@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.core.content.FileProvider
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.MessageLabel
@@ -11,6 +12,7 @@ import com.inboxiq.app.data.SendStatus
 import com.klinker.android.send_message.Message
 import com.klinker.android.send_message.Settings
 import com.klinker.android.send_message.Transaction
+import java.io.File
 
 /** Known send strategies — a closed set the config backend can switch between per device+carrier. */
 private enum class MmsStrategy(val id: String) {
@@ -40,6 +42,27 @@ object MmsSender {
 
     suspend fun send(context: Context, address: String, body: String, imageUri: Uri) {
         val dao = AppDatabase.get(context).messageDao()
+
+        // The system Photo Picker's read grant on imageUri is short-lived and won't
+        // survive a later self-healing retry (confirmed live: retry() crashed with
+        // a SecurityException reading a picker uri from an earlier send). Copy the
+        // bytes into our own storage immediately and use that stable uri everywhere.
+        val localUri = persistLocally(context, imageUri) ?: run {
+            dao.insert(
+                MessageEntity(
+                    threadId = 0,
+                    address = address,
+                    body = body,
+                    timestamp = System.currentTimeMillis(),
+                    isIncoming = false,
+                    label = MessageLabel.PERSONAL,
+                    sendStatus = SendStatus.FAILED,
+                    awaitingAutoHeal = true,
+                ),
+            )
+            return
+        }
+
         val id = dao.insert(
             MessageEntity(
                 threadId = 0,
@@ -49,12 +72,12 @@ object MmsSender {
                 isIncoming = false,
                 label = MessageLabel.PERSONAL,
                 sendStatus = SendStatus.PENDING,
-                imagePartUri = imageUri.toString(),
+                imagePartUri = localUri.toString(),
             ),
         )
 
         val fingerprint = DeviceFingerprint.forDevice(context)
-        val bitmap = context.contentResolver.openInputStream(imageUri)?.use {
+        val bitmap = context.contentResolver.openInputStream(localUri)?.use {
             BitmapFactory.decodeStream(it)
         }
         if (bitmap == null) {
@@ -88,9 +111,11 @@ object MmsSender {
             dao.setAwaitingAutoHeal(message.id, false)
             return false
         }
-        val bitmap = context.contentResolver.openInputStream(imageUri)?.use {
-            BitmapFactory.decodeStream(it)
-        } ?: run {
+        val bitmap = runCatching {
+            context.contentResolver.openInputStream(imageUri)?.use { BitmapFactory.decodeStream(it) }
+        }.getOrNull() ?: run {
+            // Unreadable (e.g. a stale picker uri from before local persistence was added) —
+            // this image can never be recovered, so stop retrying it instead of crashing.
             dao.setAwaitingAutoHeal(message.id, false)
             return false
         }
@@ -117,6 +142,20 @@ object MmsSender {
     ): Pair<MmsStrategy, Boolean> {
         val fallback = if (alreadyTried == MmsStrategy.SYSTEM_DEFAULT) MmsStrategy.RESIZED_IMAGE else MmsStrategy.SYSTEM_DEFAULT
         return fallback to attempt(context, address, body, bitmap, fallback)
+    }
+
+    /** Copies a picked image into app-private storage and returns a stable FileProvider uri for it. */
+    private fun persistLocally(context: Context, sourceUri: Uri): Uri? {
+        return try {
+            val dir = File(context.filesDir, "mms_images").apply { mkdirs() }
+            val destFile = File(dir, "${System.currentTimeMillis()}.jpg")
+            context.contentResolver.openInputStream(sourceUri)?.use { input ->
+                destFile.outputStream().use { output -> input.copyTo(output) }
+            } ?: return null
+            FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", destFile)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun attempt(context: Context, address: String, body: String, bitmap: Bitmap, strategy: MmsStrategy): Boolean {

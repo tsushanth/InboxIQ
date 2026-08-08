@@ -75,6 +75,19 @@
             android:name="com.klinker.android.send_message.MmsSentReceiver"
             android:exported="false" />
 
+        <!-- Serves our own copies of picked images (see MmsSender.persistLocally) — the
+             system Photo Picker's content:// grant doesn't reliably survive being read
+             again later (e.g. on a self-healing retry), so we own a stable copy instead. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <!-- Default apps that provide RCS messaging must handle this -->
         <service
             android:name=".sms.HeadlessSmsSendService"

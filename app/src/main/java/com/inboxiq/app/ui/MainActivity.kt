@@ -60,6 +60,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -201,6 +202,15 @@ class MainActivity : ComponentActivity() {
                                     screen = Screen.ThreadList
                                 },
                                 onDeleteMessage = { id -> lifecycleScope.launch { dao.deleteMessage(id) } },
+                                onRetryNow = { id ->
+                                    lifecycleScope.launch {
+                                        val msg = dao.getById(id) ?: return@launch
+                                        if (MmsSender.retry(applicationContext, msg)) {
+                                            val name = ContactResolver.displayNameFor(this@MainActivity, msg.address)
+                                            com.inboxiq.app.sms.MessageNotifier.notifyAutoHealed(applicationContext, msg.address, name)
+                                        }
+                                    }
+                                },
                                 onToggleBlock = {
                                     lifecycleScope.launch {
                                         if (blockedAddresses.contains(current.address)) {
@@ -612,6 +622,7 @@ fun ThreadDetailScreen(
     onPickImage: ((Uri?) -> Unit) -> Unit = {},
     onDeleteConversation: () -> Unit = {},
     onDeleteMessage: (Long) -> Unit = {},
+    onRetryNow: (Long) -> Unit = {},
     onToggleBlock: () -> Unit = {},
 ) {
     var body by remember { mutableStateOf("") }
@@ -686,6 +697,13 @@ fun ThreadDetailScreen(
                             ),
                         ) {
                         DropdownMenu(expanded = bubbleMenuOpen, onDismissRequest = { bubbleMenuOpen = false }) {
+                            if (message.awaitingAutoHeal) {
+                                DropdownMenuItem(
+                                    text = { Text("Retry now") },
+                                    leadingIcon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+                                    onClick = { bubbleMenuOpen = false; onRetryNow(message.id) },
+                                )
+                            }
                             DropdownMenuItem(
                                 text = { Text("Delete message") },
                                 leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null) },
