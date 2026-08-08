@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Chat bubble -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,32 H78 A10,10 0 0 1 88,42 V66 A10,10 0 0 1 78,76 H50 L36,88 V76 H30 A10,10 0 0 1 20,66 V42 A10,10 0 0 1 30,32 Z" />
+    <!-- Three sorted "label" bars inside the bubble, representing triage/categorization -->
+    <path
+        android:fillColor="#2962FF"
+        android:pathData="M32,46 H56 V52 H32 Z" />
+    <path
+        android:fillColor="#2962FF"
+        android:pathData="M32,58 H70 V64 H32 Z" />
+    <path
+        android:fillColor="#2962FF"
+        android:pathData="M60,46 H76 V52 H60 Z" />
+</vector>
