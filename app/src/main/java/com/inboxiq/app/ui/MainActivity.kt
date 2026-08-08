@@ -713,11 +713,15 @@ fun ThreadDetailScreen(
                             }
                         }
                         }
+                        val statusText = when {
+                            !isMe -> ""
+                            message.awaitingAutoHeal -> "  ·  Couldn't send — we're working on a fix for your device"
+                            else -> "  ·  ${message.sendStatus}"
+                        }
                         Text(
-                            text = formatTimestamp(message.timestamp) +
-                                if (isMe) "  ·  ${message.sendStatus}" else "",
+                            text = formatTimestamp(message.timestamp) + statusText,
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (message.awaitingAutoHeal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 2.dp),
                         )
                     }

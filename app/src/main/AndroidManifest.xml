@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Self-healing MMS config: reports device model + carrier + strategy id/outcome
+         only (never message content/address) to inboxiq-config, and fetches an
+         approved fallback strategy for that device+carrier if one exists. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- Required to be eligible for the default SMS/MMS handler role -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />

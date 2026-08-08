@@ -45,6 +45,12 @@ interface MessageDao {
     @Query("UPDATE messages SET sendStatus = :status WHERE id = :id")
     suspend fun updateSendStatus(id: Long, status: SendStatus)
 
+    @Query("UPDATE messages SET awaitingAutoHeal = :awaiting WHERE id = :id")
+    suspend fun setAwaitingAutoHeal(id: Long, awaiting: Boolean)
+
+    @Query("SELECT * FROM messages WHERE awaitingAutoHeal = 1")
+    suspend fun messagesAwaitingAutoHeal(): List<MessageEntity>
+
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE id = :id")
     suspend fun updateLabel(id: Long, label: MessageLabel, confidence: Float)
 

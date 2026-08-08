@@ -22,6 +22,8 @@ data class MessageEntity(
     val isRead: Boolean = true,
     /** content://mms/part/{id} of the first image attachment, if this MMS has one. */
     val imagePartUri: String? = null,
+    /** True once a send has failed and is waiting on a self-healing config fix (see MmsSender/MmsConfigApi). */
+    val awaitingAutoHeal: Boolean = false,
 )
 
 enum class SendStatus { NONE, PENDING, SENT, FAILED }
