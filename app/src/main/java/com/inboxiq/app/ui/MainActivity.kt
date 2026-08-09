@@ -7,11 +7,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +39,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
@@ -59,6 +64,7 @@ import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
@@ -69,10 +75,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.SpanStyle
@@ -97,6 +106,7 @@ import com.inboxiq.app.sms.DefaultSmsRole
 import com.inboxiq.app.sms.MmsSender
 import com.inboxiq.app.sms.SmsBackfill
 import com.inboxiq.app.sms.SmsSender
+import com.inboxiq.app.voice.VoiceTranscriber
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -311,6 +321,9 @@ private fun LabelChip(label: com.inboxiq.app.data.MessageLabel) {
 }
 
 private val urlPattern = android.util.Patterns.WEB_URL
+
+/** Below this, the AI-generated-text signal is genuinely too noisy on SMS-length text to show — see MessageClassifier.kt. */
+private const val AI_GENERATED_DISPLAY_THRESHOLD = 0.6f
 
 // Detects RiddleVerse's existing /open-riddle share links (see sharing.routes.js)
 // so an invite renders as a game card instead of a plain blue link.
@@ -745,6 +758,22 @@ fun ThreadDetailScreen(
                             }
                         }
                         }
+                        // Only shown above a confidence floor — this signal is genuinely weaker on
+                        // SMS-length text than on long-form text, so a low score is noise, not a finding.
+                        message.aiGeneratedConfidence?.takeIf { !isMe && it >= AI_GENERATED_DISPLAY_THRESHOLD }?.let { confidence ->
+                            Surface(
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier.padding(top = 4.dp),
+                            ) {
+                                Text(
+                                    text = "Possibly AI-generated · ${(confidence * 100).toInt()}% confidence",
+                                    fontSize = 11.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                )
+                            }
+                        }
                         val gaveUp = message.sendStatus == SendStatus.FAILED && !message.awaitingAutoHeal && message.autoHealRetryCount > 0
                         val statusText = when {
                             !isMe -> ""
@@ -795,9 +824,72 @@ fun ThreadDetailScreen(
                 }
             }
         }
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        val transcriber = remember { VoiceTranscriber.getInstance(context) }
+        var isRecording by remember { mutableStateOf(false) }
+        var isTranscribing by remember { mutableStateOf(false) }
+
+        val requestMicPermission = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { granted ->
+            if (!granted) {
+                Toast.makeText(context, "Microphone permission is needed for voice memos", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { onPickImage { uri -> if (uri != null) pendingImage = uri } }) {
                 Icon(Icons.Filled.AttachFile, contentDescription = "Attach image")
+            }
+            if (isTranscribing) {
+                Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                }
+            } else {
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier.pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                if (!transcriber.hasRecordPermission()) {
+                                    requestMicPermission.launch(Manifest.permission.RECORD_AUDIO)
+                                    return@detectTapGestures
+                                }
+                                val started = transcriber.startRecording()
+                                if (!started) {
+                                    Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show()
+                                    return@detectTapGestures
+                                }
+                                isRecording = true
+                                val released = tryAwaitRelease()
+                                isRecording = false
+                                if (released) {
+                                    isTranscribing = true
+                                    coroutineScope.launch {
+                                        when (val result = transcriber.stopAndTranscribe()) {
+                                            is VoiceTranscriber.Result.Success -> {
+                                                body = if (body.isBlank()) result.text else "$body ${result.text}"
+                                            }
+                                            is VoiceTranscriber.Result.Failure -> {
+                                                Toast.makeText(context, result.reason, Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                        isTranscribing = false
+                                    }
+                                } else {
+                                    transcriber.cancelRecording()
+                                }
+                            },
+                        )
+                    },
+                ) {
+                    Icon(
+                        Icons.Filled.Mic,
+                        contentDescription = if (isRecording) "Recording — release to transcribe" else "Hold to record voice memo",
+                        tint = if (isRecording) MaterialTheme.colorScheme.error else androidx.compose.material3.LocalContentColor.current,
+                    )
+                }
             }
             OutlinedTextField(
                 value = body,

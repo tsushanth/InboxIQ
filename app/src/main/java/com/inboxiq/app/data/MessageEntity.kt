@@ -26,6 +26,13 @@ data class MessageEntity(
     val awaitingAutoHeal: Boolean = false,
     /** Failed retries so far — capped at MmsSender.MAX_AUTO_HEAL_RETRIES before giving up permanently. */
     val autoHealRetryCount: Int = 0,
+    /**
+     * 0-1 confidence this message's text was AI-generated — only ever populated by the
+     * MID/HIGH classifier tiers (see GemmaClassifier); null when unevaluated (DEFAULT tier,
+     * or an outgoing message). Surfaced as a secondary badge, not a primary label, since
+     * accuracy on SMS-length text is genuinely lower than on long-form text — see ClassifierTier.
+     */
+    val aiGeneratedConfidence: Float? = null,
 )
 
 enum class SendStatus { NONE, PENDING, SENT, FAILED }

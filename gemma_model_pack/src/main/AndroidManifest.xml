@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.inboxiq.app">
+
+    <!-- Delivers Gemma 3 270M (.litertlm, ~125MB) only when the user opts into the
+         MID classifier tier in Settings — never downloaded automatically. Content is
+         baked into our own Play Console release (see docs/gemma-model-pack.md), not
+         fetched from Hugging Face at runtime, so this doesn't need INTERNET permission
+         in app/ — Play's own asset-delivery pipeline handles the transfer. -->
+    <dist:module
+        dist:type="asset-pack">
+        <dist:fusing dist:include="false" />
+        <dist:delivery>
+            <dist:on-demand />
+        </dist:delivery>
+    </dist:module>
+</manifest>

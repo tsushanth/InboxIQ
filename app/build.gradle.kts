@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
 }
 
@@ -14,6 +15,7 @@ val localProps = Properties().apply {
 android {
     namespace = "com.inboxiq.app"
     compileSdk = 35
+    ndkVersion = "27.2.12479018"
 
     defaultConfig {
         applicationId = "com.inboxiq.app"
@@ -21,7 +23,27 @@ android {
         targetSdk = 35
         versionCode = 2
         versionName = "0.2.0"
+
+        // Native whisper.cpp build for on-device voice-memo transcription (zero network).
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments += listOf(
+                    "-DWHISPER_BUILD_TESTS=OFF",
+                    "-DWHISPER_BUILD_EXAMPLES=OFF",
+                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+                )
+            }
+        }
     }
+
+    // MID tier's Gemma 3 270M model ships as an on-demand Play asset pack, not an
+    // APK asset — it's a ~125MB opt-in download, and this way it never needs the
+    // INTERNET permission in this module (Play's own infra handles the transfer).
+    assetPacks += setOf(":gemma_model_pack")
 
     signingConfigs {
         create("release") {
@@ -35,16 +57,13 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+    // Compose compiler version now comes from the org.jetbrains.kotlin.plugin.compose
+    // plugin (matches the Kotlin version) — composeOptions/kotlinCompilerExtensionVersion
+    // doesn't exist under Kotlin 2.x.
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
 
     buildTypes {
@@ -52,6 +71,21 @@ android {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
         }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+}
+
+// Replaces the deprecated android { kotlinOptions { jvmTarget = ... } } block — hard
+// compile error under Kotlin 2.x's compiler-options DSL migration.
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
@@ -71,9 +105,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4")
 
     implementation("androidx.work:work-runtime-ktx:2.9.1")
 
@@ -82,6 +116,12 @@ dependencies {
 
     // MMS PDU encoding for send — Apache-2.0 maintained fork of klinker's android-smsmms
     implementation("com.github.FossifyOrg:mmslib:1.0.0")
+
+    // On-device LLM runtime for the MID/HIGH classifier tiers (Gemma 3 270M / Qwen 1.5B)
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.15.0")
+
+    // Downloads the gemma_model_pack asset pack on-demand when the user opts into MID tier
+    implementation("com.google.android.play:asset-delivery-ktx:2.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

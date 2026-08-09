@@ -64,6 +64,9 @@ interface MessageDao {
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE id = :id")
     suspend fun updateLabel(id: Long, label: MessageLabel, confidence: Float)
 
+    @Query("UPDATE messages SET aiGeneratedConfidence = :confidence WHERE id = :id")
+    suspend fun updateAiGeneratedConfidence(id: Long, confidence: Float)
+
     /** Applies a thread's cached classification to every message from that address — pure SQL, no inference. */
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE address = :address AND isIncoming = 1")
     suspend fun applyThreadLabel(address: String, label: MessageLabel, confidence: Float)

@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 class Converters {
     @TypeConverter
@@ -21,9 +23,20 @@ class Converters {
     fun toSendStatus(value: String): SendStatus = SendStatus.valueOf(value)
 }
 
+/**
+ * v2 (versionCode 2) is the first release submitted for real users, so schema changes
+ * from here on need a real migration, not fallbackToDestructiveMigration() — that would
+ * silently wipe read-state, thread labels, and blocked numbers for anyone already updated.
+ */
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE messages ADD COLUMN aiGeneratedConfidence REAL")
+    }
+}
+
 @Database(
     entities = [MessageEntity::class, ThreadLabelEntity::class, BlockedNumberEntity::class],
-    version = 7,
+    version = 8,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -42,8 +55,10 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "inboxiq.db",
                 )
-                    // Pre-release: schema still moving, no real user data to preserve yet.
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(MIGRATION_7_8)
+                    // Only wipes on a downgrade (e.g. a bad build during dev) — real
+                    // forward upgrades must go through an explicit migration above.
+                    .fallbackToDestructiveMigrationOnDowngrade()
                     .build().also { instance = it }
             }
     }
