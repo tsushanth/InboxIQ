@@ -14,15 +14,10 @@ import com.klinker.android.send_message.Settings
 import com.klinker.android.send_message.Transaction
 import java.io.File
 
-/** Known send strategies — a closed set the config backend can switch between per device+carrier. */
-private enum class MmsStrategy(val id: String) {
-    SYSTEM_DEFAULT("system_default"),
-    RESIZED_IMAGE("resized_image"),
-    ;
-
-    companion object {
-        fun fromId(id: String?) = entries.find { it.id == id } ?: SYSTEM_DEFAULT
-    }
+/** Known send strategies — tried locally, in order, on every send. Nothing external decides between them. */
+private enum class MmsStrategy {
+    SYSTEM_DEFAULT,
+    RESIZED_IMAGE,
 }
 
 /**
@@ -32,11 +27,10 @@ private enum class MmsStrategy(val id: String) {
  * lets the OS resolve the carrier's MMSC/APN for us — only available once
  * this app holds the default-SMS-handler role, which InboxIQ requires anyway.
  *
- * Self-healing: checks inboxiq-config for a known-good strategy for this
- * device+carrier before sending, falls back to RESIZED_IMAGE locally if the
- * primary attempt throws, and reports the outcome either way. See
- * MmsConfigApi/DeviceFingerprint — only device model + carrier + strategy id
- * + success are ever sent, never message content or address.
+ * Fully on-device: if the primary attempt fails, a resized-image variant is
+ * tried immediately as a local fallback — no network call, no data ever
+ * leaves the phone. A failed send can be retried later (manually, or via
+ * AutoHealWorker) purely to recover from a transient carrier hiccup.
  */
 object MmsSender {
 
@@ -44,8 +38,8 @@ object MmsSender {
         val dao = AppDatabase.get(context).messageDao()
 
         // The system Photo Picker's read grant on imageUri is short-lived and won't
-        // survive a later self-healing retry (confirmed live: retry() crashed with
-        // a SecurityException reading a picker uri from an earlier send). Copy the
+        // survive a later retry (confirmed live: retry() crashed with a
+        // SecurityException reading a picker uri from an earlier send). Copy the
         // bytes into our own storage immediately and use that stable uri everywhere.
         val localUri = persistLocally(context, imageUri) ?: run {
             dao.insert(
@@ -76,7 +70,6 @@ object MmsSender {
             ),
         )
 
-        val fingerprint = DeviceFingerprint.forDevice(context)
         val bitmap = context.contentResolver.openInputStream(localUri)?.use {
             BitmapFactory.decodeStream(it)
         }
@@ -86,11 +79,8 @@ object MmsSender {
             return
         }
 
-        val remoteStrategy = MmsStrategy.fromId(MmsConfigApi.fetchStrategy(fingerprint))
-        val (succeededStrategy, succeeded) = attempt(context, address, body, bitmap, remoteStrategy)
-            .let { if (it) remoteStrategy to true else fallbackAttempt(context, address, body, bitmap, remoteStrategy) }
-
-        MmsConfigApi.reportOutcome(fingerprint, succeededStrategy.id, succeeded)
+        val succeeded = attempt(context, address, body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
+            attempt(context, address, body, bitmap, MmsStrategy.RESIZED_IMAGE)
 
         if (succeeded) {
             dao.updateSendStatus(id, SendStatus.SENT)
@@ -100,12 +90,13 @@ object MmsSender {
         }
     }
 
-    /** After this many failed auto-heal retries (~5 days at the daily worker cadence), stop retrying and tell the user it's permanent. */
+    /** After this many failed retries (~5 days at the daily worker cadence), stop retrying and tell the user it's permanent. */
     const val MAX_AUTO_HEAL_RETRIES = 5
 
     /**
-     * Retries a previously-failed MMS that's awaiting a self-healing fix — used by
-     * AutoHealWorker once inboxiq-config has a strategy for this device+carrier.
+     * Retries a previously-failed MMS — used by AutoHealWorker and the manual
+     * "Retry now" action. Purely local: recovers a transient failure (no
+     * signal, carrier hiccup) by trying both known strategies again.
      * Returns true if the retry succeeded.
      */
     suspend fun retry(context: Context, message: MessageEntity): Boolean {
@@ -123,10 +114,8 @@ object MmsSender {
             return false
         }
 
-        val fingerprint = DeviceFingerprint.forDevice(context)
-        val strategy = MmsStrategy.fromId(MmsConfigApi.fetchStrategy(fingerprint))
-        val succeeded = attempt(context, message.address, message.body, bitmap, strategy)
-        MmsConfigApi.reportOutcome(fingerprint, strategy.id, succeeded)
+        val succeeded = attempt(context, message.address, message.body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
+            attempt(context, message.address, message.body, bitmap, MmsStrategy.RESIZED_IMAGE)
 
         if (succeeded) {
             dao.updateSendStatus(message.id, SendStatus.SENT)
@@ -134,24 +123,12 @@ object MmsSender {
         } else {
             dao.incrementAutoHealRetryCount(message.id)
             if (message.autoHealRetryCount + 1 >= MAX_AUTO_HEAL_RETRIES) {
-                // No strategy in the app has fixed this after repeated tries — a config
-                // switch alone can't help further; stop implying a fix is still coming.
+                // Both known strategies still fail after repeated tries — nothing left
+                // to switch to, so stop implying a retry might still fix it.
                 dao.setAwaitingAutoHeal(message.id, false)
             }
         }
         return succeeded
-    }
-
-    /** Only tried if the primary (remote-config or default) strategy throws — one local fallback, not a chain. */
-    private suspend fun fallbackAttempt(
-        context: Context,
-        address: String,
-        body: String,
-        bitmap: Bitmap,
-        alreadyTried: MmsStrategy,
-    ): Pair<MmsStrategy, Boolean> {
-        val fallback = if (alreadyTried == MmsStrategy.SYSTEM_DEFAULT) MmsStrategy.RESIZED_IMAGE else MmsStrategy.SYSTEM_DEFAULT
-        return fallback to attempt(context, address, body, bitmap, fallback)
     }
 
     /** Copies a picked image into app-private storage and returns a stable FileProvider uri for it. */

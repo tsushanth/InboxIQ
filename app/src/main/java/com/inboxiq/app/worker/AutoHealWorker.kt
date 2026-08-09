@@ -9,10 +9,10 @@ import com.inboxiq.app.sms.MessageNotifier
 import com.inboxiq.app.sms.MmsSender
 
 /**
- * Periodic retry for MMS sends that failed and are awaiting a self-healing
- * config fix (see MmsSender.retry / inboxiq-config). Each retry re-checks
- * the config backend, so a message only goes through once a fix for this
- * device+carrier has actually been approved — see MmsConfigApi.
+ * Periodic retry for MMS sends that failed and are still pending (see
+ * MmsSender.retry) — purely local, recovers a transient send failure (no
+ * signal, brief carrier hiccup) by trying both known strategies again.
+ * No network call is ever made; nothing leaves the device.
  */
 class AutoHealWorker(
     appContext: Context,

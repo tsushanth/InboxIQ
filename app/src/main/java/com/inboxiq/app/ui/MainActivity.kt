@@ -748,7 +748,7 @@ fun ThreadDetailScreen(
                         val gaveUp = message.sendStatus == SendStatus.FAILED && !message.awaitingAutoHeal && message.autoHealRetryCount > 0
                         val statusText = when {
                             !isMe -> ""
-                            message.awaitingAutoHeal -> "  ·  Couldn't send — we're working on a fix for your device"
+                            message.awaitingAutoHeal -> "  ·  Couldn't send — will retry automatically"
                             gaveUp -> "  ·  Couldn't be delivered"
                             else -> "  ·  ${message.sendStatus}"
                         }

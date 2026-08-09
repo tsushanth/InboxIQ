@@ -35,7 +35,7 @@ object MessageNotifier {
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(autoHealChannel)
     }
 
-    /** A previously-failed MMS just went through after a self-healing config fix (see AutoHealWorker). */
+    /** A previously-failed MMS just went through on a local retry (see AutoHealWorker). */
     fun notifyAutoHealed(context: Context, address: String, displayName: String?) {
         ensureChannel(context)
 

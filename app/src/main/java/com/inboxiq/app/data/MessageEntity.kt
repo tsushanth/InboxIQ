@@ -22,9 +22,9 @@ data class MessageEntity(
     val isRead: Boolean = true,
     /** content://mms/part/{id} of the first image attachment, if this MMS has one. */
     val imagePartUri: String? = null,
-    /** True once a send has failed and is waiting on a self-healing config fix (see MmsSender/MmsConfigApi). */
+    /** True once a send has failed and is pending a local retry (see MmsSender.retry). */
     val awaitingAutoHeal: Boolean = false,
-    /** Failed auto-heal attempts so far — capped at MmsSender.MAX_AUTO_HEAL_RETRIES before giving up permanently. */
+    /** Failed retries so far — capped at MmsSender.MAX_AUTO_HEAL_RETRIES before giving up permanently. */
     val autoHealRetryCount: Int = 0,
 )
 
