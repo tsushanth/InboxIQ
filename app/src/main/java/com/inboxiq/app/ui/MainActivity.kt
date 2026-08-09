@@ -91,6 +91,7 @@ import com.inboxiq.app.classify.QuickReplySuggester
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.ContactResolver
 import com.inboxiq.app.data.MessageEntity
+import com.inboxiq.app.data.SendStatus
 import com.inboxiq.app.data.ThreadSummary
 import com.inboxiq.app.sms.DefaultSmsRole
 import com.inboxiq.app.sms.MmsSender
@@ -161,7 +162,12 @@ class MainActivity : ComponentActivity() {
                             onOpenThread = { address -> screen = Screen.ThreadDetail(address) },
                             onOpenSettings = { screen = Screen.Settings },
                             onNewConversation = { screen = Screen.NewConversation },
-                            onDeleteThread = { address -> lifecycleScope.launch { dao.deleteThread(address) } },
+                            onDeleteThread = { address ->
+                                lifecycleScope.launch {
+                                    com.inboxiq.app.sms.MmsImageStore.deleteAll(applicationContext, dao.imageUrisForThread(address))
+                                    dao.deleteThread(address)
+                                }
+                            },
                             onBlockThread = { address ->
                                 lifecycleScope.launch { blockedDao.block(com.inboxiq.app.data.BlockedNumberEntity(address, System.currentTimeMillis())) }
                             },
@@ -198,10 +204,18 @@ class MainActivity : ComponentActivity() {
                                     pickImage.launch(androidx.activity.result.PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                                 },
                                 onDeleteConversation = {
-                                    lifecycleScope.launch { dao.deleteThread(current.address) }
+                                    lifecycleScope.launch {
+                                        com.inboxiq.app.sms.MmsImageStore.deleteAll(applicationContext, dao.imageUrisForThread(current.address))
+                                        dao.deleteThread(current.address)
+                                    }
                                     screen = Screen.ThreadList
                                 },
-                                onDeleteMessage = { id -> lifecycleScope.launch { dao.deleteMessage(id) } },
+                                onDeleteMessage = { id ->
+                                    lifecycleScope.launch {
+                                        dao.getById(id)?.let { com.inboxiq.app.sms.MmsImageStore.delete(applicationContext, it.imagePartUri) }
+                                        dao.deleteMessage(id)
+                                    }
+                                },
                                 onRetryNow = { id ->
                                     lifecycleScope.launch {
                                         val msg = dao.getById(id) ?: return@launch
@@ -731,15 +745,17 @@ fun ThreadDetailScreen(
                             }
                         }
                         }
+                        val gaveUp = message.sendStatus == SendStatus.FAILED && !message.awaitingAutoHeal && message.autoHealRetryCount > 0
                         val statusText = when {
                             !isMe -> ""
                             message.awaitingAutoHeal -> "  ·  Couldn't send — we're working on a fix for your device"
+                            gaveUp -> "  ·  Couldn't be delivered"
                             else -> "  ·  ${message.sendStatus}"
                         }
                         Text(
                             text = formatTimestamp(message.timestamp) + statusText,
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (message.awaitingAutoHeal) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = if (message.awaitingAutoHeal || gaveUp) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 2.dp),
                         )
                     }

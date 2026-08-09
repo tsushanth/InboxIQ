@@ -23,7 +23,7 @@ class Converters {
 
 @Database(
     entities = [MessageEntity::class, ThreadLabelEntity::class, BlockedNumberEntity::class],
-    version = 6,
+    version = 7,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

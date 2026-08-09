@@ -24,6 +24,8 @@ data class MessageEntity(
     val imagePartUri: String? = null,
     /** True once a send has failed and is waiting on a self-healing config fix (see MmsSender/MmsConfigApi). */
     val awaitingAutoHeal: Boolean = false,
+    /** Failed auto-heal attempts so far — capped at MmsSender.MAX_AUTO_HEAL_RETRIES before giving up permanently. */
+    val autoHealRetryCount: Int = 0,
 )
 
 enum class SendStatus { NONE, PENDING, SENT, FAILED }

@@ -54,6 +54,13 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): MessageEntity?
 
+    @Query("UPDATE messages SET autoHealRetryCount = autoHealRetryCount + 1 WHERE id = :id")
+    suspend fun incrementAutoHealRetryCount(id: Long)
+
+    /** Backing image files to delete before removing these rows — see MmsImageStore. */
+    @Query("SELECT imagePartUri FROM messages WHERE address = :address AND imagePartUri IS NOT NULL")
+    suspend fun imageUrisForThread(address: String): List<String>
+
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE id = :id")
     suspend fun updateLabel(id: Long, label: MessageLabel, confidence: Float)
 

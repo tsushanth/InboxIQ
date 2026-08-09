@@ -100,6 +100,9 @@ object MmsSender {
         }
     }
 
+    /** After this many failed auto-heal retries (~5 days at the daily worker cadence), stop retrying and tell the user it's permanent. */
+    const val MAX_AUTO_HEAL_RETRIES = 5
+
     /**
      * Retries a previously-failed MMS that's awaiting a self-healing fix — used by
      * AutoHealWorker once inboxiq-config has a strategy for this device+carrier.
@@ -128,6 +131,13 @@ object MmsSender {
         if (succeeded) {
             dao.updateSendStatus(message.id, SendStatus.SENT)
             dao.setAwaitingAutoHeal(message.id, false)
+        } else {
+            dao.incrementAutoHealRetryCount(message.id)
+            if (message.autoHealRetryCount + 1 >= MAX_AUTO_HEAL_RETRIES) {
+                // No strategy in the app has fixed this after repeated tries — a config
+                // switch alone can't help further; stop implying a fix is still coming.
+                dao.setAwaitingAutoHeal(message.id, false)
+            }
         }
         return succeeded
     }
