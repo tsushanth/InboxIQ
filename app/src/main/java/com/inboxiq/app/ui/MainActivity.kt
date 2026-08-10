@@ -847,42 +847,49 @@ fun ThreadDetailScreen(
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                 }
             } else {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = {
-                                if (!transcriber.hasRecordPermission()) {
-                                    requestMicPermission.launch(Manifest.permission.RECORD_AUDIO)
-                                    return@detectTapGestures
-                                }
-                                val started = transcriber.startRecording()
-                                if (!started) {
-                                    Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show()
-                                    return@detectTapGestures
-                                }
-                                isRecording = true
-                                val released = tryAwaitRelease()
-                                isRecording = false
-                                if (released) {
-                                    isTranscribing = true
-                                    coroutineScope.launch {
-                                        when (val result = transcriber.stopAndTranscribe()) {
-                                            is VoiceTranscriber.Result.Success -> {
-                                                body = if (body.isBlank()) result.text else "$body ${result.text}"
-                                            }
-                                            is VoiceTranscriber.Result.Failure -> {
-                                                Toast.makeText(context, result.reason, Toast.LENGTH_SHORT).show()
-                                            }
-                                        }
-                                        isTranscribing = false
+                // Deliberately NOT an IconButton — IconButton installs its own internal
+                // clickable gesture detector, which races/conflicts with a custom
+                // detectTapGestures(onPress+tryAwaitRelease) on the same node and made
+                // press-and-hold fire unreliably (confirmed live: taps produced no
+                // response at all). A plain Box with only our own gesture detector fixes it.
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onPress = {
+                                    if (!transcriber.hasRecordPermission()) {
+                                        requestMicPermission.launch(Manifest.permission.RECORD_AUDIO)
+                                        return@detectTapGestures
                                     }
-                                } else {
-                                    transcriber.cancelRecording()
-                                }
-                            },
-                        )
-                    },
+                                    val started = transcriber.startRecording()
+                                    if (!started) {
+                                        Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show()
+                                        return@detectTapGestures
+                                    }
+                                    isRecording = true
+                                    val released = tryAwaitRelease()
+                                    isRecording = false
+                                    if (released) {
+                                        isTranscribing = true
+                                        coroutineScope.launch {
+                                            when (val result = transcriber.stopAndTranscribe()) {
+                                                is VoiceTranscriber.Result.Success -> {
+                                                    body = if (body.isBlank()) result.text else "$body ${result.text}"
+                                                }
+                                                is VoiceTranscriber.Result.Failure -> {
+                                                    Toast.makeText(context, result.reason, Toast.LENGTH_SHORT).show()
+                                                }
+                                            }
+                                            isTranscribing = false
+                                        }
+                                    } else {
+                                        transcriber.cancelRecording()
+                                    }
+                                },
+                            )
+                        },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         Icons.Filled.Mic,
