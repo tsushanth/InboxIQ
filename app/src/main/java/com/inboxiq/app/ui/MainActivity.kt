@@ -843,8 +843,15 @@ fun ThreadDetailScreen(
                 Icon(Icons.Filled.AttachFile, contentDescription = "Attach image")
             }
             if (isTranscribing) {
-                Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                    }
+                    Text(
+                        "Transcribing…",
+                        fontSize = 9.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             } else {
                 // Deliberately NOT an IconButton — IconButton installs its own internal
@@ -852,9 +859,14 @@ fun ThreadDetailScreen(
                 // detectTapGestures(onPress+tryAwaitRelease) on the same node and made
                 // press-and-hold fire unreliably (confirmed live: taps produced no
                 // response at all). A plain Box with only our own gesture detector fixes it.
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier
                         .size(48.dp)
+                        .background(
+                            if (isRecording) MaterialTheme.colorScheme.errorContainer else androidx.compose.ui.graphics.Color.Transparent,
+                            CircleShape,
+                        )
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onPress = {
@@ -896,6 +908,12 @@ fun ThreadDetailScreen(
                         contentDescription = if (isRecording) "Recording — release to transcribe" else "Hold to record voice memo",
                         tint = if (isRecording) MaterialTheme.colorScheme.error else androidx.compose.material3.LocalContentColor.current,
                     )
+                }
+                Text(
+                    if (isRecording) "Recording…" else "Hold",
+                    fontSize = 9.sp,
+                    color = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 }
             }
             OutlinedTextField(
