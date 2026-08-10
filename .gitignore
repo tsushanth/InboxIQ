@@ -9,3 +9,7 @@ build/
 .externalNativeBuild
 .cxx
 local.properties
+
+# Gemma 3 270M model (~290MB, exceeds GitHub's 100MB hard limit anyway) — gated download,
+# not committed. See docs/gemma-model-pack.md to reproduce it locally before building.
+gemma_model_pack/src/main/assets/*.litertlm

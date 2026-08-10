@@ -961,6 +961,19 @@ fun SettingsScreen(
     onBack: () -> Unit,
 ) {
     var current by remember { mutableStateOf(selectedTier) }
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var modelState by remember {
+        mutableStateOf<com.inboxiq.app.classify.ModelDownloadState>(
+            if (com.inboxiq.app.classify.GemmaModelStore.isReady(context)) {
+                com.inboxiq.app.classify.ModelDownloadState.Ready
+            } else {
+                com.inboxiq.app.classify.ModelDownloadState.NotDownloaded
+            },
+        )
+    }
+    LaunchedEffect(Unit) {
+        com.inboxiq.app.classify.GemmaModelStore.observeDownloadState(context).collect { modelState = it }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -982,12 +995,34 @@ fun SettingsScreen(
                         .clickable(enabled = tier.available) {
                             current = tier
                             onSelectTier(tier)
+                            if (tier == ClassifierTier.MID && modelState !is com.inboxiq.app.classify.ModelDownloadState.Ready) {
+                                com.inboxiq.app.classify.GemmaModelStore.requestDownload(context)
+                            }
                         }
                         .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(selected = current == tier, onClick = null, enabled = tier.available)
                     Text(tier.label, modifier = Modifier.padding(start = 8.dp))
+                }
+                if (tier == ClassifierTier.MID && current == ClassifierTier.MID) {
+                    val hint = when (val s = modelState) {
+                        is com.inboxiq.app.classify.ModelDownloadState.Downloading -> {
+                            val pct = if (s.totalBytes > 0) (100 * s.bytesDownloaded / s.totalBytes) else 0
+                            "Downloading model… $pct%"
+                        }
+                        is com.inboxiq.app.classify.ModelDownloadState.WaitingForWifi -> "Waiting for Wi-Fi to download the model"
+                        is com.inboxiq.app.classify.ModelDownloadState.RequiresConfirmation -> "Tap to confirm the model download"
+                        is com.inboxiq.app.classify.ModelDownloadState.Failed -> "Download failed — tap the tier again to retry"
+                        is com.inboxiq.app.classify.ModelDownloadState.Ready -> "Model ready — using Gemma 3 270M for this tier"
+                        is com.inboxiq.app.classify.ModelDownloadState.NotDownloaded -> "Starting download…"
+                    }
+                    Text(
+                        hint,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 40.dp, bottom = 8.dp),
+                    )
                 }
             }
         }

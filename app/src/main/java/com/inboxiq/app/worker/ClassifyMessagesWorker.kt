@@ -6,9 +6,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.inboxiq.app.classify.ClassifierFactory
 import com.inboxiq.app.classify.MessageClassifier
-import com.inboxiq.app.classify.OnnxEncoderClassifier
-import com.inboxiq.app.classify.StubClassifier
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.ThreadLabelEntity
 
@@ -31,12 +30,7 @@ class ClassifyMessagesWorker(
         val messageDao = db.messageDao()
         val threadDao = db.threadLabelDao()
 
-        val classifier: MessageClassifier = try {
-            OnnxEncoderClassifier(applicationContext)
-        } catch (e: Exception) {
-            Log.w(TAG, "Falling back to heuristics-only classifier", e)
-            StubClassifier()
-        }
+        val classifier: MessageClassifier = ClassifierFactory.create(applicationContext)
 
         var processed = 0
         try {
@@ -56,6 +50,12 @@ class ClassifyMessagesWorker(
                         ),
                     )
                     messageDao.applyThreadLabel(address, result.label, result.confidence)
+                    // Per-message, not per-thread — a sender being generally legitimate doesn't
+                    // mean every message from them is human-written, so this only applies to
+                    // the exact sample the model actually saw, unlike the label above.
+                    result.aiGeneratedConfidence?.let { confidence ->
+                        threadDao.latestMessageId(address)?.let { id -> messageDao.updateAiGeneratedConfidence(id, confidence) }
+                    }
                 }
                 processed += addresses.size
             }

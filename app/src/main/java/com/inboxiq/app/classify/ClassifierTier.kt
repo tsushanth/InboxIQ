@@ -4,7 +4,7 @@ import android.content.Context
 
 enum class ClassifierTier(val label: String, val available: Boolean) {
     DEFAULT("Default (bert-tiny, on-device)", available = true),
-    MID("Balanced (Gemma 3 270M) — coming soon", available = false),
+    MID("Balanced (Gemma 3 270M, on-device — needs a one-time ~290MB download)", available = true),
     HIGH("Best (Gemma/Qwen 1-3B) — coming soon", available = false),
 }
 

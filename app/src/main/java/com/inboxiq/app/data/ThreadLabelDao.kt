@@ -27,4 +27,11 @@ interface ThreadLabelDao {
     /** Most recent message body for an address — used as the representative sample for classification. */
     @Query("SELECT body FROM messages WHERE address = :address ORDER BY timestamp DESC LIMIT 1")
     suspend fun latestBody(address: String): String?
+
+    /** Id of that same latest message — lets MID/HIGH tiers store aiGeneratedConfidence against the exact sample classified, not the whole thread. */
+    @Query("SELECT id FROM messages WHERE address = :address ORDER BY timestamp DESC LIMIT 1")
+    suspend fun latestMessageId(address: String): Long?
+
+    @Query("DELETE FROM thread_labels WHERE address = :address")
+    suspend fun delete(address: String)
 }
