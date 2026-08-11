@@ -122,6 +122,10 @@ private sealed interface Screen {
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        const val EXTRA_THREAD_ADDRESS = "com.inboxiq.app.EXTRA_THREAD_ADDRESS"
+    }
+
     private val requestRole = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
     ) { runBackfillIfDefault() }
@@ -136,12 +140,28 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.PickVisualMedia(),
     ) { uri -> onImagePicked?.invoke(uri) }
 
+    private val screenState = mutableStateOf<Screen>(Screen.ThreadList)
+
+    private fun addressFromIntent(intent: android.content.Intent?): String? {
+        val fromExtra = intent?.getStringExtra(EXTRA_THREAD_ADDRESS)
+        if (fromExtra != null) return fromExtra
+        return intent?.data?.takeIf { it.scheme == "inboxiq" }?.lastPathSegment
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        addressFromIntent(intent)?.let { address -> screenState.value = Screen.ThreadDetail(address) }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val db = AppDatabase.get(applicationContext)
         val dao = db.messageDao()
         val blockedDao = db.blockedNumberDao()
+
+        addressFromIntent(intent)?.let { address -> screenState.value = Screen.ThreadDetail(address) }
 
         setContent {
             val dark = isSystemInDarkTheme()
@@ -156,7 +176,7 @@ class MainActivity : ComponentActivity() {
             MaterialTheme(colorScheme = colorScheme) {
                 Surface(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
                     var isDefault by remember { mutableStateOf(DefaultSmsRole.isDefault(this)) }
-                    var screen by remember { mutableStateOf<Screen>(Screen.ThreadList) }
+                    var screen by screenState
                     // Sorted newest-first at the query level (MessageDao.observeThreadList ORDER BY timestamp DESC).
                     val threads by dao.observeThreadList().collectAsState(initial = emptyList())
                     val blockedAddresses by blockedDao.observeBlockedAddresses().collectAsState(initial = emptyList())

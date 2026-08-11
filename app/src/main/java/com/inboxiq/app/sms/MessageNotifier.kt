@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -39,7 +40,10 @@ object MessageNotifier {
     fun notifyAutoHealed(context: Context, address: String, displayName: String?) {
         ensureChannel(context)
 
-        val openIntent = Intent(context, MainActivity::class.java)
+        val openIntent = Intent(context, MainActivity::class.java).apply {
+            data = Uri.parse("inboxiq://thread/$address")
+            putExtra(MainActivity.EXTRA_THREAD_ADDRESS, address)
+        }
         val pendingIntent = PendingIntent.getActivity(
             context,
             "heal_$address".hashCode(),
@@ -68,7 +72,10 @@ object MessageNotifier {
     fun notifyIncoming(context: Context, address: String, displayName: String?, body: String) {
         ensureChannel(context)
 
-        val openIntent = Intent(context, MainActivity::class.java)
+        val openIntent = Intent(context, MainActivity::class.java).apply {
+            data = Uri.parse("inboxiq://thread/$address")
+            putExtra(MainActivity.EXTRA_THREAD_ADDRESS, address)
+        }
         val pendingIntent = PendingIntent.getActivity(
             context,
             address.hashCode(),
