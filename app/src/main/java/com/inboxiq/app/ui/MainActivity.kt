@@ -1053,7 +1053,7 @@ fun SettingsScreen(
             Spacer(Modifier.height(24.dp))
             HorizontalDivider()
             Spacer(Modifier.height(16.dp))
-            com.inboxiq.app.mcp.ConnectedAgentsSection()
+            com.inboxiq.app.mcp.CloudConnectSection()
             com.inboxiq.app.mcp.AgentDraftsSection()
         }
     }

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.inboxiq.app.data.AgentDraftEntity
 import com.inboxiq.app.data.AgentDraftStatus
 import com.inboxiq.app.data.AppDatabase
-import com.inboxiq.app.sms.SmsSender
+import com.inboxiq.app.worker.SendDraftWorker
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -60,12 +60,7 @@ fun AgentDraftsSection() {
     drafts.forEach { draft ->
         DraftCard(
             draft = draft,
-            onSend = {
-                coroutineScope.launch {
-                    SmsSender.send(context, draft.address, draft.body)
-                    dao.setStatus(draft.id, AgentDraftStatus.SENT)
-                }
-            },
+            onSend = { SendDraftWorker.enqueue(context, draft.id) },
             onDelete = {
                 coroutineScope.launch { dao.setStatus(draft.id, AgentDraftStatus.DISCARDED) }
             },

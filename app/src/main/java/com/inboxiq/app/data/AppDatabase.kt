@@ -73,15 +73,22 @@ val MIGRATION_9_10 = object : Migration(9, 10) {
     }
 }
 
+// The LAN-only local MCP server (and its per-device pairing) is retired in favor of the
+// cloud relay (inboxiq-mcp-backend) — paired-device bookkeeping now lives server-side.
+val MIGRATION_10_11 = object : Migration(10, 11) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS paired_devices")
+    }
+}
+
 @Database(
     entities = [
         MessageEntity::class,
         ThreadLabelEntity::class,
         BlockedNumberEntity::class,
-        PairedDeviceEntity::class,
         AgentDraftEntity::class,
     ],
-    version = 10,
+    version = 11,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)
@@ -89,7 +96,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun messageDao(): MessageDao
     abstract fun threadLabelDao(): ThreadLabelDao
     abstract fun blockedNumberDao(): BlockedNumberDao
-    abstract fun pairedDeviceDao(): PairedDeviceDao
     abstract fun agentDraftDao(): AgentDraftDao
 
     companion object {
@@ -102,7 +108,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "inboxiq.db",
                 )
-                    .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
+                    .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
                     // Only wipes on a downgrade (e.g. a bad build during dev) — real
                     // forward upgrades must go through an explicit migration above.
                     .fallbackToDestructiveMigrationOnDowngrade()
