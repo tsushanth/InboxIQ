@@ -127,6 +127,13 @@ dependencies {
     // Downloads the gemma_model_pack asset pack on-demand when the user opts into MID tier
     implementation("com.google.android.play:asset-delivery-ktx:2.3.0")
 
+    // Embedded local-network MCP server (agent pairing) — lightweight, built for in-app
+    // embedding, avoids the unverified Android compatibility of Ktor's server engines.
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
+
+    // QR code generation for the agent-pairing flow (encoding only, no camera/scanning needed)
+    implementation("com.google.zxing:core:3.5.4")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
 }

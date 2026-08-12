@@ -17,6 +17,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -1006,7 +1007,11 @@ fun SettingsScreen(
             Text("Settings", style = MaterialTheme.typography.titleMedium)
         }
         HorizontalDivider()
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(androidx.compose.foundation.rememberScrollState())
+                .padding(16.dp),
+        ) {
             Text("Classifier tier", style = MaterialTheme.typography.titleSmall)
             ClassifierTier.entries.forEach { tier ->
                 Row(
@@ -1045,6 +1050,11 @@ fun SettingsScreen(
                     )
                 }
             }
+            Spacer(Modifier.height(24.dp))
+            HorizontalDivider()
+            Spacer(Modifier.height(16.dp))
+            com.inboxiq.app.mcp.ConnectedAgentsSection()
+            com.inboxiq.app.mcp.AgentDraftsSection()
         }
     }
 }

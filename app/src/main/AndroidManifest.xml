@@ -11,8 +11,16 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- On-device voice memo -> text (whisper.cpp). Audio is transcribed locally and never
-         leaves the device — this app deliberately has no INTERNET permission. -->
+         leaves the device. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Optional, off-by-default: a local-network-only MCP server (see mcp/) so the user's own
+         AI agent (running on their own computer, same wifi) can query/send messages, always
+         with a per-send on-device approval. This is the one legitimate reason this app needs
+         INTERNET — it binds to the phone's LAN address only (never 0.0.0.0), so it's not
+         reachable from the public internet. See docs/mcp-server.md. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <application
         android:name=".InboxIqApp"
@@ -85,6 +93,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- Hosts the optional local-network MCP server (see mcp/McpServer.kt) — only ever
+             started explicitly from Settings, never on boot. -->
+        <service
+            android:name=".mcp.McpForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- Handles Approve/Deny taps on pairing/send-message notifications (see mcp/ApprovalGate). -->
+        <receiver
+            android:name=".mcp.ApprovalActionReceiver"
+            android:exported="false" />
 
         <!-- Default apps that provide RCS messaging must handle this -->
         <service
