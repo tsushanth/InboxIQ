@@ -1,6 +1,7 @@
 package com.inboxiq.app.sms
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -31,6 +32,10 @@ private enum class MmsStrategy {
  * tried immediately as a local fallback — no network call, no data ever
  * leaves the phone. A failed send can be retried later (manually, or via
  * AutoHealWorker) purely to recover from a transient carrier hiccup.
+ *
+ * A successful `attempt()` only means the send was handed off — not that it was
+ * delivered. The real result arrives later via MmsStatusReceiver (redirected from
+ * mmslib's own completion broadcast), which is what actually marks SENT vs FAILED.
  */
 object MmsSender {
 
@@ -79,12 +84,13 @@ object MmsSender {
             return
         }
 
-        val succeeded = attempt(context, address, body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
-            attempt(context, address, body, bitmap, MmsStrategy.RESIZED_IMAGE)
+        val dispatched = attempt(context, id, address, body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
+            attempt(context, id, address, body, bitmap, MmsStrategy.RESIZED_IMAGE)
 
-        if (succeeded) {
-            dao.updateSendStatus(id, SendStatus.SENT)
-        } else {
+        // dispatched=true means handed off for delivery, not delivered — MmsStatusReceiver
+        // will correct this to SENT or FAILED once the real result is known. dispatched=false
+        // means both strategies failed locally before ever reaching the network.
+        if (!dispatched) {
             dao.updateSendStatus(id, SendStatus.FAILED)
             dao.setAwaitingAutoHeal(id, true)
         }
@@ -114,11 +120,12 @@ object MmsSender {
             return false
         }
 
-        val succeeded = attempt(context, message.address, message.body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
-            attempt(context, message.address, message.body, bitmap, MmsStrategy.RESIZED_IMAGE)
+        val dispatched = attempt(context, message.id, message.address, message.body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
+            attempt(context, message.id, message.address, message.body, bitmap, MmsStrategy.RESIZED_IMAGE)
 
-        if (succeeded) {
-            dao.updateSendStatus(message.id, SendStatus.SENT)
+        if (dispatched) {
+            // Still not confirmed — MmsStatusReceiver will finalize it. Clear the retry flag
+            // optimistically; if it actually fails again, the receiver re-sets it to true.
             dao.setAwaitingAutoHeal(message.id, false)
         } else {
             dao.incrementAutoHealRetryCount(message.id)
@@ -128,7 +135,7 @@ object MmsSender {
                 dao.setAwaitingAutoHeal(message.id, false)
             }
         }
-        return succeeded
+        return dispatched
     }
 
     /** Copies a picked image into app-private storage and returns a stable FileProvider uri for it. */
@@ -145,12 +152,20 @@ object MmsSender {
         }
     }
 
-    private fun attempt(context: Context, address: String, body: String, bitmap: Bitmap, strategy: MmsStrategy): Boolean {
+    private fun attempt(context: Context, localMessageId: Long, address: String, body: String, bitmap: Bitmap, strategy: MmsStrategy): Boolean {
         return try {
             val settings = Settings().apply { setUseSystemSending(true) }
             val transaction = Transaction(context, settings)
             val payload = if (strategy == MmsStrategy.RESIZED_IMAGE) resize(bitmap) else bitmap
             val message = Message(body, address, payload)
+            // Redirect mmslib's completion broadcast to our own receiver so we can correct
+            // this row to SENT/FAILED once the real delivery result is known.
+            transaction.setExplicitBroadcastForSentMms(
+                Intent(context, MmsStatusReceiver::class.java).apply {
+                    action = MmsStatusReceiver.ACTION_MMS_SENT
+                    putExtra(MmsStatusReceiver.EXTRA_LOCAL_MESSAGE_ID, localMessageId)
+                },
+            )
             transaction.sendNewMessage(message)
             true
         } catch (e: Exception) {

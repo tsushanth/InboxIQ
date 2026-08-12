@@ -83,6 +83,13 @@
             android:name="com.klinker.android.send_message.MmsSentReceiver"
             android:exported="false" />
 
+        <!-- Our own MMS delivery-result receiver — MmsSender redirects mmslib's completion
+             broadcast here (see MmsStatusReceiver) since attempt() succeeding only means the
+             send was handed off, not confirmed delivered. -->
+        <receiver
+            android:name=".sms.MmsStatusReceiver"
+            android:exported="false" />
+
         <!-- Serves our own copies of picked images (see MmsSender.persistLocally) — the
              system Photo Picker's content:// grant doesn't reliably survive being read
              again later (e.g. on a retry), so we own a stable copy instead. -->
