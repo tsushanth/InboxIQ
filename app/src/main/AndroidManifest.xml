@@ -19,7 +19,10 @@
          Message content passes through that backend in transit to relay live tool calls; it
          is not stored there. See mcp/ and inboxiq-mcp-backend's README. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- FOREGROUND_SERVICE_DATA_SYNC intentionally omitted for now — RelayForegroundService
+         is unreachable while CloudConnectSection is hidden (see MainActivity), and declaring
+         this permission requires a Play Console "Foreground service" usage declaration.
+         Re-add alongside re-enabling that section. -->
     <!-- Held only while the relay WebSocket is open (see RelayForegroundService), so Doze
          doesn't silently throttle the connection while it still reports as "connected". -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -103,13 +106,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Holds the persistent WebSocket connection to inboxiq-mcp-backend (see
-             mcp/RelayForegroundService.kt) — only ever started explicitly from Settings,
-             never on boot. -->
-        <service
-            android:name=".mcp.RelayForegroundService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
+        <!-- RelayForegroundService (mcp/) intentionally not registered here for now — see the
+             FOREGROUND_SERVICE_DATA_SYNC comment above. Re-add alongside that permission. -->
 
         <!-- Default apps that provide RCS messaging must handle this -->
         <service

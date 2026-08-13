@@ -1,0 +1,3 @@
+Fixed MMS messages sometimes showing as "Sent" when they actually failed to deliver.
+
+Fixed a bug where contacts saved without a country code could show as two separate, disconnected conversations instead of one.
