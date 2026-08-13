@@ -249,11 +249,10 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onRetryNow = { id ->
                                     lifecycleScope.launch {
+                                        // Dispatching (a true return) only means handed off, not delivered —
+                                        // MmsStatusReceiver owns the real result and the "Fixed!" notification.
                                         val msg = dao.getById(id) ?: return@launch
-                                        if (MmsSender.retry(applicationContext, msg)) {
-                                            val name = ContactResolver.displayNameFor(this@MainActivity, msg.address)
-                                            com.inboxiq.app.sms.MessageNotifier.notifyAutoHealed(applicationContext, msg.address, name)
-                                        }
+                                        MmsSender.retry(applicationContext, msg)
                                     }
                                 },
                                 onToggleBlock = {

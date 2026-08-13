@@ -30,8 +30,17 @@ class MmsStatusReceiver : BroadcastReceiver() {
             try {
                 val sent = contentUriString?.let { isActuallySent(context, Uri.parse(it)) } ?: false
                 val dao = AppDatabase.get(context).messageDao()
+                val message = dao.getById(localId)
                 if (sent) {
                     dao.updateSendStatus(localId, SendStatus.SENT)
+                    // Only a genuine recovery — not every first-time send — deserves the "Fixed!"
+                    // notification. This is the one place that notification should fire from: a
+                    // retry's return value only means "dispatched," the same premature signal
+                    // MmsSender.attempt() used to (wrongly) treat as success (see MmsSender).
+                    if (message?.sendStatus == SendStatus.FAILED) {
+                        val displayName = com.inboxiq.app.data.ContactResolver.displayNameFor(context, message.address)
+                        MessageNotifier.notifyAutoHealed(context, message.address, displayName)
+                    }
                 } else {
                     dao.updateSendStatus(localId, SendStatus.FAILED)
                     dao.setAwaitingAutoHeal(localId, true)
