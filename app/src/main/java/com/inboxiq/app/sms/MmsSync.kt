@@ -38,7 +38,7 @@ object MmsSync {
                     val timestamp = cursor.getLong(dateIdx) * 1000
                     val isIncoming = cursor.getInt(boxIdx) == Telephony.Mms.MESSAGE_BOX_INBOX
 
-                    val address = senderAddress(resolver, id) ?: "unknown"
+                    val address = PhoneNumberNormalizer.normalize(context, senderAddress(resolver, id) ?: "unknown")
                     if (isIncoming && db.blockedNumberDao().isBlocked(address)) continue
                     val parts = messageParts(resolver, id)
 

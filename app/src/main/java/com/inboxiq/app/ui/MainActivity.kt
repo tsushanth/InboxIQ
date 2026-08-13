@@ -297,7 +297,7 @@ class MainActivity : ComponentActivity() {
 }
 
 private fun resolvePickedContactNumber(context: android.content.Context, contactUri: Uri): String? {
-    return context.contentResolver.query(contactUri, null, null, null, null)?.use { cursor ->
+    val raw = context.contentResolver.query(contactUri, null, null, null, null)?.use { cursor ->
         if (!cursor.moveToFirst()) return@use null
         val contactId = cursor.getString(cursor.getColumnIndexOrThrow(android.provider.ContactsContract.Contacts._ID))
         val hasPhone = cursor.getInt(cursor.getColumnIndexOrThrow(android.provider.ContactsContract.Contacts.HAS_PHONE_NUMBER))
@@ -316,6 +316,12 @@ private fun resolvePickedContactNumber(context: android.content.Context, contact
             }
         }
     }
+    // Contacts entries are often saved without a country code. The platform's own SMS/MMS
+    // provider always normalizes to E.164, so an un-normalized address here would silently
+    // start a second, disconnected thread for the same person (confirmed live: this exact
+    // gap split a real contact's history into a 19-message thread and a separate 2-message
+    // one that only ever saw failed MMS sends).
+    return raw?.let { com.inboxiq.app.sms.PhoneNumberNormalizer.normalize(context, it) }
 }
 
 private fun formatTimestamp(millis: Long): String {

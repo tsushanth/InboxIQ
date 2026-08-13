@@ -37,10 +37,11 @@ object SmsBackfill {
 
             while (cursor.moveToNext()) {
                 val type = cursor.getInt(typeIdx)
+                val rawAddress = cursor.getString(addressIdx) ?: "unknown"
                 dao.insert(
                     MessageEntity(
                         threadId = cursor.getLong(threadIdx),
-                        address = cursor.getString(addressIdx) ?: "unknown",
+                        address = PhoneNumberNormalizer.normalize(context, rawAddress),
                         body = cursor.getString(bodyIdx) ?: "",
                         timestamp = cursor.getLong(dateIdx),
                         isIncoming = type == Telephony.Sms.MESSAGE_TYPE_INBOX,

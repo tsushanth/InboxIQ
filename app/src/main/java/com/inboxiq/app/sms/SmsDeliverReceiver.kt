@@ -27,9 +27,10 @@ class SmsDeliverReceiver : BroadcastReceiver() {
         val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent) ?: return
         if (messages.isEmpty()) return
 
-        val address = messages[0].originatingAddress ?: "unknown"
+        val rawAddress = messages[0].originatingAddress ?: "unknown"
         val body = messages.joinToString(separator = "") { it.messageBody ?: "" }
         val timestamp = messages[0].timestampMillis
+        val address = PhoneNumberNormalizer.normalize(context, rawAddress)
 
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
