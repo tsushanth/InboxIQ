@@ -19,10 +19,7 @@
          Message content passes through that backend in transit to relay live tool calls; it
          is not stored there. See mcp/ and inboxiq-mcp-backend's README. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- FOREGROUND_SERVICE_DATA_SYNC intentionally omitted for now — RelayForegroundService
-         is unreachable while CloudConnectSection is hidden (see MainActivity), and declaring
-         this permission requires a Play Console "Foreground service" usage declaration.
-         Re-add alongside re-enabling that section. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <!-- Held only while the relay WebSocket is open (see RelayForegroundService), so Doze
          doesn't silently throttle the connection while it still reports as "connected". -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -93,6 +90,13 @@
             android:name=".sms.MmsStatusReceiver"
             android:exported="false" />
 
+        <!-- MMS content-download-result callback (see MmsDownloadWorker/MmsDownloadReceiver) —
+             explicitly triggers and confirms the actual multimedia download, since the OS
+             doesn't reliably do this on its own despite holding the default-handler role. -->
+        <receiver
+            android:name=".sms.MmsDownloadReceiver"
+            android:exported="false" />
+
         <!-- Serves our own copies of picked images (see MmsSender.persistLocally) — the
              system Photo Picker's content:// grant doesn't reliably survive being read
              again later (e.g. on a retry), so we own a stable copy instead. -->
@@ -106,8 +110,13 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- RelayForegroundService (mcp/) intentionally not registered here for now — see the
-             FOREGROUND_SERVICE_DATA_SYNC comment above. Re-add alongside that permission. -->
+        <!-- Holds the persistent WebSocket connection to inboxiq-mcp-backend (see
+             mcp/RelayForegroundService.kt) — only ever started explicitly from Settings,
+             never on boot. -->
+        <service
+            android:name=".mcp.RelayForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <!-- Default apps that provide RCS messaging must handle this -->
         <service

@@ -104,7 +104,7 @@ fun CloudConnectSection() {
         Spacer(Modifier.height(8.dp))
         Text(
             "Now add InboxIQ as a Connector in claude.ai (Settings → Connectors) — you'll " +
-                "verify this same phone number with a text code there.",
+                "get a call there reading out a verification code for this same phone number.",
             style = MaterialTheme.typography.bodySmall,
         )
     }

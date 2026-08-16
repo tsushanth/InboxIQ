@@ -1058,10 +1058,7 @@ fun SettingsScreen(
             Spacer(Modifier.height(24.dp))
             HorizontalDivider()
             Spacer(Modifier.height(16.dp))
-            // Hidden until inboxiq-mcp-backend is actually reachable (mcp.kreativekoala.llc
-            // DNS + Twilio secrets still pending) — otherwise every user sees a permanently
-            // broken "Enable connection" toggle. Re-enable once the backend is live.
-            // com.inboxiq.app.mcp.CloudConnectSection()
+            com.inboxiq.app.mcp.CloudConnectSection()
             com.inboxiq.app.mcp.AgentDraftsSection()
         }
     }
