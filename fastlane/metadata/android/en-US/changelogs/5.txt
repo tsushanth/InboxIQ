@@ -1,0 +1,3 @@
+Added Connect to Claude: link InboxIQ to your Claude account so your own AI agent can search your messages and draft replies for you to review and send — nothing is ever sent automatically.
+
+Improved reliability of incoming picture messages.
