@@ -34,7 +34,10 @@ import kotlinx.coroutines.launch
 fun CloudConnectSection() {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    var enabled by remember { mutableStateOf(RelayConfig.isEnabled(context)) }
+    // Reflects whether the service is actually alive, not just the persisted preference —
+    // those can drift apart (e.g. the process was killed since), and showing "on" for a dead
+    // connection is worse than showing "off": it tells the user everything's fine when it isn't.
+    var enabled by remember { mutableStateOf(RelayForegroundService.isRunning) }
     var phoneNumber by remember { mutableStateOf(RelayConfig.phoneNumber(context) ?: "") }
     var isLinking by remember { mutableStateOf(false) }
     var statusText by remember { mutableStateOf<String?>(null) }

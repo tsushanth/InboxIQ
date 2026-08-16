@@ -164,6 +164,17 @@ class MainActivity : ComponentActivity() {
 
         addressFromIntent(intent)?.let { address -> screenState.value = Screen.ThreadDetail(address) }
 
+        // Self-heal the relay connection: a foreground service getting killed (Doze, low
+        // memory, a reboot) doesn't clear the user's "enabled" preference, and nothing else
+        // restarts it — confirmed live that this leaves Settings showing "on" while nothing
+        // is actually connected, silently, for as long as the user doesn't happen to
+        // re-toggle it. Runs from an Activity (not Application.onCreate) since starting a
+        // foreground service from a background-triggered process start hits Android's
+        // background-start restrictions; opening the app is always a safe, foregrounded context.
+        if (com.inboxiq.app.mcp.RelayConfig.isEnabled(applicationContext) && !com.inboxiq.app.mcp.RelayForegroundService.isRunning) {
+            startForegroundService(android.content.Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
+        }
+
         setContent {
             val dark = isSystemInDarkTheme()
             val colorScheme = when {
