@@ -42,17 +42,30 @@ object MmsSync {
                     if (isIncoming && db.blockedNumberDao().isBlocked(address)) continue
                     val parts = messageParts(resolver, id)
 
-                    dao.insert(
-                        MessageEntity(
-                            threadId = 0,
-                            address = address,
-                            body = parts.text,
-                            timestamp = timestamp,
-                            isIncoming = isIncoming,
-                            isRead = !isIncoming, // incoming MMS starts unread; our own sent MMS doesn't need the concept
-                            imagePartUri = parts.imagePartUri,
-                        ),
-                    )
+                    // A prior sync can have run before this MMS's image part finished
+                    // downloading, leaving a "[MMS message]" placeholder row behind. Plain
+                    // insert-ignore can never fix that: the unique index is on
+                    // address+timestamp+body, so a later sync with the real image text is a
+                    // *different* body and inserts a second row instead of being recognized as
+                    // the same message. Look the row up by address+timestamp (ignoring body) and
+                    // update it in place once we have real content.
+                    val existing = dao.findByAddressTimestamp(address, timestamp, isIncoming)
+                    val hasBetterContent = parts.imagePartUri != null && existing?.imagePartUri == null
+                    if (existing != null && hasBetterContent) {
+                        dao.update(existing.copy(body = parts.text, imagePartUri = parts.imagePartUri))
+                    } else if (existing == null) {
+                        dao.insert(
+                            MessageEntity(
+                                threadId = 0,
+                                address = address,
+                                body = parts.text,
+                                timestamp = timestamp,
+                                isIncoming = isIncoming,
+                                isRead = !isIncoming, // incoming MMS starts unread; our own sent MMS doesn't need the concept
+                                imagePartUri = parts.imagePartUri,
+                            ),
+                        )
+                    }
                 }
             }
     }

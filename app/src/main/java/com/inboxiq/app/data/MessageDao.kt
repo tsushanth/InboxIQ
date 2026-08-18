@@ -24,7 +24,17 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE address = :address ORDER BY timestamp ASC")
     fun observeThread(address: String): Flow<List<MessageEntity>>
 
-    /** One row per address: its most recent message + unread count, for the thread-list screen. */
+    /**
+     * One row per address: its most recent message + unread count, for the thread-list screen.
+     *
+     * The final GROUP BY m.address is load-bearing, not decorative — confirmed live that a
+     * single multi-part MMS (e.g. an image part and a text part landing as two separate
+     * provider rows, same conversation turn) can produce two messages with the *exact* same
+     * timestamp. The join alone matches both of them to the same address+maxTs pair, handing
+     * the LazyColumn two rows with an identical key and crashing
+     * ("Key ... was already used"). Collapsing to one row per address after the join is what
+     * actually guarantees the "one row per address" the screen depends on.
+     */
     @Query(
         """
         SELECT m.*, (
@@ -34,6 +44,7 @@ interface MessageDao {
         FROM messages m
         INNER JOIN (SELECT address, MAX(timestamp) AS maxTs FROM messages GROUP BY address) latest
         ON m.address = latest.address AND m.timestamp = latest.maxTs
+        GROUP BY m.address
         ORDER BY m.timestamp DESC
         """,
     )
@@ -53,6 +64,16 @@ interface MessageDao {
 
     @Query("SELECT * FROM messages WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): MessageEntity?
+
+    /**
+     * Finds a message already synced for this exact address+timestamp, regardless of its body —
+     * used by MmsSync to detect a placeholder row it inserted before an image part finished
+     * downloading, so a later re-sync can UPDATE it instead of silently no-op'ing (the unique
+     * index on address+timestamp+body means an insert with different body/image content is a
+     * distinct row, not a conflict, so plain insert-ignore can never self-heal a placeholder).
+     */
+    @Query("SELECT * FROM messages WHERE address = :address AND timestamp = :timestamp AND isIncoming = :isIncoming LIMIT 1")
+    suspend fun findByAddressTimestamp(address: String, timestamp: Long, isIncoming: Boolean): MessageEntity?
 
     @Query("UPDATE messages SET autoHealRetryCount = autoHealRetryCount + 1 WHERE id = :id")
     suspend fun incrementAutoHealRetryCount(id: Long)

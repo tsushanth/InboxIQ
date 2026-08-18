@@ -27,7 +27,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -36,6 +38,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -43,12 +46,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -59,6 +66,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Reply
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Block
@@ -303,6 +311,13 @@ class MainActivity : ComponentActivity() {
     private fun runBackfillIfDefault() {
         if (!DefaultSmsRole.isDefault(this)) return
         lifecycleScope.launch { SmsBackfill.run(applicationContext) }
+        // Confirmed live: MMS had no equivalent of SmsBackfill at all — SyncMmsWorker only
+        // ever runs with a 1-hour lookback, triggered solely by a live WAP push arriving.
+        // Any MMS received while the app was backgrounded, or during any window where
+        // InboxIQ briefly wasn't the default handler, was permanently invisible — reopening
+        // the app never retroactively caught it up the way it does for SMS. syncRecent
+        // already takes an arbitrary cutoff, so a full backfill is just calling it with 0.
+        lifecycleScope.launch { com.inboxiq.app.sms.MmsSync.syncRecent(applicationContext, 0L) }
     }
 }
 
@@ -833,31 +848,19 @@ fun ThreadDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(androidx.compose.foundation.rememberScrollState())
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 suggestions.forEach { suggestion ->
                     AssistChip(
                         onClick = { body = suggestion },
                         label = { Text(suggestion) },
+                        shape = RoundedCornerShape(50),
+                        colors = androidx.compose.material3.AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        ),
+                        border = null,
                     )
-                }
-            }
-            Spacer(Modifier.height(4.dp))
-        }
-        pendingImage?.let { uri ->
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box {
-                    MmsImage(uri.toString(), modifier = Modifier.size(64.dp).padding(top = 4.dp))
-                    IconButton(
-                        onClick = { pendingImage = null },
-                        modifier = Modifier.size(20.dp).align(Alignment.TopEnd),
-                    ) {
-                        Icon(Icons.Filled.Close, contentDescription = "Remove image", tint = MaterialTheme.colorScheme.error)
-                    }
                 }
             }
         }
@@ -875,97 +878,182 @@ fun ThreadDetailScreen(
             }
         }
 
-        Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { onPickImage { uri -> if (uri != null) pendingImage = uri } }) {
-                Icon(Icons.Filled.AttachFile, contentDescription = "Attach image")
-            }
-            if (isTranscribing) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
-                    }
-                    Text(
-                        "Transcribing…",
-                        fontSize = 9.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else {
-                // Deliberately NOT an IconButton — IconButton installs its own internal
-                // clickable gesture detector, which races/conflicts with a custom
-                // detectTapGestures(onPress+tryAwaitRelease) on the same node and made
-                // press-and-hold fire unreliably (confirmed live: taps produced no
-                // response at all). A plain Box with only our own gesture detector fixes it.
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(
-                            if (isRecording) MaterialTheme.colorScheme.errorContainer else androidx.compose.ui.graphics.Color.Transparent,
-                            CircleShape,
-                        )
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = {
-                                    if (!transcriber.hasRecordPermission()) {
-                                        requestMicPermission.launch(Manifest.permission.RECORD_AUDIO)
-                                        return@detectTapGestures
-                                    }
-                                    val started = transcriber.startRecording()
-                                    if (!started) {
-                                        Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show()
-                                        return@detectTapGestures
-                                    }
-                                    isRecording = true
-                                    val released = tryAwaitRelease()
-                                    isRecording = false
-                                    if (released) {
-                                        isTranscribing = true
-                                        coroutineScope.launch {
-                                            when (val result = transcriber.stopAndTranscribe()) {
-                                                is VoiceTranscriber.Result.Success -> {
-                                                    body = if (body.isBlank()) result.text else "$body ${result.text}"
-                                                }
-                                                is VoiceTranscriber.Result.Failure -> {
-                                                    Toast.makeText(context, result.reason, Toast.LENGTH_SHORT).show()
-                                                }
-                                            }
-                                            isTranscribing = false
-                                        }
-                                    } else {
-                                        transcriber.cancelRecording()
-                                    }
-                                },
+        // A single elevated surface for everything below the message list — the image
+        // preview, and the input row — reads as one "composer" instead of loose controls
+        // floating directly on the thread background.
+        Surface(
+            tonalElevation = 3.dp,
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column {
+                pendingImage?.let { uri ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Box {
+                            MmsImage(
+                                uri.toString(),
+                                modifier = Modifier.size(64.dp).clip(RoundedCornerShape(12.dp)),
                             )
-                        },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.Filled.Mic,
-                        contentDescription = if (isRecording) "Recording — release to transcribe" else "Hold to record voice memo",
-                        tint = if (isRecording) MaterialTheme.colorScheme.error else androidx.compose.material3.LocalContentColor.current,
-                    )
+                            IconButton(
+                                onClick = { pendingImage = null },
+                                modifier = Modifier
+                                    .size(22.dp)
+                                    .align(Alignment.TopEnd)
+                                    .offset(x = 6.dp, y = (-6).dp)
+                                    .background(MaterialTheme.colorScheme.surface, CircleShape),
+                            ) {
+                                Icon(
+                                    Icons.Filled.Close,
+                                    contentDescription = "Remove image",
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(14.dp),
+                                )
+                            }
+                        }
+                    }
                 }
-                Text(
-                    if (isRecording) "Recording…" else "Hold",
-                    fontSize = 9.sp,
-                    color = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    // Wrapped in the same Column + caption-row shape as the mic button below so
+                    // both icons share the same total height and align on the icon itself — the
+                    // "Hold" caption under the mic used to make it taller than this button, which
+                    // (combined with Alignment.Bottom) pushed the icons out of visual alignment.
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        IconButton(onClick = { onPickImage { uri -> if (uri != null) pendingImage = uri } }) {
+                            Icon(Icons.Filled.AttachFile, contentDescription = "Attach image")
+                        }
+                        Text(" ", fontSize = 9.sp, color = androidx.compose.ui.graphics.Color.Transparent)
+                    }
+                    if (isTranscribing) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
+                            }
+                            Text(
+                                "Transcribing…",
+                                fontSize = 9.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    } else {
+                        // Deliberately NOT an IconButton — IconButton installs its own internal
+                        // clickable gesture detector, which races/conflicts with a custom
+                        // detectTapGestures(onPress+tryAwaitRelease) on the same node and made
+                        // press-and-hold fire unreliably (confirmed live: taps produced no
+                        // response at all). A plain Box with only our own gesture detector fixes it.
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .background(
+                                        if (isRecording) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,
+                                        CircleShape,
+                                    )
+                                    .pointerInput(Unit) {
+                                        detectTapGestures(
+                                            onPress = {
+                                                if (!transcriber.hasRecordPermission()) {
+                                                    requestMicPermission.launch(Manifest.permission.RECORD_AUDIO)
+                                                    return@detectTapGestures
+                                                }
+                                                val started = transcriber.startRecording()
+                                                if (!started) {
+                                                    Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show()
+                                                    return@detectTapGestures
+                                                }
+                                                isRecording = true
+                                                val released = tryAwaitRelease()
+                                                isRecording = false
+                                                if (released) {
+                                                    isTranscribing = true
+                                                    coroutineScope.launch {
+                                                        when (val result = transcriber.stopAndTranscribe()) {
+                                                            is VoiceTranscriber.Result.Success -> {
+                                                                body = if (body.isBlank()) result.text else "$body ${result.text}"
+                                                            }
+                                                            is VoiceTranscriber.Result.Failure -> {
+                                                                Toast.makeText(context, result.reason, Toast.LENGTH_SHORT).show()
+                                                            }
+                                                        }
+                                                        isTranscribing = false
+                                                    }
+                                                } else {
+                                                    transcriber.cancelRecording()
+                                                }
+                                            },
+                                        )
+                                    },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    Icons.Filled.Mic,
+                                    contentDescription = if (isRecording) "Recording — release to transcribe" else "Hold to record voice memo",
+                                    tint = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
+                            }
+                            Text(
+                                if (isRecording) "Recording…" else "Hold to record",
+                                fontSize = 9.sp,
+                                color = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                    // Same invisible-caption-spacer trick as the attach button: the mic/recording
+                    // column has real caption text under it, so every other element in this row
+                    // needs a same-height placeholder or Alignment.Bottom pulls it out of line.
+                    Column(modifier = Modifier.weight(1f)) {
+                        TextField(
+                            value = body,
+                            onValueChange = { body = it },
+                            placeholder = { Text("Message", maxLines = 1) },
+                            shape = RoundedCornerShape(24.dp),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                                focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 2.dp)
+                                .heightIn(min = 48.dp),
+                        )
+                        Text(" ", fontSize = 9.sp, color = androidx.compose.ui.graphics.Color.Transparent)
+                    }
+                    Spacer(Modifier.width(4.dp))
+                    val canSend = body.isNotBlank() || pendingImage != null
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        FilledIconButton(
+                            onClick = {
+                                if (canSend) {
+                                    onSend(body, pendingImage)
+                                    body = ""
+                                    pendingImage = null
+                                }
+                            },
+                            enabled = canSend,
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            ),
+                            modifier = Modifier.size(48.dp),
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.Send,
+                                contentDescription = "Send",
+                                tint = if (canSend) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        Text(" ", fontSize = 9.sp, color = androidx.compose.ui.graphics.Color.Transparent)
+                    }
                 }
             }
-            OutlinedTextField(
-                value = body,
-                onValueChange = { body = it },
-                label = { Text("Message") },
-                modifier = Modifier.weight(1f).padding(end = 8.dp),
-            )
-            Button(onClick = {
-                if (body.isNotBlank() || pendingImage != null) {
-                    onSend(body, pendingImage)
-                    body = ""
-                    pendingImage = null
-                }
-            }) { Text("Send") }
         }
     }
 }

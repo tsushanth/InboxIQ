@@ -14,15 +14,15 @@ val localProps = Properties().apply {
 
 android {
     namespace = "com.inboxiq.app"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "27.2.12479018"
 
     defaultConfig {
         applicationId = "com.inboxiq.app"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 6
-        versionName = "0.4.0"
+        targetSdk = 36
+        versionCode = 7
+        versionName = "0.4.1"
 
         // Native whisper.cpp build for on-device voice-memo transcription (zero network).
         ndk {
