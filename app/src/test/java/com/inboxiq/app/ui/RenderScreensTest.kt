@@ -16,6 +16,10 @@ import com.inboxiq.app.ui.theme.Density
 import com.inboxiq.app.ui.theme.InboxTheme
 import com.inboxiq.app.ui.theme.ThemeMode
 import com.inboxiq.app.ui.theme.ThemeSettings
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.unit.dp
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -115,4 +119,29 @@ class RenderScreensTest {
     @Test fun blocked_empty() { show { BlockedNumbersScreen(emptyList(), { null }, {}, {}) }; shot("blocked_empty") }
 
     @Test fun gallery_empty() { show { MediaGalleryScreen("Avery Park", emptyList(), {}, {}) }; shot("gallery_empty") }
+
+    @Test @Config(qualifiers = "w1100dp-h700dp-xhdpi")
+    fun two_pane_tablet_landscape() {
+        show {
+            androidx.compose.foundation.layout.Row(androidx.compose.ui.Modifier.fillMaxSize()) {
+                InboxScreen(
+                    rows = Fixtures.rows(), names = Fixtures.names, isDefaultHandler = true, callbacks = InboxCallbacks(),
+                    now = Fixtures.NOW, activeAddress = "+15550101", twoPane = true,
+                    modifier = androidx.compose.ui.Modifier.width(380.dp).fillMaxHeight(),
+                )
+                androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1f)) {
+                    ThreadScreen("+15550101", "Avery Park", Fixtures.thread(), ThreadCallbacks(), showBack = false, voiceEnabled = false, now = Fixtures.NOW)
+                }
+            }
+        }
+        shot("two_pane_tablet")
+    }
+
+    @Test fun inbox_archived_empty() { show { InboxScreen(Fixtures.rows(), Fixtures.names, true, InboxCallbacks(), now = Fixtures.NOW, initialShowArchived = true) }; shot("inbox_archived_empty") }
+
+    @Test fun link_warning_content_is_reachable() {
+        // The scam thread's link is flagged, so tapping it must warn rather than open.
+        val a = com.inboxiq.app.inbox.LinkSafety.analyze("usps-redelivery.top", MessageLabel.SCAM)
+        assertTrue(a.risk == com.inboxiq.app.inbox.LinkRisk.DANGER)
+    }
 }

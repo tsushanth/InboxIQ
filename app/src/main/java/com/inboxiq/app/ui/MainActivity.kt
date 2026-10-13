@@ -290,7 +290,10 @@ class MainActivity : ComponentActivity() {
         val draft by produceState<String?>(null, address) { value = vm.draftFor(address) }
         val displayName = names[address]
 
-        LaunchedEffect(address, messages.count { !it.isRead }) { vm.actions.markRead(address) }
+        LaunchedEffect(address, messages.count { !it.isRead }) {
+            vm.actions.markRead(address)
+            com.inboxiq.app.sms.MessageNotifier.cancel(applicationContext, address)
+        }
 
         val cb = remember(address) {
             ThreadCallbacks(

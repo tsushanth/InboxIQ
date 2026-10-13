@@ -30,6 +30,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.InboxIQ"
+        android:enableOnBackInvokedCallback="true"
         android:supportsRtl="true">
 
         <activity
@@ -72,6 +73,11 @@
                 <data android:mimeType="application/vnd.wap.mms-message" />
             </intent-filter>
         </receiver>
+
+        <!-- Buttons on message notifications: Reply, Mark as read, Copy code -->
+        <receiver
+            android:name=".sms.NotificationActionReceiver"
+            android:exported="false" />
 
         <!-- Sent-SMS status callback -->
         <receiver

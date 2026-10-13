@@ -49,6 +49,7 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                     ),
                 )
 
+                var labelForNotification = com.inboxiq.app.data.MessageLabel.UNLABELED
                 if (id > 0) {
                     val cached = db.threadLabelDao().get(address)
                     // A high-precision heuristic (OTP code, "you've won" scam phrasing, etc.)
@@ -59,6 +60,7 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                     // ...unless the user hand-filed this sender, in which case their choice stands.
                     val userCorrected = db.threadStateDao().get(address)?.labelCorrected == true
                     val heuristic = if (userCorrected) null else HeuristicRules.match(body)
+                    labelForNotification = heuristic?.label ?: cached?.label ?: com.inboxiq.app.data.MessageLabel.UNLABELED
                     when {
                         heuristic != null && heuristic.label != cached?.label -> {
                             db.threadLabelDao().upsert(
@@ -78,7 +80,8 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                 }
 
                 val displayName = ContactResolver.displayNameFor(context, address)
-                MessageNotifier.notifyIncoming(context, address, displayName, body)
+                val muted = db.threadStateDao().isMuted(address, System.currentTimeMillis())
+                MessageNotifier.notifyIncoming(context, address, displayName, body, labelForNotification, timestamp, muted)
             } finally {
                 pendingResult.finish()
             }
