@@ -17,7 +17,7 @@ actual submission, not yet submitted.
 - `READ_SMS`, `RECEIVE_SMS`, `SEND_SMS`, `RECEIVE_MMS`, `RECEIVE_WAP_PUSH`
 - `READ_CONTACTS` (for display-name resolution in the inbox UI)
 - Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET`, `WAKE_LOCK`, `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_SPECIAL_USE` (see FOREGROUND_SERVICE_DECLARATION.md)
-- Removed in 0.4.2: `RECEIVE_BOOT_COMPLETED`, `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `FOREGROUND_SERVICE_DATA_SYNC`
+- Removed from our own manifest in 0.4.2: `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE_DATA_SYNC`. Libraries still add `RECEIVE_BOOT_COMPLETED` (WorkManager) and `FOREGROUND_SERVICE_DATA_SYNC` (Play Asset Delivery); see DIAGNOSIS.md
 
 ## Core functionality justification (per permission)
 

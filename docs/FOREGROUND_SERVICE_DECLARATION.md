@@ -12,3 +12,8 @@ Why not dataSync: on Android 15+ (target 35+) dataSync is capped at roughly 6 ho
 - Impact if deferred/stopped: the connection drops; the user reconnects by reopening the app. No SMS functionality depends on it.
 - Video: record (1) Settings > Connect to Claude > consent dialog > enable, (2) the notification with Disconnect, (3) Claude issuing a read, (4) Disconnect. Use a test phone with test messages only.
 - Honest risk: Play may reject specialUse as "not special". Fallback options: remove the relay, or replace the persistent socket with FCM-triggered short work (needs backend work and a Firebase dependency).
+
+## Also declare (library-injected)
+The merged manifest still contains `FOREGROUND_SERVICE_DATA_SYNC` and a disabled `ExtractionForegroundService` (dataSync) from Play Asset Delivery (Gemma pack). Either declare it as "Play asset pack extraction, system-managed, not started by app code" or strip both with `tools:node="remove"` after testing the Gemma download on a device.
+## Lower-risk alternative
+Foreground-only connection (no foreground service at all). See DIAGNOSIS.md, "specialUse versus Play policy".
