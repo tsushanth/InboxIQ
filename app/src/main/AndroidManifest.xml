@@ -13,13 +13,6 @@
          leaves the device. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!-- Optional, off-by-default, behind an explicit consent dialog: connects to
-         inboxiq-mcp-backend (mcp.kreativekoala.llc) so the user can add this phone as a Claude
-         Connector. When enabled, message text, sender numbers and contact names are sent to
-         that service and on to Claude in response to the user's own requests, and only while InboxIQ is
-         open on screen (no foreground service, no wake lock). See mcp/ and docs/DIAGNOSIS.md. -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".InboxIqApp"
         android:allowBackup="false"

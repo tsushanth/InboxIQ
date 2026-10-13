@@ -1,0 +1,20 @@
+<resources>
+    <!-- Optional "Connect to Claude" relay: disclosure text. Keep in sync with
+         docs/DATA_SAFETY.md and the privacy policy. Changing what is shared => bump
+         RelayConfig.CONSENT_VERSION. -->
+    <string name="relay_section_blurb">Optional. While InboxIQ is open on your screen, Claude (claude.ai or Claude Desktop, signed in to your account) can read your text messages and draft replies. Closing the app ends access. Off until you turn it on.</string>
+    <string name="relay_consent_title">Share your messages with Claude while InboxIQ is open?</string>
+    <string name="relay_consent_body">If you turn this on:\n\n- Claude can reach your messages only while InboxIQ is open on your screen. When you close the app, switch to another app, or turn the screen off, the connection ends within a few seconds and nothing runs in the background. It does not reconnect until you open InboxIQ again.\n- While connected, and only when you ask Claude, it can list your conversations, search your texts, and read full threads. It sees message text, sender phone numbers, contact names and timestamps for the messages it asks for, including messages from banks and other services. One-time passcodes are hidden.\n- That data goes from this phone to the InboxIQ relay service (mcp.kreativekoala.llc, run by InboxIQ\'s publisher on Fly.io), and from there to Claude through the connector on your own Claude account, which handles it under that account\'s terms and privacy settings. The relay passes messages through and does not store them. Your phone number is stored so the relay can find this phone.\n- Claude can only draft texts. Nothing is sent until you open InboxIQ and tap Send on each draft.\n- Turning this off disconnects immediately and discards this phone\'s relay key. To also remove the connector, delete InboxIQ under Settings, Connectors in Claude.\n\nInboxIQ\'s sorting of your inbox stays on this phone either way.</string>
+    <string name="relay_consent_accept">Share my messages</string>
+    <string name="relay_consent_decline">Not now</string>
+    <string name="relay_status_off">Status: Off</string>
+    <string name="relay_status_connecting">Status: Connecting</string>
+    <string name="relay_status_connected">Status: Connected. Claude can reach your messages while this screen is open.</string>
+    <string name="relay_status_offline">Status: Offline. Can\'t reach the relay, retrying while InboxIQ is open.</string>
+    <string name="relay_status_paused">Status: Paused (app closed). Reopen InboxIQ to reconnect.</string>
+    <string name="relay_status_reconnect_needed">Reconnect needed. The relay no longer accepts this phone\'s key, so verify this phone again.</string>
+    <string name="relay_reconnect_action">Reconnect</string>
+    <string name="relay_foreground_only_note">Works only while InboxIQ is open on your screen. Closing the app, switching apps or turning the screen off ends access within a few seconds.</string>
+    <string name="settings_privacy_note">Sorting happens on this phone. InboxIQ has no accounts, ads or analytics. Nothing leaves the phone unless you turn on Connect to Claude below, and then only while InboxIQ is open.</string>
+    <string name="intro_relay_exception">Connect to Claude, in Settings, is off until you turn it on. It is the only feature that sends message content off the phone, and only after you set it up. It works only while InboxIQ is open on your screen.</string>
+</resources>
