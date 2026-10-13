@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /** What the relay settings row shows. Wording lives in strings.xml (relay_status_*). */
-enum class RelayStatus { OFF, CONNECTING, CONNECTED, OFFLINE, PAUSED, RECONNECT_NEEDED }
+enum class RelayStatus { OFF, CONNECTING, CONNECTED, OFFLINE, PAUSED, RECONNECT_NEEDED, REPLACED }
 
 /** One open socket. Implementations must make [cancel] and [close] safe to call repeatedly. */
 interface RelaySocket {
@@ -23,7 +23,11 @@ interface RelaySocket {
 interface RelaySocketEvents {
     fun onOpen()
     fun onMessage(text: String)
-    fun onClosed()
+    /**
+     * [code]/[reason] are the WebSocket close frame. The relay closes with 4401 for an unknown,
+     * expired or revoked token ("unauthorized"), and for "replaced" / "unlinked".
+     */
+    fun onClosed(code: Int = 1000, reason: String = "")
     /** [httpCode] is the HTTP status of a rejected upgrade, if any. */
     fun onFailure(httpCode: Int?)
 }
@@ -41,6 +45,9 @@ interface RelayGate {
     fun token(): String
     /** The server rejected the token (401/403): stop and require re-verification. */
     fun markReconnectNeeded()
+    /** Another install took this number over (close 4401 "replaced"/"unlinked"); also requires re-verification. */
+    fun markReplaced() = markReconnectNeeded()
+    fun replaced(): Boolean = false
 }
 
 /**
@@ -105,7 +112,8 @@ class RelayConnectionManager(
     }
 
     private fun idleStatus(): RelayStatus = when {
-        gate.needsReconnect() && gate.isEnabled() -> RelayStatus.RECONNECT_NEEDED
+        gate.needsReconnect() && gate.isEnabled() ->
+            if (gate.replaced()) RelayStatus.REPLACED else RelayStatus.RECONNECT_NEEDED
         !gate.canConnect() -> RelayStatus.OFF
         else -> RelayStatus.PAUSED
     }
@@ -159,11 +167,24 @@ class RelayConnectionManager(
                 }
             }
 
-            override fun onClosed() {
+            override fun onClosed(code: Int, reason: String) {
                 synchronized(lock) {
                     if (gen != generation) return
                     deadGeneration = gen
                     socket = null
+                    if (code == CLOSE_UNAUTHORIZED) {
+                        // 4401: token unknown/expired/revoked, or this number was re-linked/unlinked
+                        // elsewhere. Retrying with the same token can never succeed: stop, no backoff loop.
+                        retryJob?.cancel(); retryJob = null
+                        if (reason == "replaced" || reason == "unlinked") {
+                            gate.markReplaced()
+                            _status.value = RelayStatus.REPLACED
+                        } else {
+                            gate.markReconnectNeeded()
+                            _status.value = RelayStatus.RECONNECT_NEEDED
+                        }
+                        return
+                    }
                     scheduleRetry()
                 }
             }
@@ -215,6 +236,8 @@ class RelayConnectionManager(
     }
 
     companion object {
+        /** WebSocket close code the relay uses for "this token is no longer valid here". */
+        const val CLOSE_UNAUTHORIZED = 4401
         const val GRACE_MS = 5_000L
         const val INITIAL_BACKOFF_MS = 2_000L
         const val MAX_BACKOFF_MS = 60_000L

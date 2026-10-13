@@ -7,7 +7,7 @@ listing text is true again.
 ## Top-level questions
 - Does your app collect or share any of the required user data types? **Yes**
 - Is all of the user data collected by your app encrypted in transit? **Yes** (TLS: https and wss to mcp.kreativekoala.llc)
-- Do you provide a way for users to request that their data be deleted? **Yes**: turning the connection off in the app discards the phone's relay key; relay-side phone number/token records are deleted on request to support@kreativekoala.llc (NOTE: the backend has no self-service delete endpoint yet; add one, or keep this answer as email request only).
+- Do you provide a way for users to request that their data be deleted? **Yes**: turning the connection off in the app discards the phone's relay key and asks the relay to unlink the phone and revoke Claude's access (best effort); relay-side phone number/token records are deleted on request to support@kreativekoala.llc (NOTE: the backend has no self-service delete endpoint yet; add one, or keep this answer as email request only).
 - Independent security review: No.
 
 ## Data types (only when the user turns on "Connect to Claude"; data can leave the phone only while InboxIQ is open on screen)
@@ -15,7 +15,7 @@ listing text is true again.
 |---|---|---|---|---|---|
 | Messages > SMS or MMS | Yes (transmitted through relay, not stored) | Yes, with Anthropic (the AI service the user connects) | App functionality (user-directed AI assistant) | Yes, opt-in | Message text, one-time passcodes masked |
 | Contacts > (contact names) | Yes (transmitted, not stored) | Yes, with Anthropic | App functionality | Yes | Names resolved from device contacts, sent in tool results |
-| Personal info > Phone number | Yes (stored on relay) | No | App functionality, account management (find and verify the phone) | Yes | Entered by the user; also the number voice-called for OTP; Twilio places that call as a processor |
+| Personal info > Phone number | Yes (stored on relay) | No | App functionality, account management (find and verify the phone) | Yes | Entered by the user; also the number voice-called to read a 6-digit code when linking the phone and when adding the connector (the code is typed into the app and not stored on the phone); Twilio places that call as a processor |
 | App info and performance | No | No | | | No analytics or crash SDK; crash log stays on device |
 | Audio files / Voice | No | No | | | Mic used for on-device transcription, never leaves the phone |
 | Device or other IDs | No | | | | |
