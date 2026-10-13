@@ -1,17 +1,22 @@
 package com.inboxiq.app.mcp
 
 import android.content.Intent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,8 +24,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.launch
 
 /**
@@ -41,6 +50,23 @@ fun CloudConnectSection() {
     var phoneNumber by remember { mutableStateOf(RelayConfig.phoneNumber(context) ?: "") }
     var isLinking by remember { mutableStateOf(false) }
     var statusText by remember { mutableStateOf<String?>(null) }
+    var ignoringBatteryOptimizations by remember {
+        mutableStateOf(BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context))
+    }
+
+    // The user can grant the exemption from system Settings (reached via the banner below,
+    // or independently) and come straight back here without the app process restarting, so
+    // recheck on every resume rather than only once at first composition.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                ignoringBatteryOptimizations = BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Text("Connect to Claude", style = MaterialTheme.typography.titleSmall)
     Text(
@@ -110,5 +136,57 @@ fun CloudConnectSection() {
                 "get a call there reading out a verification code for this same phone number.",
             style = MaterialTheme.typography.bodySmall,
         )
+    }
+
+    Spacer(Modifier.height(12.dp))
+    BatteryOptimizationStatusRow(
+        ignoringBatteryOptimizations = ignoringBatteryOptimizations,
+        onRequestExemption = { BatteryOptimizationHelper.requestExemption(context) },
+    )
+}
+
+/**
+ * Persistent status row for the relay's Doze exemption. Shown regardless of whether the
+ * relay switch above is currently on — the exemption matters the moment it's enabled, and a
+ * user checking this screen while the relay is off should still see it's not protected yet.
+ */
+@Composable
+private fun BatteryOptimizationStatusRow(
+    ignoringBatteryOptimizations: Boolean,
+    onRequestExemption: () -> Unit,
+) {
+    if (ignoringBatteryOptimizations) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("✓", color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 8.dp))
+            Text(
+                "Background delivery: reliable",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.errorContainer)
+                .padding(12.dp),
+        ) {
+            Text(
+                "Background reliability may be limited",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+            )
+            Text(
+                "Android's battery optimization can silently stop the relay connection " +
+                    "while InboxIQ is in the background. Exempt it to keep messages flowing.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+                modifier = Modifier.padding(top = 2.dp, bottom = 8.dp),
+            )
+            Button(onClick = onRequestExemption) {
+                Text("Exempt InboxIQ from battery optimization")
+            }
+        }
     }
 }
