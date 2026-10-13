@@ -30,6 +30,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.inboxiq.app.R
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -190,17 +192,13 @@ fun SettingsScreen(
             // ---------- privacy ----------
             Section("Privacy")
             Text(
-                "Sorting happens on this phone. InboxIQ has no accounts, ads or analytics. Nothing leaves the phone unless you turn on Connect to Claude below, and then only while InboxIQ is open.",
+                stringResource(R.string.settings_privacy_note),
                 style = MaterialTheme.typography.bodyMedium,
             )
             OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp)) { Text("Read what InboxIQ does and does not access") }
 
             if (showCloudSections) {
-                Spacer(Modifier.height(24.dp))
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Spacer(Modifier.height(16.dp))
-                com.inboxiq.app.mcp.CloudConnectSection()
-                com.inboxiq.app.mcp.AgentDraftsSection()
+                com.inboxiq.app.feature.RelayFeatures.instance.SettingsSection()
             }
             Spacer(Modifier.height(32.dp))
         }

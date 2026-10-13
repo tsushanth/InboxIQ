@@ -54,6 +54,16 @@ android {
         }
     }
 
+    // Two shippable variants from one codebase (docs/ARCHITECTURE_RELAY_OPTIONAL.md):
+    //  core  - no relay code, no INTERNET permission; what the Play listing describes.
+    //  relay - core plus the optional, consent-gated "Connect to Claude" relay (opt-in distribution).
+    // Same applicationId and signing, so a user's database carries across variants unchanged.
+    flavorDimensions += "distribution"
+    productFlavors {
+        create("core") { dimension = "distribution" }
+        create("relay") { dimension = "distribution" }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -146,9 +156,9 @@ dependencies {
     // Downloads the gemma_model_pack asset pack on-demand when the user opts into MID tier
     implementation("com.google.android.play:asset-delivery-ktx:2.3.0")
 
-    // WebSocket client for the cloud MCP relay (inboxiq-mcp-backend) — holds a persistent
-    // connection so a paired Claude Connector session can reach this phone.
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // WebSocket client for the cloud MCP relay (inboxiq-mcp-backend). `relay` variant ONLY:
+    // the core variant must contain no network client at all.
+    "relayImplementation"("com.squareup.okhttp3:okhttp:4.12.0")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")

@@ -1,0 +1,31 @@
+InboxIQ is a full text-messaging (SMS and MMS) app that sorts your inbox for you.
+
+Every text you get - from banks, delivery services, verification codes, spam, scam attempts, and people you know - lands in one inbox looking the same. InboxIQ sorts them into Personal, Work, Promo, Verification Codes, Spam, and Suspected Scam, so you can see what needs your attention.
+
+WHAT IT DOES
+
+- Replaces your default messaging app: send, receive, and view text and photo messages.
+- Sorts messages on your phone. The classifier runs entirely on-device; message text is not sent anywhere to be sorted. An optional larger on-device model can be downloaded through Google Play.
+- Flags conversations waiting on a reply and offers quick-reply suggestions.
+- Labels verification codes, promotions, and suspected scams.
+- Block numbers, search messages, voice memos transcribed on-device, dark mode, contact names.
+
+OPTIONAL: CONNECT TO CLAUDE (OFF BY DEFAULT, ONLY WHILE THE APP IS OPEN)
+
+If you choose to turn it on in Settings, InboxIQ can let Claude (claude.ai or Claude Desktop, signed in to your own Claude account) read your messages and draft texts for you, but only while InboxIQ is open on your screen. Closing the app, switching to another app or turning the screen off ends access within a few seconds, and nothing runs in the background. This is the only feature that sends message content off your phone, and it is off until you accept an on-screen disclosure.
+
+When it is on and the app is open:
+- Claude can list your conversations, search your texts, and read threads when you ask it to. It can see message text, sender phone numbers, contact names, and times for the messages it asks for. One-time passcodes are hidden.
+- That data travels from your phone to the InboxIQ relay service (mcp.kreativekoala.llc), then to Claude through the connector on your own Claude account. The relay passes messages through and does not store them; it stores your phone number and security tokens so it can find your phone.
+- Claude can only write drafts. Nothing is sent until you open InboxIQ, read the draft, and tap Send.
+- Settings shows the connection status. Turning it off disconnects immediately and discards the phone's connection key.
+
+If you never turn it on, your messages stay on your device.
+
+PRIVACY
+
+InboxIQ has no ads and no analytics, and does not sell your data. Messages, numbers, and contact names are stored in a local database on your phone; uninstalling deletes them. Details, including the optional Claude connection: https://kreativekoala.llc/privacy
+
+PERMISSIONS
+
+SMS and MMS permissions: required because InboxIQ is your default SMS app (send, receive, and store your texts). Contacts: shows names instead of numbers. Notifications: alerts for new messages and drafts. Microphone: voice memos, transcribed on-device. Internet: only used by the optional Claude connection and Google Play downloads.

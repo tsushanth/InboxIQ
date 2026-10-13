@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- `relay` variant only. Optional, off-by-default, behind an explicit consent dialog:
+         connects to inboxiq-mcp-backend (mcp.kreativekoala.llc) so the user can add this phone as a
+         Claude Connector. When enabled, message text, sender numbers and contact names are sent to
+         that service and on to Claude in response to the user's own requests, and only while InboxIQ
+         is open on screen (no foreground service, no wake lock). The `core` variant has no INTERNET
+         permission. See docs/ARCHITECTURE_RELAY_OPTIONAL.md and docs/DIAGNOSIS.md. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

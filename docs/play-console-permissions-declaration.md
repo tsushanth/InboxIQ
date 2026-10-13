@@ -10,13 +10,28 @@ actual submission, not yet submitted.
 
 > **CORRECTED 2026-10-13.** The earlier text of this file said no message content is ever transmitted
 > to any server. That has been false since app 0.4.0, which includes the optional "Connect to Claude"
-> relay. The statements below are the corrected, true versions. Do not reuse the older wording.
+> relay. The statements below are the corrected, true versions for the `relay` build; the `core` build makes none of those transfers. Do not reuse the older wording.
+
+## Variants
+
+Two builds exist (docs/ARCHITECTURE_RELAY_OPTIONAL.md). **Submit this declaration for the `core` build**, which is the
+one that goes to Play. Use the "core" justification text below and ignore every statement about the Claude
+connection, which exists only in the `relay` build. For `core`: no `INTERNET` permission (verify with
+`scripts/inspect-variant.py core`), no message content ever leaves the device, no relay.
+
+Core justification, ready to paste for READ_SMS / RECEIVE_SMS / SEND_SMS / RECEIVE_MMS / RECEIVE_WAP_PUSH:
+
+> InboxIQ is a full default SMS/MMS handler app. These permissions are required to read, receive and send text
+> messages, the app's entire purpose. It also categorizes incoming messages on the device with a bundled
+> model, and offers quick replies. The app has no internet permission: message content is never transmitted.
+
+READ_CONTACTS (core): only to show a sender's saved name instead of a number, read locally, never transmitted.
 
 ## Which permissions are we declaring
 
 - `READ_SMS`, `RECEIVE_SMS`, `SEND_SMS`, `RECEIVE_MMS`, `RECEIVE_WAP_PUSH`
 - `READ_CONTACTS` (for display-name resolution in the inbox UI)
-- Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET`. InboxIQ declares no foreground-service or wake-lock permission of its own; libraries add some (see FOREGROUND_SERVICE_DECLARATION.md)
+- Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET` (relay build only; the core build does not request it). InboxIQ declares no foreground-service or wake-lock permission of its own; libraries add some (see FOREGROUND_SERVICE_DECLARATION.md)
 - Removed from our own manifest by 0.5.0: `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `FOREGROUND_SERVICE_DATA_SYNC`, `WAKE_LOCK`. Libraries still add `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` (WorkManager) and `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_DATA_SYNC` (Play Asset Delivery); see FOREGROUND_SERVICE_DECLARATION.md
 
 ## Core functionality justification (per permission)
@@ -80,7 +95,7 @@ which Android — not InboxIQ — presents and controls.
       (section 10, "App-Specific Disclosures: InboxIQ") — still needs to be
       pasted into the actual Play Console listing field when the app is
       submitted; see `privacy-policy-draft.md` in this folder
-- [ ] Owner decision: keep, gate, or remove the Claude relay before submitting this declaration; if Play will not accept it as non-core user-directed transfer, remove it
+- [x] Relay decision: resolved by shipping the `core` variant to Play; the relay is only in the `relay` build. Owner still decides whether a relay build is distributed at all.
 - [ ] Screenshots/video demonstrating the app functioning as a full SMS
       client (Google reviews for "is this really a messaging app or just
       permission-grabbing")

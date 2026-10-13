@@ -141,8 +141,8 @@ fun OnboardingScreen(isDefault: Boolean, onChooseDefault: () -> Unit, onSkip: ()
             Block("What it will not do") {
                 "Upload your messages to sort them. Show ads, use analytics or ask you to sign in. Read anything outside your texts and contacts."
             }
-            Block("One optional exception") {
-                "Connect to Claude, in Settings, is off until you turn it on. It is the only feature that sends message content off the phone, and only after you set it up. It works only while InboxIQ is open on your screen."
+            com.inboxiq.app.feature.RelayFeatures.instance.introExceptionText()?.let { text ->
+                Block("One optional exception") { text }
             }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
