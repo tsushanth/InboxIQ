@@ -1,3 +1,5 @@
+> **STALE (2026-10-13):** describes the retired LAN-only server and pairing script. The app now uses the optional cloud relay only (see DIAGNOSIS.md, DATA_SAFETY.md).
+
 # InboxIQ MCP server
 
 InboxIQ can expose your messages to your own AI agent (Claude Code, Claude
