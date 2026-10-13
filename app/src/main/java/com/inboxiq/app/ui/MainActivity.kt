@@ -46,13 +46,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.delay
 import com.inboxiq.app.classify.ClassifierTierPreference
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.sms.DefaultSmsRole
 import com.inboxiq.app.sms.MmsSender
 import com.inboxiq.app.sms.ScheduledSend
 import com.inboxiq.app.sms.SendPreferences
-import com.inboxiq.app.sms.SmsBackfill
+import com.inboxiq.app.sms.ImportStatusHolder
+import com.inboxiq.app.sms.ImportTrigger
+import com.inboxiq.app.sms.RoleWatcher
 import com.inboxiq.app.ui.theme.InboxTheme
 import com.inboxiq.app.ui.theme.ThemePreferences
 import com.inboxiq.app.ui.theme.ThemeSettings
@@ -66,6 +70,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         const val EXTRA_THREAD_ADDRESS = "com.inboxiq.app.EXTRA_THREAD_ADDRESS"
         private const val PREF_ONBOARDED = "onboarding_done"
+        private const val ROLE_POLL_MS = 3_000L
     }
 
     private val vm: InboxViewModel by viewModels()
@@ -79,7 +84,7 @@ class MainActivity : ComponentActivity() {
             markOnboarded()
             if (vm.screen is Screen.Onboarding) vm.screen = Screen.Inbox
         }
-        runBackfillIfDefault()
+        roleWatcher.check(force = true)
     }
 
     private var onContactPicked: ((String?) -> Unit)? = null
@@ -105,6 +110,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun refreshDefault() { isDefault = DefaultSmsRole.isDefault(this) }
+
+    /** Starts the history import whenever we are the default SMS app, however that came about (see ImportTrigger). */
+    private val roleWatcher = RoleWatcher(
+        isDefault = { DefaultSmsRole.isDefault(this) },
+        onDefault = { ImportTrigger.ensure(applicationContext) },
+    )
     private fun prefs() = getSharedPreferences("inboxiq_prefs", MODE_PRIVATE)
     private fun markOnboarded() = prefs().edit().putBoolean(PREF_ONBOARDED, true).apply()
 
@@ -127,7 +138,21 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch { ScheduledSend.reenqueueAll(applicationContext) }
 
-        lifecycle.addObserver(LifecycleEventObserver { _, e -> if (e == Lifecycle.Event.ON_RESUME) refreshDefault() })
+        lifecycle.addObserver(LifecycleEventObserver { _, e ->
+            if (e == Lifecycle.Event.ON_RESUME) refreshDefault()
+            // Back from Settings or a system dialog: the default may have changed while we were away.
+            if (e == Lifecycle.Event.ON_START) roleWatcher.check(force = true)
+        })
+        // The role can also change under us while visible (split-screen, a dialog over the app).
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                while (true) {
+                    delay(ROLE_POLL_MS)
+                    refreshDefault()
+                    roleWatcher.check(force = false)
+                }
+            }
+        }
 
         setContent {
             InboxTheme(theme) {
@@ -136,8 +161,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        runBackfillIfDefault()
     }
 
     @Composable
@@ -146,6 +169,7 @@ class MainActivity : ComponentActivity() {
         val rows by vm.rows.collectAsState()
         val names by vm.names.collectAsState()
         val blocked by vm.blocked.collectAsState()
+        val importStatus by ImportStatusHolder.status.collectAsState()
 
         BackHandler(enabled = screen != Screen.Inbox) {
             vm.screen = when (screen) {
@@ -169,7 +193,7 @@ class MainActivity : ComponentActivity() {
                             Row(Modifier.fillMaxSize()) {
                                 InboxScreen(
                                     rows = rows, names = names, isDefaultHandler = isDefault, callbacks = inboxCallbacks,
-                                    search = vm::search, activeAddress = activeAddress, twoPane = true,
+                                    search = vm::search, activeAddress = activeAddress, twoPane = true, importStatus = importStatus,
                                     modifier = Modifier.width(380.dp).fillMaxHeight(),
                                 )
                                 Box(Modifier.weight(1f).fillMaxHeight()) {
@@ -178,7 +202,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         } else {
-                            InboxScreen(rows, names, isDefault, inboxCallbacks, search = vm::search)
+                            InboxScreen(rows, names, isDefault, inboxCallbacks, search = vm::search, importStatus = importStatus)
                         }
                     }
                     screen is Screen.Thread -> ThreadHost(screen.address, showBack = true)
@@ -261,6 +285,7 @@ class MainActivity : ComponentActivity() {
         onOpenSettings = { vm.screen = Screen.Settings },
         onNewConversation = { vm.screen = Screen.NewConversation() },
         onRequestDefault = { requestRole.launch(DefaultSmsRole.requestIntent(this)) },
+        onRetryImport = { ImportTrigger.retry(applicationContext) },
         onPin = { addrs, pin -> vm.launch { addrs.forEach { vm.actions.setPinned(it, pin) } } },
         onArchive = { addrs, archived -> vm.archive(addrs, archived) },
         onMute = { addrs, choice -> vm.mute(addrs, choice) },
@@ -337,13 +362,6 @@ class MainActivity : ComponentActivity() {
         MmsSender.retry(applicationContext, msg)
     }
 
-    private fun runBackfillIfDefault() {
-        if (!DefaultSmsRole.isDefault(this)) return
-        lifecycleScope.launch { SmsBackfill.run(applicationContext) }
-        // MMS had no equivalent of SmsBackfill: anything received while backgrounded, or while InboxIQ
-        // briefly wasn't the default handler, stayed invisible. syncRecent takes an arbitrary cutoff.
-        lifecycleScope.launch { com.inboxiq.app.sms.MmsSync.syncRecent(applicationContext, 0L) }
-    }
 }
 
 private fun resolvePickedContactNumber(context: android.content.Context, contactUri: Uri): String? {

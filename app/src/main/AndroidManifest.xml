@@ -59,6 +59,15 @@
             </intent-filter>
         </receiver>
 
+        <!-- Told by the platform when the default SMS app changes (to or from us): starts the history import -->
+        <receiver
+            android:name=".sms.DefaultSmsChangedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.provider.action.DEFAULT_SMS_PACKAGE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <!-- Delivers incoming MMS to the default handler -->
         <receiver
             android:name=".sms.MmsReceiver"

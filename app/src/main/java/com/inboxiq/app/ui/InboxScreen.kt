@@ -55,6 +55,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
@@ -105,6 +106,8 @@ import com.inboxiq.app.inbox.InboxTab
 import com.inboxiq.app.inbox.MuteDuration
 import com.inboxiq.app.inbox.SearchLogic
 import com.inboxiq.app.inbox.ThreadRow
+import com.inboxiq.app.sms.ImportError
+import com.inboxiq.app.sms.ImportStatus
 import com.inboxiq.app.ui.theme.Density
 import com.inboxiq.app.ui.theme.LocalDensityMode
 import kotlinx.coroutines.flow.Flow
@@ -125,6 +128,7 @@ class InboxCallbacks(
     val onBlock: (Set<String>) -> Unit = {},
     val onCorrectLabel: (String, MessageLabel) -> Unit = { _, _ -> },
     val onReportSpam: (String, Boolean) -> Unit = { _, _ -> },
+    val onRetryImport: () -> Unit = {},
 )
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -141,6 +145,7 @@ fun InboxScreen(
     initialShowArchived: Boolean = false,
     activeAddress: String? = null,
     twoPane: Boolean = false,
+    importStatus: ImportStatus = ImportStatus(),
 ) {
     var tab by rememberSaveable { mutableStateOf(initialTab) }
     var showArchived by rememberSaveable { mutableStateOf(initialShowArchived) }
@@ -234,8 +239,15 @@ fun InboxScreen(
                 ) {
                     Column {
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                        if (importStatus.showStrip) ImportStrip(importStatus, callbacks.onRetryImport)
                         when {
                             rows == null -> LoadingState()
+                            shown.isEmpty() && importStatus.running && tab == InboxTab.ALL && !showArchived -> StateMessage(
+                                icon = Icons.Filled.Inbox,
+                                title = "Copying your texts",
+                                body = "Your newest conversations show up here as soon as they are copied. You can keep using the app.",
+                                modifier = Modifier.fillMaxSize(),
+                            )
                             shown.isEmpty() -> EmptyInbox(tab, showArchived, isDefaultHandler, callbacks.onRequestDefault)
                             else -> LazyColumn(
                                 modifier = Modifier.fillMaxSize(),
@@ -832,6 +844,45 @@ fun ReportSpamDialog(name: String, onConfirm: (alsoBlock: Boolean) -> Unit, onDi
 }
 
 // ---------------------------------------------------------------- states
+
+/** Progress (or the reason it stopped) for copying the phone's existing texts in. */
+@Composable
+private fun ImportStrip(status: ImportStatus, onRetry: () -> Unit) {
+    val nf = remember { java.text.NumberFormat.getIntegerInstance() }
+    Surface(
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(12.dp),
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            val error = status.error
+            if (error != null) {
+                Text(
+                    when (error) {
+                        ImportError.PERMISSION_DENIED -> "Android did not let InboxIQ read your texts."
+                        ImportError.LOW_STORAGE -> "There is not enough free storage to copy your texts. Free some space, then try again."
+                        ImportError.PROVIDER_UNAVAILABLE -> "Android's message storage did not answer."
+                        ImportError.UNKNOWN -> "Copying your texts stopped unexpectedly."
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+                TextButton(onClick = onRetry) { Text("Try again") }
+            } else {
+                Text(
+                    "Copying your texts: ${nf.format(status.processed)} of ${nf.format(maxOf(status.total, status.processed))}. You can keep using the app.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+                Spacer(Modifier.height(8.dp))
+                LinearProgressIndicator(
+                    progress = { if (status.total > 0) (status.processed.toFloat() / status.total).coerceIn(0f, 1f) else 0f },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun LoadingState() {
