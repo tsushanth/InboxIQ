@@ -174,6 +174,14 @@ class TriageEngineTest {
         assertEquals("never claims a label for a plain personal or model-only decision", null, HeuristicRules.match("hey are you free"))
     }
 
+    @Test fun `receiver override sees the sender - a known contact is not re-filed by one pushy text`() {
+        val pushy = "call me asap!! urgent!! see this bit.ly/3xK9fPq"
+        assertEquals(null, HeuristicRules.match(pushy, friend, 9))
+        assertEquals(null, HeuristicRules.match("20% off today, reply STOP", friend, 9))
+        assertEquals(SCAM, HeuristicRules.match("is this you in this video? bit.ly/3xK9fPq", friend, 9)!!.label)
+        assertEquals(OTP_2FA, HeuristicRules.match("Your code is 482913", "22000", 0)!!.label)
+    }
+
     @Test fun `all outputs are real labels`() {
         val v = TriageEngine.classify(thread(friend, 0, "x"), null)
         assertTrue(v.label != MessageLabel.UNLABELED && v.confidence in 0f..1f)

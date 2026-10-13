@@ -21,11 +21,18 @@ object HeuristicRules {
 
     fun match(text: String): ClassificationResult? = evaluate(text)?.result
 
+    /**
+     * Same, but knowing who sent it and how often the user really replied to them. Use this wherever the
+     * address is at hand: a number you talk to needs far stronger evidence before a single text may re-file
+     * the whole conversation.
+     */
+    fun match(text: String, address: String?, replies: Int): ClassificationResult? = evaluate(text, address, replies)?.result
+
     /** Same decision as [match], plus why. */
     fun explain(text: String): Reason? = evaluate(text)
 
-    private fun evaluate(text: String): Reason? {
-        val v = TriageEngine.rulesOnly(text)
+    private fun evaluate(text: String, address: String? = null, replies: Int = 0): Reason? {
+        val v = TriageEngine.rulesOnly(text, SenderProfile.of(address), replies)
         if (v.basis != Basis.RULE) return null
         // A text-only view cannot tell a transactional notice from an ordinary message: leave that to the full pipeline.
         if (v.label == MessageLabel.PERSONAL || v.label == MessageLabel.SPAM) return null
