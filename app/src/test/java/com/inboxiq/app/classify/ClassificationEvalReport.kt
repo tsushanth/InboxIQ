@@ -50,6 +50,8 @@ object ClassificationEvalReport {
             sb.appendLine()
             sb.appendLine("UCI held-out test (3/4): " + uciBinary(EvalCorpus.uciTest(), run.predictor))
             sb.appendLine()
+            sb.appendLine("UCI all 5,574: " + uciBinary(EvalCorpus.uci(), run.predictor))
+            sb.appendLine()
         }
         return sb.toString()
     }

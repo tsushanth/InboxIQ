@@ -17,15 +17,13 @@ import java.nio.LongBuffer
  */
 class OnnxSpamScorer(modelBytes: ByteArray, vocab: java.io.InputStream) : SpamScorer, AutoCloseable {
     private val env = OrtEnvironment.getEnvironment()
-    private val session: OrtSession = env.createSession(
-        modelBytes,
-        OrtSession.SessionOptions().apply {
-            setIntraOpNumThreads(1)
-            setInterOpNumThreads(1)
-            setCPUArenaAllocator(false)
-            setMemoryPatternOptimization(false)
-        },
-    )
+    private val session: OrtSession = OrtSession.SessionOptions().use { options ->
+        options.setIntraOpNumThreads(1)
+        options.setInterOpNumThreads(1)
+        options.setCPUArenaAllocator(false)
+        options.setMemoryPatternOptimization(false)
+        env.createSession(modelBytes, options)
+    }
     private val tokenizer = WordPieceTokenizer(vocab)
     private val hasTokenTypes = session.inputNames.contains("token_type_ids")
 
