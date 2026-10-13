@@ -560,7 +560,9 @@ fun ThreadRowContent(
 ) {
     val latest = row.summary.latestMessage
     val unread = row.unread > 0
-    val needsReply = QuickReplySuggester.needsResponse(latest.isIncoming, latest.label)
+    val needsReply = remember(latest.id, latest.body, latest.label) {
+        QuickReplySuggester.needsReply(latest.address, latest.body, latest.label, latest.isIncoming, latest.imagePartUri != null)
+    }
     val vPad = if (LocalDensityMode.current == Density.COMPACT) 8.dp else 14.dp
     val bg = when {
         isSelected -> MaterialTheme.colorScheme.primaryContainer

@@ -88,6 +88,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -109,7 +110,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.inboxiq.app.classify.QuickReplySuggester
+import com.inboxiq.app.reply.ReplyRequest
+import com.inboxiq.app.reply.ReplySuggester
+import com.inboxiq.app.reply.RulesReplySuggester
+import com.inboxiq.app.reply.ThreadMsg
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.data.ScheduledMessageEntity
@@ -167,6 +171,12 @@ fun ThreadScreen(
     voiceEnabled: Boolean = true,
     initialDraft: String = "",
     now: Long = System.currentTimeMillis(),
+    /** Texts the user sent to anyone, for learning their phrasing (local, rebuilt on the fly). */
+    recentSent: List<String> = emptyList(),
+    isKnownContact: Boolean = false,
+    suggester: ReplySuggester = RulesReplySuggester,
+    /** Ids of texts the auto-responder sent: marked "Sent automatically". */
+    autoSentIds: Set<Long> = emptySet(),
 ) {
     var body by remember(address) { mutableStateOf(initialDraft) }
     var menuOpen by remember { mutableStateOf(false) }
@@ -192,10 +202,18 @@ fun ThreadScreen(
 
     val threadLabel = messages.lastOrNull { it.isIncoming }?.label
     val lastMessage = messages.lastOrNull()
-    val suggestions = remember(lastMessage?.id) {
-        if (lastMessage != null && QuickReplySuggester.needsResponse(lastMessage.isIncoming, threadLabel ?: MessageLabel.UNLABELED)) {
-            QuickReplySuggester.suggest(lastMessage.body)
-        } else emptyList()
+    // Computed off the main thread; the chips appear a few milliseconds after the thread opens.
+    val suggestions by produceState(emptyList<String>(), lastMessage?.id, threadLabel, recentSent.size, isKnownContact) {
+        value = if (lastMessage == null || !lastMessage.isIncoming) emptyList() else {
+            val request = ReplyRequest(
+                address = address,
+                threadLabel = threadLabel ?: MessageLabel.UNLABELED,
+                messages = messages.takeLast(200).map { ThreadMsg(it.body, it.isIncoming, it.timestamp, it.imagePartUri != null, it.label) },
+                globalSent = recentSent,
+                isKnownContact = isKnownContact,
+            )
+            runCatching { suggester.suggest(request).suggestions }.getOrDefault(emptyList())
+        }
     }
     val muted = state?.isMuted(tick) == true
 
@@ -328,6 +346,7 @@ fun ThreadScreen(
                         onRetry = { callbacks.onRetryNow(message.id) },
                         onDelete = { callbacks.onDeleteMessage(message.id) },
                         onForward = { callbacks.onForward(message.body) },
+                        sentAutomatically = message.id in autoSentIds,
                     )
                 }
                 itemsIndexed(scheduled, key = { _, s -> "s" + s.id }) { _, s ->
@@ -458,6 +477,7 @@ private fun MessageBubble(
     onRetry: () -> Unit,
     onDelete: () -> Unit,
     onForward: () -> Unit,
+    sentAutomatically: Boolean = false,
 ) {
     val context = LocalContext.current
     val isMe = !message.isIncoming
@@ -535,7 +555,7 @@ private fun MessageBubble(
 
             val status = DeliveryInfo.short(message)
             Text(
-                text = formatMessageTime(message.timestamp) + (status?.let { "  ·  $it" } ?: ""),
+                text = formatMessageTime(message.timestamp) + (status?.let { "  ·  $it" } ?: "") + if (sentAutomatically) "  ·  Sent automatically" else "",
                 style = MaterialTheme.typography.labelSmall,
                 color = if (failed) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 2.dp, start = 4.dp, end = 4.dp),
