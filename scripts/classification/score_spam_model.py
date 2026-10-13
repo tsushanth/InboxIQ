@@ -4,7 +4,7 @@ spam_probs.tsv (sha1(utf8 text) <TAB> P(spam)).
 
 The tokenizer below is a line-for-line port of app/.../classify/WordPieceTokenizer.kt
 (checked by WordPieceTokenizerGoldenTest). Run with the venv python that has
-`onnxruntime` and `numpy`:  score_spam_model.py <model.onnx> <vocab.txt> <classification_dir> [--golden out.tsv]
+`onnxruntime` and `numpy`:  score_spam_model.py <model.onnx> <vocab.txt> <classification_dir> [--out spam_probs.tsv] [--golden out.tsv]
 """
 import hashlib
 import math
@@ -83,6 +83,11 @@ def main():
             for line in f:
                 parts = line.rstrip("\n").split("\t")
                 texts.update(parts[5].split(" ||| "))
+    for name in ("challenge.tsv", "challenge2.tsv", "challenge3.tsv"):
+        with open(os.path.join(cdir, name), encoding="utf-8") as f:
+            next(f)
+            for line in f:
+                texts.add(line.rstrip("\n").split("\t", 4)[4])
     with open(os.path.join(cdir, "uci", "SMSSpamCollection"), encoding="utf-8") as f:
         for line in f:
             line = line.rstrip("\n")
@@ -101,7 +106,8 @@ def main():
         e = [math.exp(x - m) for x in logits]
         p = e[1] / sum(e)
         out.append((hashlib.sha1(t.encode("utf-8")).hexdigest(), p))
-    with open(os.path.join(cdir, "spam_probs.tsv"), "w", encoding="utf-8") as f:
+    out_name = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else "spam_probs.tsv"
+    with open(os.path.join(cdir, out_name), "w", encoding="utf-8") as f:
         for h, p in sorted(out):
             f.write("%s\t%.6f\n" % (h, p))
     if "--golden" in sys.argv:

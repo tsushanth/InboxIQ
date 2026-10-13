@@ -3,65 +3,32 @@ package com.inboxiq.app.classify
 import com.inboxiq.app.data.MessageLabel
 
 /**
- * Cheap keyword rules for categories the bundled binary spam/ham model
- * doesn't cover at all (OTP/2FA, promo, scam-vs-plain-spam). Checked before
- * the ONNX model runs since these are high-precision, near-zero-cost signals.
+ * Keyword and structure rules, checked before (and often instead of) the ONNX spam model. This is a
+ * thin, sender-agnostic view of [TriageEngine]; the full pipeline also uses the sender type and the
+ * user's reply history, which a bare message text does not carry.
  *
- * All matching uses word boundaries (\b), not plain substring `contains` —
- * a real bug shipped in v1 where the SCAM keyword "irs" matched inside
- * "First Tech Federal Credit Union" and mislabeled a legitimate bank alert.
+ * All matching uses word boundaries, never substring `contains`: a real v1 bug matched the SCAM
+ * keyword "irs" inside "First Tech Federal Credit Union" and mislabelled a legitimate bank alert.
+ *
+ * [match] only returns a label when a rule decided on the text alone (code, scam, work, promo),
+ * not for the model-based or default outcomes. SmsDeliverReceiver relies on that: it lets this
+ * override a cached thread label for a single incoming message.
  */
 object HeuristicRules {
-
-    private val otpWords = listOf("otp", "code", "verify", "verification")
-
-    private val scamWords = listOf("irs")
-    private val scamPhrases = listOf(
-        "act now", "claim your", "you've won", "you have won", "urgent action", "arrest warrant",
-    )
-
-    private val promoPhrases = listOf("% off", "unsubscribe", "reply stop", "promo code", "limited time")
 
     /** The rule that fired, in words the user can check against the message. */
     data class Reason(val result: ClassificationResult, val explanation: String)
 
     fun match(text: String): ClassificationResult? = evaluate(text)?.result
 
-    /** Same decision as [match], plus why. Used by the "Why was this labelled?" sheet. */
+    /** Same decision as [match], plus why. */
     fun explain(text: String): Reason? = evaluate(text)
 
-    private fun firstWord(text: String, words: List<String>): String? =
-        words.firstOrNull { Regex("\\b${Regex.escape(it)}\\b", RegexOption.IGNORE_CASE).containsMatchIn(text) }
-
-    private fun firstPhrase(text: String, phrases: List<String>): String? =
-        phrases.firstOrNull { text.contains(it, ignoreCase = true) }
-
     private fun evaluate(text: String): Reason? {
-        val number = Regex("\\b\\d{4,8}\\b").find(text)
-        val otpWord = firstWord(text, otpWords)
-        if (number != null && otpWord != null) {
-            return Reason(
-                ClassificationResult(MessageLabel.OTP_2FA, 0.9f),
-                "It has a ${number.value.length}-digit number and the word \"$otpWord\", which is how verification codes are written.",
-            )
-        }
-
-        val scamHit = firstWord(text, scamWords) ?: firstPhrase(text, scamPhrases)
-        if (scamHit != null) {
-            return Reason(
-                ClassificationResult(MessageLabel.SCAM, 0.7f),
-                "It uses the pressure wording \"$scamHit\", common in scam texts.",
-            )
-        }
-
-        val promoHit = firstPhrase(text, promoPhrases)
-        if (promoHit != null) {
-            return Reason(
-                ClassificationResult(MessageLabel.PROMO, 0.7f),
-                "It contains \"$promoHit\", typical of marketing messages.",
-            )
-        }
-
-        return null
+        val v = TriageEngine.rulesOnly(text)
+        if (v.basis != Basis.RULE) return null
+        // A text-only view cannot tell a transactional notice from an ordinary message: leave that to the full pipeline.
+        if (v.label == MessageLabel.PERSONAL || v.label == MessageLabel.SPAM) return null
+        return Reason(v.toResult(), v.evidence.joinToString(" "))
     }
 }

@@ -1,0 +1,135 @@
+label	address	replies	tag	text
+OTP_2FA	22000	0	otp	123456 is your Microsoft account security code
+OTP_2FA	32665	0	otp	Your Lyft code is 4821
+OTP_2FA	86753	0	otp	Use 937 214 as your Venmo verification code
+OTP_2FA	AIRBNB	0	otp	Here's your Airbnb verification code: 5521. Don't share it with anyone.
+OTP_2FA	73981	0	otp	Your DoorDash code is 8741. Reply STOP to unsubscribe
+OTP_2FA	NETFLIX	0	otp	Netflix: Use code 4412 to sign in. Never share this code.
+OTP_2FA	26787	0	otp	Your CVS Pharmacy verification PIN is 1182
+OTP_2FA	48921	0	otp	4421 is your Tinder code
+OTP_2FA	WhatsApp	0	otp	Your WhatsApp code: 338-221 You can also tap on this link to verify your phone: v.whatsapp.com/338221
+OTP_2FA	33789	0	otp	Your Chase verification code is 77241. We'll never call to ask for it.
+OTP_2FA	55192	0	otp	Bank of Test: Your temporary password is 8dk2Lw. Do not share it.
+OTP_2FA	28444	0	otp	Steam Guard code: K4T9X
+OTP_2FA	91234	0	otp	Your one-time passcode for checkout is 290412. It expires in 10 minutes.
+OTP_2FA	COINEX	0	otp	[CoinEx] Your login verification code: 762319, valid for 5 min
+OTP_2FA	+18885550103	0	otp	Your appointment verification code is 5521
+SCAM	+14155550101	0	scam	Your Wells Fargo account has been temporarily locked. Visit https://wellsfargo-secure-login.top/verify to restore access
+SCAM	+14155550102	0	scam	USPS Alert: We were unable to deliver your parcel due to a missing house number. Update here: https://usps-parcel-help.icu/track
+SCAM	+19175550144	0	scam	NYC Toll: you have an outstanding balance of $8.75. Settle at https://tollpay-ny.cc to avoid $50 late fee
+SCAM	+14155550103	0	scam	This is Officer Daniels with the county sheriff. There is a warrant for your arrest regarding missed jury duty. Call 555-0187 immediately
+SCAM	+14155550104	0	scam	Congrats! Walmart is giving away free $1,000 shopping cards to loyal customers. Claim yours today: bit.ly/3zXkQ9s
+SCAM	+447700900123	0	scam	Hey beautiful, I'm Linda, I found your number by accident. I'm a widow living in Florida, looking for a good friend. Text me on Telegram @linda_fl_88
+SCAM	+14155550105	0	scam	Remote data entry position, $45/hour, flexible schedule. Send your name and age to our manager on WhatsApp 555 0161
+SCAM	+14155550106	0	scam	I'm an account manager at BlockPrime. We help beginners earn 5%-10% daily with USDT staking. Add me on WhatsApp
+SCAM	+14155550107	0	scam	Your Netflix membership has expired. Update your payment details to continue: http://netflix-billing-update.xyz/login
+SCAM	1234567890@example.com	0	scam	Zelle alert: a payment of $2,400 to Jasper Moore is pending approval. If you don't recognize this, call 555-0123 now
+SCAM	+14155550108	0	scam	Social Security: Your SSN has been linked to suspicious transactions in Texas. Press 1 to speak with an agent
+SCAM	+14155550109	0	scam	Your Apple iCloud storage is full. Upgrade now to avoid losing photos: icloud-storage-upgrade.top
+SCAM	+14155550110	0	scam	Dear user, your electricity bill is overdue and your power will be disconnected tonight. Call 555-0144 immediately to update your payment
+SCAM	+14155550111	0	scam	FedEx: your package is waiting. A $2.99 customs charge is required. fedex-redelivery.shop/pay
+SCAM	+14155550112	0	scam	Hi it's your son. I lost my phone, this is my new number. I'm in trouble, can you buy some Apple gift cards? I'll pay you back
+SCAM	+14155550113	0	scam	Congratulations, your tax refund of $1,284.00 has been approved. Verify your bank details here: irs-refunds-gov.click
+SCAM	+14155550114	0	scam	Is that you in the pic?? 😳 http://viral-pics.ru/xk3
+SCAM	+14155550115	0	scam	Amazon Security: unusual login to your account from Moscow. If this wasn't you, secure your account: https://amazon-security-center.top
+SCAM	+14155550116	0	scam	Student loan forgiveness program: you qualify for full cancellation. Confirm your details at studentaid-relief.vip
+SCAM	+14155550117	0	scam	Your Coinbase account has been restricted. Verify your identity at coinbase-verify-id.live within 24 hours.
+SCAM	+14155550199	0	scam	Bank of America: Your debit card has been blocked due to suspicious activity. Unblock at bit.ly/boa-unlock-3k
+SCAM	+14155550118	0	scam	Hello this is Mark from Microsoft Support. We detected a virus on your computer. Call 555-0176 to remove it.
+SCAM	+14155550119	0	scam	Hi, I'm Emily, do you remember me from the cruise? Your friend gave me your number. I want to show you an amazing investment platform my uncle runs
+SCAM	+14155550120	0	scam	Pay $3.99 to release your held package. https://post-delivery-fee.sbs/p
+SCAM	+14155550121	0	scam	Your account will be closed in 24 hours unless you confirm your details: http://193.46.12.8/confirm
+SCAM	+14155550122	0	scam	You've been pre-selected for a government grant of $9,000. No repayment. Reply YES to claim.
+SCAM	+14155550123	0	scam	Hey, are you free? I need help with a quick favor, can you pick up gift cards for my boss? He's in a meeting, will reimburse
+SCAM	+14155550124	0	scam	ALERT: your SunPass account has a negative balance. Pay now: sunpass-payments.top
+SCAM	+13105550101	0	scam	Hi Dad, my phone fell in water so I'm texting from a friend's. Can you wire me $450 for the repair? I'll explain later
+SCAM	+14085550111	0	scam	Hello, I think I have the wrong number but you seem kind. I'm in Singapore working in finance, would love to be friends
+SPAM	+14155550130	0	spam	Need cash fast? Get up to $2500 deposited today. No credit check! Apply: cashnow.example.com Reply STOP to end
+SPAM	+14155550131	0	spam	Hi it's Mike with Sun Valley Roofing, we're in your neighborhood and offering free roof inspections this week. Call 555-0132
+SPAM	+14155550132	0	spam	Are you looking for a lower rate on your mortgage? Rates just dropped. Call us at 555-0155
+SPAM	+14155550133	0	spam	Hey there! Want to see my photos? Join free: example-dating.example.com
+SPAM	+14155550134	0	spam	Congrats! You have been selected for our VIP slot tournament. Free 100 spins at Lucky7 casino
+SPAM	+14155550135	0	spam	Hello, I came across your profile and thought you'd be a great fit for a work from home opportunity
+SPAM	+18885550136	0	spam	Your car's warranty is about to expire. Call now 555-0178 for a free quote
+SPAM	+14155550137	0	spam	Looking to sell your house? We buy houses in any condition. Reply YES for a cash offer.
+SPAM	+14155550138	0	spam	Get paid to take surveys, make up to $500/week from your couch
+SPAM	+14155550139	0	spam	Hi Chris, I'm a real estate agent in your area. Are you thinking about selling? Reply YES
+SPAM	+14155550140	0	spam	Final reminder: you may qualify for the new solar tax credit. Homeowners only.
+SPAM	+14155550141	0	spam	Buy 1 get 1 free Cialis today. no prescription needed
+SPAM	+14155550142	0	spam	Your chance to join our exclusive trading signals group, 90% accuracy guaranteed
+SPAM	+14155550143	0	spam	Do you need a business loan? Fast approval in 24 hours
+SPAM	+14155550144	0	spam	Meet singles in your area tonight: example-meet.example.com
+PROMO	72345	0	promo	Sephora: Beauty Insider event starts today! Take 20% off your order with code INSIDER. Reply STOP to opt out
+PROMO	46786	0	promo	Joe's Pizza: Large 1-topping $9.99 tonight only! Order: example.com/joes. Txt STOP to cancel
+PROMO	+14155550150	0	promo	Hi Pat, it's Greenleaf Dental. We have a few spots open this month for cleanings and a 15% discount on whitening. Text back or call 555-0111 to book.
+PROMO	38201	0	promo	Your cart misses you! Complete your order in the next hour and enjoy free shipping.
+PROMO	88022	0	promo	Vote YES on Prop 12 this November. Learn more at yesonprop12.example.org. Paid for by Citizens for Progress. Reply STOP to unsubscribe
+PROMO	30403	0	promo	Alex, we're 3 days from our deadline and $4,000 short. Will you split a $10 donation to help us win? example.com/give
+PROMO	TMOBILE	0	promo	Tuesdays: Free pizza! Open the app to claim your reward. Msg&data rates may apply
+PROMO	41222	0	promo	Final hours! Our summer clearance ends tonight. Up to 70% off. Shop now
+PROMO	62552	0	promo	Last chance to save: get $50 off your first month of FiberNet. Offer ends Sunday. example.com/fiber. Reply STOP to end.
+PROMO	+18885550151	0	promo	Planet Gym: join today for $1 down. No commitment. Reply STOP to stop receiving texts
+PROMO	26688	0	promo	Stark Mart Black Friday starts NOW. Doorbusters live: example.com/bf
+PROMO	57741	0	promo	Congratulations on your recent purchase! Take our 1-minute survey for a chance to win a $50 gift card
+PROMO	91011	0	promo	Pet Palace: Happy birthday to Max! Here's a free treat on us. Show this text at checkout
+PROMO	29271	0	promo	New spring collection just landed. Members get early access: example.com/spring. Text STOP to opt out
+PROMO	+14155550152	0	promo	Hey it's Jen at Glow Studio, we're running a refer-a-friend special this month, you both get $20 off. Reply STOP to opt out
+WORK	+14155550160	7	work	Hey, are you around for a quick call about the Henderson account?
+WORK	+14155550161	4	work	Reminder: Q3 planning offsite is Thursday 9am, Building 4. Lunch provided.
+WORK	+14155550162	12	work	can u cover my shift tmrw 7-3? I'll owe u one
+WORK	+14155550163	9	work	Server in us-east-1 is down again, rebooting now. Will update the channel.
+WORK	+14155550164	5	work	Please remember to submit your expense report by Friday
+WORK	+14155550165	0	work	Hi Sarah, this is Tom from Brightwave Staffing. I have a contract role that matches your background, 6 months, remote. Do you have 5 min to chat?
+WORK	+14155550166	8	work	The client moved the demo to 2pm. Can you present?
+WORK	+14155550167	20	work	Stand-up in 5
+WORK	+14155550168	6	work	Migration finished, no errors. Closing the ticket
+WORK	+14155550169	3	work	I need the signed NDA back before we can start the project
+WORK	+14155550170	15	work	Boss wants the numbers before the board meeting tomorrow
+WORK	+14155550171	10	work	Is the release branch cut yet? QA is waiting
+WORK	+14155550172	11	work	heading into the all-hands, will call you after
+WORK	77123	0	work	Dispatch: Truck 14 needs to reroute, road closure on Main St. Confirm receipt.
+WORK	+14155550173	5	work	Your 1:1 with Priya has been moved to Wed 3:30pm
+WORK	+14155550174	6	work	I'm out sick today, can someone cover the front desk?
+WORK	+14155550175	4	work	Can we push the vendor call to next week? Legal hasn't reviewed the contract
+WORK	+14155550176	0	work	Thanks for interviewing with us. We'd like to move you to the final round next Tuesday.
+WORK	+14155550177	14	work	Schedule posted for next week. You're on closing Mon-Wed.
+WORK	+14155550178	9	work	can you look at my PR when you get a chance? it's blocking the release
+PERSONAL	+14155550180	30	personal	mom: dinner sunday? bringing the pie
+PERSONAL	+14155550181	18	personal	ok but are you actually coming or not 😂
+PERSONAL	AMAZON	0	personal	Your package from Amazon is out for delivery today and will arrive by 8 PM.
+PERSONAL	+18885550182	0	personal	Hi, it's Dr. Patel's office confirming your appointment tomorrow at 10:15. Reply C to confirm
+PERSONAL	24273	0	personal	Chase: Your Zelle payment of $40 to Maria was sent.
+PERSONAL	UBER	0	personal	Uber: your driver Ahmed is arriving in a white Toyota Camry
+PERSONAL	86687	0	personal	Verizon: Your payment of $85.12 was received. Thank you.
+PERSONAL	33281	0	personal	Bank of Test: Debit card purchase $12.40 at CORNER CAFE. Not you? Call 555-0100
+PERSONAL	+14155550183	0	personal	hey this is Jess, Tom gave me your number about the dog walking
+PERSONAL	+14155550184	22	personal	I just got a text from the IRS lol it's obviously fake
+PERSONAL	+14155550185	14	personal	Don't click the link they sent, it's a scam
+PERSONAL	+14155550186	9	personal	Did you get the verification code? The site isn't sending me one
+PERSONAL	+14155550187	25	personal	my verification code is 482913, can you read it? I'm locked out of my own account lol
+PERSONAL	+14155550188	6	personal	Are you free to chat? I have some exciting news
+PERSONAL	+14155550189	17	personal	just won $20 on a scratch ticket lol drinks on me
+PERSONAL	+14155550190	40	personal	Win win. See you at 6
+PERSONAL	+14155550191	8	personal	The bank said my account was locked for suspicious activity, had to call them, ugh
+PERSONAL	+14155550192	16	personal	congrats on the promotion!! party at our place friday
+PERSONAL	+14155550193	12	personal	She says the deadline is Friday, do you want me to pay the fee today?
+PERSONAL	+14155550194	50	personal	Call me asap, it's about grandma
+PERSONAL	+14155550195	21	personal	Black Friday plans? Mom wants to hit the mall at 5am 😅
+PERSONAL	+14155550196	33	personal	Reminder: dentist at 3. Also pick up the kids
+PERSONAL	+14155550197	13	personal	Where are you? The game starts in 10
+PERSONAL	+14155550198	80	personal	i love you. have a good day at work
+PERSONAL	+14155550199	19	personal	Can you send me the wifi password again?
+PERSONAL	+14155550001	27	personal	Happy anniversary!!! 🎉❤️
+PERSONAL	+14155550002	11	personal	Free Saturday? We're doing a yard sale, come by
+PERSONAL	+14155550003	0	personal	Sorry wrong number
+PERSONAL	+14155550004	0	personal	Hi this is Ana, your daughter's teacher. Just wanted to say she did great today
+PERSONAL	+14155550005	15	personal	I'm at the DMV and the line is insane
+PERSONAL	+14155550006	9	personal	The USPS guy left your package at my door, come grab it
+PERSONAL	+14155550007	45	personal	Dinner is on me tonight, you've earned it
+PERSONAL	+14155550008	7	personal	Check out this deal on headphones 40% off http://example.com/deal
+PERSONAL	+14155550009	10	personal	lol my toll tag expired and I owe like $12 now
+PERSONAL	+14155550010	16	personal	ur code for the door is 4482
+PERSONAL	+14155550011	0	personal	Hey, it's Chris from the hiking group. Are you coming Saturday?
+PERSONAL	+14155550012	5	personal	Can you Venmo me for the tickets? $35
+PERSONAL	+14155550013	3	personal	Your Uber Eats order is here, I'm in the lobby
+PERSONAL	+14155550014	20	personal	Which bank are you with? Mine charges $12 a month fee, thinking of switching
