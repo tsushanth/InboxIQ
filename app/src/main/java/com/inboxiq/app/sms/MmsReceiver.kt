@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit
  */
 class MmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        ImportTrigger.ensure(context)
         val pushData = intent.getByteArrayExtra("data")
         if (pushData == null) {
             Log.w(TAG, "WAP_PUSH_DELIVER with no 'data' extra")
