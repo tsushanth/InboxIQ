@@ -169,7 +169,7 @@ val MIGRATION_13_14 = object : Migration(13, 14) {
         AgentDraftEntity::class,
     ],
     version = 14,
-    exportSchema = false,
+    exportSchema = true,
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

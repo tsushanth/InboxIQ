@@ -73,6 +73,11 @@ android {
         }
     }
 
+    sourceSets {
+        // Lets MigrationTestHelper (room-testing) find the exported schema JSON in unit tests.
+        getByName("test").assets.srcDir("$projectDir/schemas")
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -94,6 +99,11 @@ android {
 
 // Replaces the deprecated android { kotlinOptions { jvmTarget = ... } } block — hard
 // compile error under Kotlin 2.x's compiler-options DSL migration.
+ksp {
+    // Exported Room schemas back the migration tests (see MigrationTest).
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
