@@ -6,11 +6,9 @@ import android.content.Intent
 import android.provider.Telephony
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.inboxiq.app.classify.HeuristicRules
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.ContactResolver
 import com.inboxiq.app.data.MessageEntity
-import com.inboxiq.app.data.ThreadLabelEntity
 import com.inboxiq.app.worker.ClassifyMessagesWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +30,9 @@ class SmsDeliverReceiver : BroadcastReceiver() {
         val timestamp = messages[0].timestampMillis
         val address = PhoneNumberNormalizer.normalize(context, rawAddress)
 
+        // Becoming the default by any route delivers SMS_DELIVER to us; make sure history is imported.
+        ImportTrigger.ensure(context)
+
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -49,34 +50,22 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                     ),
                 )
 
-                var labelForNotification = com.inboxiq.app.data.MessageLabel.UNLABELED
-                if (id > 0) {
-                    val cached = db.threadLabelDao().get(address)
-                    // A high-precision heuristic (OTP code, "you've won" scam phrasing, etc.)
-                    // on THIS message overrides a stale/wrong cached thread label — e.g. a
-                    // spoofed sender number reusing an address we'd previously seen as benign.
-                    // Only this message is corrected, not the address's older history, since
-                    // we can't tell from one message whether the whole thread actually changed.
-                    // ...unless the user hand-filed this sender, in which case their choice stands.
-                    val userCorrected = db.threadStateDao().get(address)?.labelCorrected == true
-                    val heuristic = if (userCorrected) null else HeuristicRules.match(body)
-                    labelForNotification = heuristic?.label ?: cached?.label ?: com.inboxiq.app.data.MessageLabel.UNLABELED
-                    when {
-                        heuristic != null && heuristic.label != cached?.label -> {
-                            db.threadLabelDao().upsert(
-                                ThreadLabelEntity(address, heuristic.label, heuristic.confidence, timestamp),
-                            )
-                            db.messageDao().updateLabel(id, heuristic.label, heuristic.confidence)
-                        }
-                        cached != null -> {
-                            db.messageDao().updateLabel(id, cached.label, cached.confidence)
-                        }
-                        else -> {
+                val labelForNotification = if (id > 0) {
+                    IncomingLabeler.resolve(
+                        db = db,
+                        address = address,
+                        body = body,
+                        timestamp = timestamp,
+                        messageId = id,
+                        model = IncomingLabeler.defaultModel(context),
+                        enqueueClassifier = {
                             WorkManager.getInstance(context).enqueue(
                                 OneTimeWorkRequestBuilder<ClassifyMessagesWorker>().build(),
                             )
-                        }
-                    }
+                        },
+                    )
+                } else {
+                    com.inboxiq.app.data.MessageLabel.UNLABELED
                 }
 
                 val displayName = ContactResolver.displayNameFor(context, address)
