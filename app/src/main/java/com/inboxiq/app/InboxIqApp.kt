@@ -29,6 +29,9 @@ class InboxIqApp : Application() {
             autoHeal,
         )
 
+        // Writes to the Android SMS provider that failed earlier (see ProviderWrites): retry them.
+        com.inboxiq.app.sms.ProviderWriteScheduler.enqueueIfPending(this)
+
         CrashLogger.install(this)
         com.inboxiq.app.feature.RelayFeatures.instance.onAppStart(this)
     }

@@ -50,7 +50,8 @@ sealed interface Screen {
 /** Data for the inbox: joined rows, resolved contact names, blocked numbers, search. */
 class InboxViewModel(app: Application) : AndroidViewModel(app) {
     private val db = AppDatabase.get(app)
-    val actions = ThreadActions(db, { MmsImageStore.deleteAll(app, it) }, tombstones = com.inboxiq.app.sms.ImportTombstones(app))
+    val actions = ThreadActions(db, { MmsImageStore.deleteAll(app, it) }, tombstones = com.inboxiq.app.sms.ImportTombstones(app),
+        readSync = com.inboxiq.app.sms.ProviderReadSync.create(app))
 
     /** null until the first database emission, so the screen can show a loading state instead of "empty". */
     val rows: StateFlow<List<ThreadRow>?> = combine(

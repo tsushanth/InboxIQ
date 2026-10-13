@@ -26,7 +26,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
                 val pending = goAsync()
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        AppDatabase.get(context).messageDao().markThreadRead(address)
+                        markRead(context, address)
                         MessageNotifier.cancel(context, address)
                     } finally { pending.finish() }
                 }
@@ -38,11 +38,15 @@ class NotificationActionReceiver : BroadcastReceiver() {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         runCatching { SmsSender.send(context, address, text) }
-                            .onSuccess { AppDatabase.get(context).messageDao().markThreadRead(address); MessageNotifier.cancel(context, address) }
+                            .onSuccess { markRead(context, address); MessageNotifier.cancel(context, address) }
                             .onFailure { Toast.makeText(context, "Couldn't send the reply. Open InboxIQ to try again.", Toast.LENGTH_LONG).show() }
                     } finally { pending.finish() }
                 }
             }
         }
+    }
+
+    private suspend fun markRead(context: Context, address: String) {
+        com.inboxiq.app.data.ThreadActions(AppDatabase.get(context), readSync = ProviderReadSync.create(context)).markRead(address)
     }
 }

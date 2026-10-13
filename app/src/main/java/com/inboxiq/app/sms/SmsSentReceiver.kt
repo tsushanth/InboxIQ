@@ -16,12 +16,16 @@ class SmsSentReceiver : BroadcastReceiver() {
         val messageId = intent.getLongExtra(SmsSender.EXTRA_MESSAGE_ID, -1L)
         if (messageId < 0) return
 
+        val providerUri = intent.getStringExtra(SmsSender.EXTRA_PROVIDER_URI)
+        val code = resultCode
         val status = if (resultCode == Activity.RESULT_OK) SendStatus.SENT else SendStatus.FAILED
 
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 AppDatabase.get(context).messageDao().updateSendStatus(messageId, status)
+                // resultCode is Activity.RESULT_OK or one of SmsManager.RESULT_ERROR_*; kept as the provider's error_code.
+                OutgoingSmsSync.create(context).finish(messageId, providerUri, status == SendStatus.SENT, code)
             } finally {
                 pendingResult.finish()
             }

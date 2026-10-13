@@ -14,6 +14,8 @@ class ThreadActions(
     private val clock: () -> Long = System::currentTimeMillis,
     /** Remembers deletions so the next history import does not bring them back (see ImportTombstones). */
     private val tombstones: com.inboxiq.app.sms.ImportTombstones? = null,
+    /** Mirrors explicit read actions into the Android SMS provider (null in tests / when not wired). */
+    private val readSync: ReadSync? = null,
 ) {
     data class DeletedThread(
         val address: String,
@@ -29,8 +31,16 @@ class ThreadActions(
     suspend fun setPinned(address: String, pinned: Boolean) = states.setPinned(address, pinned, clock())
     suspend fun setArchived(address: String, archived: Boolean) = states.setArchived(address, archived)
     suspend fun setMutedUntil(address: String, until: Long?) = states.setMutedUntil(address, until)
-    suspend fun markRead(address: String) = messages.markThreadRead(address)
-    suspend fun markAllRead() = messages.markAllRead()
+    suspend fun markRead(address: String) {
+        val threads = if (readSync != null) messages.unreadThreadIds(address) else emptyList()
+        messages.markThreadRead(address)
+        readSync?.let { rs -> kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { rs.markThreadsRead(threads) } }
+    }
+
+    suspend fun markAllRead() {
+        messages.markAllRead()
+        readSync?.let { rs -> kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { rs.markAllRead() } }
+    }
 
     /** Saves a draft without creating state rows for conversations that never had one. */
     suspend fun saveDraft(address: String, text: String) {
@@ -90,4 +100,10 @@ class ThreadActions(
         if (blocked) db.blockedNumberDao().block(BlockedNumberEntity(address, clock()))
         else db.blockedNumberDao().unblock(address)
     }
+}
+
+/** The provider side of "mark as read"; implementations must not throw and may block (called off the main thread). */
+interface ReadSync {
+    fun markThreadsRead(threadIds: Collection<Long>)
+    fun markAllRead()
 }

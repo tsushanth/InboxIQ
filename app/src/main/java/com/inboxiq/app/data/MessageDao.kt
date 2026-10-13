@@ -61,6 +61,16 @@ interface MessageDao {
     @Query("UPDATE messages SET isRead = 1 WHERE address = :address AND isRead = 0")
     suspend fun markThreadRead(address: String)
 
+    @Query("SELECT * FROM messages WHERE address = :address AND timestamp = :timestamp AND body = :body LIMIT 1")
+    suspend fun findByKey(address: String, timestamp: Long, body: String): MessageEntity?
+
+    @Query("UPDATE messages SET isRead = 0 WHERE id = :id")
+    suspend fun markUnread(id: Long)
+
+    /** Provider thread ids of this address's unread incoming rows (0 = never had one), so reads can be mirrored. */
+    @Query("SELECT DISTINCT threadId FROM messages WHERE address = :address AND isIncoming = 1 AND isRead = 0 AND threadId != 0")
+    suspend fun unreadThreadIds(address: String): List<Long>
+
     @Query("UPDATE messages SET sendStatus = :status WHERE id = :id")
     suspend fun updateSendStatus(id: Long, status: SendStatus)
 

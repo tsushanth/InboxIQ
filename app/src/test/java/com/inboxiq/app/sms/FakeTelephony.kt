@@ -7,7 +7,10 @@ import android.database.MatrixCursor
 import android.net.Uri
 import org.robolectric.shadows.ShadowContentResolver
 
-data class FakeSms(val id: Long, val thread: Long, val address: String?, val body: String?, val date: Long, val type: Int = 1)
+data class FakeSms(
+    val id: Long, val thread: Long, val address: String?, val body: String?, val date: Long, val type: Int = 1,
+    val read: Int = 1, val seen: Int = 1, val dateSent: Long = 0, val serviceCenter: String? = null, val errorCode: Int = 0, val subId: Int = -1,
+)
 data class FakeMmsPart(val id: Long, val contentType: String, val text: String? = null)
 data class FakeMms(val id: Long, val dateSeconds: Long, val box: Int, val from: String?, val parts: List<FakeMmsPart> = emptyList())
 
@@ -27,6 +30,14 @@ class FakeTelephony {
     var queryCount = 0
         private set
     var batchedPartQueries = true
+
+    /** Writes: false models InboxIQ not being the default SMS app (the provider throws SecurityException). */
+    var writable = true
+    /** When set, the next inserts throw this (provider down, storage full...). */
+    var insertFailure: Exception? = null
+    var insertCount = 0
+        private set
+    private val threadsByAddress = HashMap<String, Long>()
 
     fun register() {
         ShadowContentResolver.registerProviderInternal("sms", Provider())
@@ -62,7 +73,10 @@ class FakeTelephony {
             val seg = uri.pathSegments
             val auth = uri.authority
             return when {
+                auth == "sms" && seg.isEmpty() && selection?.startsWith("date = ?") == true ->
+                    smsRows(projection, null, null, null, only = sms.filter { it.date == selectionArgs!![0].toLong() && it.body == selectionArgs[1] }.map { it.id })
                 auth == "sms" && seg.isEmpty() -> smsRows(projection, selection, selectionArgs, sortOrder)
+                auth == "sms" && seg.size == 1 && seg[0].toLongOrNull() != null -> smsRows(projection, null, null, null, only = listOf(seg[0].toLong()))
                 auth == "mms" && seg.isEmpty() -> mmsRows(projection, selection, selectionArgs, sortOrder)
                 auth == "mms" && seg.size == 2 && seg[1] == "addr" -> {
                     val c = MatrixCursor(arrayOf("address", "type"))
@@ -85,9 +99,9 @@ class FakeTelephony {
             return c
         }
 
-        private fun smsRows(projection: Array<out String>?, sel: String?, args: Array<out String>?, sort: String?): Cursor {
+        private fun smsRows(projection: Array<out String>?, sel: String?, args: Array<out String>?, sort: String?, only: List<Long>? = null): Cursor {
             val cols = projection ?: arrayOf("_id")
-            val idx = filter(sel, args, { sms[it].id }, { sms[it].date }, sms.size)
+            val idx = (if (only != null) sms.indices.filter { sms[it].id in only } else filter(sel, args, { sms[it].id }, { sms[it].date }, sms.size))
                 .let { if (sort?.contains("_id ASC") == true) it.sortedBy { i -> sms[i].id } else it.sortedByDescending { i -> if (sort?.startsWith("date") == true) sms[i].date else sms[i].id } }
             val c = MatrixCursor(cols, idx.size)
             for (i in idx) {
@@ -95,7 +109,8 @@ class FakeTelephony {
                 c.addRow(cols.map { col ->
                     when (col) {
                         "_id" -> r.id; "thread_id" -> r.thread; "address" -> r.address
-                        "body" -> r.body; "date" -> r.date; "type" -> r.type; else -> null
+                        "body" -> r.body; "date" -> r.date; "type" -> r.type
+                        "read" -> r.read; "seen" -> r.seen; "date_sent" -> r.dateSent; "error_code" -> r.errorCode; else -> null
                     }
                 })
             }
@@ -116,9 +131,50 @@ class FakeTelephony {
             return c
         }
 
-        override fun insert(uri: Uri, values: ContentValues?) = null
-        override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?) = 0
-        override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?) = 0
+        override fun insert(uri: Uri, values: ContentValues?): Uri? {
+            if (uri.authority != "sms" || values == null) return null
+            if (!writable) throw SecurityException("not the default SMS app")
+            insertFailure?.let { throw it }
+            val type = when (uri.pathSegments.firstOrNull()) { "inbox" -> 1; "sent" -> 2; "draft" -> 3; "outbox" -> 4; else -> values.getAsInteger("type") ?: 1 }
+            val address = values.getAsString("address")
+            val id = (sms.maxOfOrNull { it.id } ?: 0L) + 1
+            val thread = threadsByAddress.getOrPut(address ?: "") { 10_000L + threadsByAddress.size }
+            sms += FakeSms(
+                id, thread, address, values.getAsString("body"), values.getAsLong("date") ?: 0L, type,
+                read = values.getAsInteger("read") ?: 0, seen = values.getAsInteger("seen") ?: 0,
+                dateSent = values.getAsLong("date_sent") ?: 0L, serviceCenter = values.getAsString("service_center"),
+                errorCode = values.getAsInteger("error_code") ?: 0, subId = values.getAsInteger("sub_id") ?: -1,
+            )
+            insertCount++
+            return Uri.parse("content://sms/$id")
+        }
+
+        override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?) = error("provider deletes are not allowed")
+
+        override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
+            if (uri.authority != "sms" || values == null) return 0
+            if (!writable) throw SecurityException("not the default SMS app")
+            val seg = uri.pathSegments
+            var n = 0
+            for (i in sms.indices) {
+                val r = sms[i]
+                val hit = when {
+                    seg.size == 1 -> r.id == seg[0].toLong()
+                    selection == "thread_id = ? AND read = 0" -> r.thread == selectionArgs!![0].toLong() && r.read == 0
+                    selection == "read = 0" -> r.read == 0
+                    else -> error("fake provider cannot parse update selection: $selection")
+                }
+                if (!hit) continue
+                sms[i] = r.copy(
+                    type = values.getAsInteger("type") ?: r.type,
+                    errorCode = values.getAsInteger("error_code") ?: r.errorCode,
+                    read = values.getAsInteger("read") ?: r.read,
+                    seen = values.getAsInteger("seen") ?: r.seen,
+                )
+                n++
+            }
+            return n
+        }
         override fun getType(uri: Uri): String? = null
     }
 
