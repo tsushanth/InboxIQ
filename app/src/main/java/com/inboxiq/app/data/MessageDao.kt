@@ -12,6 +12,14 @@ interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(message: MessageEntity): Long
 
+    /**
+     * Bulk variant of [insert] for history import. Same IGNORE semantics against the unique
+     * (address, timestamp, body) index, so re-importing a row is a no-op; the returned ids are
+     * -1 for ignored rows. Call inside one transaction per page so observers invalidate once.
+     */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(messages: List<MessageEntity>): List<Long>
+
     @Update
     suspend fun update(message: MessageEntity)
 

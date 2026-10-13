@@ -136,8 +136,8 @@ Data: 10,000 SMS + 5,000 MMS, 692 distinct contacts, an `observeThreadList()` co
 
 | | Before (3bd45fb) | After |
 |---|---|---|
-| SMS import | 3.4 s | |
-| MMS import | 2.0 s | |
+| SMS import | 3.4 s | interleaved with MMS |
+| MMS import | 2.0 s | interleaved with SMS |
 | Total | 5.4 s | 1.0 s (1.0 to 1.4 s over runs) |
 | Thread-list recomputes during import | 1,085 | 71 |
 | Re-run with nothing new | full re-read (same cost again) | 2 provider queries |
