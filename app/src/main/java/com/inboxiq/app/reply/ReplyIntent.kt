@@ -30,7 +30,7 @@ enum class ReplyIntent(
     AFFECTION(false, true, 15),
     SHARE(false, true, 16),
     INFO(false, true, 17),
-    GREETING(true, true, 18),
+    GREETING(false, true, 18),
     FAREWELL(false, true, 19),
 
     /** "ok", "lol", a thumbs-up: a conversation closer. */

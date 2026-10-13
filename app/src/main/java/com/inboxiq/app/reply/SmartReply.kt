@@ -86,7 +86,10 @@ object SmartReply {
             }
             val classified = usable.map { IntentClassifier.classify(it.body) }
             // The newest text that needs an answer, else the newest text.
-            chosen = classified.lastOrNull { it.intent.needsReply } ?: classified.lastOrNull() ?: IntentClassifier.classify(last.body)
+            // A bare nudge ("ok?", "hello??") does not outrank the real ask above it.
+            val demanding = usable.zip(classified).filter { it.second.intent.needsReply }
+            val real = demanding.filter { (m, _) -> m.body.trim().length > 8 }
+            chosen = (real.lastOrNull() ?: demanding.lastOrNull())?.second ?: classified.lastOrNull() ?: IntentClassifier.classify(last.body)
         }
 
         val intent = chosen.intent

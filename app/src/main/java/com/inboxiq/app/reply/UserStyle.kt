@@ -93,7 +93,7 @@ class UserStyle(thread: List<String>, overall: List<String>, incomingHint: List<
     fun knows(stance: Stance): Boolean = phrase(stance) != null
 
     companion object {
-        val EMOJI = Regex("[\\u2600-\\u27BF\\u2B00-\\u2BFF\\u{1F300}-\\u{1FAFF}\\u{1F000}-\\u{1F2FF}]\\uFE0F?")
+        val EMOJI = Regex("[\\u2600-\\u27BF\\u2B00-\\u2BFF\\x{1F300}-\\x{1FAFF}\\x{1F000}-\\x{1F2FF}]\\uFE0F?")
         private val LOWER_I = Regex("(^|\\s)i('|\\s|$)")
         private val FORMAL = Regex("^(hello|dear|good (morning|afternoon|evening))\\b|\\b(thank you|regards|sincerely|kindly|i will|i would|please let me know|best wishes|i am)\\b", RegexOption.IGNORE_CASE)
         private val CASUAL = Regex("\\b(lol|lmao|haha+|yeah|yep|yup|nope|gonna|wanna|gotta|omg|brb|thx|ya|u|ur|k|kk|lemme|dunno|idk|np|ttyl|bruh|bro|dude|sup|tho)\\b|^(hey|yo)\\b", RegexOption.IGNORE_CASE)
@@ -125,9 +125,9 @@ object StanceMatcher {
         Stance.WELCOME to Regex("^(you'?re welcome|youre welcome|you are welcome|welcome|np|no prob(lem)?|anytime|any time|my pleasure|happy to help|don'?t mention it|glad to help|glad i could help)\\b.*$", I),
         Stance.NOWORRIES to Regex("^(no worries|all good|it'?s (ok|okay|fine|all good|alright)|don'?t worry( about it)?|no need to (apologi[sz]e|be sorry)|no problem at all|that'?s (ok|okay|fine|alright)|not a problem|it happens|there'?s no need to apologi[sz]e)\\b.*$", I),
         Stance.CONGRATS to Regex("^(congrats|congratulations|congrat|that'?s (amazing|awesome|great|wonderful|fantastic|incredible)( news)?|so happy for you|well done|amazing|awesome|yay|woohoo|i'?m (so )?(happy|delighted|thrilled) for you|great news).*$", I),
-        Stance.SYMPATHY to Regex("^(so sorry|i'?m (so )?sorry|sorry to hear|that'?s (rough|tough|hard|awful|terrible)|that sucks|here for you|i'?m here|thinking of you|hang in there|ugh|oh no|my condolences|sending (love|hugs))\\b.*$", I),
+        Stance.SYMPATHY to Regex("^(so sorry|i'?m (so )?sorry|i am (so )?sorry|i am here|i'?m here if|sorry to hear|that'?s (rough|tough|hard|awful|terrible)|that sucks|here for you|i'?m here|thinking of you|hang in there|ugh|oh no|my condolences|sending (love|hugs))\\b.*$", I),
         Stance.LOVE to Regex("^(love you|love u|love you too|miss you|miss you too|miss u|luv you|me too)\\b.*$", I),
-        Stance.ETA to Regex("^(on my way|omw|be right there|be there (soon|shortly)|coming|leaving now|almost there|running (a bit |a few minutes )?late|i'?ll be there|heading (out|over|there))\\b.*$", I),
+        Stance.ETA to Regex("^((i am|i'?m|i will be|i'?ll be) )?(on my way|omw|be right there|be there (soon|shortly)|coming|leaving now|almost there|running (a bit |a few minutes )?late|i'?ll be there|heading (out|over|there))\\b.*$", I),
         Stance.DEFER to Regex("^(let me (check|see|think|find out|look|get back)|lemme (check|see|think)|i'?ll (let you know|check|see|think about it)|will let you know|get back to you|give me a (minute|sec|second|moment)|one (sec|second|moment|minute)|hold on|hang on|checking|not sure yet|i'?ll get back to you|can i get back to you)\\b.*$", I),
         Stance.DECLINE to Regex("^(no|nope|nah|not (today|now|really|this time|tonight|yet)|can'?t|cannot|i can'?t( make it)?|sorry,? (i )?can'?t|sorry,? no|unfortunately|rain ?check|maybe next time|i'?ll pass|pass|i don'?t think so|no thanks|no thank you|i'?m afraid not)\\b.*$", I),
         Stance.AFFIRM to Regex("^(yes|yeah|yep|yup|ya|yea|sure|sounds (good|great|fun|perfect)|works for me|that works|i'?m (in|down|game)|down|in|for sure|definitely|absolutely|of course|will do|sure thing|can do|i can|i will|please|yes please|why not|let'?s do it|deal|bet|ok(ay)?,? (sure|sounds good))\\b.*$", I),
