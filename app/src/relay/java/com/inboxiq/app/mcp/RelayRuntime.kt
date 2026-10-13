@@ -50,16 +50,29 @@ internal class ConfigGate(private val context: Context) : RelayGate {
     override fun canConnect() = RelayConfig.canConnect(context)
     override fun token() = RelayConfig.relayToken(context)
     override fun markReconnectNeeded() = RelayConfig.markReconnectNeeded(context)
+    override fun markReplaced() = RelayConfig.markReplaced(context)
+    override fun replaced() = RelayConfig.replacedElsewhere(context)
 }
 
 private class OkHttpRelaySocket(client: OkHttpClient, token: String, events: RelaySocketEvents) : RelaySocket {
+    private val done = java.util.concurrent.atomic.AtomicBoolean(false)
     private val ws: WebSocket = client.newWebSocket(
         Request.Builder().url("wss://mcp.kreativekoala.llc/phone-ws").addHeader("Authorization", "Bearer $token").build(),
         object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) = events.onOpen()
             override fun onMessage(webSocket: WebSocket, text: String) = events.onMessage(text)
-            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) = events.onClosed()
-            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) = events.onFailure(response?.code)
+            // The relay closes first with 4401 for a bad/replaced token; OkHttp reports that as
+            // onClosing and waits for us to answer, so surface it here and complete the handshake.
+            override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+                if (done.compareAndSet(false, true)) events.onClosed(code, reason)
+                webSocket.close(code.takeIf { it in 1000..4999 && it != 1005 && it != 1006 } ?: 1000, null)
+            }
+            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                if (done.compareAndSet(false, true)) events.onClosed(code, reason)
+            }
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                if (done.compareAndSet(false, true)) events.onFailure(response?.code)
+            }
         },
     )
     override fun send(text: String) = ws.send(text)

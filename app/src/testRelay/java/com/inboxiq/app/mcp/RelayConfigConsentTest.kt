@@ -87,4 +87,30 @@ class RelayConfigConsentTest {
         RelayConfig.disable(context)
         assertFalse(RelayConfig.needsReconnect(context))
     }
+
+    @Test
+    fun `consent given under version 2 no longer counts - the link flow now places a voice call`() {
+        context.getSharedPreferences("relay_config", Context.MODE_PRIVATE).edit()
+            .putInt("consent_version", 2).putBoolean("enabled", true).commit()
+        assertEquals(3, RelayConfig.CONSENT_VERSION)
+        assertFalse(RelayConfig.hasConsent(context))
+        assertFalse(RelayConfig.isEnabled(context))
+    }
+
+    @Test
+    fun `replaced-elsewhere flag needs reconnect and is cleared by re-verification and by disable`() {
+        RelayConfig.markReplaced(context)
+        assertTrue(RelayConfig.needsReconnect(context)); assertTrue(RelayConfig.replacedElsewhere(context))
+        RelayConfig.clearReconnectNeeded(context)
+        assertFalse(RelayConfig.needsReconnect(context)); assertFalse(RelayConfig.replacedElsewhere(context))
+        RelayConfig.markReplaced(context); RelayConfig.disable(context)
+        assertFalse(RelayConfig.replacedElsewhere(context))
+    }
+
+    @Test
+    fun `existingRelayToken never creates a token`() {
+        assertEquals(null, RelayConfig.existingRelayToken(context))
+        val t = RelayConfig.relayToken(context)
+        assertEquals(t, RelayConfig.existingRelayToken(context))
+    }
 }

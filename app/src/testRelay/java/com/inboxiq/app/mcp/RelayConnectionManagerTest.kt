@@ -32,7 +32,10 @@ class RelayConnectionManagerTest {
         override fun isEnabled() = enabled
         override fun needsReconnect() = reconnect
         override fun token() = "tok"
+        var replacedFlag = false
         override fun markReconnectNeeded() { reconnect = true }
+        override fun markReplaced() { reconnect = true; replacedFlag = true }
+        override fun replaced() = replacedFlag
     }
 
     private class Rig(testScope: TestScope) {
@@ -208,5 +211,53 @@ class RelayConnectionManagerTest {
         old.events.onFailure(500)
         assertEquals(RelayStatus.CONNECTED, r.manager.status.value)
         assertFalse(r.gate.reconnect)
+    }
+
+    @Test
+    fun `close 4401 unauthorized (expired or revoked token) needs reconnect and never retries`() = runTest {
+        val r = rig()
+        r.manager.onForeground()
+        r.sockets[0].events.onOpen()
+        r.sockets[0].events.onClosed(4401, "unauthorized")
+        assertEquals(RelayStatus.RECONNECT_NEEDED, r.manager.status.value)
+        assertTrue(r.gate.reconnect)
+        advanceTimeBy(10 * 60_000L); runCurrent()
+        assertEquals(1, r.sockets.size)
+    }
+
+    @Test
+    fun `close 4401 replaced or unlinked is reported as taken over, with no retry loop`() = runTest {
+        for (reason in listOf("replaced", "unlinked")) {
+            val r = rig()
+            r.manager.onForeground()
+            r.sockets[0].events.onOpen()
+            r.sockets[0].events.onClosed(4401, reason)
+            assertEquals(RelayStatus.REPLACED, r.manager.status.value)
+            advanceTimeBy(10 * 60_000L); runCurrent()
+            assertEquals(1, r.sockets.size)
+            // Leaving and returning to the app does not reconnect either: the user must re-verify.
+            r.manager.onBackground(); r.manager.onForeground()
+            assertEquals(1, r.sockets.size)
+            assertEquals(RelayStatus.REPLACED, r.manager.status.value)
+        }
+    }
+
+    @Test
+    fun `an ordinary close still retries with backoff`() = runTest {
+        val r = rig()
+        r.manager.onForeground()
+        r.sockets[0].events.onOpen()
+        r.sockets[0].events.onClosed(1006, "")
+        assertEquals(RelayStatus.OFFLINE, r.manager.status.value)
+        advanceTimeBy(RelayConnectionManager.INITIAL_BACKOFF_MS + 1); runCurrent()
+        assertEquals(2, r.sockets.size)
+    }
+
+    @Test
+    fun `upgrade rejected with 401 or 403 still needs reconnect`() = runTest {
+        val r = rig()
+        r.manager.onForeground()
+        r.sockets[0].events.onFailure(403)
+        assertEquals(RelayStatus.RECONNECT_NEEDED, r.manager.status.value)
     }
 }

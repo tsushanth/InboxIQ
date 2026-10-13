@@ -69,17 +69,18 @@ create text drafts; nothing is sent unless you tap Send in InboxIQ.
 
 - The relay passes this content through in memory and does not store or log it.
 - The relay stores your phone number, the hashed credentials that link your phone to your Claude connector,
-  and one-time verification records. Verification of the connector is done by an automated voice call to your
-  number placed through Twilio.
+  and one-time verification records. When you turn the connection on, InboxIQ asks the relay to place an
+  automated voice call to your number (through Twilio) that reads out a 6-digit code; you type it into InboxIQ to
+  prove the number is yours. Adding the connector in Claude uses a second automated voice call the same way.
+  Claude's access to the connector expires after a period of inactivity and can be revoked.
 - Anthropic's handling of what Claude receives is governed by your Claude account's terms and privacy
   settings; Kreative Koala does not control it.
 - Foreground only: Claude can reach your messages only while InboxIQ is open on your screen. When you close the
   app, switch to another app or turn the screen off, the connection ends within a few seconds. Nothing runs in
   the background and it does not reconnect until you open InboxIQ again.
-- To stop: turn the switch off in Settings. That disconnects immediately and
-  discards your phone's key. To remove the connector from Claude, delete InboxIQ in Claude's Connectors settings.
+- To stop: turn the switch off in Settings. That disconnects immediately, discards your phone's key, and asks the
+  relay to unlink your phone and revoke Claude's access to it (if the relay cannot be reached, InboxIQ says so). To remove the connector from Claude, delete InboxIQ in Claude's Connectors settings.
   To delete the relay's record of your phone number, email support@kreativekoala.llc.
-- The relay service is being hardened (phone linking and token expiry/revocation); details will be added here when released.
 
 ## What we don't do
 

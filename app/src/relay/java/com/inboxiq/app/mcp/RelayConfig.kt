@@ -16,14 +16,18 @@ object RelayConfig {
     private const val KEY_ENABLED = "enabled"
     private const val KEY_CONSENT_VERSION = "consent_version"
     private const val KEY_NEEDS_RECONNECT = "needs_reconnect"
+    private const val KEY_REPLACED = "replaced_elsewhere"
 
     /**
      * Bump when the data the relay exposes (or who receives it) changes, so everyone has to
      * re-read and re-accept the disclosure shown by RelayConsentDialog.
      * 2: the relay works only while InboxIQ is open on screen (no foreground service); closing the
      * app ends access. Everyone who accepted version 1 (0.4.x) must accept this text.
+     * 3: linking now proves control of the number: the relay places an automated voice call to it
+     * that reads a one-time code, and turning the relay off asks the relay to revoke this phone's
+     * access.
      */
-    const val CONSENT_VERSION = 2
+    const val CONSENT_VERSION = 3
 
     private fun prefs(context: Context) = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
@@ -35,6 +39,9 @@ object RelayConfig {
         prefs(context).edit().putString(KEY_RELAY_TOKEN, token).apply()
         return token
     }
+
+    /** Like [relayToken] but never creates one. */
+    fun existingRelayToken(context: Context): String? = prefs(context).getString(KEY_RELAY_TOKEN, null)
 
     fun phoneNumber(context: Context): String? = prefs(context).getString(KEY_PHONE_NUMBER, null)
 
@@ -54,7 +61,14 @@ object RelayConfig {
     }
 
     fun clearReconnectNeeded(context: Context) {
-        prefs(context).edit().putBoolean(KEY_NEEDS_RECONNECT, false).apply()
+        prefs(context).edit().putBoolean(KEY_NEEDS_RECONNECT, false).putBoolean(KEY_REPLACED, false).apply()
+    }
+
+    /** The relay closed our socket with 4401 "replaced"/"unlinked": another install took this number over. */
+    fun replacedElsewhere(context: Context): Boolean = prefs(context).getBoolean(KEY_REPLACED, false)
+
+    fun markReplaced(context: Context) {
+        prefs(context).edit().putBoolean(KEY_NEEDS_RECONNECT, true).putBoolean(KEY_REPLACED, true).apply()
     }
 
     /** Every condition for opening the relay socket (visibility is checked by the connection manager). */
@@ -75,7 +89,7 @@ object RelayConfig {
      * within the same disclosure version; call [clearConsent] to withdraw it as well.
      */
     fun disable(context: Context) {
-        prefs(context).edit().putBoolean(KEY_ENABLED, false).putBoolean(KEY_NEEDS_RECONNECT, false).remove(KEY_RELAY_TOKEN).apply()
+        prefs(context).edit().putBoolean(KEY_ENABLED, false).putBoolean(KEY_NEEDS_RECONNECT, false).putBoolean(KEY_REPLACED, false).remove(KEY_RELAY_TOKEN).apply()
     }
 
     fun clearConsent(context: Context) {
