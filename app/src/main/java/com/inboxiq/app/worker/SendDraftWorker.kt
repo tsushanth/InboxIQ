@@ -15,7 +15,7 @@ import com.inboxiq.app.sms.SmsSender
  * Sends an agent draft (see AgentDraftsSection) via WorkManager rather than a coroutine
  * scoped to the Settings screen — a plain `coroutineScope.launch` dies if the user backgrounds
  * the app or the process gets killed right after tapping Send, which could leave a draft
- * stuck mid-flight. WorkManager persists the job and retries across process death/reboots.
+ * stuck mid-flight. WorkManager persists the job across process death/reboots (sends are claimed, never auto-retried).
  */
 class SendDraftWorker(
     appContext: Context,
@@ -26,21 +26,26 @@ class SendDraftWorker(
         val draftId = inputData.getString(KEY_DRAFT_ID) ?: return Result.failure()
         val dao = AppDatabase.get(applicationContext).agentDraftDao()
         val draft = dao.findById(draftId) ?: return Result.failure()
-        if (draft.status != AgentDraftStatus.PENDING) return Result.success() // already handled
+        // At-most-once: a retry after a crash between dispatch and the status write would
+        // send the real SMS twice (and SmsSender inserts a message row per call). Claim first;
+        // if the claim is lost or the draft was already handled, do nothing.
+        if (dao.claimForSending(draftId) == 0) return Result.success()
 
         return try {
             SmsSender.send(applicationContext, draft.address, draft.body)
             dao.setStatus(draftId, AgentDraftStatus.SENT)
             Result.success()
         } catch (e: Exception) {
-            if (runAttemptCount < MAX_ATTEMPTS) Result.retry() else Result.failure()
+            // Not retried automatically: the failure may have happened after dispatch. Return the
+            // draft to PENDING so the user sees it and can decide to tap Send again.
+            dao.setStatus(draftId, AgentDraftStatus.PENDING)
+            Result.failure()
         }
     }
 
     companion object {
         private const val KEY_DRAFT_ID = "draft_id"
-        private const val MAX_ATTEMPTS = 3
-
+    
         fun enqueue(context: Context, draftId: String) {
             val work = OneTimeWorkRequestBuilder<SendDraftWorker>()
                 .setInputData(workDataOf(KEY_DRAFT_ID to draftId))

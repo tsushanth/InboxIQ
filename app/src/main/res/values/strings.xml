@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">InboxIQ</string>
+
+    <!-- Optional "Connect to Claude" relay: disclosure text. Keep in sync with
+         docs/DATA_SAFETY.md and the privacy policy. Changing what is shared => bump
+         RelayConfig.CONSENT_VERSION. -->
+    <string name="relay_section_blurb">Optional. Lets Claude (claude.ai or Claude Desktop, signed in to your account) read your text messages and draft replies. Off until you turn it on. Your messages leave this phone only while it is on.</string>
+    <string name="relay_consent_title">Share your messages with Claude?</string>
+    <string name="relay_consent_body">If you turn this on:\n\n- Claude can list your conversations, search all your texts, and read full threads, only when you ask it to. It sees message text, phone numbers, contact names and times, including messages from banks and other services. One-time passcodes are hidden.\n- That data goes from this phone through InboxIQ\'s relay server (mcp.kreativekoala.llc, run by InboxIQ\'s publisher on Fly.io) to Anthropic\'s Claude, which handles it under your Claude account\'s terms and privacy settings. The relay passes messages through and does not store them. Your phone number is stored so the relay can find this phone.\n- Claude can only draft texts. Nothing is sent until you open InboxIQ and tap Send on each draft.\n- Turning this off disconnects immediately and discards this phone\'s relay key. To also remove the connector, delete InboxIQ under Settings, Connectors in Claude.\n\nInboxIQ\'s sorting of your inbox stays on this phone either way.</string>
+    <string name="relay_consent_accept">Share my messages</string>
+    <string name="relay_consent_decline">Not now</string>
 </resources>

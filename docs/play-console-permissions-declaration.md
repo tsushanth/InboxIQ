@@ -8,10 +8,16 @@ qualifying as the default SMS, Phone, or Assistant handler, and on
 "core functionality" justification. This is a draft to review/refine before
 actual submission, not yet submitted.
 
+> **CORRECTED 2026-10-13.** The earlier text of this file said no message content is ever transmitted
+> to any server. That has been false since app 0.4.0, which includes the optional "Connect to Claude"
+> relay. The statements below are the corrected, true versions. Do not reuse the older wording.
+
 ## Which permissions are we declaring
 
 - `READ_SMS`, `RECEIVE_SMS`, `SEND_SMS`, `RECEIVE_MMS`, `RECEIVE_WAP_PUSH`
 - `READ_CONTACTS` (for display-name resolution in the inbox UI)
+- Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET`, `WAKE_LOCK`, `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_SPECIAL_USE` (see FOREGROUND_SERVICE_DECLARATION.md)
+- Removed from our own manifest in 0.4.2: `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE_DATA_SYNC`. Libraries still add `RECEIVE_BOOT_COMPLETED` (WorkManager) and `FOREGROUND_SERVICE_DATA_SYNC` (Play Asset Delivery); see DIAGNOSIS.md
 
 ## Core functionality justification (per permission)
 
@@ -24,15 +30,22 @@ actual submission, not yet submitted.
 > messages into a fixed set of labels (personal / work / promotional /
 > one-time-passcode / spam / suspected scam) to help users triage their
 > inbox. All classification happens locally on the device using a bundled
-> machine-learning model; no message content is ever transmitted to any
-> server, ours or third-party.
+> machine-learning model; no message content is transmitted for classification.
+> Separately, an optional feature, OFF by default and enabled only after an
+> on-screen disclosure and consent, lets the user connect their own Claude
+> account (claude.ai / Claude Desktop). When on, message text, sender numbers
+> and contact names are sent, at the user's request, through a relay operated
+> by the developer to Anthropic's Claude. Replies are only drafts; the user
+> must tap Send in InboxIQ. One-time passcodes are masked. This feature is a
+> user-directed transfer, not required for the app's core messaging function.
 
 **READ_CONTACTS**
 
 > Used solely to display a sender's saved contact name instead of a raw
 > phone number in the conversation list and thread view — standard
-> messaging-app behavior. Contact data is read locally and never
-> transmitted off-device.
+> messaging-app behavior. Contact names are read locally; if the user
+> enables the optional Claude connection, names of the contacts in conversations
+> Claude reads are included in what is sent.
 
 ## Why default-handler status, not just permissions
 
@@ -47,10 +60,13 @@ which Android — not InboxIQ — presents and controls.
 ## Data handling summary (for the "how is this data used" question)
 
 - Message content, sender addresses, and contact names are stored **only**
-  in a local on-device database (Room/SQLite). Nothing is synced to any
-  backend.
+  in a local on-device database (Room/SQLite). Nothing is synced or backed up.
+  Exception: the optional Claude connection (above) transmits them on demand;
+  the relay does not store message content but does store the user's phone number
+  and hashed tokens.
 - The classification model runs **on-device** via ONNX Runtime Mobile.
-  No network call is made to classify a message.
+  No network call is made to classify a message. (The optional Claude relay is
+  the only path where message content leaves the phone.)
 - No analytics SDK reads message content. (If/when we add crash reporting
   or usage analytics, it must be scoped to explicitly exclude message
   bodies, addresses, and contact names — flag this constraint before
@@ -63,6 +79,7 @@ which Android — not InboxIQ — presents and controls.
       (section 10, "App-Specific Disclosures: InboxIQ") — still needs to be
       pasted into the actual Play Console listing field when the app is
       submitted; see `privacy-policy-draft.md` in this folder
+- [ ] Owner decision: keep, gate, or remove the Claude relay before submitting this declaration; if Play will not accept it as non-core user-directed transfer, remove it
 - [ ] Screenshots/video demonstrating the app functioning as a full SMS
       client (Google reviews for "is this really a messaging app or just
       permission-grabbing")

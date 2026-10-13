@@ -130,7 +130,10 @@ class MainActivity : ComponentActivity() {
         // Runs from an Activity since starting a foreground service from a background-triggered
         // process start hits Android's background-start restrictions.
         if (com.inboxiq.app.mcp.RelayConfig.isEnabled(applicationContext) && !com.inboxiq.app.mcp.RelayForegroundService.isRunning) {
-            startForegroundService(Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
+            // isEnabled() is false unless the user accepted the current consent disclosure.
+            runCatching {
+                startForegroundService(Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
+            }
         }
 
         lifecycleScope.launch { ScheduledSend.reenqueueAll(applicationContext) }
