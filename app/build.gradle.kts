@@ -66,6 +66,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     // Compose compiler version now comes from the org.jetbrains.kotlin.plugin.compose
     // plugin (matches the Kotlin version) — composeOptions/kotlinCompilerExtensionVersion
@@ -77,7 +78,15 @@ android {
     }
 
     buildTypes {
+        // AUTO_RESPONDER_ENABLED: compile the optional "Auto-reply when away" feature in and show it.
+        // Debug builds have it on for testing; release builds ship with it OFF unless the owner
+        // opts in with -PautoResponder=true (docs/AUTO_RESPONDER.md). Off means no settings entry,
+        // no receiver hook and no worker: the code is inert.
+        debug {
+            buildConfigField("boolean", "AUTO_RESPONDER_ENABLED", (project.findProperty("autoResponder") ?: "true").toString())
+        }
         release {
+            buildConfigField("boolean", "AUTO_RESPONDER_ENABLED", (project.findProperty("autoResponder") ?: "false").toString())
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
         }

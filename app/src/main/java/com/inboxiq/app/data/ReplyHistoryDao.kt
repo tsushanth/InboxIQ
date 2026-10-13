@@ -8,4 +8,8 @@ import androidx.room.Query
 interface ReplyHistoryDao {
     @Query("SELECT body FROM messages WHERE isIncoming = 0 AND body != '' ORDER BY timestamp DESC LIMIT :limit")
     suspend fun recentSentBodies(limit: Int): List<String>
+
+    /** The user's recent outgoing rows to one number (for "have I ever texted this person"). */
+    @Query("SELECT * FROM messages WHERE address = :address AND isIncoming = 0 ORDER BY timestamp DESC LIMIT 100")
+    suspend fun recentSentTo(address: String): List<MessageEntity>
 }

@@ -15,7 +15,8 @@ object SmsSender {
     const val EXTRA_MESSAGE_ID = "message_id"
     const val EXTRA_PROVIDER_URI = "provider_uri"
 
-    suspend fun send(context: Context, rawAddress: String, body: String) {
+    /** Returns the id of the stored outgoing row (<= 0 when the insert was ignored). */
+    suspend fun send(context: Context, rawAddress: String, body: String): Long {
         val dao = AppDatabase.get(context).messageDao()
         // Same normalisation the history import applies, so the row we store and the provider row it
         // later re-reads share one (address, timestamp, body) key. Idempotent on already-normal numbers.
@@ -66,5 +67,6 @@ object SmsSender {
             }
             throw e
         }
+        return id
     }
 }
