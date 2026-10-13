@@ -21,8 +21,8 @@ android {
         applicationId = "com.inboxiq.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 8
-        versionName = "0.4.2"
+        versionCode = 9
+        versionName = "0.5.0"
 
         // Native whisper.cpp build for on-device voice-memo transcription (zero network).
         ndk {
@@ -139,6 +139,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-service:2.8.4")
     implementation("androidx.lifecycle:lifecycle-process:2.8.4")
     implementation("androidx.activity:activity-compose:1.9.1")
+    // A transitive library pulls androidx.fragment 1.1.0, which lint rejects for registerForActivityResult
+    // (backup/restore file pickers). Force a current version.
+    implementation("androidx.fragment:fragment:1.8.5")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")

@@ -1,0 +1,4 @@
+Smarter replies that fit what was asked and match how you write. Nothing is suggested for codes, promos or scams.
+Better sorting: Work and Scam now appear, fewer real messages land in Spam, and imports are faster with correct unread counts.
+Texts are now saved to Android's own message store, so they stay if you switch apps.
+New look with tabs, search, swipe actions, Copy code and notification buttons. No internet access: your messages stay on your phone.
