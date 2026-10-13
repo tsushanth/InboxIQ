@@ -16,3 +16,6 @@ gemma_model_pack/src/main/assets/*.litertlm
 
 hs_err_pid*.log
 replay_pid*.log
+
+__pycache__/
+*.pyc

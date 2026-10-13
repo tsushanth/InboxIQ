@@ -67,7 +67,9 @@ object IncomingLabeler {
         // we can't tell from one message whether the whole thread actually changed.
         // ...unless the user hand-filed this sender, in which case their choice stands.
         val userCorrected = db.threadStateDao().get(address)?.labelCorrected == true
-        val heuristic = if (userCorrected) null else HeuristicRules.match(body)
+        // Sender-aware rules: a number the user has really replied to is never filed as spam/promo.
+        val replies = if (userCorrected) 0 else db.threadLabelDao().substantiveReplies(address)
+        val heuristic = if (userCorrected) null else HeuristicRules.match(body, address, replies)
         val label = heuristic?.label ?: cached?.label ?: MessageLabel.UNLABELED
         when {
             heuristic != null && heuristic.label != cached?.label -> {

@@ -137,11 +137,14 @@ a real device or an emulator with SMS injection via `adb emu sms send`).
 
 ## Model export
 
-The bundled `app/src/main/assets/spam_classifier_v1.onnx` +
+The bundled `app/src/main/assets/spam_classifier_v1_q8.onnx` +
 `spam_classifier_vocab.txt` were produced by exporting
 `mrm8488/bert-tiny-finetuned-sms-spam-detection` via `optimum.exporters.onnx`
 (task: `text-classification`). Output verified to match native PyTorch
-inference exactly before bundling. Re-run the same export for future
+inference exactly before bundling. The word-embedding table was then stored as int8
+(`scripts/classification/quantize_embeddings.py`, 17.6 MB to 6.0 MB, probabilities move by at most 0.013).
+How the model is combined with rules, and how it is evaluated, is in `docs/CLASSIFICATION.md`.
+Re-run the same export for future
 fine-tunes; the Kotlin `WordPieceTokenizer` expects a standard BERT
 `vocab.txt`.
 

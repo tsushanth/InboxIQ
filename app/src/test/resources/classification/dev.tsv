@@ -1,0 +1,645 @@
+id	category	label	address	replies	bodies
+personal_hard-14-1	personal_hard	PERSONAL	+15125550155	12	free to chat? urgent but good news!!
+txn_delivery-6-0	txn_delivery	PERSONAL	+18665550124	0	Your Contoso ride receipt: $770.43. Thanks for riding!
+work_automated-2-9	work_automated	WORK	35276	0	Incident TCK-6509 resolved. Service search is healthy again. Postmortem on Tuesday.
+personal_hard-2-5	personal_hard	PERSONAL	+16465550177	12	you won the bet lol. you owe me a coffee
+spam_unsolicited-6-9	spam_unsolicited	SPAM	+16025550172	0	Hi, this is Ravi with Umbra Solar. Homeowners in Miami can cut electric bills by 80%. Are you the homeowner?
+personal_hard-2-9	personal_hard	PERSONAL	+13125550188	2	you won the bet lol. you owe me a coffee 👍
+work_human-2-4	work_human	WORK	+12125550187	1	Heads up, I'm out on PTO Thursday through Thursday. Ping Chloe for anything urgent.
+scam_callback-2-6	scam_callback	SCAM	sam124@example.com	0	Norton: your subscription renewal of $574.78 will be charged today. To cancel call 555-0125.
+personal_newcontact-2-3	personal_newcontact	PERSONAL	+14155550127	0	hi, this is hannah okafor, the plumber. i can come tuesday between 1 and 3. does that work?
+work_automated-6-0	work_automated	WORK	HOOLIPAY	0	Build failed on main: #7953 'Fix checkout rounding'. See logs: https://stark.example.com/DFkJWj
+promo_retail-2-7	promo_retail	PROMO	+18665550154	0	Vandelay Rewards: you have 500 bonus points expiring Dec 28. Redeem them on your next purchase! https://vandelay.example.com/WGN6v5 Reply STOP to unsubscribe
+work_human-2-11	work_human	WORK	+13055550165	1	heads up, i'm out on pto saturday through saturday. ping zoe for anything urgent. 😂
+work_human-10-6	work_human	WORK	+13125550118	1	Mr. Okafor confirmed the walkthrough for Tuesday at 3:00 AM. Contract is in your email, please review before then.
+txn_reminder-6-11	txn_reminder	PERSONAL	INITECH	0	Your car service is complete. Total $368.70. You can pick up the vehicle until 6 PM.
+work_human-2-9	work_human	WORK	+16025550134	1	Heads up, I'm out on PTO Thursday through Thursday. Ping Priya for anything urgent.
+spam_unsolicited-2-10	spam_unsolicited	SPAM	684171	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: t.ly/rPjQb6b
+personal_plans-6-7	personal_plans	PERSONAL	+13035550142	12	Thanks for dropping off the keys, you're a lifesaver!
+scam_toll_parcel-2-6	scam_toll_parcel	SCAM	6888661676@example.com	0	FINAL NOTICE: You have an unpaid toll balance of $23.88. Pay now to avoid a late fee of $50: https://soylent-login.example-svc.sbs/98QZR
+scam_account-2-6	scam_account	SCAM	+16465550105	0	Security notice: unusual sign-in on your Stripe account. Secure your account immediately at rb.gy/4A7ejqs
+spam_unsolicited-2-0	spam_unsolicited	SPAM	407444	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: rb.gy/87VZZY9
+personal_plans-18-7	personal_plans	PERSONAL	+12065550159	0	yes!!! congrats!!! 🎉
+work_human-18-0	work_human	WORK	+13125550142	0	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? 👍 ||| morning, quick question about the release
+work_human-6-5	work_human	WORK	+12065550112	3	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+otp-10-6	otp	OTP_2FA	+13035550180	0	Enter 524231 to confirm your sign-in to Umbra. This code is valid for 10 minutes.
+promo_service-2-3	promo_service	PROMO	GLOBEXCU	0	Take our 2-minute survey and enter to win a $100 gift card. https://initech.example.com/mVa5Fp Reply STOP to opt out.
+work_automated-6-9	work_automated	WORK	808976	0	Build failed on main: #1950 'Fix checkout rounding'. See logs: https://initech.example.com/RcybUG
+personal_plans-18-11	personal_plans	PERSONAL	+16465550128	8	yes!!! congrats!!! 🎉
+txn_bank-6-2	txn_bank	PERSONAL	BOXBEE	0	Zelle: Rosa Nguyen sent you $786.15. Money has been deposited to your account ending 2449.
+otp-10-10	otp	OTP_2FA	PARCELPAL	0	Enter 631813 to confirm your sign-in to Initech. This code is valid for 10 minutes.
+work_automated-2-4	work_automated	WORK	+18335550145	0	Incident TCK-8255 resolved. Service search is healthy again. Postmortem on Wednesday.
+x-repliedscam-10	replied_to_scammer	SCAM	+12125550112	1	Final notice: unpaid toll balance of $782.99. Pay now to avoid a late fee: https://contoso-verify.example-svc.help/9qDWu
+work_human-2-0	work_human	WORK	+15125550107	20	Heads up, I'm out on PTO Saturday through Saturday. Ping Zoe for anything urgent.
+otp-2-6	otp	OTP_2FA	+12125550192	0	Your one-time passcode is 162354. It expires in 5 minutes.
+personal_hard-14-0	personal_hard	PERSONAL	+16175550112	4	free to chat? urgent but good news!!
+txn_delivery-6-6	txn_delivery	PERSONAL	+18335550101	0	Your Globex ride receipt: $742.97. Thanks for riding!
+otp-6-0	otp	OTP_2FA	+16025550135	0	G-760292 is your Google verification code.
+spam_unsolicited-6-4	spam_unsolicited	SPAM	775208	0	Hi, this is Chloe with Acme Solar. Homeowners in Denver can cut electric bills by 80%. Are you the homeowner?
+txn_bank-2-2	txn_bank	PERSONAL	UMBRA-RX	0	Acme Bank: Your account ending 7903 has a new deposit of $251.95.
+txn_reminder-6-6	txn_reminder	PERSONAL	837799	0	Your car service is complete. Total $126.45. You can pick up the vehicle until 6 PM.
+promo_retail-6-4	promo_retail	PROMO	+18005550159	0	Exclusive offer for VIP members: extra 10% off clearance. Ends tonight. https://contoso.example.com/aN3FeE Unsubscribe: reply STOP
+txn_reminder-2-1	txn_reminder	PERSONAL	UMBRA-RX	0	Wonka Airlines: Flight AC5278 is delayed 45 minutes. New departure 10:15 AM, gate B12.
+personal_plans-10-0	personal_plans	PERSONAL	+15125550136	8	mom: call me when you get a sec, nothing urgent 😂
+personal_hard-2-2	personal_hard	PERSONAL	+15125550100	8	you won the bet lol. you owe me a coffee
+personal_plans-14-10	personal_plans	PERSONAL	+13035550180	5	Proud of you. Call me tonight if you want to talk about it ❤️ 😊
+personal_hard-10-1	personal_hard	PERSONAL	+16465550169	12	did you get the verification email? mine never came
+work_automated-6-7	work_automated	WORK	UMBRA-RX	0	Build failed on main: #7386 'Fix checkout rounding'. See logs: https://contoso.example.com/py3th3
+promo_retail-2-9	promo_retail	PROMO	+16465550158	0	Globex Rewards: you have 500 bonus points expiring Dec 13. Redeem them on your next purchase! https://globex.example.com/nckzxx Reply STOP to unsubscribe
+promo_retail-10-2	promo_retail	PROMO	51704	0	Wonka: we miss you! Come back and enjoy 40% off your next order. Limited time. https://wonka.example.com/tNhfSU
+scam_wrongnum-2-1	scam_wrongnum	SCAM	+16465550148	0	Hello, is this Ines? We met at the conference last month. Add me on WhatsApp +1 555 0134, I'd like to share a great opportunity.
+spam_unsolicited-14-2	spam_unsolicited	SPAM	30316	0	Hello Sam, we are looking to buy cars in Portland. Text us the year and mileage for an instant offer.
+work_human-18-3	work_human	WORK	+16465550127	8	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? ||| morning, quick question about the release
+scam_toll_parcel-6-5	scam_toll_parcel	SCAM	zoe520@example.com	0	Delivery attempt failed. Reschedule at https://hooli-pay.example-web.click/gKxws or your item will be returned to sender.
+scam_wrongnum-6-2	scam_wrongnum	SCAM	+447700900386	0	omg is that you in this video?? https://globex-pay.example-id.top/XeL7T
+personal_newcontact-6-7	personal_newcontact	PERSONAL	+13125550164	0	This is Ben, your Uber driver. I'm outside in a gray Honda.
+otp-2-2	otp	OTP_2FA	49371	0	Your one-time passcode is 366457. It expires in 10 minutes.
+txn_delivery-2-9	txn_delivery	PERSONAL	+18335550163	0	QuickDrop: Out for delivery. Your driver is Noah and is 6 stops away.
+work_automated-2-5	work_automated	WORK	171966	0	Incident TCK-8193 resolved. Service auth is healthy again. Postmortem on Sunday.
+scam_wrongnum-6-4	scam_wrongnum	SCAM	+447700900842	0	omg is that you in this video?? https://stark-help.example-portal.xyz/q8PCj
+work_human-18-2	work_human	WORK	+13055550171	4	Sounds good, I'll update the Jira board ||| did u see the staging build fail again? ||| morning, quick question about the release 😊
+scam_toll_parcel-2-7	scam_toll_parcel	SCAM	+447700900202	0	FINAL NOTICE: You have an unpaid toll balance of $329.25. Pay now to avoid a late fee of $50: https://initech-support.example-id.buzz/JKgiv
+scam_callback-2-3	scam_callback	SCAM	+12125550124	0	Norton: your subscription renewal of $711.90 will be charged today. To cancel call 555-0134.
+scam_toll_parcel-2-3	scam_toll_parcel	SCAM	+447700900255	0	FINAL NOTICE: You have an unpaid toll balance of $753.46. Pay now to avoid a late fee of $50: https://contoso-support.example-id.cc/FLbtt
+scam_callback-2-2	scam_callback	SCAM	tariq979@example.com	0	Norton: your subscription renewal of $421.80 will be charged today. To cancel call 555-0146.
+scam_prize-2-10	scam_prize	SCAM	737902	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://globex-secure.example-web.top/vBaxu
+scam_toll_parcel-6-7	scam_toll_parcel	SCAM	3306655810@example.com	0	Delivery attempt failed. Reschedule at https://soylent-verify.example-svc.vip/AMfLZ or your item will be returned to sender.
+scam_prize-2-1	scam_prize	SCAM	3358287311@example.com	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://wonka-verify.example-svc.live/vuARy
+txn_delivery-6-4	txn_delivery	PERSONAL	12814	0	Your Globex ride receipt: $746.27. Thanks for riding!
+promo_retail-10-11	promo_retail	PROMO	+18335550108	0	Umbra: we miss you! Come back and enjoy 15% off your next order. Limited time. https://umbra.example.com/Gbvtst
+work_human-18-11	work_human	WORK	+13125550197	8	Sounds good, I'll update the Jira board ❤️ ||| did you see the staging build fail again? ||| morning, quick question about the release
+txn_bank-6-9	txn_bank	PERSONAL	+18555550195	0	Zelle: Tariq Brandt sent you $291.04. Money has been deposited to your account ending 5784.
+work_automated-2-6	work_automated	WORK	+18885550137	0	Incident TCK-0560 resolved. Service billing is healthy again. Postmortem on Sunday.
+personal_hard-6-5	personal_hard	PERSONAL	+12125550121	8	Venmo'd you $1000 for the tickets, let me know if it didn't go through
+personal_hard-10-9	personal_hard	PERSONAL	+14155550151	8	did you get the verification email? mine never came
+promo_service-2-0	promo_service	PROMO	UMBRA-RX	0	Take our 2-minute survey and enter to win a $100 gift card. https://contoso.example.com/xRGs98 Reply STOP to opt out.
+work_automated-2-2	work_automated	WORK	38167	0	Incident TCK-9809 resolved. Service search is healthy again. Postmortem on Thursday.
+otp-18-8	otp	OTP_2FA	ACMEBANK	0	Uber PIN 7111. Use it to finish signing in.
+promo_service-2-7	promo_service	PROMO	435259	0	Take our 2-minute survey and enter to win a $100 gift card. https://soylent.example.com/7C2apm Reply STOP to opt out.
+personal_plans-14-12	personal_plans	PERSONAL	+12125550128	4	Proud of you. Call me tonight if you want to talk about it ❤️
+scam_callback-2-7	scam_callback	SCAM	+447700900312	0	Norton: your subscription renewal of $785.37 will be charged today. To cancel call 555-0117.
+promo_civic-2-1	promo_civic	PROMO	80245	0	Your gift of $8 can feed a family this winter. Donate today: https://globex.example.com/WuqDNP. Reply STOP to end.
+otp-14-10	otp	OTP_2FA	+16465550175	0	215334 is your Stripe confirmation code
+personal_newcontact-6-3	personal_newcontact	PERSONAL	+15125550142	0	This is Luis, your Uber driver. I'm outside in a gray Honda.
+personal_plans-10-8	personal_plans	PERSONAL	+13125550157	4	mom: call me when you get a sec, nothing urgent
+personal_hard-18-1	personal_hard	PERSONAL	+14155550121	3	can you review my resume? the link is https://docs.example.com/d/3629 🔥
+personal_hard-18-10	personal_hard	PERSONAL	+12065550198	4	can you review my resume? the link is https://docs.example.com/d/3164
+work_human-2-1	work_human	WORK	+16025550146	3	Heads up, I'm out on PTO Saturday through Saturday. Ping Alex for anything urgent.
+otp-2-0	otp	OTP_2FA	+18885550134	0	Your one-time passcode is 771401. It expires in 5 minutes.
+txn_bank-6-6	txn_bank	PERSONAL	+18555550169	0	Zelle: Tariq Nguyen sent you $793.18. Money has been deposited to your account ending 9150.
+otp-18-12	otp	OTP_2FA	+18335550199	0	Uber PIN 9007. Use it to finish signing in.
+personal_hard-6-8	personal_hard	PERSONAL	+15125550192	5	Venmo'd you $150 for the tickets, let me know if it didn't go through
+personal_newcontact-6-0	personal_newcontact	PERSONAL	+16025550119	0	This is Chloe, your Uber driver. I'm outside in a gray Honda.
+spam_unsolicited-10-2	spam_unsolicited	SPAM	3374820939@example.com	0	Make money from home!!! Click here rb.gy/5qkbz5a limited spots
+work_human-18-5	work_human	WORK	+12065550110	5	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? 🙏 ||| morning, quick question about the release ❤️
+scam_invest_job-6-9	scam_invest_job	SCAM	+16025550196	0	I'm from Chicago, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0147
+personal_plans-6-5	personal_plans	PERSONAL	+13055550142	3	Thanks for dropping off the keys, you're a lifesaver! 🔥
+work_human-6-2	work_human	WORK	+15125550155	1	prod deploy is done. watch the dashboards for errors, roll back if you see anything weird.
+scam_callback-2-9	scam_callback	SCAM	+18665550196	0	Norton: your subscription renewal of $765.88 will be charged today. To cancel call 555-0147.
+personal_newcontact-6-5	personal_newcontact	PERSONAL	+13055550183	2	This is Noah, your Uber driver. I'm outside in a gray Honda
+personal_plans-6-10	personal_plans	PERSONAL	+14155550187	20	Thanks for dropping off the keys, you're a lifesaver!
+scam_account-6-2	scam_account	SCAM	+16025550190	0	We noticed a problem with your Acme Bank online banking. Login to http://165.170.153.217/BWMZ to avoid permanent suspension.
+personal_plans-14-0	personal_plans	PERSONAL	+16175550108	20	proud of you. call me tonight if you want to talk about it ❤️ 🔥
+personal_newcontact-2-7	personal_newcontact	PERSONAL	+13125550152	1	Hi, this is Ines Silva, the plumber. I can come Wednesday between 1 and 3. Does that work?
+work_human-10-9	work_human	WORK	+13055550107	8	mr. nguyen confirmed the walkthrough for saturday at 10:00 pm. contract is in your email, please review before then.
+scam_invest_job-2-5	scam_invest_job	SCAM	+16465550175	0	Part-time job offer: like and review products, earn $2 commissions daily. Add us on Telegram bit.ly/uCZPUQZ
+spam_unsolicited-14-11	spam_unsolicited	SPAM	+18775550148	0	Hello Ben, we are looking to buy cars in Boston. Text us the year and mileage for an instant offer.
+spam_unsolicited-2-2	spam_unsolicited	SPAM	+447700900274	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: rb.gy/5jDqN9B
+x-friendlink-14	friend_with_link	PERSONAL	+13055550160	10	call me asap!! urgent!! see this is.gd/nZfe7T6 ||| you around?
+txn_bank-2-7	txn_bank	PERSONAL	ACMEBANK	0	Initech Federal: Your account ending 5765 has a new deposit of $397.41.
+personal_hard-2-10	personal_hard	PERSONAL	+13055550162	0	you won the bet lol. you owe me a coffee
+otp-18-6	otp	OTP_2FA	+12125550131	0	Google PIN 3633. Use it to finish signing in.
+scam_account-2-9	scam_account	SCAM	+16465550185	0	Security notice: unusual sign-in on your Uber account. Secure your account immediately at rb.gy/ttBnXMN
+otp-2-13	otp	OTP_2FA	93939	0	Your one-time passcode is 563513. It expires in 5 minutes.
+scam_wrongnum-6-0	scam_wrongnum	SCAM	+12125550130	0	omg is that you in this video?? https://stark-login.example-svc.xyz/bpcfE
+scam_toll_parcel-2-0	scam_toll_parcel	SCAM	+14155550185	0	FINAL NOTICE: You have an unpaid toll balance of $86.99. Pay now to avoid a late fee of $50: https://soylent-login.example-id.shop/fnvMx
+personal_plans-6-8	personal_plans	PERSONAL	+16175550160	20	Thanks for dropping off the keys, you're a lifesaver!
+scam_account-2-5	scam_account	SCAM	+13035550175	0	Security notice: unusual sign-in on your Google account. Secure your account immediately at cutt.ly/5bWV46g
+work_human-14-6	work_human	WORK	+15125550140	8	Quarterly review slides are in the shared drive. Can you add your team's numbers by Friday?
+promo_civic-2-8	promo_civic	PROMO	+14155550113	0	Your gift of $1000 can feed a family this winter. Donate today: https://initech.example.com/pw8PuA. Reply STOP to end.
+scam_wrongnum-6-6	scam_wrongnum	SCAM	+16025550156	0	omg is that you in this video?? https://stark-verify.example-id.icu/6t2Y6
+promo_retail-2-0	promo_retail	PROMO	+18005550177	0	Initech Rewards: you have 500 bonus points expiring Nov 9. Redeem them on your next purchase! https://initech.example.com/R64SaV Reply STOP to unsubscribe
+spam_unsolicited-6-5	spam_unsolicited	SPAM	+18005550193	0	Hi, this is Tariq with Initech Solar. Homeowners in Phoenix can cut electric bills by 80%. Are you the homeowner?
+promo_retail-10-4	promo_retail	PROMO	INITECH	0	Acme: we miss you! Come back and enjoy 10% off your next order. Limited time. https://acme.example.com/e3KTu6
+work_human-10-1	work_human	WORK	+15125550140	12	Mr. Haddad confirmed the walkthrough for Tuesday at 11:15 PM. Contract is in your email, please review before then.
+work_automated-6-1	work_automated	WORK	+18005550189	0	Build failed on main: #8550 'Fix checkout rounding'. See logs: https://initech.example.com/fM59NT
+work_human-10-8	work_human	WORK	+13035550146	2	Mr. Nguyen confirmed the walkthrough for Monday at 5:00 PM. Contract is in your email, please review before then.
+otp-18-11	otp	OTP_2FA	PARCELPAL	0	Acme PIN 3184. Use it to finish signing in.
+personal_newcontact-6-9	personal_newcontact	PERSONAL	+12125550108	1	This is Tariq, your Uber driver. I'm outside in a gray Honda.
+personal_newcontact-2-4	personal_newcontact	PERSONAL	+16465550107	0	Hi, this is Alex Okafor, the plumber. I can come Saturday between 1 and 3. Does that work
+spam_unsolicited-14-10	spam_unsolicited	SPAM	+447700900531	0	Hello Mei, we are looking to buy cars in Seattle. Text us the year and mileage for an instant offer.
+personal_hard-14-11	personal_hard	PERSONAL	+13035550114	3	free to chat? urgent but good news!!
+scam_toll_parcel-2-1	scam_toll_parcel	SCAM	6112772321@example.com	0	FINAL NOTICE: You have an unpaid toll balance of $405.60. Pay now to avoid a late fee of $50: https://initech-support.example-svc.top/PhUha
+txn_delivery-2-11	txn_delivery	PERSONAL	UMBRA-RX	0	ParcelPal: Out for delivery. Your driver is Zoe and is 6 stops away.
+txn_reminder-6-0	txn_reminder	PERSONAL	+18445550139	0	Your car service is complete. Total $694.81. You can pick up the vehicle until 6 PM.
+scam_account-6-1	scam_account	SCAM	+447700900553	0	We noticed a problem with your Globex Credit Union online banking. Login to http://136.120.211.252/HM7j to avoid permanent suspension.
+spam_unsolicited-10-4	spam_unsolicited	SPAM	+13055550122	0	Make money from home!!! Click here tinyurl.com/uhHtth9 limited spots
+work_human-10-4	work_human	WORK	+12065550150	3	mr. haddad confirmed the walkthrough for saturday at 2:45 am. contract is in your email, please review before then.
+work_human-6-6	work_human	WORK	+12125550167	2	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+personal_hard-2-7	personal_hard	PERSONAL	+16175550118	0	you won the bet lol. you owe me a coffee
+otp-10-4	otp	OTP_2FA	+16465550178	0	Enter 459438 to confirm your sign-in to Contoso. This code is valid for 10 minutes.
+x-repliedscam-30	replied_to_scammer	SCAM	+13035550163	1	Final notice: unpaid toll balance of $777.13. Pay now to avoid a late fee: https://stark-support.example-portal.buzz/F4rhr
+personal_plans-2-2	personal_plans	PERSONAL	+16025550174	4	dinner at 7 works. I'll make the reservation 👍
+spam_unsolicited-10-11	spam_unsolicited	SPAM	+18555550197	0	Make money from home!!! Click here tinyurl.com/eySpL6U limited spots
+personal_plans-10-3	personal_plans	PERSONAL	+14155550174	4	mom: call me when you get a sec, nothing urgent
+personal_plans-2-7	personal_plans	PERSONAL	+16025550198	0	dinner at 7 works. I'll make the reservation
+scam_wrongnum-6-8	scam_wrongnum	SCAM	+447700900146	0	omg is that you in this video?? https://globex-login.example-web.click/t6EEJ
+x-friendlink-18	friend_with_link	PERSONAL	+12065550155	30	call me asap!! urgent!! see this tinyurl.com/bkKRpCH ||| you around?
+personal_plans-2-13	personal_plans	PERSONAL	+12125550118	0	dinner at 7 works. I'll make the reservation
+scam_invest_job-2-8	scam_invest_job	SCAM	+15125550101	0	part-time job offer: like and review products, earn $5 commissions daily. add us on telegram is.gd/fffxsvy
+personal_plans-18-8	personal_plans	PERSONAL	+13055550158	5	yes!!! congrats!!! 🎉
+personal_newcontact-6-1	personal_newcontact	PERSONAL	+12065550183	0	This is Ben, your Uber driver. I'm outside in a gray Honda.
+personal_hard-6-3	personal_hard	PERSONAL	+12125550151	8	Venmo'd u $480 for the tickets, let me know if it didn't go through
+scam_prize-2-0	scam_prize	SCAM	82522	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://globex-secure.example-portal.top/Mn4Wu
+promo_service-2-5	promo_service	PROMO	16424	0	Take our 2-minute survey and enter to win a $100 gift card. https://globex.example.com/kVae4x Reply STOP to opt out.
+otp-6-13	otp	OTP_2FA	BOXBEE	0	G-701719 is your Google verification code.
+promo_civic-2-2	promo_civic	PROMO	+15125550155	0	Your gift of $2500 can feed a family this winter. Donate today: https://wonka.example.com/5y4bTj. Reply STOP to end.
+promo_retail-10-5	promo_retail	PROMO	47254	0	Umbra: we miss you! Come back and enjoy 30% off your next order. Limited time. https://umbra.example.com/n39L9m
+txn_bank-2-1	txn_bank	PERSONAL	HOOLIPAY	0	Contoso Savings: Your account ending 3623 has a new deposit of $409.95.
+spam_unsolicited-6-10	spam_unsolicited	SPAM	+18555550164	0	Hi, this is Zoe with Globex Solar. Homeowners in Denver can cut electric bills by 80%. Are you the homeowner?
+scam_invest_job-2-11	scam_invest_job	SCAM	+15125550180	0	Part-time job offer: like and review products, earn $35 commissions daily. Add us on Telegram tinyurl.com/VGWL4Rd 🙏
+work_human-6-1	work_human	WORK	+13055550104	4	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+personal_hard-18-6	personal_hard	PERSONAL	+12125550134	2	can you review my resume? the link is https://docs.example.com/d/8123
+scam_toll_parcel-6-9	scam_toll_parcel	SCAM	+447700900469	0	Delivery attempt failed. Reschedule at https://umbra-pay.example-portal.info/4YHh9 or your item will be returned to sender.
+txn_bank-6-5	txn_bank	PERSONAL	09647	0	Zelle: Ravi Patel sent you $410.95. Money has been deposited to your account ending 0075.
+scam_gov-2-8	scam_gov	SCAM	+14155550131	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0152 now.
+txn_delivery-6-8	txn_delivery	PERSONAL	SHIPFAST	0	Your Vandelay ride receipt: $344.72. Thanks for riding!
+personal_hard-14-9	personal_hard	PERSONAL	+13055550101	1	free to chat? urgent but good news!!
+personal_newcontact-2-0	personal_newcontact	PERSONAL	+16175550100	2	Hi, this is Devon Brandt, the plumber. I can come Wednesday between 1 and 3. Does that work? 👍
+promo_retail-2-1	promo_retail	PROMO	+18005550169	0	Vandelay Rewards: you have 500 bonus points expiring Dec 18. Redeem them on your next purchase! https://vandelay.example.com/iyMfQ9 Reply STOP to unsubscribe
+spam_unsolicited-2-11	spam_unsolicited	SPAM	+12125550116	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: tinyurl.com/3qfvukG
+txn_bank-2-8	txn_bank	PERSONAL	+18665550144	0	Contoso Savings: Your account ending 0532 has a new deposit of $849.50.
+txn_reminder-6-4	txn_reminder	PERSONAL	+13035550116	0	Your car service is complete. Total $376.79. You can pick up the vehicle until 6 PM.
+scam_gov-2-5	scam_gov	SCAM	+447700900000	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0127 now.
+spam_unsolicited-10-7	spam_unsolicited	SPAM	99008	0	Make money from home!!! Click here tinyurl.com/g7a5iBc limited spots
+x-friendlink-10	friend_with_link	PERSONAL	+16465550144	10	call me asap!! urgent!! see this is.gd/CZ9EZcw ||| you around?
+personal_plans-2-3	personal_plans	PERSONAL	+16025550174	5	dinner at 7 works. I'll make the reservation
+otp-10-1	otp	OTP_2FA	GLOBEXCU	0	Enter 708620 to confirm your sign-in to Globex. This code is valid for 3 minutes.
+personal_plans-6-6	personal_plans	PERSONAL	+12125550198	12	Thanks for dropping off the keys, you're a lifesaver!
+scam_invest_job-2-4	scam_invest_job	SCAM	5630139130@example.com	0	part-time job offer: like and review products, earn $2 commissions daily. add us on telegram bit.ly/mbbzmcq
+otp-2-12	otp	OTP_2FA	+18555550198	0	Your one-time passcode is 408599. It expires in 10 minutes.
+promo_service-2-6	promo_service	PROMO	+18335550182	0	Take our 2-minute survey and enter to win a $100 gift card. https://globex.example.com/ajD7jj Reply STOP to opt out.
+work_human-18-6	work_human	WORK	+13035550104	12	Sounds good, I'll update the Jira board 🙏 ||| did you see the staging build fail again? ||| morning, quick question about the release 🙏
+personal_plans-2-12	personal_plans	PERSONAL	+16175550122	0	dinner at 7 works. i'll make the reservation
+personal_newcontact-6-4	personal_newcontact	PERSONAL	+15125550117	0	This is Hannah, your Uber driver. I'm outside in a gray Honda. ❤️
+txn_reminder-6-2	txn_reminder	PERSONAL	+18775550196	0	Your car service is complete. Total $869.45. You can pick up the vehicle until 6 PM.
+personal_hard-10-4	personal_hard	PERSONAL	+13035550127	1	did you get the verification email? mine never came
+otp-10-2	otp	OTP_2FA	+16025550196	0	Enter 129936 to confirm your sign-in to Umbra. This code is valid for 3 minutes.
+txn_bank-2-4	txn_bank	PERSONAL	+18445550169	0	Acme Bank: Your account ending 0127 has a new deposit of $344.87.
+otp-10-3	otp	OTP_2FA	402581	0	Enter 848559 to confirm your sign-in to Hooli. This code is valid for 10 minutes.
+otp-6-12	otp	OTP_2FA	+15125550196	0	G-285271 is your Google verification code.
+otp-18-4	otp	OTP_2FA	875823	0	Globex PIN 4963. Use it to finish signing in.
+personal_hard-10-11	personal_hard	PERSONAL	+13035550188	4	did you get the verification email? mine never came 😂
+scam_toll_parcel-6-6	scam_toll_parcel	SCAM	+447700900812	0	Delivery attempt failed. Reschedule at https://soylent-verify.example-portal.cc/3NQeW or your item will be returned to sender.
+x-hijack-26	hijacked_friend	SCAM	+13055550115	9	is this you in this video? shorturl.at/MPT2mjz ||| hey, how are you?
+personal_hard-14-5	personal_hard	PERSONAL	+13035550127	12	free to chat? urgent but good news!!
+otp-10-0	otp	OTP_2FA	GLOBEXCU	0	Enter 932921 to confirm your sign-in to Initech. This code is valid for 15 minutes.
+otp-6-1	otp	OTP_2FA	WONKA	0	G-074753 is your Google verification code.
+scam_wrongnum-2-8	scam_wrongnum	SCAM	+447700900468	0	Hello, is this Tess? We met at the conference last month. Add me on WhatsApp +1 555 0141, I'd like to share a great opportunity. ❤️
+personal_plans-10-10	personal_plans	PERSONAL	+13055550173	12	mom: call me when you get a sec, nothing urgent
+personal_hard-18-3	personal_hard	PERSONAL	+15125550136	0	can you review my resume? the link is https://docs.example.com/d/4116
+work_human-10-2	work_human	WORK	+16025550163	8	mr. reyes confirmed the walkthrough for thursday at 8:00 am. contract is in your email, please review before then.
+work_human-2-10	work_human	WORK	+15125550189	12	heads up, i'm out on pto saturday through saturday. ping tariq for anything urgent.
+work_human-6-11	work_human	WORK	+14155550125	2	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+personal_plans-10-12	personal_plans	PERSONAL	+14155550189	4	mom: call me when you get a sec, nothing urgent
+personal_plans-10-5	personal_plans	PERSONAL	+13035550154	0	mom: call me when you get a sec, nothing urgent ❤️
+txn_delivery-6-7	txn_delivery	PERSONAL	+18005550187	0	Your Stark Mart ride receipt: $704.17. Thanks for riding!
+otp-6-6	otp	OTP_2FA	+18445550117	0	G-703295 is your Google verification code.
+work_human-2-12	work_human	WORK	+12125550115	5	Heads up, I'm out on PTO Tuesday through Tuesday. Ping Ines for anything urgent.
+personal_hard-10-8	personal_hard	PERSONAL	+15125550102	0	did you get the verification email? mine never came
+spam_unsolicited-14-5	spam_unsolicited	SPAM	653765	0	Hello Rosa, we are looking to buy cars in Phoenix. Text us the year and mileage for an instant offer.
+personal_hard-6-4	personal_hard	PERSONAL	+16465550130	8	Venmo'd you $60 for the tickets, let me know if it didn't go through
+work_human-10-5	work_human	WORK	+16465550112	2	Mr. Brandt confirmed the walkthrough for Sunday at 6:00 PM. Contract is in your email, please review before then.
+scam_callback-2-4	scam_callback	SCAM	+18445550150	0	Norton: your subscription renewal of $577.62 will be charged today. To cancel call 555-0139.
+otp-10-11	otp	OTP_2FA	UMBRA-RX	0	Enter 348339 to confirm your sign-in to Initech. This code is valid for 15 minutes.
+personal_hard-14-3	personal_hard	PERSONAL	+12065550118	8	free to chat? urgent but good news!!
+personal_plans-14-3	personal_plans	PERSONAL	+16465550174	20	Proud of you. Call me tonight if you want to talk about it ❤️
+work_human-10-10	work_human	WORK	+12065550140	0	Mr. Silva confirmed the walkthrough for Thursday at 3:30 PM. Contract is in your email, please review before then.
+spam_unsolicited-6-2	spam_unsolicited	SPAM	225486	0	Hi, this is Gabe with Globex Solar. Homeowners in Austin can cut electric bills by 80%. Are you the homeowner?
+txn_delivery-2-6	txn_delivery	PERSONAL	+18005550160	0	ParcelPal: Out for delivery. Your driver is Dana and is 6 stops away.
+scam_wrongnum-2-10	scam_wrongnum	SCAM	+12065550186	0	Hello, is this Jordan? We met at the conference last month. Add me on WhatsApp +1 555 0148, I'd like to share a great opportunity. 🙏
+txn_bank-2-3	txn_bank	PERSONAL	CONTOSO	0	Contoso Savings: Your account ending 6390 has a new deposit of $78.33.
+promo_retail-10-10	promo_retail	PROMO	351024	0	Globex: we miss you! Come back and enjoy 15% off your next order. Limited time. https://globex.example.com/iBd2Za
+personal_newcontact-2-6	personal_newcontact	PERSONAL	+12125550161	2	Hi, this is Noah Nguyen, the plumber. I can come Friday between 1 and 3. Does that work
+personal_hard-2-0	personal_hard	PERSONAL	+13125550192	3	you won the bet lol. you owe me a coffee
+scam_invest_job-6-2	scam_invest_job	SCAM	+447700900813	0	I'm from Denver, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0178
+scam_gov-2-4	scam_gov	SCAM	0720057599@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0115 now.
+txn_bank-6-8	txn_bank	PERSONAL	GLOBEXCU	0	Zelle: Ben Nguyen sent you $218.02. Money has been deposited to your account ending 0080.
+txn_reminder-6-8	txn_reminder	PERSONAL	INITECH	0	Your car service is complete. Total $746.09. You can pick up the vehicle until 6 PM.
+personal_hard-18-8	personal_hard	PERSONAL	+16025550185	5	can you review my resume? the link is https://docs.example.com/d/1670
+work_automated-2-7	work_automated	WORK	UMBRA-RX	0	Incident TCK-4734 resolved. Service billing is healthy again. Postmortem on Sunday.
+promo_retail-6-5	promo_retail	PROMO	+15125550136	0	Exclusive offer for VIP members: extra 50% off clearance. Ends tonight. https://contoso.example.com/t7MqBq Unsubscribe: reply STOP
+spam_unsolicited-6-8	spam_unsolicited	SPAM	+13125550143	0	Hi, this is Noah with Hooli Solar. Homeowners in Austin can cut electric bills by 80%. Are you the homeowner?
+promo_retail-10-6	promo_retail	PROMO	+14155550109	0	Hooli: we miss you! Come back and enjoy 50% off your next order. Limited time. https://hooli.example.com/XNSAGq
+txn_reminder-6-10	txn_reminder	PERSONAL	UMBRA-RX	0	Your car service is complete. Total $171.43. You can pick up the vehicle until 6 PM.
+work_human-18-8	work_human	WORK	+16465550176	12	sounds good, i'll update the jira board ||| did you see the staging build fail again? 😊 ||| morning, quick question about the release
+scam_invest_job-2-7	scam_invest_job	SCAM	devon595@example.com	0	Part-time job offer: like and review products, earn $60 commissions daily. Add us on Telegram t.ly/wjE6YWX ❤️
+personal_newcontact-6-6	personal_newcontact	PERSONAL	+15125550164	2	This is Ava, your Uber driver. I'm outside in a gray Honda.
+scam_wrongnum-2-5	scam_wrongnum	SCAM	+16465550138	0	Hello, is this Omar? We met at the conference last month. Add me on WhatsApp +1 555 0118, I'd like to share a great opportunity
+promo_retail-10-7	promo_retail	PROMO	+18445550193	0	Stark Mart: we miss you! Come back and enjoy 15% off your next order. Limited time. https://stark.example.com/iBmrkZ
+otp-2-4	otp	OTP_2FA	+18665550196	0	Your one-time passcode is 450937. It expires in 3 minutes.
+scam_invest_job-2-10	scam_invest_job	SCAM	0765021864@example.com	0	Part-time job offer: like and review products, earn $12 commissions daily. Add us on Telegram bit.ly/nhzcQfM 🔥
+work_human-6-8	work_human	WORK	+13035550112	12	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+work_human-2-7	work_human	WORK	+14155550189	12	Heads up, I'm out on PTO Thursday through Thursday. Ping Alex for anything urgent. ❤️
+personal_hard-6-0	personal_hard	PERSONAL	+13055550152	0	Venmo'd u $35 for the tickets, let me know if it didn't go through ❤️
+scam_invest_job-2-2	scam_invest_job	SCAM	2646894113@example.com	0	Part-time job offer: like and review products, earn $2 commissions daily. Add us on Telegram is.gd/X9kDqMN
+scam_toll_parcel-2-8	scam_toll_parcel	SCAM	+447700900447	0	FINAL NOTICE: You have an unpaid toll balance of $131.98. Pay now to avoid a late fee of $50: https://stark-help.example-web.info/fV5gc
+otp-6-4	otp	OTP_2FA	GLOBEXCU	0	G-411617 is your Google verification code.
+txn_reminder-2-6	txn_reminder	PERSONAL	+18005550146	0	Soylent Airlines: Flight AC2062 is delayed 45 minutes. New departure 7:30 AM, gate B12.
+txn_delivery-2-3	txn_delivery	PERSONAL	SHIPFAST	0	Vandelay Freight: Out for delivery. Your driver is Sam and is 6 stops away.
+txn_delivery-2-4	txn_delivery	PERSONAL	PARCELPAL	0	Vandelay Freight: Out for delivery. Your driver is Tariq and is 6 stops away.
+txn_reminder-6-7	txn_reminder	PERSONAL	BOXBEE	0	Your car service is complete. Total $241.97. You can pick up the vehicle until 6 PM.
+promo_retail-2-3	promo_retail	PROMO	+14155550185	0	Contoso Rewards: you have 500 bonus points expiring Oct 6. Redeem them on your next purchase! https://contoso.example.com/zuGcRv Reply STOP to unsubscribe
+promo_retail-2-4	promo_retail	PROMO	002710	0	Umbra Rewards: you have 500 bonus points expiring Dec 2. Redeem them on your next purchase! https://umbra.example.com/rRmMQN Reply STOP to unsubscribe
+spam_unsolicited-6-0	spam_unsolicited	SPAM	+18005550182	0	Hi, this is Gabe with Soylent Solar. Homeowners in Denver can cut electric bills by 80%. Are you the homeowner?
+otp-6-3	otp	OTP_2FA	SHIPFAST	0	G-563168 is your Google verification code.
+personal_plans-6-1	personal_plans	PERSONAL	+12125550165	4	Thanks for dropping off the keys, you're a lifesaver! 🔥
+otp-2-11	otp	OTP_2FA	49351	0	Your one-time passcode is 258203. It expires in 5 minutes.
+otp-18-1	otp	OTP_2FA	882470	0	Globex PIN 6151. Use it to finish signing in.
+personal_newcontact-2-5	personal_newcontact	PERSONAL	+15125550184	2	Hi, this is Luis Kowalski, the plumber. I can come Friday between 1 and 3. Does that work
+otp-14-12	otp	OTP_2FA	21395	0	696796 is your Google confirmation code
+work_human-14-11	work_human	WORK	+16465550116	3	Quarterly review slides are in the shared drive. Can you add your team's numbers by Monday?
+txn_delivery-6-2	txn_delivery	PERSONAL	+18775550135	0	Your Soylent ride receipt: $893.79. Thanks for riding!
+spam_unsolicited-10-9	spam_unsolicited	SPAM	ava098@example.com	0	Make money from home!!! Click here tinyurl.com/6KnXRrh limited spots
+x-friendlink-38	friend_with_link	PERSONAL	+14155550114	30	call me asap!! urgent!! see this ow.ly/LsJh4Yr ||| you around?
+personal_plans-18-0	personal_plans	PERSONAL	+13035550129	12	yes!!! congrats!!! 🎉
+spam_unsolicited-2-5	spam_unsolicited	SPAM	+447700900633	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: rb.gy/kbKxa6X
+otp-18-2	otp	OTP_2FA	SHIPFAST	0	Acme PIN 8537. Use it to finish signing in.
+scam_gov-2-9	scam_gov	SCAM	ben385@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0182 now.
+promo_retail-10-3	promo_retail	PROMO	636962	0	Globex: we miss you! Come back and enjoy 60% off your next order. Limited time. https://globex.example.com/aHqJ45
+promo_service-2-1	promo_service	PROMO	+18005550183	0	Take our 2-minute survey and enter to win a $100 gift card. https://soylent.example.com/QR4Pgb Reply STOP to opt out.
+work_human-14-4	work_human	WORK	+14155550110	1	Quarterly review slides are in the shared drive. Can you add your team's numbers by Wednesday
+personal_plans-18-3	personal_plans	PERSONAL	+13125550159	0	yes!!! congrats!!! 🎉 👍
+spam_unsolicited-10-1	spam_unsolicited	SPAM	+12125550175	0	Make money from home!!! Click here bit.ly/b33XELi limited spots
+txn_delivery-6-11	txn_delivery	PERSONAL	+18555550140	0	Your Globex ride receipt: $324.27. Thanks for riding!
+scam_invest_job-6-4	scam_invest_job	SCAM	+12125550158	0	I'm from Portland, a trader. My uncle taught me forex and I earn passive income every day. Want me to show u? Add me on WhatsApp +1 555 0140
+scam_toll_parcel-6-4	scam_toll_parcel	SCAM	+16175550163	0	Delivery attempt failed. Reschedule at https://vandelay-secure.example-portal.icu/bPhbG or your item will be returned to sender.
+otp-10-8	otp	OTP_2FA	+18665550109	0	Enter 507924 to confirm your sign-in to Soylent. This code is valid for 3 minutes.
+personal_plans-6-3	personal_plans	PERSONAL	+13035550102	5	Thanks for dropping off the keys, you're a lifesaver!
+otp-2-8	otp	OTP_2FA	+13125550163	0	Your one-time passcode is 920985. It expires in 5 minutes.
+spam_unsolicited-6-7	spam_unsolicited	SPAM	+447700900369	0	Hi, this is Yuki with Stark Mart Solar. Homeowners in Portland can cut electric bills by 80%. Are you the homeowner?
+personal_hard-18-2	personal_hard	PERSONAL	+16025550154	12	can you review my resume? the link is https://docs.example.com/d/6915
+scam_wrongnum-2-11	scam_wrongnum	SCAM	+13125550195	0	Hello, is this Ravi? We met at the conference last month. Add me on WhatsApp +1 555 0166, I'd like to share a great opportunity. 🙏
+work_human-6-13	work_human	WORK	+13035550147	5	prod deploy is done. watch the dashboards for errors, roll back if you see anything weird.
+work_human-10-0	work_human	WORK	+16175550190	8	mr. tanaka confirmed the walkthrough for thursday at 9:30 am. contract is in your email, please review before then. 👍
+x-friendlink-6	friend_with_link	PERSONAL	+13055550171	10	call me asap!! urgent!! see this bit.ly/2EfVFcR ||| you around?
+personal_plans-6-4	personal_plans	PERSONAL	+16465550173	5	Thanks for dropping off the keys, you're a lifesaver!
+otp-14-11	otp	OTP_2FA	CONTOSO	0	148243 is your Hooli confirmation code
+promo_retail-6-0	promo_retail	PROMO	UMBRA-RX	0	Exclusive offer for VIP members: extra 40% off clearance. Ends tonight. https://initech.example.com/5nqnZD Unsubscribe: reply STOP
+scam_prize-2-9	scam_prize	SCAM	+12065550167	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://soylent-pay.example-web.cfd/AgPHA
+txn_reminder-2-11	txn_reminder	PERSONAL	+18555550123	0	Contoso Airlines: Flight AC6700 is delayed 45 minutes. New departure 6:45 AM, gate B12.
+scam_wrongnum-6-11	scam_wrongnum	SCAM	+13035550175	0	omg is that you in this video?? https://contoso-verify.example-id.cc/SgQ4e
+scam_account-2-3	scam_account	SCAM	+13055550197	0	Security notice: unusual sign-in on your Instagram account. Secure your account immediately at tinyurl.com/SSYcJzx
+scam_wrongnum-6-7	scam_wrongnum	SCAM	+447700900192	0	omg is that you in this video?? https://stark-secure.example-portal.live/MtYbG
+personal_newcontact-6-2	personal_newcontact	PERSONAL	+16025550172	2	This is Ben, your Uber driver. I'm outside in a gray Honda.
+personal_newcontact-2-9	personal_newcontact	PERSONAL	+15125550119	0	Hi, this is Ava Tanaka, the plumber. I can come Wednesday between 1 and 3. Does that work?
+personal_plans-6-13	personal_plans	PERSONAL	+16025550199	8	Thanks for dropping off the keys, you're a lifesaver!
+x-hijack-22	hijacked_friend	SCAM	+14155550127	6	is this you in this video? ow.ly/c2UgPyH ||| hey, how are you?
+personal_plans-2-1	personal_plans	PERSONAL	+16025550113	8	dinner at 7 works. I'll make the reservation
+scam_toll_parcel-6-0	scam_toll_parcel	SCAM	zoe767@example.com	0	Delivery attempt failed. Reschedule at https://globex-help.example-web.cfd/JGeWb or your item will be returned to sender.
+work_human-14-1	work_human	WORK	+13035550178	20	Quarterly review slides are in the shared drive. Can you add your team's numbers by Wednesday?
+work_human-18-10	work_human	WORK	+13035550149	3	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? ||| morning, quick question about the release
+personal_hard-6-11	personal_hard	PERSONAL	+13055550100	8	venmo'd you $150 for the tickets, let me know if it didn't go through ❤️
+personal_plans-10-9	personal_plans	PERSONAL	+14155550132	0	mom: call me when you get a sec, nothing urgent 😂
+spam_unsolicited-2-8	spam_unsolicited	SPAM	tariq531@example.com	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: shorturl.at/y5TcD7n
+work_human-14-8	work_human	WORK	+13125550184	0	quarterly review slides are in the shared drive. can you add your team's numbers by tuesday? 😂
+promo_civic-2-3	promo_civic	PROMO	+13125550121	0	Your gift of $60 can feed a family this winter. Donate today: https://stark.example.com/SKc3EM. Reply STOP to end.
+work_human-14-7	work_human	WORK	+12125550138	3	Quarterly review slides are in the shared drive. Can you add your team's numbers by Monday?
+txn_delivery-2-2	txn_delivery	PERSONAL	86722	0	QuickDrop: Out for delivery. Your driver is Devon and is 6 stops away.
+personal_plans-18-12	personal_plans	PERSONAL	+14155550173	5	yes!!! congrats!!! 🎉
+promo_civic-2-5	promo_civic	PROMO	+12065550149	0	Your gift of $12 can feed a family this winter. Donate today: https://initech.example.com/8sSaaA. Reply STOP to end.
+otp-14-1	otp	OTP_2FA	+18445550178	0	721976 is your Contoso confirmation code
+personal_plans-10-4	personal_plans	PERSONAL	+14155550147	12	mom: call me when you get a sec, nothing urgent
+scam_toll_parcel-6-8	scam_toll_parcel	SCAM	sam295@example.com	0	Delivery attempt failed. Reschedule at https://vandelay-support.example-svc.buzz/9fpjA or your item will be returned to sender.
+personal_hard-10-3	personal_hard	PERSONAL	+16175550104	4	did you get the verification email? mine never came
+otp-14-9	otp	OTP_2FA	+13055550198	0	935733 is your Uber confirmation code
+personal_hard-18-7	personal_hard	PERSONAL	+13055550109	3	can you review my resume? the link is https://docs.example.com/d/0354
+work_human-14-5	work_human	WORK	+16025550158	1	Quarterly review slides are in the shared drive. Can you add your team's numbers by Tuesday
+scam_account-2-4	scam_account	SCAM	+14155550169	0	Security notice: unusual sign-in on your Globex account. Secure your account immediately at rb.gy/LzHe4t8
+scam_toll_parcel-2-11	scam_toll_parcel	SCAM	+15125550146	0	FINAL NOTICE: You have an unpaid toll balance of $476.41. Pay now to avoid a late fee of $50: https://umbra-login.example-web.cc/uh8fT
+otp-2-10	otp	OTP_2FA	+15125550176	0	Your one-time passcode is 013729. It expires in 5 minutes.
+x-friendlink-22	friend_with_link	PERSONAL	+14155550135	10	call me asap!! urgent!! see this ow.ly/c2UgPyH ||| you around?
+scam_wrongnum-6-10	scam_wrongnum	SCAM	+15125550117	0	omg is that you in this video?? https://umbra-login.example-svc.shop/wbKYV
+txn_bank-6-3	txn_bank	PERSONAL	610510	0	Zelle: Ben Okafor sent you $602.88. Money has been deposited to your account ending 8988.
+scam_account-6-7	scam_account	SCAM	+13125550112	0	We noticed a problem with your Hooli Pay online banking. Login to http://14.252.231.145/Fcpd to avoid permanent suspension.
+personal_hard-18-0	personal_hard	PERSONAL	+13035550147	2	can you review my resume? the link is https://docs.example.com/d/8197
+work_automated-6-5	work_automated	WORK	64063	0	Build failed on main: #250 'Fix checkout rounding'. See logs: https://soylent.example.com/rutTMQ
+work_human-2-3	work_human	WORK	+15125550133	20	Heads up, I'm out on PTO Thursday through Thursday. Ping Sam for anything urgent.
+work_automated-2-0	work_automated	WORK	UMBRA-RX	0	Incident TCK-3639 resolved. Service billing is healthy again. Postmortem on Friday.
+personal_plans-14-1	personal_plans	PERSONAL	+13055550186	5	Proud of you. Call me tonight if you want to talk about it ❤️
+personal_plans-14-6	personal_plans	PERSONAL	+13055550171	20	Proud of you. Call me tonight if you want to talk about it ❤️
+txn_reminder-2-9	txn_reminder	PERSONAL	+18885550142	0	Acme Airlines: Flight AC1039 is delayed 45 minutes. New departure 4:00 AM, gate B12.
+promo_civic-2-7	promo_civic	PROMO	73442	0	Your gift of $1000 can feed a family this winter. Donate today: https://acme.example.com/CU75vT. Reply STOP to end.
+promo_retail-10-9	promo_retail	PROMO	077681	0	Contoso: we miss you! Come back and enjoy 50% off your next order. Limited time. https://contoso.example.com/X7ZZ34
+promo_retail-6-10	promo_retail	PROMO	+18885550174	0	Exclusive offer for VIP members: extra 40% off clearance. Ends tonight. https://acme.example.com/XRheCE Unsubscribe: reply STOP
+otp-18-10	otp	OTP_2FA	+16175550152	0	Instagram PIN 1644. Use it to finish signing in.
+scam_gov-2-0	scam_gov	SCAM	chloe238@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0155 now.
+spam_unsolicited-10-8	spam_unsolicited	SPAM	5972160797@example.com	0	Make money from home!!! Click here bit.ly/2EViVKx limited spots
+scam_gov-2-10	scam_gov	SCAM	ben116@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0179 now.
+personal_plans-6-9	personal_plans	PERSONAL	+13125550134	12	Thanks for dropping off the keys, you're a lifesaver!
+work_human-18-9	work_human	WORK	+16465550163	12	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? ||| morning, quick question about the release
+promo_retail-6-6	promo_retail	PROMO	32746	0	Exclusive offer for VIP members: extra 50% off clearance. Ends tonight. https://stark.example.com/ZkgJGt Unsubscribe: reply STOP
+scam_invest_job-6-6	scam_invest_job	SCAM	7580814085@example.com	0	I'm from Miami, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0162
+txn_reminder-6-3	txn_reminder	PERSONAL	UMBRA-RX	0	Your car service is complete. Total $264.64. You can pick up the vehicle until 6 PM.
+personal_hard-6-9	personal_hard	PERSONAL	+13055550197	5	Venmo'd you $1000 for the tickets, let me know if it didn't go through
+work_automated-6-4	work_automated	WORK	+18555550136	0	Build failed on main: #7416 'Fix checkout rounding'. See logs: https://initech.example.com/5x6Nkw
+personal_plans-14-8	personal_plans	PERSONAL	+12125550121	20	Proud of you. Call me tonight if you want to talk about it ❤️
+promo_retail-2-6	promo_retail	PROMO	+13055550196	0	Wonka Rewards: you have 500 bonus points expiring Jan 8. Redeem them on your next purchase! https://wonka.example.com/vYLj9n Reply STOP to unsubscribe
+promo_civic-2-6	promo_civic	PROMO	+14155550191	0	Your gift of $12 can feed a family this winter. Donate today: https://acme.example.com/2kSj4r. Reply STOP to end.
+scam_account-6-6	scam_account	SCAM	ACMEBANK	0	We noticed a problem with your Initech Federal online banking. Login to http://84.220.79.78/rTmV to avoid permanent suspension.
+personal_plans-10-1	personal_plans	PERSONAL	+12065550111	8	mom: call me when you get a sec, nothing urgent
+personal_hard-10-0	personal_hard	PERSONAL	+13125550189	12	did you get the verification email? mine never came
+txn_reminder-2-2	txn_reminder	PERSONAL	+13035550175	0	Soylent Airlines: Flight AC2275 is delayed 45 minutes. New departure 11:00 AM, gate B12.
+scam_account-2-0	scam_account	SCAM	+16025550113	0	Security notice: unusual sign-in on your Contoso account. Secure your account immediately at t.ly/qZwKCeJ
+x-repliedscam-22	replied_to_scammer	SCAM	+16175550159	1	Final notice: unpaid toll balance of $685.84. Pay now to avoid a late fee: https://wonka-login.example-svc.top/WKSbQ
+txn_reminder-2-7	txn_reminder	PERSONAL	ACMEBANK	0	Umbra Airlines: Flight AC1751 is delayed 45 minutes. New departure 6:45 AM, gate B12.
+promo_civic-2-9	promo_civic	PROMO	583424	0	Your gift of $150 can feed a family this winter. Donate today: https://wonka.example.com/dZSAKd. Reply STOP to end.
+promo_civic-2-4	promo_civic	PROMO	820074	0	Your gift of $1000 can feed a family this winter. Donate today: https://wonka.example.com/vJXMN4. Reply STOP to end.
+scam_invest_job-2-1	scam_invest_job	SCAM	+13055550100	0	Part-time job offer: like and review products, earn $480 commissions daily. Add us on Telegram tinyurl.com/2qP8vgu
+promo_retail-2-10	promo_retail	PROMO	HOOLIPAY	0	Initech Rewards: you have 500 bonus points expiring Jan 26. Redeem them on your next purchase! https://initech.example.com/a7LDWx Reply STOP to unsubscribe
+otp-2-1	otp	OTP_2FA	PARCELPAL	0	Your one-time passcode is 034803. It expires in 10 minutes.
+scam_wrongnum-2-0	scam_wrongnum	SCAM	+16465550134	0	Hello, is this Rosa? We met at the conference last month. Add me on WhatsApp +1 555 0117, I'd like to share a great opportunity.
+personal_hard-10-5	personal_hard	PERSONAL	+13125550199	4	did you get the verification email? mine never came 🙏
+personal_plans-2-6	personal_plans	PERSONAL	+14155550130	4	dinner at 7 works. i'll make the reservation
+work_automated-2-3	work_automated	WORK	+18445550181	0	Incident TCK-2276 resolved. Service payments is healthy again. Postmortem on Saturday.
+scam_toll_parcel-2-9	scam_toll_parcel	SCAM	+447700900008	0	FINAL NOTICE: You have an unpaid toll balance of $869.43. Pay now to avoid a late fee of $50: https://initech-verify.example-web.live/pBJUY
+personal_plans-10-7	personal_plans	PERSONAL	+12065550163	2	mom: call me when you get a sec, nothing urgent
+x-repliedscam-6	replied_to_scammer	SCAM	+16465550111	1	Final notice: unpaid toll balance of $175.94. Pay now to avoid a late fee: https://hooli-verify.example-portal.live/vs4HG
+personal_hard-14-8	personal_hard	PERSONAL	+14155550190	5	free to chat? urgent but good news!!
+spam_unsolicited-14-9	spam_unsolicited	SPAM	951383	0	Hello Sam, we are looking to buy cars in Austin. Text us the year and mileage for an instant offer.
+otp-18-5	otp	OTP_2FA	BOXBEE	0	Globex PIN 0005. Use it to finish signing in.
+work_automated-6-3	work_automated	WORK	68739	0	Build failed on main: #3541 'Fix checkout rounding'. See logs: https://hooli.example.com/qJFjaC
+spam_unsolicited-10-6	spam_unsolicited	SPAM	+18775550123	0	Make money from home!!! Click here is.gd/tjxxdJU limited spots
+scam_prize-2-5	scam_prize	SCAM	2449889092@example.com	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://initech-pay.example-id.shop/nTis6
+work_human-2-8	work_human	WORK	+12065550181	8	Heads up, I'm out on PTO Friday through Friday. Ping Alex for anything urgent.
+scam_wrongnum-6-3	scam_wrongnum	SCAM	+16025550168	0	omg is that you in this video?? https://wonka-support.example-portal.icu/xPE2B
+txn_bank-2-11	txn_bank	PERSONAL	+18445550112	0	Globex Credit Union: Your account ending 1638 has a new deposit of $247.78.
+otp-10-13	otp	OTP_2FA	HOOLIPAY	0	Enter 816374 to confirm your sign-in to Stark Mart. This code is valid for 10 minutes.
+otp-6-7	otp	OTP_2FA	UMBRA-RX	0	G-882357 is your Google verification code.
+personal_plans-2-10	personal_plans	PERSONAL	+16465550125	5	dinner at 7 works. I'll make the reservation
+spam_unsolicited-6-1	spam_unsolicited	SPAM	150063	0	Hi, this is Noah with Stark Mart Solar. Homeowners in Chicago can cut electric bills by 80%. Are you the homeowner?
+scam_invest_job-6-10	scam_invest_job	SCAM	+12125550186	0	I'm from Boston, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0195
+scam_prize-2-6	scam_prize	SCAM	+15125550157	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://wonka-login.example-svc.live/bApjZ
+personal_hard-6-10	personal_hard	PERSONAL	+16465550144	1	Venmo'd you $35 for the tickets, let me know if it didn't go through
+scam_callback-2-1	scam_callback	SCAM	ben792@example.com	0	Norton: your subscription renewal of $494.48 will be charged today. To cancel call 555-0115.
+txn_delivery-2-7	txn_delivery	PERSONAL	+18005550102	0	ShipFast: Out for delivery. Your driver is Rosa and is 6 stops away.
+txn_delivery-6-5	txn_delivery	PERSONAL	+18445550136	0	Your Umbra ride receipt: $375.63. Thanks for riding!
+scam_invest_job-2-0	scam_invest_job	SCAM	+12125550144	0	Part-time job offer: like and review products, earn $35 commissions daily. Add us on Telegram ow.ly/wAz6RWL 🔥
+scam_wrongnum-2-2	scam_wrongnum	SCAM	+15125550136	0	Hello, is this Ines? We met at the conference last month. Add me on WhatsApp +1 555 0113, I'd like to share a great opportunity. 👍
+spam_unsolicited-14-3	spam_unsolicited	SPAM	tariq079@example.com	0	Hello Rosa, we are looking to buy cars in Seattle. Text us the year and mileage for an instant offer.
+x-hijack-34	hijacked_friend	SCAM	+16465550138	9	is this you in this video? t.ly/rp4BuzY ||| hey, how are you?
+otp-14-2	otp	OTP_2FA	INITECH	0	176513 is your Instagram confirmation code
+personal_hard-6-1	personal_hard	PERSONAL	+14155550103	5	Venmo'd you $480 for the tickets, let me know if it didn't go through
+txn_delivery-6-3	txn_delivery	PERSONAL	+18665550145	0	Your Hooli ride receipt: $332.20. Thanks for riding!
+scam_wrongnum-2-6	scam_wrongnum	SCAM	+13035550130	0	Hello, is this Marcus? We met at the conference last month. Add me on WhatsApp +1 555 0107, I'd like to share a great opportunity.
+scam_callback-2-5	scam_callback	SCAM	marcus391@example.com	0	Norton: your subscription renewal of $40.20 will be charged today. To cancel call 555-0142.
+scam_prize-2-3	scam_prize	SCAM	+447700900498	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://contoso-verify.example-id.info/WAND8
+personal_plans-2-4	personal_plans	PERSONAL	+14155550102	5	dinner at 7 works. I'll make the reservation
+scam_invest_job-6-11	scam_invest_job	SCAM	+447700900618	0	I'm from Seattle, a trader. My uncle taught me forex and I earn passive income every day. Want me to show u? Add me on WhatsApp +1 555 0129
+x-repliedscam-26	replied_to_scammer	SCAM	+16465550187	1	Final notice: unpaid toll balance of $389.68. Pay now to avoid a late fee: https://globex-pay.example-id.sbs/LwihN
+personal_plans-6-11	personal_plans	PERSONAL	+16465550109	0	Thanks for dropping off the keys, you're a lifesaver!
+personal_hard-14-7	personal_hard	PERSONAL	+16465550188	5	free to chat? urgent but good news!! 🔥
+personal_plans-14-9	personal_plans	PERSONAL	+14155550194	8	Proud of you. Call me tonight if you want to talk about it ❤️
+work_human-18-4	work_human	WORK	+12125550106	1	sounds good, i'll update the jira board ||| did you see the staging build fail again? ||| morning, quick question about the release
+scam_callback-2-0	scam_callback	SCAM	+447700900761	0	Norton: your subscription renewal of $606.70 will be charged today. To cancel call 555-0115.
+x-hijack-30	hijacked_friend	SCAM	+13125550179	14	is this you in this video? shorturl.at/Gf43Fu7 ||| hey, how are you?
+promo_retail-2-8	promo_retail	PROMO	+13125550192	0	Wonka Rewards: you have 500 bonus points expiring Nov 13. Redeem them on your next purchase! https://wonka.example.com/fwT34R Reply STOP to unsubscribe
+scam_invest_job-6-8	scam_invest_job	SCAM	hannah824@example.com	0	I'm from Phoenix, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0181
+txn_bank-6-10	txn_bank	PERSONAL	GLOBEXCU	0	Zelle: Tariq Reyes sent you $22.38. Money has been deposited to your account ending 7924.
+otp-10-7	otp	OTP_2FA	WONKA	0	Enter 334689 to confirm your sign-in to Acme. This code is valid for 5 minutes.
+txn_bank-2-10	txn_bank	PERSONAL	+18445550113	0	Globex Credit Union: Your account ending 7422 has a new deposit of $597.51.
+scam_gov-2-1	scam_gov	SCAM	+13125550121	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0165 now.
+txn_reminder-2-4	txn_reminder	PERSONAL	+12065550169	0	Vandelay Airlines: Flight AC6868 is delayed 45 minutes. New departure 9:00 PM, gate B12.
+txn_reminder-2-8	txn_reminder	PERSONAL	+16025550168	0	Umbra Airlines: Flight AC8911 is delayed 45 minutes. New departure 5:15 PM, gate B12.
+spam_unsolicited-14-4	spam_unsolicited	SPAM	+447700900744	0	Hello Devon, we are looking to buy cars in Miami. Text us the year and mileage for an instant offer.
+personal_newcontact-2-8	personal_newcontact	PERSONAL	+15125550160	0	Hi, this is Yuki Silva, the plumber. I can come Saturday between 1 and 3. Does that work? 😊
+scam_wrongnum-2-3	scam_wrongnum	SCAM	+447700900284	0	Hello, is this Dana? We met at the conference last month. Add me on WhatsApp +1 555 0146, I'd like to share a great opportunity 🔥
+work_human-10-11	work_human	WORK	+13055550144	12	Mr. Okafor confirmed the walkthrough for Thursday at 3:00 AM. Contract is in your email, please review before then.
+promo_service-2-2	promo_service	PROMO	GLOBEXCU	0	Take our 2-minute survey and enter to win a $100 gift card. https://stark.example.com/JXt4cg Reply STOP to opt out.
+work_human-14-2	work_human	WORK	+12065550100	0	Quarterly review slides are in the shared drive. Can you add your team's numbers by Thursday? 😂
+scam_prize-2-11	scam_prize	SCAM	55957	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://soylent-login.example-portal.icu/kuRBN
+scam_prize-2-8	scam_prize	SCAM	956093	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://vandelay-verify.example-web.info/rszXi
+personal_plans-10-2	personal_plans	PERSONAL	+13035550192	0	mom: call me when you get a sec, nothing urgent
+personal_plans-6-0	personal_plans	PERSONAL	+13055550142	8	Thanks for dropping off the keys, you're a lifesaver!
+personal_hard-6-7	personal_hard	PERSONAL	+15125550150	8	venmo'd you $5 for the tickets, let me know if it didn't go through
+personal_plans-18-5	personal_plans	PERSONAL	+12065550120	20	yes!!! congrats!!! 🎉 😊
+work_human-14-13	work_human	WORK	+15125550111	2	Quarterly review slides are in the shared drive. Can you add your team's numbers by Saturday?
+personal_hard-14-4	personal_hard	PERSONAL	+15125550132	2	free to chat? urgent but good news!!
+scam_invest_job-6-5	scam_invest_job	SCAM	+13055550157	0	i'm from chicago, a trader. my uncle taught me forex and i earn passive income every day. want me to show you? add me on whatsapp +1 555 0189 😂
+personal_hard-14-10	personal_hard	PERSONAL	+16465550122	12	free to chat? urgent but good news!!
+scam_wrongnum-2-7	scam_wrongnum	SCAM	+447700900319	0	Hello, is this Ravi? We met at the conference last month. Add me on WhatsApp +1 555 0151, I'd like to share a great opportunity.
+scam_wrongnum-6-9	scam_wrongnum	SCAM	+16465550190	0	omg is that you in this video?? https://contoso-verify.example-portal.cc/4Ydn5
+spam_unsolicited-2-6	spam_unsolicited	SPAM	154644	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: ow.ly/8tBfZnC
+promo_retail-6-2	promo_retail	PROMO	UMBRA-RX	0	Exclusive offer for VIP members: extra 10% off clearance. Ends tonight. https://soylent.example.com/Eg5Tzz Unsubscribe: reply STOP
+spam_unsolicited-10-5	spam_unsolicited	SPAM	+18775550132	0	Make money from home!!! Click here cutt.ly/2RkKifh limited spots
+otp-10-5	otp	OTP_2FA	+14155550164	0	Enter 221925 to confirm your sign-in to Vandelay. This code is valid for 15 minutes.
+scam_toll_parcel-2-10	scam_toll_parcel	SCAM	+447700900532	0	FINAL NOTICE: You have an unpaid toll balance of $725.73. Pay now to avoid a late fee of $50: https://contoso-login.example-svc.cc/p6YRK
+work_human-18-13	work_human	WORK	+13035550119	8	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? ||| morning, quick question about the release
+promo_retail-10-1	promo_retail	PROMO	PARCELPAL	0	Umbra: we miss you! Come back and enjoy 40% off your next order. Limited time. https://umbra.example.com/dwzf9z
+txn_reminder-6-5	txn_reminder	PERSONAL	PARCELPAL	0	Your car service is complete. Total $555.54. You can pick up the vehicle until 6 PM.
+personal_hard-10-2	personal_hard	PERSONAL	+13035550188	20	did you get the verification email? mine never came 🙏
+work_automated-2-1	work_automated	WORK	CONTOSO	0	Incident TCK-4806 resolved. Service billing is healthy again. Postmortem on Tuesday.
+otp-6-10	otp	OTP_2FA	+13125550170	0	G-344684 is your Google verification code.
+personal_plans-6-2	personal_plans	PERSONAL	+13055550139	20	Thanks for dropping off the keys, you're a lifesaver!
+txn_bank-2-6	txn_bank	PERSONAL	482491	0	Hooli Pay: Your account ending 4154 has a new deposit of $451.96.
+scam_toll_parcel-6-11	scam_toll_parcel	SCAM	+13035550125	0	Delivery attempt failed. Reschedule at https://soylent-secure.example-id.info/ncV62 or your item will be returned to sender.
+spam_unsolicited-14-8	spam_unsolicited	SPAM	2365951208@example.com	0	Hello Dana, we are looking to buy cars in Miami. Text us the year and mileage for an instant offer.
+personal_plans-18-6	personal_plans	PERSONAL	+14155550125	1	yes!!! congrats!!! 🎉 😊
+work_human-10-3	work_human	WORK	+15125550190	20	Mr. Haddad confirmed the walkthrough for Friday at 12:45 AM. Contract is in your email, please review before then. 😂
+personal_hard-14-6	personal_hard	PERSONAL	+16465550180	12	free to chat? urgent but good news!!
+scam_invest_job-6-1	scam_invest_job	SCAM	+16465550178	0	I'm from Miami, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0132
+spam_unsolicited-2-9	spam_unsolicited	SPAM	+18665550107	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: bit.ly/kjpsMkJ
+work_human-14-12	work_human	WORK	+16025550175	1	Quarterly review slides are in the shared drive. Can you add your team's numbers by Wednesday?
+txn_reminder-2-10	txn_reminder	PERSONAL	ACMEBANK	0	Vandelay Airlines: Flight AC5898 is delayed 45 minutes. New departure 10:45 AM, gate B12.
+otp-14-5	otp	OTP_2FA	ACMEBANK	0	889617 is your Discord confirmation code
+scam_account-6-4	scam_account	SCAM	+447700900230	0	We noticed a problem with your Contoso Savings online banking. Login to http://70.187.38.121/jdNU to avoid permanent suspension.
+personal_hard-18-4	personal_hard	PERSONAL	+16175550138	5	can you review my resume? the link is https://docs.example.com/d/2274
+otp-6-5	otp	OTP_2FA	HOOLIPAY	0	G-123231 is your Google verification code.
+x-hijack-14	hijacked_friend	SCAM	+16025550193	9	is this you in this video? is.gd/nZfe7T6 ||| hey, how are you?
+scam_toll_parcel-6-3	scam_toll_parcel	SCAM	+447700900920	0	Delivery attempt failed. Reschedule at https://hooli-login.example-svc.buzz/EV3h4 or your item will be returned to sender.
+promo_civic-2-0	promo_civic	PROMO	704066	0	Your gift of $2500 can feed a family this winter. Donate today: https://globex.example.com/XFRP7C. Reply STOP to end.
+otp-14-13	otp	OTP_2FA	CONTOSO	0	899145 is your Uber confirmation code
+work_human-10-12	work_human	WORK	+14155550109	3	Mr. Patel confirmed the walkthrough for Tuesday at 2:15 PM. Contract is in your email, please review before then. 😂
+work_human-14-0	work_human	WORK	+12065550161	5	Quarterly review slides are in the shared drive. Can you add your team's numbers by Monday?
+personal_hard-18-11	personal_hard	PERSONAL	+13055550175	0	can you review my resume? the link is https://docs.example.com/d/8262
+promo_retail-6-1	promo_retail	PROMO	CONTOSO	0	Exclusive offer for VIP members: extra 40% off clearance. Ends tonight. https://initech.example.com/6m2dfK Unsubscribe: reply STOP
+promo_retail-2-5	promo_retail	PROMO	UMBRA-RX	0	Soylent Rewards: you have 500 bonus points expiring Nov 10. Redeem them on your next purchase! https://soylent.example.com/cxsUzs Reply STOP to unsubscribe
+personal_plans-18-9	personal_plans	PERSONAL	+16175550173	3	yes!!! congrats!!! 🎉
+scam_wrongnum-6-1	scam_wrongnum	SCAM	+16175550146	0	omg is that you in this video?? https://initech-login.example-svc.buzz/WvMPY
+scam_account-6-10	scam_account	SCAM	HOOLIPAY	0	We noticed a problem with your Contoso Savings online banking. Login to http://102.55.234.114/qFR6 to avoid permanent suspension.
+scam_account-6-8	scam_account	SCAM	+447700900561	0	We noticed a problem with your Initech Federal online banking. Login to http://139.146.101.158/5Z8Y to avoid permanent suspension.
+personal_plans-10-13	personal_plans	PERSONAL	+16175550127	2	mom: call me when you get a sec, nothing urgent
+work_human-2-2	work_human	WORK	+13035550115	3	Heads up, I'm out on PTO Thursday through Thursday. Ping Marcus for anything urgent.
+x-hijack-18	hijacked_friend	SCAM	+13055550133	9	is this you in this video? tinyurl.com/bkKRpCH ||| hey, how are you?
+x-repliedscam-14	replied_to_scammer	SCAM	+16175550145	1	Final notice: unpaid toll balance of $90.45. Pay now to avoid a late fee: https://hooli-verify.example-svc.sbs/Nb55F
+spam_unsolicited-10-10	spam_unsolicited	SPAM	priya534@example.com	0	Make money from home!!! Click here is.gd/mShPCNL limited spots
+txn_reminder-2-3	txn_reminder	PERSONAL	838203	0	Acme Airlines: Flight AC0929 is delayed 45 minutes. New departure 8:00 PM, gate B12.
+x-hijack-10	hijacked_friend	SCAM	+14155550187	6	is this you in this video? is.gd/CZ9EZcw ||| hey, how are you?
+work_human-6-0	work_human	WORK	+13035550156	20	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird 🙏
+txn_delivery-6-10	txn_delivery	PERSONAL	PARCELPAL	0	Your Wonka ride receipt: $599.11. Thanks for riding!
+txn_bank-6-7	txn_bank	PERSONAL	+18445550137	0	Zelle: Ravi Tanaka sent you $772.28. Money has been deposited to your account ending 1375.
+scam_gov-2-11	scam_gov	SCAM	+15125550171	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0181 now.
+spam_unsolicited-10-3	spam_unsolicited	SPAM	0188132790@example.com	0	Make money from home!!! Click here cutt.ly/mcW48DB limited spots
+otp-6-2	otp	OTP_2FA	+13035550134	0	G-000741 is your Google verification code.
+personal_plans-2-11	personal_plans	PERSONAL	+12125550199	0	dinner at 7 works. I'll make the reservation
+scam_callback-2-8	scam_callback	SCAM	1069922158@example.com	0	Norton: your subscription renewal of $659.93 will be charged today. To cancel call 555-0120.
+scam_account-2-7	scam_account	SCAM	tariq838@example.com	0	Security notice: unusual sign-in on your Google account. Secure your account immediately at shorturl.at/9iXcxxk
+personal_hard-2-6	personal_hard	PERSONAL	+16465550106	2	you won the bet lol. you owe me a coffee
+otp-6-11	otp	OTP_2FA	+14155550124	0	G-721473 is your Google verification code.
+work_human-2-6	work_human	WORK	+16175550121	0	heads up, i'm out on pto saturday through saturday. ping zoe for anything urgent. 🙏
+personal_plans-2-0	personal_plans	PERSONAL	+16025550134	1	dinner at 7 works. I'll make the reservation
+work_human-6-4	work_human	WORK	+15125550173	5	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird 👍
+scam_gov-2-3	scam_gov	SCAM	4318242693@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0198 now.
+otp-18-9	otp	OTP_2FA	+18335550144	0	Discord PIN 4538. Use it to finish signing in.
+otp-6-9	otp	OTP_2FA	49674	0	G-905037 is your Google verification code.
+personal_hard-2-8	personal_hard	PERSONAL	+12125550153	2	you won the bet lol. you owe me a coffee
+personal_plans-18-10	personal_plans	PERSONAL	+16175550189	8	yes!!! congrats!!! 🎉 😊
+spam_unsolicited-2-1	spam_unsolicited	SPAM	+447700900198	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: t.ly/mVaBxpA
+work_human-6-7	work_human	WORK	+16025550164	8	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird. 😊
+txn_reminder-6-9	txn_reminder	PERSONAL	INITECH	0	Your car service is complete. Total $271.61. You can pick up the vehicle until 6 PM.
+personal_plans-14-4	personal_plans	PERSONAL	+15125550184	8	Proud of you. Call me tonight if you want to talk about it ❤️
+scam_invest_job-6-3	scam_invest_job	SCAM	+13125550161	0	i'm from portland, a trader. my uncle taught me forex and i earn passive income every day. want me to show you? add me on whatsapp +1 555 0103
+scam_gov-2-6	scam_gov	SCAM	+13125550152	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0130 now.
+otp-2-9	otp	OTP_2FA	+18555550102	0	Your one-time passcode is 905741. It expires in 5 minutes.
+personal_hard-10-10	personal_hard	PERSONAL	+12125550159	8	did you get the verification email? mine never came
+txn_reminder-2-0	txn_reminder	PERSONAL	286244	0	Vandelay Airlines: Flight AC4243 is delayed 45 minutes. New departure 10:30 PM, gate B12.
+personal_hard-10-6	personal_hard	PERSONAL	+12065550162	5	did you get the verification email? mine never came
+x-hijack-2	hijacked_friend	SCAM	+13125550172	6	is this you in this video? rb.gy/QD8kXm8 ||| hey, how are you?
+txn_bank-2-5	txn_bank	PERSONAL	+18555550126	0	Initech Federal: Your account ending 5144 has a new deposit of $350.84.
+personal_plans-18-4	personal_plans	PERSONAL	+16025550113	2	yes!!! congrats!!! 🎉
+scam_account-2-1	scam_account	SCAM	3023637073@example.com	0	Security notice: unusual sign-in on your Hooli account. Secure your account immediately at bit.ly/q4Qv46f
+personal_hard-18-5	personal_hard	PERSONAL	+12065550199	0	can you review my resume? the link is https://docs.example.com/d/6015 🔥
+spam_unsolicited-14-7	spam_unsolicited	SPAM	378120	0	Hello Devon, we are looking to buy cars in Seattle. Text us the year and mileage for an instant offer.
+txn_delivery-2-10	txn_delivery	PERSONAL	+18885550106	0	Vandelay Freight: Out for delivery. Your driver is Marcus and is 6 stops away.
+promo_retail-10-8	promo_retail	PROMO	73947	0	Acme: we miss you! Come back and enjoy 60% off your next order. Limited time. https://acme.example.com/vVL5Ji
+txn_bank-6-11	txn_bank	PERSONAL	INITECH	0	Zelle: Gabe Haddad sent you $184.17. Money has been deposited to your account ending 2956.
+scam_toll_parcel-2-4	scam_toll_parcel	SCAM	6081608576@example.com	0	FINAL NOTICE: You have an unpaid toll balance of $878.04. Pay now to avoid a late fee of $50: https://globex-pay.example-web.vip/EuZpK
+promo_retail-6-11	promo_retail	PROMO	+14155550160	0	Exclusive offer for VIP members: extra 15% off clearance. Ends tonight. https://stark.example.com/u6GTuU Unsubscribe: reply STOP
+scam_invest_job-6-0	scam_invest_job	SCAM	+16465550193	0	I'm from Denver, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0180
+promo_retail-6-3	promo_retail	PROMO	+18885550134	0	Exclusive offer for VIP members: extra 10% off clearance. Ends tonight. https://wonka.example.com/7Dt9Jp Unsubscribe: reply STOP
+txn_delivery-2-0	txn_delivery	PERSONAL	738867	0	ParcelPal: Out for delivery. Your driver is Omar and is 6 stops away.
+promo_retail-6-8	promo_retail	PROMO	353596	0	Exclusive offer for VIP members: extra 60% off clearance. Ends tonight. https://globex.example.com/kPNMjB Unsubscribe: reply STOP
+spam_unsolicited-2-7	spam_unsolicited	SPAM	812812	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: ow.ly/XVJDaDg
+personal_newcontact-2-1	personal_newcontact	PERSONAL	+13055550133	2	Hi, this is Tess Nguyen, the plumber. I can come Thursday between 1 and 3. Does that work 🔥
+txn_delivery-6-1	txn_delivery	PERSONAL	+18555550106	0	Your Initech ride receipt: $766.02. Thanks for riding!
+scam_prize-2-4	scam_prize	SCAM	+447700900272	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://globex-secure.example-svc.cfd/kgwuh
+personal_hard-18-9	personal_hard	PERSONAL	+12125550190	20	can u review my resume? the link is https://docs.example.com/d/2901
+txn_bank-2-9	txn_bank	PERSONAL	SHIPFAST	0	Globex Credit Union: Your account ending 1035 has a new deposit of $682.30.
+otp-14-7	otp	OTP_2FA	+18005550127	0	527183 is your Google confirmation code
+promo_service-2-4	promo_service	PROMO	408211	0	Take our 2-minute survey and enter to win a $100 gift card. https://wonka.example.com/rLAY4X Reply STOP to opt out.
+scam_prize-2-2	scam_prize	SCAM	+14155550113	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://vandelay-verify.example-svc.top/7MFru
+scam_toll_parcel-6-1	scam_toll_parcel	SCAM	+16465550163	0	Delivery attempt failed. Reschedule at https://initech-help.example-id.xyz/pv9at or your item will be returned to sender.
+personal_newcontact-2-2	personal_newcontact	PERSONAL	+12065550143	1	Hi, this is Zoe Nguyen, the plumber. I can come Tuesday between 1 and 3. Does that work?
+txn_delivery-2-8	txn_delivery	PERSONAL	94775	0	BoxBee: Out for delivery. Your driver is Sam and is 6 stops away.
+promo_retail-6-9	promo_retail	PROMO	INITECH	0	Exclusive offer for VIP members: extra 60% off clearance. Ends tonight. https://globex.example.com/mVcJWc Unsubscribe: reply STOP
+work_automated-2-8	work_automated	WORK	020703	0	Incident TCK-0757 resolved. Service checkout is healthy again. Postmortem on Sunday.
+txn_bank-6-0	txn_bank	PERSONAL	UMBRA-RX	0	Zelle: Priya Tanaka sent you $770.34. Money has been deposited to your account ending 6211.
+work_human-14-3	work_human	WORK	+12065550132	20	Quarterly review slides are in the shared drive. Can you add your team's numbers by Monday?
+scam_invest_job-2-9	scam_invest_job	SCAM	+12065550174	0	Part-time job offer: like and review products, earn $2 commissions daily. Add us on Telegram tinyurl.com/T8qxjpu
+scam_toll_parcel-2-2	scam_toll_parcel	SCAM	+447700900449	0	FINAL NOTICE: You have an unpaid toll balance of $605.63. Pay now to avoid a late fee of $50: https://acme-login.example-portal.cfd/KLdPF
+personal_plans-6-12	personal_plans	PERSONAL	+13055550171	2	Thanks for dropping off the keys, you're a lifesaver! 😂
+scam_invest_job-2-3	scam_invest_job	SCAM	+16175550164	0	Part-time job offer: like and review products, earn $35 commissions daily. Add us on Telegram is.gd/5Yp2W4U
+personal_plans-10-11	personal_plans	PERSONAL	+14155550124	12	mom: call me when you get a sec, nothing urgent
+spam_unsolicited-6-6	spam_unsolicited	SPAM	439446	0	Hi, this is Tess with Acme Solar. Homeowners in Miami can cut electric bills by 80%. Are you the homeowner?
+personal_plans-10-6	personal_plans	PERSONAL	+16175550126	12	mom: call me when you get a sec, nothing urgent
+personal_hard-2-4	personal_hard	PERSONAL	+12125550180	1	you won the bet lol. you owe me a coffee 🙏
+personal_plans-2-5	personal_plans	PERSONAL	+16025550120	12	dinner at 7 works. i'll make the reservation
+txn_bank-6-1	txn_bank	PERSONAL	+18665550107	0	Zelle: Luis Moreau sent you $715.46. Money has been deposited to your account ending 2720.
+work_human-6-9	work_human	WORK	+13125550138	20	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird 👍
+otp-14-6	otp	OTP_2FA	+14155550119	0	403427 is your Uber confirmation code
+work_automated-6-2	work_automated	WORK	+18445550196	0	Build failed on main: #9617 'Fix checkout rounding'. See logs: https://contoso.example.com/ULGneu
+spam_unsolicited-2-3	spam_unsolicited	SPAM	+447700900156	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: bit.ly/cdRtei4
+work_human-10-13	work_human	WORK	+12065550160	0	Mr. Moreau confirmed the walkthrough for Monday at 5:15 AM. Contract is in your email, please review before then. 😊
+work_human-18-1	work_human	WORK	+15125550174	3	Sounds good, I'll update the Jira board ||| did you see the staging build fail again? ❤️ ||| morning, quick question about the release
+otp-18-3	otp	OTP_2FA	+16465550170	0	Hooli PIN 7448. Use it to finish signing in.
+txn_reminder-6-1	txn_reminder	PERSONAL	+18335550179	0	Your car service is complete. Total $120.07. You can pick up the vehicle until 6 PM.
+personal_plans-18-2	personal_plans	PERSONAL	+16175550113	0	yes!!! congrats!!! 🎉
+scam_account-6-9	scam_account	SCAM	+447700900123	0	We noticed a problem with your Acme Bank online banking. Login to http://42.37.170.119/WtMw to avoid permanent suspension.
+otp-2-7	otp	OTP_2FA	+18775550178	0	Your one-time passcode is 035621. It expires in 5 minutes.
+personal_plans-18-13	personal_plans	PERSONAL	+12065550135	5	yes!!! congrats!!! 🎉
+scam_toll_parcel-2-5	scam_toll_parcel	SCAM	+16465550174	0	FINAL NOTICE: You have an unpaid toll balance of $549.07. Pay now to avoid a late fee of $50: https://wonka-support.example-id.icu/7rhJz
+scam_invest_job-6-7	scam_invest_job	SCAM	+12125550132	0	I'm from Miami, a trader. My uncle taught me forex and I earn passive income every day. Want me to show you? Add me on WhatsApp +1 555 0147
+x-repliedscam-2	replied_to_scammer	SCAM	+14155550144	1	Final notice: unpaid toll balance of $311.97. Pay now to avoid a late fee: https://initech-login.example-web.icu/jWvAz
+x-hijack-6	hijacked_friend	SCAM	+15125550117	14	is this you in this video? bit.ly/2EfVFcR ||| hey, how are you?
+promo_retail-6-7	promo_retail	PROMO	PARCELPAL	0	Exclusive offer for VIP members: extra 20% off clearance. Ends tonight. https://contoso.example.com/G4PMuF Unsubscribe: reply STOP
+x-hijack-38	hijacked_friend	SCAM	+12065550123	9	is this you in this video? ow.ly/LsJh4Yr ||| hey, how are you?
+scam_account-6-0	scam_account	SCAM	6070065166@example.com	0	We noticed a problem with your Hooli Pay online banking. Login to http://37.212.66.45/2uSv to avoid permanent suspension.
+otp-2-5	otp	OTP_2FA	606000	0	Your one-time passcode is 391081. It expires in 15 minutes.
+otp-18-13	otp	OTP_2FA	78421	0	Globex PIN 5247. Use it to finish signing in.
+otp-14-3	otp	OTP_2FA	+13055550197	0	318934 is your Instagram confirmation code
+personal_plans-14-11	personal_plans	PERSONAL	+16465550104	8	proud of you. call me tonight if you want to talk about it ❤️ 🔥
+otp-2-3	otp	OTP_2FA	67297	0	Your one-time passcode is 384045. It expires in 15 minutes.
+promo_retail-2-2	promo_retail	PROMO	970013	0	Soylent Rewards: you have 500 bonus points expiring Nov 6. Redeem them on your next purchase! https://soylent.example.com/EurFvh Reply STOP to unsubscribe
+promo_retail-10-0	promo_retail	PROMO	+16025550193	0	Acme: we miss you! Come back and enjoy 10% off your next order. Limited time. https://acme.example.com/6jWnsm
+work_automated-6-8	work_automated	WORK	+18555550182	0	Build failed on main: #4519 'Fix checkout rounding'. See logs: https://globex.example.com/azYmCt
+otp-14-0	otp	OTP_2FA	006302	0	481477 is your Stripe confirmation code
+x-friendlink-2	friend_with_link	PERSONAL	+13125550121	5	call me asap!! urgent!! see this rb.gy/QD8kXm8 ||| you around?
+work_human-2-5	work_human	WORK	+14155550131	8	Heads up, I'm out on PTO Sunday through Sunday. Ping Tess for anything urgent.
+spam_unsolicited-6-3	spam_unsolicited	SPAM	+447700900804	0	Hi, this is Ava with Contoso Solar. Homeowners in Seattle can cut electric bills by 80%. Are you the homeowner?
+otp-10-9	otp	OTP_2FA	+13125550107	0	Enter 669380 to confirm your sign-in to Contoso. This code is valid for 3 minutes.
+personal_plans-14-13	personal_plans	PERSONAL	+13125550141	0	Proud of you. Call me tonight if you want to talk about it ❤️
+otp-14-8	otp	OTP_2FA	UMBRA-RX	0	326800 is your Globex confirmation code
+personal_plans-14-5	personal_plans	PERSONAL	+13035550163	8	proud of you. call me tonight if you want to talk about it ❤️
+scam_account-6-11	scam_account	SCAM	+12065550186	0	We noticed a problem with your Initech Federal online banking. Login to http://31.200.149.124/qjNW to avoid permanent suspension.
+scam_account-2-2	scam_account	SCAM	ACMEBANK	0	Security notice: unusual sign-in on your Instagram account. Secure your account immediately at cutt.ly/PnqyxyP
+scam_wrongnum-2-4	scam_wrongnum	SCAM	+16465550196	0	Hello, is this Sam? We met at the conference last month. Add me on WhatsApp +1 555 0170, I'd like to share a great opportunity.
+work_automated-6-6	work_automated	WORK	+18005550112	0	Build failed on main: #684 'Fix checkout rounding'. See logs: https://wonka.example.com/suewu9
+work_human-14-10	work_human	WORK	+15125550128	12	Quarterly review slides are in the shared drive. Can you add your team's numbers by Monday?
+txn_reminder-2-5	txn_reminder	PERSONAL	27120	0	Umbra Airlines: Flight AC7272 is delayed 45 minutes. New departure 11:30 AM, gate B12.
+x-friendlink-34	friend_with_link	PERSONAL	+13035550199	5	call me asap!! urgent!! see this t.ly/rp4BuzY ||| you around?
+personal_hard-2-1	personal_hard	PERSONAL	+12125550126	5	you won the bet lol. you owe me a coffee
+txn_bank-6-4	txn_bank	PERSONAL	+18885550137	0	Zelle: Tariq Reyes sent you $319.77. Money has been deposited to your account ending 2984.
+scam_account-6-5	scam_account	SCAM	+16465550176	0	We noticed a problem with your Acme Bank online banking. Login to http://111.105.21.134/peun to avoid permanent suspension.
+work_human-14-9	work_human	WORK	+13125550167	20	Quarterly review slides are in the shared drive. Can you add your team's numbers by Thursday
+scam_toll_parcel-6-2	scam_toll_parcel	SCAM	+447700900203	0	Delivery attempt failed. Reschedule at https://acme-help.example-web.sbs/mUfZ8 or your item will be returned to sender.
+txn_bank-2-0	txn_bank	PERSONAL	+18885550173	0	Contoso Savings: Your account ending 4535 has a new deposit of $347.93.
+scam_gov-2-7	scam_gov	SCAM	+447700900249	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0176 now.
+work_human-6-3	work_human	WORK	+15125550173	20	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+personal_hard-14-2	personal_hard	PERSONAL	+13055550144	20	free to chat? urgent but good news!!
+personal_hard-6-2	personal_hard	PERSONAL	+14155550145	8	Venmo'd u $8 for the tickets, let me know if it didn't go through 👍
+work_human-2-13	work_human	WORK	+14155550127	8	heads up, i'm out on pto wednesday through wednesday. ping omar for anything urgent. 🔥
+work_human-10-7	work_human	WORK	+12125550118	0	mr. kowalski confirmed the walkthrough for thursday at 6:30 pm. contract is in your email, please review before then. 👍
+work_human-18-12	work_human	WORK	+16175550120	5	Sounds good, I'll update the Jira board ❤️ ||| did you see the staging build fail again? ||| morning, quick question about the release
+personal_hard-6-6	personal_hard	PERSONAL	+16175550175	1	Venmo'd you $8 for the tickets, let me know if it didn't go through
+personal_newcontact-6-8	personal_newcontact	PERSONAL	+16175550131	0	This is Luis, your Uber driver. I'm outside in a gray Honda
+personal_hard-2-3	personal_hard	PERSONAL	+13055550137	3	you won the bet lol. you owe me a coffee 😂
+work_human-6-12	work_human	WORK	+14155550175	1	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+personal_plans-18-1	personal_plans	PERSONAL	+13055550169	20	yes!!! congrats!!! 🎉
+scam_wrongnum-2-9	scam_wrongnum	SCAM	+13125550194	0	hello, is this ines? we met at the conference last month. add me on whatsapp +1 555 0129, i'd like to share a great opportunity.
+scam_prize-2-7	scam_prize	SCAM	+447700900178	0	Dear customer, you are the lucky winner of an iPhone 15. Click to claim https://acme-support.example-svc.cfd/LFjwa
+txn_delivery-6-9	txn_delivery	PERSONAL	PARCELPAL	0	Your Umbra ride receipt: $186.85. Thanks for riding!
+scam_account-2-11	scam_account	SCAM	+12065550138	0	Security notice: unusual sign-in on your Globex account. Secure your account immediately at rb.gy/Kf4QWpE
+x-repliedscam-38	replied_to_scammer	SCAM	+13055550132	1	Final notice: unpaid toll balance of $721.79. Pay now to avoid a late fee: https://initech-help.example-svc.help/qsTMh
+scam_invest_job-2-6	scam_invest_job	SCAM	+12065550126	0	Part-time job offer: like and review products, earn $60 commissions daily. Add us on Telegram is.gd/Rm6n97r
+scam_wrongnum-6-5	scam_wrongnum	SCAM	+447700900887	0	omg is that you in this video?? https://initech-help.example-svc.sbs/4xtfD
+spam_unsolicited-14-6	spam_unsolicited	SPAM	+13055550140	0	Hello Tess, we are looking to buy cars in Boston. Text us the year and mileage for an instant offer.
+spam_unsolicited-14-0	spam_unsolicited	SPAM	+18665550167	0	Hello Dana, we are looking to buy cars in Phoenix. Text us the year and mileage for an instant offer.
+scam_account-2-8	scam_account	SCAM	+447700900887	0	Security notice: unusual sign-in on your Contoso account. Secure your account immediately at tinyurl.com/uCcwy2H
+x-repliedscam-34	replied_to_scammer	SCAM	+14155550131	1	Final notice: unpaid toll balance of $718.84. Pay now to avoid a late fee: https://contoso-login.example-web.xyz/wvqQ5
+scam_toll_parcel-6-10	scam_toll_parcel	SCAM	+13035550101	0	Delivery attempt failed. Reschedule at https://initech-verify.example-id.sbs/bsEi4 or your item will be returned to sender.
+spam_unsolicited-6-11	spam_unsolicited	SPAM	+18335550129	0	Hi, this is Alex with Vandelay Solar. Homeowners in Denver can cut electric bills by 80%. Are you the homeowner?
+otp-10-12	otp	OTP_2FA	+13055550154	0	Enter 215035 to confirm your sign-in to Umbra. This code is valid for 3 minutes.
+scam_account-2-10	scam_account	SCAM	7165848374@example.com	0	Security notice: unusual sign-in on your Stripe account. Secure your account immediately at tinyurl.com/VjTFxzP
+scam_account-6-3	scam_account	SCAM	BOXBEE	0	We noticed a problem with your Contoso Savings online banking. Login to http://153.22.17.251/gc5e to avoid permanent suspension.
+personal_plans-14-7	personal_plans	PERSONAL	+14155550152	4	proud of you. call me tonight if you want to talk about it ❤️
+spam_unsolicited-2-4	spam_unsolicited	SPAM	+18665550119	0	You are pre-approved for a $5000 personal loan! No credit check. Apply now: cutt.ly/sWWtDJd
+promo_retail-2-11	promo_retail	PROMO	WONKA	0	Hooli Rewards: you have 500 bonus points expiring Oct 4. Redeem them on your next purchase! https://hooli.example.com/yQXAqm Reply STOP to unsubscribe
+spam_unsolicited-14-1	spam_unsolicited	SPAM	priya372@example.com	0	Hello Yuki, we are looking to buy cars in Austin. Text us the year and mileage for an instant offer.
+work_human-18-7	work_human	WORK	+15125550170	20	sounds good, i'll update the jira board 😂 ||| did you see the staging build fail again? 😂 ||| morning, quick question about the release
+personal_plans-14-2	personal_plans	PERSONAL	+16465550155	4	Proud of u. Call me tonight if u want to talk about it ❤️
+x-repliedscam-18	replied_to_scammer	SCAM	+13125550155	1	Final notice: unpaid toll balance of $97.21. Pay now to avoid a late fee: https://vandelay-pay.example-svc.sbs/zJ2Ta
+otp-18-7	otp	OTP_2FA	+13055550126	0	WhatsApp PIN 1818. Use it to finish signing in.
+otp-18-0	otp	OTP_2FA	+16025550179	0	Acme PIN 9506. Use it to finish signing in.
+personal_plans-2-8	personal_plans	PERSONAL	+14155550142	5	dinner at 7 works. I'll make the reservation
+txn_delivery-2-1	txn_delivery	PERSONAL	133858	0	QuickDrop: Out for delivery. Your driver is Mei and is 6 stops away.
+otp-14-4	otp	OTP_2FA	+14155550147	0	817545 is your Uber confirmation code
+x-friendlink-30	friend_with_link	PERSONAL	+16175550167	30	call me asap!! urgent!! see this shorturl.at/Gf43Fu7 ||| you around?
+work_human-6-10	work_human	WORK	+12065550159	0	Prod deploy is done. Watch the dashboards for errors, roll back if you see anything weird.
+otp-6-8	otp	OTP_2FA	ACMEBANK	0	G-554379 is your Google verification code.
+personal_plans-2-9	personal_plans	PERSONAL	+14155550139	12	dinner at 7 works. i'll make the reservation
+personal_hard-10-7	personal_hard	PERSONAL	+13125550129	4	did you get the verification email? mine never came
+personal_hard-2-11	personal_hard	PERSONAL	+16025550130	8	you won the bet lol. you owe me a coffee
+spam_unsolicited-10-0	spam_unsolicited	SPAM	+18005550159	0	Make money from home!!! Click here ow.ly/vT8y8uV limited spots
+x-friendlink-26	friend_with_link	PERSONAL	+12065550149	10	call me asap!! urgent!! see this shorturl.at/MPT2mjz ||| you around?
+txn_delivery-2-5	txn_delivery	PERSONAL	+18005550181	0	ShipFast: Out for delivery. Your driver is Omar and is 6 stops away.
+scam_gov-2-2	scam_gov	SCAM	ken530@example.com	0	Social Security Administration: your number has been suspended due to suspicious activity. Call 555-0164 now.

@@ -24,10 +24,24 @@ object ClassifierFactory {
         return defaultClassifier(context)
     }
 
-    private fun defaultClassifier(context: Context): MessageClassifier = try {
-        OnnxEncoderClassifier(context)
-    } catch (e: Exception) {
-        Log.w(TAG, "Falling back to heuristics-only classifier", e)
-        StubClassifier()
+    /**
+     * Rules plus the bert-tiny model. The model is loaded on first use, not here: a pass whose messages
+     * the rules settle never pays for it, and if loading fails the rules keep working on their own.
+     */
+    private fun defaultClassifier(context: Context): MessageClassifier {
+        val app = context.applicationContext
+        return TriageClassifier(
+            LazySpamScorer {
+                try {
+                    OnnxSpamScorer.load(app)
+                } catch (e: Throwable) {
+                    Log.w(TAG, "Spam model unavailable, using rules only", e)
+                    NO_MODEL
+                }
+            },
+        )
     }
+
+    /** Stands in when the model cannot load; NaN means "no opinion" to [TriageEngine]. */
+    private val NO_MODEL = SpamScorer { Float.NaN }
 }

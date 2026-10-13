@@ -373,7 +373,12 @@ fun ThreadScreen(
     // ---------------- dialogs ----------------
     if (showWhy && threadLabel != null) {
         val e = remember(threadLabel, labelConfidence, state, messages.lastOrNull { it.isIncoming }?.body) {
-            LabelExplainer.explain(threadLabel, labelConfidence, state?.labelCorrected == true, messages.lastOrNull { it.isIncoming }?.body, LabelPalette.displayName(threadLabel))
+            val recent = messages.filter { it.isIncoming }.takeLast(5).reversed().map { it.body }
+            val replies = messages.count { !it.isIncoming && !com.inboxiq.app.classify.BareReplies.isBare(it.body) }
+            LabelExplainer.explain(
+                threadLabel, labelConfidence, state?.labelCorrected == true, recent.firstOrNull(), LabelPalette.displayName(threadLabel),
+                address = address, recentIncoming = recent, replies = replies,
+            )
         }
         AlertDialog(
             onDismissRequest = { showWhy = false },
