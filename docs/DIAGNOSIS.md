@@ -63,7 +63,7 @@ Play requires every foreground service type to be declared in Console, and `spec
 
 ## Verification (2026-10-13, this branch, `./gradlew testDebugUnitTest assembleDebug`, GRADLE_USER_HOME=$HOME/.gradle because the clearvoice home lacked AGP 8.13.2 offline)
 - Compiled: yes, `assembleDebug` succeeded (debug APK built, not installed anywhere).
-- Unit tests: 31 run, 0 failures, 0 errors (23 pre-existing/related Robolectric and JVM tests + 8 for the relay + 3 for draft claiming; relay: RelayRedactionTest 3, RelayConfigConsentTest 5; drafts: AgentDraftClaimTest 3).
+- Unit tests: 31 run, 0 failures, 0 errors (20 pre-existing tests + RelayRedactionTest 3 + RelayConfigConsentTest 5 + AgentDraftClaimTest 3).
 - Two problems found by actually building, both fixed: (1) a raw apostrophe in `strings.xml` broke resource compilation (my own bug); (2) the pre-existing Robolectric tests all failed on the base branch because Robolectric 4.14.1 cannot run SDK 36 (targetSdk 36 commit); fixed with `app/src/test/resources/robolectric.properties` (`sdk=35`). So at the WIP base commit the unit test suite did not pass.
 - Not verified: UI rendering of the consent dialog, the service at runtime, the Android 15 behaviour, the Gemma download, anything on a real device (device not used).
 - Secrets: gitleaks over the branch range (54e3fc7^..HEAD): no leaks. `local.properties` is git-ignored and untracked; only the `localProps.getProperty(...)` lookups appear in tracked files. A full-directory gitleaks scan flagged two generic-key hits only inside `app/build` cache files (untracked build output), which I deleted.
