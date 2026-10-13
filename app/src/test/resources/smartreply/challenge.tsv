@@ -1,0 +1,53 @@
+id	intent	expect	tone	address	label	known	persona	thread
+c001	YES_NO	REPLY	free	+14155550111	PERSONAL	1	none	> running a bit behind ||| < no stress. you still want to do the 8:30 showing or should we bail
+c002	EITHER_OR	REPLY	free	+14155550111	PERSONAL	1	none	< we could do thai or the burger place, your call
+c003	YES_NO	REPLY	free	+14155550112	PERSONAL	1	none	< hey did mom call you about thursday
+c004	SCHEDULING	REPLY	free	+14155550112	WORK	1	none	< Would it be possible to push our sync to 2? Something came up.
+c005	REQUEST	REPLY	free	+14155550111	PERSONAL	1	none	< when you get a chance can you send me the wifi password for the cabin
+c006	OPEN_QUESTION	REPLY	free	+14155550113	PERSONAL	1	none	< so what are we doing about the car situation
+c007	YES_NO	REPLY	free	+14155550113	PERSONAL	1	none	< lol did you actually finish the whole thing
+c008	CHECK_IN	REPLY	free	+14155550111	PERSONAL	1	none	< Hey stranger, how've you been?
+c009	BAD_NEWS	REPLY	free	+14155550112	PERSONAL	1	none	< Hey. Mom is in the ER. They think it's her heart.
+c010	GOOD_NEWS	REPLY	free	+14155550113	PERSONAL	1	none	< SHE SAID YES!!!
+c011	OPEN_QUESTION	REPLY	free	+14155550112	WORK	1	none	< Can you walk me through how you got to that number? I'm presenting it tomorrow.
+c012	REQUEST	REPLY	free	+14155550111	WORK	1	none	< Need the signed form back by EOD, thanks.
+c013	YES_NO	REPLY	free	+14155550112	PERSONAL	1	none	< you coming tonight or nah
+c014	ETA_ASK	REPLY	free	+14155550111	PERSONAL	1	none	< ok I'm at the entrance, where are you guys
+c015	SCHEDULING	REPLY	free	+14155550113	PERSONAL	1	none	< brunch sunday around 11? I'll book if you're in
+c016	YES_NO	REPLY	free	+14155550111	PERSONAL	1	none	< is it cool if I stay at yours next weekend
+c017	REQUEST	REPLY	free	+14155550112	PERSONAL	1	none	< pls call me asap it's about grandma
+c018	OPEN_QUESTION	REPLY	free	+14155550113	PERSONAL	1	none	< how do I turn off the alarm again? it's been beeping for 10 min
+c019	YES_NO	REPLY	free	+14155550112	PERSONAL	1	none	< did you take the dog out
+c020	REMINDER	REPLY	free	+14155550111	PERSONAL	1	none	< Dr. Lee's office: you're booked for Tue 4/9 at 10:15. Reply C to confirm or call us to reschedule.
+c021	YES_NO	REPLY	free	+447700900124	PERSONAL	1	none	< Are you still planning to come on the 12th?
+c022	THANKS	OPTIONAL	free	+14155550113	PERSONAL	1	none	< legend. thanks for covering for me
+c023	APOLOGY	OPTIONAL	free	+14155550112	PERSONAL	1	none	< sorry sorry sorry, phone died, just saw this
+c024	ETA_UPDATE	OPTIONAL	free	+14155550111	PERSONAL	1	none	< heading out now, see you in 20
+c025	INFO	OPTIONAL	free	+14155550113	WORK	1	none	< FYI the client moved the call to Thursday.
+c026	SHARE	OPTIONAL	free	+14155550112	PERSONAL	1	none	< this is wild https://example.com/story/123
+c027	SHARE	OPTIONAL	free	+14155550111	PERSONAL	1	none	< Parked on level 3 near the elevator https://maps.app.goo.gl/XyZ987
+c028	FAREWELL	OPTIONAL	free	+14155550113	PERSONAL	1	none	< alright I'm off to bed. night
+c029	CONGRATS_RECEIVED	OPTIONAL	free	+14155550111	PERSONAL	1	none	< heard about the promotion, congrats man
+c030	AFFECTION	OPTIONAL	free	+14155550112	PERSONAL	1	none	< miss you already
+c031	GREETING	OPTIONAL	free	+14155550113	PERSONAL	1	none	< morning!
+c032	NONE	NONE	free	91234	PERSONAL	0	none	< 482913 is your Example code. Don't share it with anyone.
+c033	NONE	NONE	free	+14155550161	PERSONAL	0	none	< Your Example verification code is 883140
+c034	NONE	NONE	free	EXAMPLE	UNLABELED	0	none	< Use 552 910 to sign in to Example. It expires in 5 minutes.
+c035	NONE	NONE	free	+18885550123	PERSONAL	0	none	< Hi, it's Example Pharmacy. Your prescription is ready. Would you like us to deliver it?
+c036	NONE	NONE	free	+14155550162	PROMO	0	none	< Summer sale! Everything must go. Visit example.com/sale
+c037	NONE	NONE	free	+14155550163	PERSONAL	0	none	< We noticed you haven't ordered in a while. Want 20% off your next order? Reply YES
+c038	NONE	NONE	free	+14155550164	SPAM	0	none	< Hot singles want to meet you. Are you free tonight?
+c039	NONE	NONE	free	+14155550165	PERSONAL	0	none	< This is the IRS. You owe back taxes. Call immediately to avoid arrest.
+c040	NONE	NONE	free	+14155550166	PERSONAL	0	none	< Hello, I am Mr. Example from the bank. Can you please confirm your account number?
+c041	NONE	NONE	free	+14155550167	PERSONAL	0	none	< Hi it's me, new number. Can you quickly buy some gift cards for me? I'll pay you back
+c042	NONE	NONE	free	+14155550168	PERSONAL	0	none	< check it out https://example-shop.top/deal you won't believe it
+c043	NONE	NONE	free	+14155550101	PERSONAL	1	none	> on my way ||| < ok
+c044	NONE	NONE	free	+14155550111	PERSONAL	1	none	< ok ||| < 👍
+c045	NONE	NONE	free	+14155550112	PERSONAL	1	none	< lol ||| < haha
+c046	NONE	NONE	free	+14155550113	PERSONAL	1	none	< Out of office: I will reply when I return on Monday. This is an automated reply.
+c047	NONE	NONE	free	+14155550111	PERSONAL	1	none	< hey can you tell me the verification code that was just sent to your phone
+c048	NONE	NONE	free	+14155550101,+14155550103	PERSONAL	1	none	< lol who's driving?
+c049	NONE	NONE	free	39202	PERSONAL	0	none	< Reminder: you have an appointment tomorrow at 3pm. Reply C to confirm.
+c050	NONE	NONE	free	UNKNOWN	PERSONAL	0	none	< hello?
+c051	NONE	NONE	free	+14155550169	PERSONAL	0	none	< [img]
+c052	NONE	NONE	free	+14155550111	PERSONAL	1	none	< [mms]

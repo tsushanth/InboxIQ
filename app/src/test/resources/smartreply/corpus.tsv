@@ -1,0 +1,254 @@
+id	intent	expect	tone	address	label	known	persona	thread
+s001	YES_NO	REPLY	casual	+14155550101	PERSONAL	1	none	< Are you free tonight?
+s002	YES_NO	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < u free later?
+s003	YES_NO	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < Do you want to grab dinner?
+s004	YES_NO	REPLY	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < wanna come to the game on Saturday?
+s005	YES_NO	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < Did you see my email?
+s006	YES_NO	REPLY	casual	+14155550106	PERSONAL	0	none	< Have you eaten yet?
+s007	YES_NO	REPLY	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < are you ok?
+s008	YES_NO	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < Are you coming?
+s009	YES_NO	REPLY	casual	+14155550101	PERSONAL	0	none	< did you get the package?
+s010	YES_NO	REPLY	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < You home?
+s011	YES_NO	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < Are you up for a walk?
+s012	YES_NO	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Is it okay if I bring my cousin?
+s013	YES_NO	REPLY	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < sounds good?
+s014	YES_NO	REPLY	casual	+14155550106	PERSONAL	0	none	< Can I borrow your charger tomorrow?
+s015	YES_NO	REPLY	formal	+14155550107	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Are you available for a call this afternoon?
+s016	YES_NO	REPLY	formal	+14155550108	WORK	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < Would you like to join us for lunch on Friday?
+s017	YES_NO	REPLY	formal	+14155550101	WORK	0	none	< Have you had a chance to review the document?
+s018	YES_NO	REPLY	formal	+14155550102	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Is it acceptable if I send the invoice on Monday?
+s019	YES_NO	REPLY	formal	+14155550103	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Do you have a moment to discuss the schedule?
+s020	YES_NO	REPLY	formal	+14155550104	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Are you able to attend the meeting?
+s021	OPEN_QUESTION	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < what do you think about the new place?
+s022	OPEN_QUESTION	REPLY	casual	+14155550106	PERSONAL	1	none	< where should we eat?
+s023	OPEN_QUESTION	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < what time is the thing again?
+s024	OPEN_QUESTION	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < why didn't you answer?
+s025	OPEN_QUESTION	REPLY	casual	+14155550101	PERSONAL	1	none	< how did the interview go?
+s026	OPEN_QUESTION	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < what's the plan for tomorrow?
+s027	OPEN_QUESTION	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < who's coming Saturday?
+s028	OPEN_QUESTION	REPLY	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < thoughts?
+s029	OPEN_QUESTION	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < guess what
+s030	OPEN_QUESTION	REPLY	casual	+14155550106	PERSONAL	0	none	< which one do you like better?
+s031	OPEN_QUESTION	REPLY	formal	+14155550107	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < What are your thoughts on the proposal?
+s032	OPEN_QUESTION	REPLY	formal	+14155550108	WORK	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < When would be a suitable time to meet?
+s033	OPEN_QUESTION	REPLY	formal	+14155550101	WORK	0	none	< Where would you like to hold the meeting?
+s034	OPEN_QUESTION	REPLY	formal	+14155550102	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Could you tell me what the next steps are?
+s035	EITHER_OR	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < pizza or tacos?
+s036	EITHER_OR	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Saturday or Sunday?
+s037	EITHER_OR	REPLY	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < do you want coffee or tea?
+s038	EITHER_OR	REPLY	casual	+14155550106	PERSONAL	0	none	< call or text you later?
+s039	EITHER_OR	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < beach or mountains?
+s040	EITHER_OR	REPLY	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < do you prefer morning or evening?
+s041	EITHER_OR	REPLY	formal	+14155550101	WORK	0	none	< Would you prefer Tuesday or Thursday?
+s042	EITHER_OR	REPLY	formal	+14155550102	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Shall we use email or phone for the update?
+s043	SCHEDULING	REPLY	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < Does 7pm work?
+s044	SCHEDULING	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < how about Friday evening?
+s045	SCHEDULING	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < let's meet at 6 by the cafe
+s046	SCHEDULING	REPLY	casual	+14155550106	PERSONAL	1	none	< can we reschedule to next week?
+s047	SCHEDULING	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < What about tomorrow at noon?
+s048	SCHEDULING	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < when are you free this week?
+s049	SCHEDULING	REPLY	casual	+14155550101	PERSONAL	1	none	< what time works for you?
+s050	SCHEDULING	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < Can you make it at 5?
+s051	SCHEDULING	REPLY	formal	+14155550103	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Does Wednesday at 10:00 suit you?
+s052	SCHEDULING	REPLY	formal	+14155550104	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Would 3pm on Thursday work for you?
+s053	SCHEDULING	REPLY	formal	+14155550105	WORK	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < When are you available for a short meeting?
+s054	SCHEDULING	REPLY	formal	+14155550106	WORK	0	none	< Can we move our appointment to the afternoon?
+s055	REQUEST	REPLY	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < can you pick up milk on your way home?
+s056	REQUEST	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < could you send me that photo from last night
+s057	REQUEST	REPLY	casual	+14155550101	PERSONAL	0	none	< can you call me when you get a sec
+s058	REQUEST	REPLY	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < need your help with something
+s059	REQUEST	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < please let me know when you land
+s060	REQUEST	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Can you water the plants this weekend?
+s061	REQUEST	REPLY	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < hit me up when you're out
+s062	REQUEST	REPLY	casual	+14155550106	PERSONAL	0	none	< can you grab my package from the front desk
+s063	REQUEST	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < mind sending me the address?
+s064	REQUEST	REPLY	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < do me a favor and text my mom
+s065	REQUEST	REPLY	formal	+14155550101	WORK	0	none	< Could you please send me the updated figures?
+s066	REQUEST	REPLY	formal	+14155550102	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Would you mind reviewing the draft before noon?
+s067	REQUEST	REPLY	formal	+14155550103	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Please let me know once you have confirmed.
+s068	REQUEST	REPLY	formal	+14155550104	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Can you forward the agenda to the team?
+s069	CHECK_IN	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < hey how are you?
+s070	CHECK_IN	REPLY	casual	+14155550106	PERSONAL	1	none	< how's it going
+s071	CHECK_IN	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < what's up?
+s072	CHECK_IN	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < how was your day?
+s073	CHECK_IN	REPLY	casual	+14155550101	PERSONAL	1	none	< how have you been
+s074	CHECK_IN	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < hey, how was your weekend?
+s075	CHECK_IN	REPLY	formal	+14155550103	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Hello, how are you?
+s076	CHECK_IN	REPLY	formal	+14155550104	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I hope you are well. How have you been?
+s077	ETA_ASK	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < where are you?
+s078	ETA_ASK	REPLY	casual	+14155550106	PERSONAL	0	none	< how far are you
+s079	ETA_ASK	REPLY	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < are you on your way?
+s080	ETA_ASK	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < where u at
+s081	ETA_ASK	REPLY	casual	+14155550101	PERSONAL	0	none	< what's your eta?
+s082	ETA_ASK	REPLY	formal	+14155550102	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Where are you at the moment?
+s083	ETA_ASK	REPLY	formal	+14155550103	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < When do you expect to arrive?
+s084	CLARIFY	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < what?
+s085	CLARIFY	REPLY	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < huh?
+s086	CLARIFY	REPLY	casual	+14155550106	PERSONAL	0	none	< ??
+s087	CLARIFY	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < wdym
+s088	CLARIFY	REPLY	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < what do you mean?
+s089	BAD_NEWS	REPLY	casual	+14155550101	PERSONAL	0	none	< my dad passed away this morning
+s090	BAD_NEWS	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < I got laid off today
+s091	BAD_NEWS	REPLY	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < bad news, my dog is really sick
+s092	BAD_NEWS	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I failed my exam
+s093	BAD_NEWS	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < we broke up
+s094	BAD_NEWS	REPLY	casual	+14155550106	PERSONAL	1	none	< I'm in the hospital, it's nothing serious but I'm scared
+s095	BAD_NEWS	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < i lost my job
+s096	BAD_NEWS	REPLY	formal	+14155550108	WORK	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < I regret to inform you that my grandmother passed away.
+s097	BAD_NEWS	REPLY	formal	+14155550101	WORK	1	none	< Unfortunately I was in a car accident this morning.
+s098	GOOD_NEWS	REPLY	casual	+14155550102	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < I got the job!!
+s099	GOOD_NEWS	REPLY	casual	+14155550103	PERSONAL	0	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < we're engaged!
+s100	GOOD_NEWS	REPLY	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I passed my driving test
+s101	GOOD_NEWS	REPLY	casual	+14155550105	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < guess who got promoted
+s102	GOOD_NEWS	REPLY	casual	+14155550106	PERSONAL	0	none	< we're having a baby
+s103	GOOD_NEWS	REPLY	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < I got into grad school!
+s104	GOOD_NEWS	REPLY	casual	+14155550108	PERSONAL	0	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < great news, the house sold
+s105	GOOD_NEWS	REPLY	casual	+14155550101	PERSONAL	0	none	< I did it, I finished the marathon
+s106	GOOD_NEWS	REPLY	formal	+14155550102	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I am pleased to share that I have been promoted.
+s107	GOOD_NEWS	REPLY	formal	+14155550103	WORK	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Good news: we signed the lease today.
+s108	REMINDER	REPLY	casual	+14155550104	PERSONAL	0	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < don't forget dinner tomorrow at 7
+s109	REMINDER	REPLY	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < reminder: soccer practice is at 5pm today
+s110	REMINDER	REPLY	casual	+14155550106	PERSONAL	0	none	< just a reminder about the dentist on Thursday at 3pm
+s111	REMINDER	REPLY	casual	+14155550107	PERSONAL	0	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < remember we have the school thing tomorrow at 9
+s112	REMINDER	REPLY	formal	+14155550108	WORK	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < This is a reminder of your appointment on Thursday at 2:30 PM. Please reply C to confirm.
+s113	REMINDER	REPLY	formal	+14155550101	WORK	0	none	< Friendly reminder: your table is booked for Friday at 8pm. Please confirm.
+s114	YES_NO	REPLY	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < are you free tonight? ||| < hello??
+s115	REQUEST	REPLY	casual	+14155550103	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < can you call me when you get a chance ||| < ok?
+s116	SCHEDULING	REPLY	casual	+14155550104	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < what time should I come over ||| < lol
+s117	YES_NO	REPLY	casual	+14155550105	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < did you get the tickets? ||| < 👍
+s118	CHECK_IN	REPLY	casual	+14155550102	PERSONAL	1	none	< hey ||| < how are you doing?
+s119	YES_NO	REPLY	casual	+14155550103	PERSONAL	1	none	< hey! ||| < are you free to talk?
+s120	YES_NO	REPLY	casual	+447700900123	PERSONAL	1	none	< Are you coming to the wedding?
+s121	SCHEDULING	REPLY	formal	+447700900123	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Does Tuesday at 11 work for you?
+s122	REQUEST	REPLY	casual	+14155550104	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < can you venmo me $20 for dinner?
+s123	REQUEST	REPLY	casual	+14155550105	PERSONAL	1	none	< could you lend me some money until Friday?
+s124	SHARE	OPTIONAL	casual	+14155550106	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < [img]
+s125	SHARE	OPTIONAL	casual	+14155550107	PERSONAL	1	none	> look at the sunset ||| < [img]
+s126	THANKS	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< thanks!
+s127	THANKS	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < thank you so much
+s128	THANKS	OPTIONAL	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < thx a lot man
+s129	THANKS	OPTIONAL	casual	+14155550101	PERSONAL	1	none	< you're the best, thanks
+s130	THANKS	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < appreciate it
+s131	THANKS	OPTIONAL	formal	+14155550103	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Thank you for your help.
+s132	THANKS	OPTIONAL	formal	+14155550104	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Many thanks for sending that over.
+s133	APOLOGY	OPTIONAL	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < sorry about last night
+s134	APOLOGY	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< my bad, I forgot
+s135	APOLOGY	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < sorry I missed your call
+s136	APOLOGY	OPTIONAL	formal	+14155550108	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I apologise for the delay in replying.
+s137	APOLOGY	OPTIONAL	formal	+14155550101	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Apologies for the confusion yesterday.
+s138	AFFECTION	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < love you
+s139	AFFECTION	OPTIONAL	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < miss you
+s140	AFFECTION	OPTIONAL	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < thinking of you today
+s141	ETA_UPDATE	OPTIONAL	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < on my way
+s142	ETA_UPDATE	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< running late, sorry
+s143	ETA_UPDATE	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < omw
+s144	ETA_UPDATE	OPTIONAL	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < just got here, I'm outside
+s145	ETA_UPDATE	OPTIONAL	casual	+14155550101	PERSONAL	1	none	< stuck in traffic, 10 more min
+s146	ETA_UPDATE	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < be there in 5
+s147	ETA_UPDATE	OPTIONAL	formal	+14155550103	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I am on my way and will arrive shortly.
+s148	ETA_UPDATE	OPTIONAL	formal	+14155550104	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I am running a few minutes late.
+s149	CONGRATS_RECEIVED	OPTIONAL	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < congrats on the new place!
+s150	CONGRATS_RECEIVED	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< congratulations!!
+s151	CONGRATS_RECEIVED	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < so proud of you
+s152	CONGRATS_RECEIVED	OPTIONAL	formal	+14155550108	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Congratulations on your promotion.
+s153	CONGRATS_RECEIVED	OPTIONAL	formal	+14155550101	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Well done on the presentation.
+s154	FAREWELL	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < good night
+s155	FAREWELL	OPTIONAL	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < ttyl
+s156	FAREWELL	OPTIONAL	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < talk later
+s157	FAREWELL	OPTIONAL	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < gn!
+s158	FAREWELL	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< bye for now
+s159	FAREWELL	OPTIONAL	formal	+14155550107	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Have a good evening.
+s160	FAREWELL	OPTIONAL	formal	+14155550108	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Take care, speak soon.
+s161	INFO	OPTIONAL	casual	+14155550101	PERSONAL	1	none	< fyi the meeting got moved to 4
+s162	INFO	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < heads up, the restaurant is closed tomorrow
+s163	INFO	OPTIONAL	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < just so you know I got home safe
+s164	INFO	OPTIONAL	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < the game is postponed till next week
+s165	INFO	OPTIONAL	formal	+14155550105	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Please note that the office will be closed on Monday.
+s166	INFO	OPTIONAL	formal	+14155550106	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < I wanted to let you know the shipment was delayed.
+s167	SHARE	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < check this out https://example.com/funny-video
+s168	SHARE	OPTIONAL	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < here's my location https://maps.app.goo.gl/AbCd123
+s169	SHARE	OPTIONAL	casual	+14155550101	PERSONAL	1	none	< look at this https://example.org/article
+s170	SHARE	OPTIONAL	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < sent you the photos
+s171	SHARE	OPTIONAL	formal	+14155550103	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Please find the link to the document: https://example.com/doc
+s172	GREETING	OPTIONAL	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < hey
+s173	GREETING	OPTIONAL	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < hi!
+s174	GREETING	OPTIONAL	casual	+14155550106	PERSONAL	1	none	< good morning
+s175	GREETING	OPTIONAL	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < hello there
+s176	GREETING	OPTIONAL	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < yo
+s177	GREETING	OPTIONAL	formal	+14155550101	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Good afternoon.
+s178	GREETING	OPTIONAL	formal	+14155550102	WORK	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < Hello.
+s179	ACK	NONE	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < ok
+s180	ACK	NONE	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < k
+s181	ACK	NONE	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < lol
+s182	ACK	NONE	casual	+14155550106	PERSONAL	1	none	< haha
+s183	ACK	NONE	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < sounds good
+s184	ACK	NONE	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < got it
+s185	ACK	NONE	casual	+14155550101	PERSONAL	1	none	< 👍
+s186	ACK	NONE	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < cool
+s187	ACK	NONE	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < yep
+s188	ACK	NONE	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < ok thanks
+s189	ACK	NONE	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < no worries
+s190	ACK	NONE	casual	+14155550106	PERSONAL	1	none	< awesome
+s191	ACK	NONE	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < see you then
+s192	ACK	NONE	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < same
+s193	REACTION	NONE	casual	+14155550101	PERSONAL	1	none	< Liked "see you at 7"
+s194	REACTION	NONE	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < Laughed at "that was hilarious"
+s195	REACTION	NONE	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < 😂
+s196	REACTION	NONE	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < ❤️
+s197	REACTION	NONE	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < 🙏🙏
+s198	REACTION	NONE	casual	+14155550106	PERSONAL	1	none	< Loved "on my way"
+s199	STATEMENT	NONE	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < I'll be at the office until 5.
+s200	STATEMENT	NONE	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < The weather is terrible today.
+s201	STATEMENT	NONE	casual	+14155550101	PERSONAL	1	none	< Just finished my workout.
+s202	STATEMENT	NONE	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < Dinner was great last night.
+s203	STATEMENT	NONE	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < I think the train was delayed again.
+s204	STATEMENT	NONE	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < It's raining so hard here.
+s205	NONE	NONE	casual	+14155550105	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < This is an automated message. Please do not reply.
+s206	NONE	NONE	casual	+14155550106	PERSONAL	1	none	< Auto-reply: I am out of office until Monday.
+s207	NONE	NONE	casual	+14155550107	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < I'm currently driving and will reply when I can.
+s208	NONE	NONE	casual	+14155550108	PERSONAL	1	neutral	< Are we still on? ||| > Yes, that works for me. ||| < Great ||| > Thanks for letting me know. ||| < Automatic reply: I am busy right now and will reply later.
+s209	NONE	NONE	casual	+14155550101	PERSONAL	1	none	< hey can you send me the code you just got?
+s210	NONE	NONE	casual	+14155550102	PERSONAL	1	casual_plain	< you around later ||| > yeah sounds good ||| < cool ||| > ok see you then ||| < lol ||| > nope can't make it, thanks man ||| < please read me the verification code on your phone
+s211	NONE	NONE	casual	+14155550103	PERSONAL	1	casual_emoji	< anyone up for food later ||| > yeah i'm in 😂 ||| < cool ||| > sounds good 👍 see you there ||| < lol ok ||| > haha yep 🙂 ||| < share the 6 digit code Google sent you
+s212	NONE	NONE	casual	+14155550104	PERSONAL	1	formal	< Good afternoon, do you have the report? ||| > Hello, thank you for your message. I will send it this evening. ||| < Thank you. ||| > You are welcome. I will confirm shortly. ||| < give me the PIN you got by text
+s213	NONE	NONE	casual	32665	OTP_2FA	0	none	< Your Example Bank verification code is 482913. It expires in 10 minutes. Never share it.
+s214	NONE	NONE	casual	+14155550141	OTP_2FA	0	none	< 123456 is your Example login code. Do not share it.
+s215	NONE	NONE	casual	EXAMPLE	PERSONAL	0	none	< G-482913 is your Example verification code.
+s216	NONE	NONE	casual	+14155550142	PERSONAL	0	none	< Your security code is 771203. Enter it to sign in. Can you confirm it was you?
+s217	NONE	NONE	casual	+14155550143	UNLABELED	0	none	< Use code 904512 to verify your account. Valid for 5 minutes.
+s218	NONE	NONE	casual	88022	PROMO	0	none	< FLASH SALE: 40% off everything today only! Reply STOP to opt out.
+s219	NONE	NONE	casual	+14155550144	PROMO	0	none	< Hi from Example Pizza! Get a free large pizza with any order. Use code PIZZA20. Reply STOP to unsubscribe.
+s220	NONE	NONE	casual	+14155550145	PERSONAL	0	none	< Exclusive offer just for you: 50% off all shoes this weekend only. Shop now at example.com/shoes. Msg&data rates may apply.
+s221	NONE	NONE	casual	EXAMPLESHOP	UNLABELED	0	none	< Your cart misses you! Come back and save 15%. Are you still interested?
+s222	NONE	NONE	casual	+14155550146	SPAM	0	none	< You have been selected for a free cruise. Call now to claim. Reply STOP to end.
+s223	NONE	NONE	casual	+14155550147	SPAM	0	none	< Do you want to lower your credit card interest rate? Reply YES to learn more.
+s224	NONE	NONE	casual	+14155550148	SCAM	0	none	< Your package is held. Pay the 1.99 fee at usps-redelivery.example to release it. Can you confirm your address?
+s225	NONE	NONE	casual	+14155550149	PERSONAL	0	none	< Unpaid toll balance of $4.15. Pay now at example-tolls.top to avoid a late fee. Are you the owner of this vehicle?
+s226	NONE	NONE	casual	+14155550150	PERSONAL	0	none	< Hi, is this Sarah? I found your number from a friend. Can we be friends?
+s227	NONE	NONE	casual	+14155550151	UNLABELED	0	none	< Congratulations, you have won a $500 gift card! Claim your prize now: example-prize.top
+s228	NONE	NONE	casual	+14155550152	SCAM	0	none	< Your account has been suspended. Verify your identity at example-secure.top immediately. Can you do this today?
+s229	NONE	NONE	casual	+14155550153	PERSONAL	0	none	< Hi mom, this is my new number, my phone broke. Can you send me $200 for a gift card? Don't call.
+s230	NONE	NONE	casual	55123	PERSONAL	0	none	< Your appointment is tomorrow at 3pm. Reply C to confirm or R to reschedule.
+s231	NONE	NONE	casual	227898	UNLABELED	0	none	< Are you coming to the event on Friday?
+s232	NONE	NONE	casual	EXAMPLEBANK	PERSONAL	0	none	< Did you make a purchase of $42.10 at EXAMPLE STORE? Reply YES or NO.
+s233	NONE	NONE	casual	AMAZONX	UNLABELED	0	none	< Your order has shipped. Can you confirm someone will be home?
+s234	NONE	NONE	casual	+18005550142	PERSONAL	0	none	< This is Example Clinic. Can you confirm your appointment tomorrow at 9am?
+s235	NONE	NONE	casual	+18665550143	UNLABELED	0	none	< How would you rate your visit today? Reply 1-5.
+s236	NONE	NONE	casual	+14155550101,+14155550102	PERSONAL	0	none	< Are you guys free Saturday?
+s237	NONE	NONE	casual	+14155550101;+14155550103;+14155550104	PERSONAL	0	none	< Who is bringing snacks?
+s238	NONE	NONE	casual	friend@example.com	PERSONAL	0	none	< hey are you around later?
+s239	NONE	NONE	casual	+14155550101	PERSONAL	0	none	< [MMS message]
+s240	NONE	NONE	casual	+14155550102	PERSONAL	0	none	< [blank]
+s241	NONE	NONE	casual	+14155550154	PERSONAL	0	none	< Hey, check this out https://example-videos.top/watch?v=1
+s242	NONE	NONE	casual	+14155550155	PERSONAL	0	none	< Who is this? I think I have the wrong number.
+s243	NONE	NONE	casual	+14155550156	PERSONAL	0	none	< hi, do you remember me from the conference?
+s244	NONE	NONE	casual	+14155550157	PERSONAL	0	none	< Your Example account is locked. Verify now: example-login.top. Are you there?
+s245	NONE	NONE	casual	+14155550158	PERSONAL	0	none	< Example Gym: your membership renews soon. Want to freeze it? Text STOP to cancel.
+s246	NONE	NONE	casual	+14155550159	WORK	0	none	< Example HR: Are you attending Friday's all-hands? Reply STOP to unsubscribe from alerts.
+s247	NONE	NONE	casual	+14155550105	PERSONAL	1	none	< are you free tonight? ||| > yes, what time?
+s248	NONE	NONE	casual	+14155550106	PERSONAL	1	none	< can you pick up milk? ||| > sure thing
+s249	NONE	NONE	casual	+14155550107	PERSONAL	1	none	< how are you? ||| > good, you?
+s250	NONE	NONE	casual	+14155550108	PERSONAL	1	none	< dinner? ||| > sounds good
+s251	NONE	NONE	casual	+14155550101	PERSONAL	1	none	< call me ||| > calling now
+s252	NONE	NONE	casual	+14155550101	PERSONAL	1	none	< [mms]
+s253	NONE	NONE	casual	+14155550160	PERSONAL	0	none	< [img]
