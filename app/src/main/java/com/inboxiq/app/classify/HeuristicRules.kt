@@ -13,12 +13,6 @@ import com.inboxiq.app.data.MessageLabel
  */
 object HeuristicRules {
 
-    private fun containsAnyWord(text: String, words: List<String>): Boolean =
-        words.any { word -> Regex("\\b${Regex.escape(word)}\\b", RegexOption.IGNORE_CASE).containsMatchIn(text) }
-
-    private fun containsAnyPhrase(text: String, phrases: List<String>): Boolean =
-        phrases.any { text.contains(it, ignoreCase = true) }
-
     private val otpWords = listOf("otp", "code", "verify", "verification")
 
     private val scamWords = listOf("irs")
@@ -28,17 +22,44 @@ object HeuristicRules {
 
     private val promoPhrases = listOf("% off", "unsubscribe", "reply stop", "promo code", "limited time")
 
-    fun match(text: String): ClassificationResult? {
-        if (Regex("\\b\\d{4,8}\\b").containsMatchIn(text) && containsAnyWord(text, otpWords)) {
-            return ClassificationResult(MessageLabel.OTP_2FA, 0.9f)
+    /** The rule that fired, in words the user can check against the message. */
+    data class Reason(val result: ClassificationResult, val explanation: String)
+
+    fun match(text: String): ClassificationResult? = evaluate(text)?.result
+
+    /** Same decision as [match], plus why. Used by the "Why was this labelled?" sheet. */
+    fun explain(text: String): Reason? = evaluate(text)
+
+    private fun firstWord(text: String, words: List<String>): String? =
+        words.firstOrNull { Regex("\\b${Regex.escape(it)}\\b", RegexOption.IGNORE_CASE).containsMatchIn(text) }
+
+    private fun firstPhrase(text: String, phrases: List<String>): String? =
+        phrases.firstOrNull { text.contains(it, ignoreCase = true) }
+
+    private fun evaluate(text: String): Reason? {
+        val number = Regex("\\b\\d{4,8}\\b").find(text)
+        val otpWord = firstWord(text, otpWords)
+        if (number != null && otpWord != null) {
+            return Reason(
+                ClassificationResult(MessageLabel.OTP_2FA, 0.9f),
+                "It has a ${number.value.length}-digit number and the word \"$otpWord\", which is how verification codes are written.",
+            )
         }
 
-        if (containsAnyWord(text, scamWords) || containsAnyPhrase(text, scamPhrases)) {
-            return ClassificationResult(MessageLabel.SCAM, 0.7f)
+        val scamHit = firstWord(text, scamWords) ?: firstPhrase(text, scamPhrases)
+        if (scamHit != null) {
+            return Reason(
+                ClassificationResult(MessageLabel.SCAM, 0.7f),
+                "It uses the pressure wording \"$scamHit\", common in scam texts.",
+            )
         }
 
-        if (containsAnyPhrase(text, promoPhrases)) {
-            return ClassificationResult(MessageLabel.PROMO, 0.7f)
+        val promoHit = firstPhrase(text, promoPhrases)
+        if (promoHit != null) {
+            return Reason(
+                ClassificationResult(MessageLabel.PROMO, 0.7f),
+                "It contains \"$promoHit\", typical of marketing messages.",
+            )
         }
 
         return null

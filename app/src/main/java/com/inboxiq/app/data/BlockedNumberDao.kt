@@ -19,4 +19,10 @@ interface BlockedNumberDao {
 
     @Query("SELECT address FROM blocked_numbers")
     fun observeBlockedAddresses(): Flow<List<String>>
+
+    @Query("SELECT * FROM blocked_numbers ORDER BY blockedAt DESC")
+    suspend fun all(): List<BlockedNumberEntity>
+
+    @Query("SELECT * FROM blocked_numbers ORDER BY blockedAt DESC")
+    fun observeAll(): Flow<List<BlockedNumberEntity>>
 }

@@ -12,6 +12,9 @@ interface ThreadStateDao {
     suspend fun ensure(state: ThreadStateEntity): Long
 
     @Query("SELECT * FROM thread_state")
+    suspend fun all(): List<ThreadStateEntity>
+
+    @Query("SELECT * FROM thread_state")
     fun observeAll(): Flow<List<ThreadStateEntity>>
 
     @Query("SELECT * FROM thread_state WHERE address = :address LIMIT 1")

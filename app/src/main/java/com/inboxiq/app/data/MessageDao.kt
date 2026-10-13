@@ -101,4 +101,32 @@ interface MessageDao {
     /** Case-insensitive body search across every thread, newest first — feeds the search results list. */
     @Query("SELECT * FROM messages WHERE body LIKE '%' || :query || '%' ORDER BY timestamp DESC LIMIT 200")
     fun searchMessages(query: String): Flow<List<MessageEntity>>
+
+    /**
+     * Literal (wildcard-safe) body search for the in-app search screen. Pass the query through
+     * SearchLogic.escapeLike first. The older [searchMessages] is left as-is for its other callers.
+     */
+    @Query("SELECT * FROM messages WHERE body LIKE '%' || :escapedQuery || '%' ESCAPE '\\' ORDER BY timestamp DESC LIMIT 200")
+    fun searchMessagesLiteral(escapedQuery: String): Flow<List<MessageEntity>>
+
+    @Query("UPDATE messages SET isRead = 1 WHERE isRead = 0")
+    suspend fun markAllRead()
+
+    @Query("SELECT * FROM messages WHERE address = :address ORDER BY timestamp ASC")
+    suspend fun messagesForThread(address: String): List<MessageEntity>
+
+    /** Re-inserts rows with their original ids (used by undo-delete). Existing ids are left alone. */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun restoreAll(messages: List<MessageEntity>)
+
+    /** Image attachments in a thread, newest first, for the media gallery. */
+    @Query("SELECT * FROM messages WHERE address = :address AND imagePartUri IS NOT NULL ORDER BY timestamp DESC")
+    fun observeThreadMedia(address: String): Flow<List<MessageEntity>>
+
+    @Query("SELECT COUNT(*) FROM messages")
+    suspend fun count(): Int
+
+    /** Stable paging (by id) so a backup can stream a large history without holding it all in memory. */
+    @Query("SELECT * FROM messages WHERE id > :afterId ORDER BY id ASC LIMIT :limit")
+    suspend fun pageAfter(afterId: Long, limit: Int): List<MessageEntity>
 }

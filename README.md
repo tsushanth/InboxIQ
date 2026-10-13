@@ -166,3 +166,7 @@ fine-tunes; the Kotlin `WordPieceTokenizer` expects a standard BERT
    first is kept).
 4. Decide and implement the privacy-policy change-notification process
    (the one remaining open placeholder in the draft).
+
+## Credits
+
+- Typefaces: [Instrument Sans](https://github.com/Instrument/instrument-sans) and [Instrument Serif](https://github.com/Instrument/instrument-serif), both SIL Open Font License 1.1. Licence texts are in `third_party/fonts/`; the font files are in `app/src/main/res/font/`.

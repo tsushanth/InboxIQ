@@ -56,7 +56,9 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                     // spoofed sender number reusing an address we'd previously seen as benign.
                     // Only this message is corrected, not the address's older history, since
                     // we can't tell from one message whether the whole thread actually changed.
-                    val heuristic = HeuristicRules.match(body)
+                    // ...unless the user hand-filed this sender, in which case their choice stands.
+                    val userCorrected = db.threadStateDao().get(address)?.labelCorrected == true
+                    val heuristic = if (userCorrected) null else HeuristicRules.match(body)
                     when {
                         heuristic != null && heuristic.label != cached?.label -> {
                             db.threadLabelDao().upsert(
