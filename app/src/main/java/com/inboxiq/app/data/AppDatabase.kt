@@ -218,6 +218,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun agentDraftDao(): AgentDraftDao
     abstract fun threadStateDao(): ThreadStateDao
     abstract fun scheduledMessageDao(): ScheduledMessageDao
+    abstract fun replyHistoryDao(): ReplyHistoryDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
