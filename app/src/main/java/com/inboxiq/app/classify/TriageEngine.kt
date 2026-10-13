@@ -54,6 +54,7 @@ object TriageEngine {
     internal const val SPAM_MODEL_WITH_CUE = 0.5f
 
     private val weights = doubleArrayOf(1.0, 0.8, 0.6, 0.5, 0.4)
+    private val SOCIAL = Regex("\\b(lol|lmao|haha+|dinner|drinks?|beers?|party|birthday|movie|wanna|gonna|babe|love you|mom|dad|bro|sis)\\b|[😂❤🎉🍻😅😭]", RegexOption.IGNORE_CASE)
 
     /** Rules only (no model). Used by [HeuristicRules] and by the explainer. */
     fun rulesOnly(text: String, sender: SenderProfile = SenderProfile.UNKNOWN, replies: Int = 0): Verdict =
@@ -65,9 +66,11 @@ object TriageEngine {
         val sender = ctx.sender
         val verdicts = bodies.map { classifyMessage(it, sender, ctx.replies, spam) }
         if (verdicts.size == 1) return verdicts[0]
-        // Recency-weighted vote; newest message counts most.
+        // A scam in the newest message is the conversation's current state (a hijacked friend, a spoofed sender).
+        if (verdicts[0].label == MessageLabel.SCAM) return verdicts[0].copy(usedModel = verdicts.any { it.usedModel })
+        // Otherwise a recency-weighted vote; newest message counts most.
         val score = HashMap<MessageLabel, Double>()
-        // SCAM is boosted so one clear scam message among older normal ones (a hijacked friend) is not outvoted.
+        // An older scam message still gets extra weight, so it is not casually outvoted.
         verdicts.forEachIndexed { i, v -> score.merge(v.label, weights[i] * v.confidence * (if (v.label == MessageLabel.SCAM) 1.6 else 1.0), Double::plus) }
         val winner = score.maxByOrNull { it.value }!!.key
         val pick = verdicts.filter { it.label == winner }.maxByOrNull { it.confidence }!!
@@ -108,7 +111,10 @@ object TriageEngine {
         val scamHints = if (scamScore >= 1.0f) sig.scam.sortedByDescending { it.weight }.take(2).map { it.why } else emptyList()
 
         // 3. Work / promo
-        val workScore = sig.work.sumOf { it.weight.toDouble() }.toFloat() 
+        val workRaw = sig.work.sumOf { it.weight.toDouble() }.toFloat()
+        // Casual social chatter ("lol", "dinner", "drinks") around a meeting or team word is not work, unless a strong work rule fired.
+        val social = sig.work.none { it.weight >= 1.6f } && SOCIAL.containsMatchIn(text)
+        val workScore = if (social) workRaw - 0.8f else workRaw 
         var promoScore = sig.promo.sumOf { it.weight.toDouble() }.toFloat() + (if (sig.hasOptOut) 1.0f else 0f) +
             (if (sender.kind == SenderKind.SHORT_CODE) 0.5f else 0f)
         if (sig.promo.isEmpty()) promoScore = minOf(promoScore, PROMO_THRESHOLD - 0.1f) // opt-out alone is not marketing
