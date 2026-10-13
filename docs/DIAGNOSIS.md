@@ -1,5 +1,14 @@
 # InboxIQ diagnosis (2026-10-13)
 
+> **Update (branch integrate-0.5.0): the relay is now foreground-only.** Decision: the optional "Connect to Claude"
+> relay works only while InboxIQ is open on screen. `RelayForegroundService`, its manifest entry, the
+> `specialUse` permission, our own `FOREGROUND_SERVICE` and `WAKE_LOCK` entries and the battery-optimization
+> prompt are gone. The connection is an in-process manager tied to the app's visible lifecycle (connects on start,
+> disconnects about 5 s after the app leaves the screen, backoff while visible, Settings shows the status).
+> Findings 5 and 6 and the "specialUse versus Play policy" section below describe the previous design and are kept
+> as history. No foreground-service declaration is needed for our own code; see `FOREGROUND_SERVICE_DECLARATION.md`
+> for what libraries still inject. Consent version is now 2, so 0.4.x users must accept the new text.
+
 Scope: app at branch `diagnose-fix` (from `wip-0.4.2-relay-boot`), relay backend `inboxiq-mcp-backend` (read-only),
 legacy `inboxiq-config` (read-only), Fly state via read-only flyctl, live privacy page, store-listing copy.
 The owner has not said what failed, and the Play API exposes no policy status, so the ranking below is
@@ -23,21 +32,21 @@ Before this branch the only gate was a Switch plus a phone-number field (`CloudC
 ### 3. Relay exposes one-time passcodes to the AI agent. (High, certain)
 `read_thread`/`search_messages` returned raw bodies including 2FA codes and a prompt-injected agent (incoming SMS text is attacker-controlled input to the agent) could read them back. FIXED: codes in OTP-classified messages are masked (`RelayRedaction`). Heuristic only; not a guarantee (see limits below).
 
-### 4. Backend `inboxiq-mcp-backend`: weak ownership model and no revocation. (High, certain from code; needs owner decision, backend not touched)
-- `POST /phone/link` is unauthenticated and upserts `phone_number -> relay_token_hash` (`ON CONFLICT DO UPDATE`). Anyone who knows a victim's number can re-link it to their own token, hijack the `phoneConnections` slot, and (a) knock the real phone offline, (b) answer the victim's legitimate Claude session with fabricated text (prompt injection into the victim's agent). They cannot read real messages without also passing the voice OTP, but (b) is real. Fix: bind link to a first-seen token (reject if a different hash is already linked unless proven with the old token or a fresh voice OTP).
-- No revocation: access tokens last 1h but refresh tokens never expire and are never deleted; `/token` refresh issues new access tokens forever. App "off" previously did not touch the backend. Mitigated in the app (token discarded on disable) but the backend should add `DELETE /phone/link` authenticated by relay token that also deletes that phone's access/refresh tokens, and a refresh-token TTL.
-- Ownership proof is a voice call to the number, entered by whoever is at the Claude consent page; there is no consent screen on the server saying what scope the connector gets (single implicit scope).
-- Retention: SQLite on a Fly volume stores phone numbers (plaintext), hashed tokens, OTP challenge rows (6-digit code hashed with unsalted SHA-256, brute-forceable offline but short-lived and the file is private), OAuth client registrations. Expired rows are never purged. Message bodies are not stored and no body logging exists (no request logger; Fly logs show only proxy errors). Twilio retains call logs for the OTP calls (Twilio-side retention not verified).
-- `/mcp` rate limit is per-IP (120/min), `trust proxy` = 1. Fine for now.
-- Deploy is single machine `sjc`, `min_machines_running=1`, healthy (`/healthz` returns ok; deployed version 5, last update 2026-09-27). Secrets present by name: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER.
+### 4. Backend `inboxiq-mcp-backend`: ownership model and token lifecycle are being hardened. (High, needs owner follow-up)
+The review of the relay backend found that phone-to-token linking needs stronger proof of control, and that
+tokens need expiry and revocation. Both are being hardened in the backend repo; the app keeps a seam for the new
+linking scheme (`RelayLinkClient`) and shows "Reconnect needed" when the server rejects a token (401/403).
+Implementation detail is intentionally not recorded in this public repo. Also pending on the backend side:
+purging expired records, a self-service delete for the stored phone number, and a clear scope screen at connector approval.
+The relay does not store message bodies. Deploy: single Fly machine, healthy at review time.
 
-### 5. Foreground service design was invalid on Android 14-16 / targetSdk 36. (High, certain from platform rules; not device-tested here)
+### 5. (Superseded by the foreground-only relay) Foreground service design was invalid on Android 14-16 / targetSdk 36. (High, certain from platform rules; not device-tested here)
 - `foregroundServiceType="dataSync"` on target 35+ has a hard ~6h-per-24h cap; the platform then calls `Service.onTimeout()` and the app is crashed (`ForegroundServiceDidNotStopInTimeException`) if the service does not stop. The service had no `onTimeout`. So an enabled relay crashed the app after ~6h of connection. FIXED (specialUse, which has no cap, plus an `onTimeout` that stops cleanly).
 - WIP `BootReceiver` -> `WorkManager` (45s delay) -> `RelayStartWorker` -> `startForegroundService`: the 45s trick does not make a legal start. Android 12+ forbids starting a foreground service from the background unless an exemption applies (WorkManager is not one), and Android 15 explicitly forbids dataSync from BOOT_COMPLETED. The WIP likely "worked" in the owner's test because that phone was battery-optimization-exempt (an exemption that permits background FGS starts); this is an inference, not verified. On typical user phones the worker would throw `ForegroundServiceStartNotAllowedException` (crash loop on every boot for anyone with the relay left on). FIXED by deleting the boot path; the user reopens the app to reconnect (`MainActivity` already restarts it from a foreground context).
 - Earlier history: Play blocked an upload until `FOREGROUND_SERVICE_DATA_SYNC` was removed (commit 57e8c6c); 3f7593e added it back. Play requires every FGS type to be declared in Console with a justification and demo video. Without that declaration 0.4.x may be rejected again. Draft in `docs/FOREGROUND_SERVICE_DECLARATION.md`.
 - Service bugs also fixed: a second `onStartCommand` (START_STICKY restart, repeated starts) opened another WebSocket without closing the first (duplicate answers, leaked sockets); constant 5s reconnect loop even when the server rejects the token (now exponential to 5 min).
 
-### 6. `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (WIP) is not allowed for this app. (High, policy knowledge; I did not find a Play API to confirm per-app status)
+### 6. (Resolved) `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (WIP) is not allowed for this app. (High, policy knowledge; I did not find a Play API to confirm per-app status)
 Play restricts this permission to apps whose core function breaks without it. SMS delivery to the default SMS app is a manifest-registered broadcast and is unaffected by Doze; only the optional AI relay wants it. Using it risks rejection. REMOVED; the settings now opens the system battery list (no permission) instead.
 
 ### 7. Declarations missing or stale. (Medium, certain)
@@ -59,7 +68,7 @@ My manifest edits are not the whole story. Libraries still inject:
 - `RECEIVE_BOOT_COMPLETED` from WorkManager 2.9.1 (reschedules periodic work; not a service start). Harmless, but it means the permissions declaration should not claim it is absent.
 
 ## specialUse versus Play policy
-Play requires every foreground service type to be declared in Console, and `specialUse` needs a written justification and usually a demo video; reviewers accept it only when no standard type fits. A user-opted-in persistent socket to an AI connector plausibly fits no standard type, but combined with SMS data going to an AI service it will draw close scrutiny, and I judge acceptance uncertain (I cannot check Play's decision; this is judgment, not fact). The alternative that avoids the issue entirely is a foreground-only connection: hold the WebSocket from the visible app (lifecycle-scoped), no foreground service, no wake lock, no notification, no FGS declaration. Trade-off: Claude can reach the phone only while InboxIQ is open on screen, which makes the feature much less useful (the connector is for asking Claude from another device). It is also the lower-risk option for policy. Not implemented: it changes the product and is the owner's call. Ranking of options by Play risk: remove relay < foreground-only < specialUse FGS < dataSync FGS.
+Play requires every foreground service type to be declared in Console, and `specialUse` needs a written justification and usually a demo video; reviewers accept it only when no standard type fits. A user-opted-in persistent socket to an AI connector plausibly fits no standard type, but combined with SMS data going to an AI service it will draw close scrutiny, and I judge acceptance uncertain (I cannot check Play's decision; this is judgment, not fact). The alternative that avoids the issue entirely is a foreground-only connection: hold the WebSocket from the visible app (lifecycle-scoped), no foreground service, no wake lock, no notification, no FGS declaration. Trade-off: Claude can reach the phone only while InboxIQ is open on screen, which makes the feature much less useful (the connector is for asking Claude from another device). It is also the lower-risk option for policy. IMPLEMENTED in 0.5.0 on the owner's decision. Ranking of options by Play risk: remove relay < foreground-only < specialUse FGS < dataSync FGS.
 
 ## Verification (2026-10-13, this branch, `./gradlew testDebugUnitTest assembleDebug`, GRADLE_USER_HOME=$HOME/.gradle because the clearvoice home lacked AGP 8.13.2 offline)
 - Compiled: yes, `assembleDebug` succeeded (debug APK built, not installed anywhere).

@@ -10,16 +10,15 @@ WHAT IT DOES
 - Labels verification codes, promotions, and suspected scams.
 - Block numbers, search messages, voice memos transcribed on-device, dark mode, contact names.
 
-OPTIONAL: CONNECT TO CLAUDE (OFF BY DEFAULT)
+OPTIONAL: CONNECT TO CLAUDE (OFF BY DEFAULT, ONLY WHILE THE APP IS OPEN)
 
-If you choose to turn it on in Settings, InboxIQ can let Claude (claude.ai or Claude Desktop, signed in to your own Claude account) read your messages and draft texts for you. This is the only feature that sends message content off your phone, and it is off until you accept an on-screen disclosure.
+If you choose to turn it on in Settings, InboxIQ can let Claude (claude.ai or Claude Desktop, signed in to your own Claude account) read your messages and draft texts for you, but only while InboxIQ is open on your screen. Closing the app, switching to another app or turning the screen off ends access within a few seconds, and nothing runs in the background. This is the only feature that sends message content off your phone, and it is off until you accept an on-screen disclosure.
 
-When it is on:
-- Claude can list your conversations, search your texts, and read threads when you ask it to. It can see message text, phone numbers, contact names, and times. One-time passcodes are hidden.
-- That data travels from your phone through a relay server operated by InboxIQ's publisher (mcp.kreativekoala.llc) to Anthropic's Claude. The relay passes messages through and does not store them; it stores your phone number and security tokens so it can find your phone.
+When it is on and the app is open:
+- Claude can list your conversations, search your texts, and read threads when you ask it to. It can see message text, sender phone numbers, contact names, and times for the messages it asks for. One-time passcodes are hidden.
+- That data travels from your phone to the InboxIQ relay service (mcp.kreativekoala.llc), then to Claude through the connector on your own Claude account. The relay passes messages through and does not store them; it stores your phone number and security tokens so it can find your phone.
 - Claude can only write drafts. Nothing is sent until you open InboxIQ, read the draft, and tap Send.
-- A notification shows while the connection is active, with a Disconnect button. Turning it off disconnects immediately and discards the phone's connection key.
-- The connection ends if you restart your phone; reopen InboxIQ to reconnect.
+- Settings shows the connection status. Turning it off disconnects immediately and discards the phone's connection key.
 
 If you never turn it on, your messages stay on your device.
 

@@ -8,7 +8,7 @@ pushed 2026-08-02 (commit `637ce29`). Use that URL for the Play Console
 "Privacy Policy" field, not this file — this file remains the working
 draft/reference copy.
 
-_Last updated: 2026-08-02_
+_Last updated: 2026-10-13 (draft; the live page still carries the older text)_
 
 ## What InboxIQ does
 
@@ -33,7 +33,7 @@ or any third party for sorting.
 ## Optional: Connect to Claude (off by default)
 
 If you turn on "Connect to Claude" in Settings and accept the on-screen disclosure, InboxIQ opens a
-connection from your phone to a relay service operated by Kreative Koala (mcp.kreativekoala.llc, hosted on
+connection from your phone, only while InboxIQ is open on your screen, to a relay service operated by Kreative Koala (mcp.kreativekoala.llc, hosted on
 Fly.io in the United States). Through it, Claude (Anthropic), signed in to your own Claude account, can,
 when you ask it to, list your conversations, search your messages, and read threads. What Claude receives:
 message text, phone numbers, contact names, and timestamps. One-time passcodes are masked. Claude may also
@@ -45,10 +45,13 @@ create text drafts; nothing is sent unless you tap Send in InboxIQ.
   number placed through Twilio.
 - Anthropic's handling of what Claude receives is governed by your Claude account's terms and privacy
   settings; Kreative Koala does not control it.
-- To stop: turn the switch off (or tap Disconnect in the notification). That disconnects immediately and
+- Foreground only: Claude can reach your messages only while InboxIQ is open on your screen. When you close the
+  app, switch to another app or turn the screen off, the connection ends within a few seconds. Nothing runs in
+  the background and it does not reconnect until you open InboxIQ again.
+- To stop: turn the switch off in Settings. That disconnects immediately and
   discards your phone's key. To remove the connector from Claude, delete InboxIQ in Claude's Connectors settings.
   To delete the relay's record of your phone number, email support@kreativekoala.llc.
-- The connection ends when your phone restarts; you reopen InboxIQ to reconnect.
+- The relay service is being hardened (phone linking and token expiry/revocation); details will be added here when released.
 
 ## What we don't do
 

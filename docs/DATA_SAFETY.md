@@ -1,4 +1,4 @@
-# Play Console Data safety answer sheet (draft, version with optional Claude connection)
+# Play Console Data safety answer sheet (draft, version with optional foreground-only Claude connection)
 
 Do not submit until the relay decision (keep / gate / remove) is made. If the relay is removed from the
 app, the "Shared" and "Collected" answers below revert to "no data collected / shared", and the older
@@ -10,7 +10,7 @@ listing text is true again.
 - Do you provide a way for users to request that their data be deleted? **Yes**: turning the connection off in the app discards the phone's relay key; relay-side phone number/token records are deleted on request to support@kreativekoala.llc (NOTE: the backend has no self-service delete endpoint yet; add one, or keep this answer as email request only).
 - Independent security review: No.
 
-## Data types (only when the user turns on "Connect to Claude")
+## Data types (only when the user turns on "Connect to Claude"; data can leave the phone only while InboxIQ is open on screen)
 | Data type | Collected | Shared | Purpose | Optional? | Notes |
 |---|---|---|---|---|---|
 | Messages > SMS or MMS | Yes (transmitted through relay, not stored) | Yes, with Anthropic (the AI service the user connects) | App functionality (user-directed AI assistant) | Yes, opt-in | Message text, one-time passcodes masked |
@@ -31,5 +31,5 @@ SMS/MMS, contacts, classification results, voice memos, drafts: local Room datab
 
 ## Related declarations
 - SMS and Call Log permissions declaration: core functionality must be "default SMS handler". The relay is **not** core functionality; present it as user-initiated transfer to a service the user chooses. If the reviewer treats AI-agent access as a non-core transfer, the relay must go. See `play-console-permissions-declaration.md`.
-- Foreground service declaration: `FOREGROUND_SERVICE_DECLARATION.md`.
+- Foreground service declaration: none needed for our own code (the relay is foreground-only); see `FOREGROUND_SERVICE_DECLARATION.md` for the library-injected `dataSync` entry.
 - Policy URL: https://kreativekoala.llc/privacy (section 10 must first be replaced with `privacy-policy-draft.md` text).

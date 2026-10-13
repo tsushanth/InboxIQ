@@ -16,8 +16,8 @@ actual submission, not yet submitted.
 
 - `READ_SMS`, `RECEIVE_SMS`, `SEND_SMS`, `RECEIVE_MMS`, `RECEIVE_WAP_PUSH`
 - `READ_CONTACTS` (for display-name resolution in the inbox UI)
-- Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET`, `WAKE_LOCK`, `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_SPECIAL_USE` (see FOREGROUND_SERVICE_DECLARATION.md)
-- Removed from our own manifest in 0.4.2: `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE_DATA_SYNC`. Libraries still add `RECEIVE_BOOT_COMPLETED` (WorkManager) and `FOREGROUND_SERVICE_DATA_SYNC` (Play Asset Delivery); see DIAGNOSIS.md
+- Not SMS-policy permissions but should be explained in listing/Data safety: `RECORD_AUDIO` (on-device voice memo transcription), `POST_NOTIFICATIONS`, `INTERNET`. InboxIQ declares no foreground-service or wake-lock permission of its own; libraries add some (see FOREGROUND_SERVICE_DECLARATION.md)
+- Removed from our own manifest by 0.5.0: `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `FOREGROUND_SERVICE_DATA_SYNC`, `WAKE_LOCK`. Libraries still add `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` (WorkManager) and `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_DATA_SYNC` (Play Asset Delivery); see FOREGROUND_SERVICE_DECLARATION.md
 
 ## Core functionality justification (per permission)
 
@@ -34,8 +34,9 @@ actual submission, not yet submitted.
 > Separately, an optional feature, OFF by default and enabled only after an
 > on-screen disclosure and consent, lets the user connect their own Claude
 > account (claude.ai / Claude Desktop). When on, message text, sender numbers
-> and contact names are sent, at the user's request, through a relay operated
-> by the developer to Anthropic's Claude. Replies are only drafts; the user
+> and contact names are sent, at the user's request and only while InboxIQ is
+> open on screen (no background service; closing the app ends access), through a
+> relay operated by the developer to Anthropic's Claude. Replies are only drafts; the user
 > must tap Send in InboxIQ. One-time passcodes are masked. This feature is a
 > user-directed transfer, not required for the app's core messaging function.
 
@@ -62,7 +63,7 @@ which Android — not InboxIQ — presents and controls.
 - Message content, sender addresses, and contact names are stored **only**
   in a local on-device database (Room/SQLite). Nothing is synced or backed up.
   Exception: the optional Claude connection (above) transmits them on demand;
-  the relay does not store message content but does store the user's phone number
+  this happens only while the app is open on screen. The relay does not store message content but does store the user's phone number
   and hashed tokens.
 - The classification model runs **on-device** via ONNX Runtime Mobile.
   No network call is made to classify a message. (The optional Claude relay is
