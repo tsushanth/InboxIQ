@@ -58,4 +58,33 @@ class RelayConfigConsentTest {
         RelayConfig.clearConsent(context)
         assertEquals(false, RelayConfig.isEnabled(context))
     }
+
+    @Test
+    fun `consent given under version 1 (0_4_x, background service) no longer counts`() {
+        context.getSharedPreferences("relay_config", Context.MODE_PRIVATE).edit()
+            .putInt("consent_version", 1).putBoolean("enabled", true).commit()
+        assertTrue(RelayConfig.CONSENT_VERSION >= 2)
+        assertFalse(RelayConfig.hasConsent(context))
+        assertFalse(RelayConfig.isEnabled(context))
+    }
+
+    @Test
+    fun `canConnect needs enabled, consent, a linked phone and no pending reconnect`() {
+        RelayConfig.recordConsent(context)
+        RelayConfig.setEnabled(context, true)
+        assertFalse(RelayConfig.canConnect(context)) // no phone yet
+        RelayConfig.setPhoneNumber(context, "+14155551234")
+        assertTrue(RelayConfig.canConnect(context))
+        RelayConfig.markReconnectNeeded(context)
+        assertFalse(RelayConfig.canConnect(context))
+        RelayConfig.clearReconnectNeeded(context)
+        assertTrue(RelayConfig.canConnect(context))
+    }
+
+    @Test
+    fun `disable clears the reconnect-needed flag`() {
+        RelayConfig.markReconnectNeeded(context)
+        RelayConfig.disable(context)
+        assertFalse(RelayConfig.needsReconnect(context))
+    }
 }

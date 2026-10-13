@@ -190,7 +190,7 @@ fun SettingsScreen(
             // ---------- privacy ----------
             Section("Privacy")
             Text(
-                "Sorting happens on this phone. InboxIQ has no accounts, ads or analytics. Nothing leaves the phone unless you turn on Connect to Claude below.",
+                "Sorting happens on this phone. InboxIQ has no accounts, ads or analytics. Nothing leaves the phone unless you turn on Connect to Claude below, and then only while InboxIQ is open.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp)) { Text("Read what InboxIQ does and does not access") }

@@ -125,17 +125,6 @@ class MainActivity : ComponentActivity() {
             addressFromIntent(intent)?.let { vm.screen = Screen.Thread(it) }
         }
 
-        // Self-heal the relay connection: a foreground service getting killed (Doze, low memory, a
-        // reboot) doesn't clear the user's "enabled" preference, and nothing else restarts it.
-        // Runs from an Activity since starting a foreground service from a background-triggered
-        // process start hits Android's background-start restrictions.
-        if (com.inboxiq.app.mcp.RelayConfig.isEnabled(applicationContext) && !com.inboxiq.app.mcp.RelayForegroundService.isRunning) {
-            // isEnabled() is false unless the user accepted the current consent disclosure.
-            runCatching {
-                startForegroundService(Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
-            }
-        }
-
         lifecycleScope.launch { ScheduledSend.reenqueueAll(applicationContext) }
 
         lifecycle.addObserver(LifecycleEventObserver { _, e -> if (e == Lifecycle.Event.ON_RESUME) refreshDefault() })

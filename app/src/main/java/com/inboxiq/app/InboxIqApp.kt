@@ -30,18 +30,20 @@ class InboxIqApp : Application() {
         )
 
         CrashLogger.install(this)
+        // Relay connects only while the app is visible (ProcessLifecycleOwner); see mcp/RelayRuntime.
+        com.inboxiq.app.mcp.RelayRuntime.install(this)
     }
 }
 
 /**
- * Captures otherwise-invisible crashes (e.g. RelayForegroundService dying silently in the
- * background with no logcat history left by the time anyone looks) to a small local file so
+ * Captures otherwise-invisible crashes (e.g. a background worker dying silently
+ * with no logcat history left by the time anyone looks) to a small local file so
  * they can be inspected after the fact via `adb pull`.
  *
  * File-only: there is no existing backend endpoint for crash/status reporting (checked
  * inboxiq-mcp-backend's server.js — only /register, /authorize*, /token, /phone/link, /mcp,
  * /healthz exist) and adding a new one is out of scope here, so this deliberately does not
- * POST anywhere. RelayApi.kt is the only existing HTTP-to-backend pattern in this app, and it
+ * POST anywhere. RelayLinkClient.kt is the only existing HTTP-to-backend pattern in this app, and it
  * talks to a specific, already-existing route (/phone/link) — reusing "the pattern" would mean
  * inventing a new backend route to receive it, which was explicitly ruled out.
  */

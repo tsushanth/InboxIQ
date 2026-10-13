@@ -15,12 +15,15 @@ object RelayConfig {
     private const val KEY_PHONE_NUMBER = "phone_number"
     private const val KEY_ENABLED = "enabled"
     private const val KEY_CONSENT_VERSION = "consent_version"
+    private const val KEY_NEEDS_RECONNECT = "needs_reconnect"
 
     /**
      * Bump when the data the relay exposes (or who receives it) changes, so everyone has to
      * re-read and re-accept the disclosure shown by RelayConsentDialog.
+     * 2: the relay works only while InboxIQ is open on screen (no foreground service); closing the
+     * app ends access. Everyone who accepted version 1 (0.4.x) must accept this text.
      */
-    const val CONSENT_VERSION = 1
+    const val CONSENT_VERSION = 2
 
     private fun prefs(context: Context) = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
@@ -43,6 +46,21 @@ object RelayConfig {
     fun isEnabled(context: Context): Boolean =
         prefs(context).getBoolean(KEY_ENABLED, false) && hasConsent(context)
 
+    /** The server rejected our token (401/403); stay disconnected until the user re-verifies. */
+    fun needsReconnect(context: Context): Boolean = prefs(context).getBoolean(KEY_NEEDS_RECONNECT, false)
+
+    fun markReconnectNeeded(context: Context) {
+        prefs(context).edit().putBoolean(KEY_NEEDS_RECONNECT, true).apply()
+    }
+
+    fun clearReconnectNeeded(context: Context) {
+        prefs(context).edit().putBoolean(KEY_NEEDS_RECONNECT, false).apply()
+    }
+
+    /** Every condition for opening the relay socket (visibility is checked by the connection manager). */
+    fun canConnect(context: Context): Boolean =
+        isEnabled(context) && !phoneNumber(context).isNullOrBlank() && !needsReconnect(context)
+
     fun hasConsent(context: Context): Boolean =
         prefs(context).getInt(KEY_CONSENT_VERSION, 0) >= CONSENT_VERSION
 
@@ -57,7 +75,7 @@ object RelayConfig {
      * within the same disclosure version; call [clearConsent] to withdraw it as well.
      */
     fun disable(context: Context) {
-        prefs(context).edit().putBoolean(KEY_ENABLED, false).remove(KEY_RELAY_TOKEN).apply()
+        prefs(context).edit().putBoolean(KEY_ENABLED, false).putBoolean(KEY_NEEDS_RECONNECT, false).remove(KEY_RELAY_TOKEN).apply()
     }
 
     fun clearConsent(context: Context) {

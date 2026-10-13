@@ -1,22 +1,17 @@
 package com.inboxiq.app.mcp
 
-import android.content.Intent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,12 +19,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
+import com.inboxiq.app.R
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.launch
 
 /**
@@ -43,45 +37,36 @@ import kotlinx.coroutines.launch
 fun CloudConnectSection() {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    // Reflects whether the service is actually alive, not just the persisted preference —
-    // those can drift apart (e.g. the process was killed since), and showing "on" for a dead
-    // connection is worse than showing "off": it tells the user everything's fine when it isn't.
-    var enabled by remember { mutableStateOf(RelayForegroundService.isRunning) }
+    val linkClient = remember { HttpRelayLinkClient() }
+    // The persisted preference says what the user asked for; the live status says what is
+    // actually happening. Both are shown, because "on" with no connection must not look fine.
+    var enabled by remember { mutableStateOf(RelayConfig.isEnabled(context)) }
+    val status by RelayRuntime.status().collectAsState()
     var phoneNumber by remember { mutableStateOf(RelayConfig.phoneNumber(context) ?: "") }
     var isLinking by remember { mutableStateOf(false) }
     var showConsent by remember { mutableStateOf(false) }
     var statusText by remember { mutableStateOf<String?>(null) }
-    var ignoringBatteryOptimizations by remember {
-        mutableStateOf(BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context))
-    }
-
-    // The user can grant the exemption from system Settings (reached via the banner below,
-    // or independently) and come straight back here without the app process restarting, so
-    // recheck on every resume rather than only once at first composition.
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                ignoringBatteryOptimizations = BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context)
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
 
     val startLinking: () -> Unit = {
         isLinking = true
         coroutineScope.launch {
-            val result = RelayApi.linkPhone(phoneNumber, RelayConfig.relayToken(context))
+            val result = linkClient.link(phoneNumber, RelayConfig.relayToken(context))
             isLinking = false
-            if (result.isSuccess) {
-                RelayConfig.setPhoneNumber(context, phoneNumber)
-                RelayConfig.setEnabled(context, true)
-                enabled = true
-                statusText = null
-                context.startForegroundService(Intent(context, RelayForegroundService::class.java))
-            } else {
-                statusText = "Couldn't connect — check your connection and try again."
+            when (result) {
+                LinkResult.Linked -> {
+                    RelayConfig.setPhoneNumber(context, phoneNumber)
+                    RelayConfig.clearReconnectNeeded(context)
+                    RelayConfig.setEnabled(context, true)
+                    enabled = true
+                    statusText = null
+                    RelayRuntime.refresh()
+                }
+                LinkResult.Unauthorized -> {
+                    RelayConfig.markReconnectNeeded(context)
+                    RelayRuntime.refresh()
+                    statusText = context.getString(R.string.relay_status_reconnect_needed)
+                }
+                is LinkResult.Failed -> statusText = "Couldn't connect. Check your connection and try again."
             }
         }
     }
@@ -132,7 +117,7 @@ fun CloudConnectSection() {
                         // Also discards the relay key, so nothing can reach this phone until re-enabled.
                         RelayConfig.disable(context)
                         enabled = false
-                        context.stopService(Intent(context, RelayForegroundService::class.java))
+                        RelayRuntime.refresh()
                     }
                 },
             )
@@ -145,61 +130,33 @@ fun CloudConnectSection() {
     if (enabled) {
         Spacer(Modifier.height(8.dp))
         Text(
+            stringResource(statusLabel(status)),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            stringResource(R.string.relay_foreground_only_note),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        if (status == RelayStatus.RECONNECT_NEEDED) {
+            OutlinedButton(onClick = startLinking, enabled = !isLinking, modifier = Modifier.padding(top = 8.dp)) {
+                Text(stringResource(R.string.relay_reconnect_action))
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
             "Now add InboxIQ as a Connector in claude.ai (Settings → Connectors) — you'll " +
                 "get a call there reading out a verification code for this same phone number.",
             style = MaterialTheme.typography.bodySmall,
         )
     }
-
-    Spacer(Modifier.height(12.dp))
-    BatteryOptimizationStatusRow(
-        ignoringBatteryOptimizations = ignoringBatteryOptimizations,
-        onRequestExemption = { BatteryOptimizationHelper.requestExemption(context) },
-    )
 }
 
-/**
- * Persistent status row for the relay's Doze exemption. Shown regardless of whether the
- * relay switch above is currently on — the exemption matters the moment it's enabled, and a
- * user checking this screen while the relay is off should still see it's not protected yet.
- */
-@Composable
-private fun BatteryOptimizationStatusRow(
-    ignoringBatteryOptimizations: Boolean,
-    onRequestExemption: () -> Unit,
-) {
-    if (ignoringBatteryOptimizations) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("✓", color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(end = 8.dp))
-            Text(
-                "Background delivery: reliable",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .background(MaterialTheme.colorScheme.errorContainer)
-                .padding(12.dp),
-        ) {
-            Text(
-                "Background reliability may be limited",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onErrorContainer,
-            )
-            Text(
-                "Android's battery optimization can silently stop the relay connection " +
-                    "while InboxIQ is in the background. You can exempt InboxIQ in system settings. The connection also stops if you restart your phone; reopen InboxIQ to reconnect.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier.padding(top = 2.dp, bottom = 8.dp),
-            )
-            Button(onClick = onRequestExemption) {
-                Text("Open battery settings")
-            }
-        }
-    }
+fun statusLabel(status: RelayStatus): Int = when (status) {
+    RelayStatus.OFF -> R.string.relay_status_off
+    RelayStatus.CONNECTING -> R.string.relay_status_connecting
+    RelayStatus.CONNECTED -> R.string.relay_status_connected
+    RelayStatus.OFFLINE -> R.string.relay_status_offline
+    RelayStatus.PAUSED -> R.string.relay_status_paused
+    RelayStatus.RECONNECT_NEEDED -> R.string.relay_status_reconnect_needed
 }
