@@ -74,8 +74,9 @@ android {
     }
 
     sourceSets {
-        // Lets MigrationTestHelper (room-testing) find the exported schema JSON in unit tests.
-        getByName("test").assets.srcDir("$projectDir/schemas")
+        // Lets MigrationTestHelper (room-testing) find the exported schema JSON under Robolectric.
+        // Debug variant only, so release builds never carry the schema files.
+        getByName("debug").assets.srcDir("$projectDir/schemas")
     }
 
     testOptions {
@@ -153,6 +154,7 @@ dependencies {
     testImplementation("androidx.test:core:1.6.1")
     testImplementation("androidx.test.ext:junit:1.2.1")
     testImplementation("androidx.work:work-testing:2.9.1")
+    testImplementation("androidx.room:room-testing:2.8.4")
     testImplementation("org.mockito:mockito-core:5.14.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")

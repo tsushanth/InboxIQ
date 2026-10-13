@@ -161,14 +161,53 @@ val MIGRATION_13_14 = object : Migration(13, 14) {
     }
 }
 
+/**
+ * v15: per-conversation user state (pin / archive / mute / draft / corrected label) and
+ * scheduled-or-undoable outgoing texts. Purely additive: two new tables, no change to
+ * messages, thread_labels or blocked_numbers, so no existing row can be lost.
+ */
+val MIGRATION_14_15 = object : Migration(14, 15) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `thread_state` (
+                `address` TEXT NOT NULL,
+                `pinnedAt` INTEGER,
+                `archived` INTEGER NOT NULL,
+                `mutedUntil` INTEGER,
+                `draft` TEXT,
+                `labelCorrected` INTEGER NOT NULL,
+                PRIMARY KEY(`address`)
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `scheduled_messages` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `address` TEXT NOT NULL,
+                `body` TEXT NOT NULL,
+                `sendAt` INTEGER NOT NULL,
+                `createdAt` INTEGER NOT NULL,
+                `isUndoWindow` INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_scheduled_messages_address` ON `scheduled_messages` (`address`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_scheduled_messages_sendAt` ON `scheduled_messages` (`sendAt`)")
+    }
+}
+
 @Database(
     entities = [
         MessageEntity::class,
         ThreadLabelEntity::class,
         BlockedNumberEntity::class,
         AgentDraftEntity::class,
+        ThreadStateEntity::class,
+        ScheduledMessageEntity::class,
     ],
-    version = 14,
+    version = 15,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -177,6 +216,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun threadLabelDao(): ThreadLabelDao
     abstract fun blockedNumberDao(): BlockedNumberDao
     abstract fun agentDraftDao(): AgentDraftDao
+    abstract fun threadStateDao(): ThreadStateDao
+    abstract fun scheduledMessageDao(): ScheduledMessageDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -188,7 +229,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "inboxiq.db",
                 )
-                    .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14)
+                    .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
                     // Only wipes on a downgrade (e.g. a bad build during dev) — real
                     // forward upgrades must go through an explicit migration above.
                     .fallbackToDestructiveMigrationOnDowngrade()
