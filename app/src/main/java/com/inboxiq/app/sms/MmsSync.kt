@@ -20,8 +20,14 @@ import com.inboxiq.app.data.MessageEntity
  */
 object MmsSync {
 
-    private data class Parts(val text: String, val imagePartUri: String?)
-    private data class Row(val id: Long, val timestamp: Long, val isIncoming: Boolean)
+    internal data class Parts(val text: String, val imagePartUri: String?)
+    private data class Row(val id: Long, val timestamp: Long, val isIncoming: Boolean, val read: Boolean, val threadId: Long)
+
+    /** Addresses of one provider MMS: the FROM header (type 137) and the first real recipient (type 151). */
+    internal data class Addresses(val from: String?, val firstTo: String?)
+
+    /** The provider's placeholder for "this device" in the FROM header of outgoing MMS. */
+    private const val OWN_ADDRESS_TOKEN = "insert-address-token"
 
     private const val RECENT_PAGE = 100
 
@@ -57,24 +63,28 @@ object MmsSync {
 
     private suspend fun page(env: ImportEnv, selection: String, args: Array<String>, order: String, limit: Int): PageResult {
         val rows = ArrayList<Row>(limit)
-        val projection = arrayOf(Telephony.Mms._ID, Telephony.Mms.DATE, Telephony.Mms.MESSAGE_BOX)
+        val projection = arrayOf(Telephony.Mms._ID, Telephony.Mms.DATE, Telephony.Mms.MESSAGE_BOX, Telephony.Mms.READ, Telephony.Mms.THREAD_ID)
         val cursor = env.resolver.query(Telephony.Mms.CONTENT_URI, projection, selection, args, order)
             ?: throw ProviderUnavailableException("mms provider returned no cursor")
         cursor.use {
             val idIdx = it.getColumnIndexOrThrow(Telephony.Mms._ID)
             val dateIdx = it.getColumnIndexOrThrow(Telephony.Mms.DATE)
             val boxIdx = it.getColumnIndexOrThrow(Telephony.Mms.MESSAGE_BOX)
+            val readIdx = it.getColumnIndexOrThrow(Telephony.Mms.READ)
+            val threadIdx = it.getColumnIndexOrThrow(Telephony.Mms.THREAD_ID)
             while (rows.size < limit && it.moveToNext()) {
-                rows += Row(it.getLong(idIdx), it.getLong(dateIdx) * 1000, it.getInt(boxIdx) == Telephony.Mms.MESSAGE_BOX_INBOX)
+                rows += Row(
+                    it.getLong(idIdx), it.getLong(dateIdx) * 1000, it.getInt(boxIdx) == Telephony.Mms.MESSAGE_BOX_INBOX,
+                    read = it.getInt(readIdx) == 1, threadId = it.getLong(threadIdx),
+                )
             }
         }
         if (rows.isEmpty()) return PageResult.EMPTY
 
         // Provider reads (outside any DB transaction): sender per message, parts for the whole page.
         val ids = rows.map { it.id }
-        val addresses = rows.map { env.normalize(senderAddress(env.resolver, it.id) ?: "unknown") }
-        val partsById = (if (env.batchParts) batchParts(env.resolver, ids) else null) ?: HashMap()
-        val parts = rows.map { partsById[it.id] ?: messageParts(env.resolver, it.id) }
+        val addresses = rows.map { env.normalize(conversationAddress(env.resolver, it.id, it.isIncoming) ?: "unknown") }
+        val parts = partsFor(env, ids)
 
         val db = env.db
         val dao = db.messageDao()
@@ -103,7 +113,12 @@ object MmsSync {
                     }
                     continue
                 }
-                val existing = dao.findByAddressTimestamp(address, row.timestamp, row.isIncoming)
+                val existing = if (row.isIncoming) {
+                    dao.findByAddressTimestamp(address, row.timestamp, true)
+                } else {
+                    // MmsSender stamps its local row from the clock; the provider's `date` is whole seconds.
+                    sentMatch(dao.outgoingBetween(address, row.timestamp, row.timestamp + 999), p)
+                }
                 if (existing != null) {
                     if (p.imagePartUri != null && existing.imagePartUri == null) {
                         dao.update(existing.copy(body = p.text, imagePartUri = p.imagePartUri))
@@ -112,12 +127,13 @@ object MmsSync {
                 } else {
                     pendingIndex[key] = pending.size
                     pending += MessageEntity(
-                        threadId = 0,
+                        threadId = row.threadId,
                         address = address,
                         body = p.text,
                         timestamp = row.timestamp,
                         isIncoming = row.isIncoming,
-                        isRead = !row.isIncoming, // incoming MMS starts unread; our own sent MMS doesn't need the concept
+                        // The provider's `read` flag decides; sent MMS are read by definition.
+                        isRead = !row.isIncoming || row.read,
                         imagePartUri = p.imagePartUri,
                     )
                 }
@@ -127,18 +143,46 @@ object MmsSync {
         return PageResult(rows.size, ids.min(), ids.max(), inserted)
     }
 
-    private fun senderAddress(resolver: ContentResolver, mmsId: Long): String? {
+    /**
+     * A local row for the same sent MMS: same conversation, a clock-stamped time within the provider's
+     * second, and either the same text or an attachment on both sides. A plain SMS sent in the same second
+     * never matches (it has no attachment and a different body).
+     */
+    internal fun sentMatch(candidates: List<MessageEntity>, p: Parts): MessageEntity? =
+        candidates.firstOrNull { it.body == p.text || (p.imagePartUri != null && it.imagePartUri != null) }
+
+    /**
+     * Which address a provider MMS belongs to in our model: the sender for received MMS, the recipient
+     * for sent MMS (the FROM header of a sent MMS is this phone, not the conversation). Sent MMS with no
+     * recipient row fall back to the FROM header, which is what earlier builds stored.
+     */
+    private fun conversationAddress(resolver: ContentResolver, mmsId: Long, incoming: Boolean): String? {
+        val a = addresses(resolver, mmsId)
+        return if (incoming) a.from else (a.firstTo ?: a.from)
+    }
+
+    internal fun addresses(resolver: ContentResolver, mmsId: Long): Addresses {
+        var from: String? = null
+        var to: String? = null
         val uri = Uri.parse("content://mms/$mmsId/addr")
         resolver.query(uri, arrayOf("address", "type"), null, null, null)?.use { cursor ->
+            val addressIdx = cursor.getColumnIndexOrThrow("address")
+            val typeIdx = cursor.getColumnIndexOrThrow("type")
             while (cursor.moveToNext()) {
-                // type 137 = PDU_HEADERS_FROM in the MMS spec
-                val type = cursor.getInt(cursor.getColumnIndexOrThrow("type"))
-                if (type == 137) {
-                    return cursor.getString(cursor.getColumnIndexOrThrow("address"))
+                // 137 = PDU_HEADERS_FROM, 151 = PDU_HEADERS_TO in the MMS spec
+                when (cursor.getInt(typeIdx)) {
+                    137 -> if (from == null) from = cursor.getString(addressIdx)
+                    151 -> if (to == null) to = cursor.getString(addressIdx)?.takeIf { it.isNotBlank() && it != OWN_ADDRESS_TOKEN }
                 }
             }
         }
-        return null
+        return Addresses(from, to)
+    }
+
+    /** Text and first image of each given provider MMS (page-batched, with the per-message fallback). */
+    internal fun partsFor(env: ImportEnv, ids: List<Long>): List<Parts> {
+        val byId = (if (env.batchParts) batchParts(env.resolver, ids) else null) ?: HashMap()
+        return ids.map { byId[it] ?: messageParts(env.resolver, it) }
     }
 
     /**

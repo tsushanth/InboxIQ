@@ -59,7 +59,7 @@ class IncomingSmsStore(
         )
         var id = db.messageDao().insert(entity)
         if (id == -1L) {
-            // Either the import saw the provider row in the gap between steps 1 and 2 (it stores incoming rows as read),
+            // Either the import saw the provider row in the gap between steps 1 and 2 (it stores the row with the provider's read flag, 0 here, so this is normally a no-op),
             // or this is a genuine duplicate. Reuse the existing row; if we just created the provider row, it is the former.
             val existing = db.messageDao().findByKey(entity.address, entity.timestamp, entity.body) ?: return null
             if (row != null && existing.isRead && existing.isIncoming) db.messageDao().markUnread(existing.id)

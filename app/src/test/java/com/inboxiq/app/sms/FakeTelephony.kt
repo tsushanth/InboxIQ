@@ -12,7 +12,11 @@ data class FakeSms(
     val read: Int = 1, val seen: Int = 1, val dateSent: Long = 0, val serviceCenter: String? = null, val errorCode: Int = 0, val subId: Int = -1,
 )
 data class FakeMmsPart(val id: Long, val contentType: String, val text: String? = null)
-data class FakeMms(val id: Long, val dateSeconds: Long, val box: Int, val from: String?, val parts: List<FakeMmsPart> = emptyList())
+data class FakeMms(
+    val id: Long, val dateSeconds: Long, val box: Int, val from: String?, val parts: List<FakeMmsPart> = emptyList(),
+    /** Recipients (addr type 151), like a sent MMS in the real provider. */
+    val to: List<String> = emptyList(), val read: Int = 1, val thread: Long = 0,
+)
 
 /**
  * In-memory stand-in for the Telephony providers (Robolectric has none). Understands only the
@@ -80,7 +84,10 @@ class FakeTelephony {
                 auth == "mms" && seg.isEmpty() -> mmsRows(projection, selection, selectionArgs, sortOrder)
                 auth == "mms" && seg.size == 2 && seg[1] == "addr" -> {
                     val c = MatrixCursor(arrayOf("address", "type"))
-                    mms.firstOrNull { it.id == seg[0].toLong() }?.from?.let { c.addRow(arrayOf<Any?>(it, 137)) }
+                    mms.firstOrNull { it.id == seg[0].toLong() }?.let { m ->
+                        m.from?.let { c.addRow(arrayOf<Any?>(it, 137)) }
+                        m.to.forEach { c.addRow(arrayOf<Any?>(it, 151)) }
+                    }
                     c
                 }
                 auth == "mms" && seg.size == 2 && seg[1] == "part" -> parts(listOf(seg[0].toLong()))
@@ -125,7 +132,7 @@ class FakeTelephony {
             for (i in idx) {
                 val r = mms[i]
                 c.addRow(cols.map { col ->
-                    when (col) { "_id" -> r.id; "date" -> r.dateSeconds; "msg_box" -> r.box; else -> null }
+                    when (col) { "_id" -> r.id; "date" -> r.dateSeconds; "msg_box" -> r.box; "read" -> r.read; "thread_id" -> r.thread; else -> null }
                 })
             }
             return c
@@ -152,7 +159,22 @@ class FakeTelephony {
         override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?) = error("provider deletes are not allowed")
 
         override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
-            if (uri.authority != "sms" || values == null) return 0
+            if (values == null) return 0
+            if (uri.authority == "mms") {
+                if (!writable) throw SecurityException("not the default SMS app")
+                var k = 0
+                for (i in mms.indices) {
+                    val r = mms[i]
+                    val hit = when (selection) {
+                        "thread_id = ? AND read = 0" -> r.thread == selectionArgs!![0].toLong() && r.read == 0
+                        "read = 0" -> r.read == 0
+                        else -> error("fake provider cannot parse mms update selection: $selection")
+                    }
+                    if (hit) { mms[i] = r.copy(read = values.getAsInteger("read") ?: r.read); k++ }
+                }
+                return k
+            }
+            if (uri.authority != "sms") return 0
             if (!writable) throw SecurityException("not the default SMS app")
             val seg = uri.pathSegments
             var n = 0

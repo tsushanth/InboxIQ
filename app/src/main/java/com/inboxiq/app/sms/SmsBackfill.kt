@@ -25,6 +25,7 @@ object SmsBackfill {
         Telephony.Sms.BODY,
         Telephony.Sms.DATE,
         Telephony.Sms.TYPE,
+        Telephony.Sms.READ,
     )
 
     /** Highest `_id` in the provider, or null when it holds no SMS. */
@@ -63,6 +64,7 @@ object SmsBackfill {
             val bodyIdx = it.getColumnIndexOrThrow(Telephony.Sms.BODY)
             val dateIdx = it.getColumnIndexOrThrow(Telephony.Sms.DATE)
             val typeIdx = it.getColumnIndexOrThrow(Telephony.Sms.TYPE)
+            val readIdx = it.getColumnIndexOrThrow(Telephony.Sms.READ)
             while (read < limit && it.moveToNext()) {
                 read++
                 val id = it.getLong(idIdx)
@@ -72,12 +74,15 @@ object SmsBackfill {
                 val body = it.getString(bodyIdx) ?: ""
                 val timestamp = it.getLong(dateIdx)
                 if (env.tombstones.isSuppressed(address, timestamp, body)) continue
+                val incoming = it.getInt(typeIdx) == Telephony.Sms.MESSAGE_TYPE_INBOX
                 entities += MessageEntity(
                     threadId = it.getLong(threadIdx),
                     address = address,
                     body = body,
                     timestamp = timestamp,
-                    isIncoming = it.getInt(typeIdx) == Telephony.Sms.MESSAGE_TYPE_INBOX,
+                    isIncoming = incoming,
+                    // The provider's `read` flag is the truth for what was already read elsewhere; sent items are read by definition.
+                    isRead = !incoming || it.getInt(readIdx) == 1,
                 )
             }
         }

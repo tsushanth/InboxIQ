@@ -62,6 +62,8 @@ class ProviderSms(private val resolver: ContentResolver) {
         val values = ContentValues().apply { put(Telephony.Sms.READ, 1); put(Telephony.Sms.SEEN, 1) }
         for (t in threadIds) {
             resolver.update(Telephony.Sms.CONTENT_URI, values, "${Telephony.Sms.THREAD_ID} = ? AND ${Telephony.Sms.READ} = 0", arrayOf(t.toString()))
+            // Imported MMS carry their provider thread id too; SMS and MMS share one thread id space.
+            resolver.update(Telephony.Mms.CONTENT_URI, values, "${Telephony.Mms.THREAD_ID} = ? AND ${Telephony.Mms.READ} = 0", arrayOf(t.toString()))
         }
     }
 
