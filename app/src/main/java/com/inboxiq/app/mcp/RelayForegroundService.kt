@@ -2,6 +2,7 @@ package com.inboxiq.app.mcp
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit
  */
 class RelayForegroundService : Service() {
 
+    private var reconnectDelayMs = RECONNECT_DELAY_MS
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var webSocket: WebSocket? = null
     private val client = OkHttpClient.Builder()
@@ -58,10 +60,29 @@ class RelayForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // startForeground() must run promptly after startForegroundService() even if we are
+        // about to stop, or the OS kills the app with a "did not call startForeground" crash.
         startForeground(NOTIFICATION_ID, buildNotification())
-        connect()
+        // Never run without a recorded, current consent (e.g. a stale START_STICKY restart, or
+        // a user who enabled the relay in a version that had no disclosure screen).
+        if (intent?.action == ACTION_STOP || !RelayConfig.isEnabled(this)) {
+            if (intent?.action == ACTION_STOP) RelayConfig.disable(this)
+            stopSelf()
+            return START_NOT_STICKY
+        }
         isRunning = true
+        reconnectDelayMs = RECONNECT_DELAY_MS
+        connect()
         return START_STICKY
+    }
+
+    /**
+     * Only called for time-limited foreground service types (dataSync on Android 15+). This
+     * service is declared specialUse, which has no limit, but handling the callback keeps us
+     * safe if the declared type is ever changed: the OS crashes the app if we ignore it.
+     */
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        stopSelf()
     }
 
     override fun onDestroy() {
@@ -75,6 +96,9 @@ class RelayForegroundService : Service() {
     }
 
     private fun connect() {
+        // Replace, never stack: a second start command or a late reconnect must not leave two
+        // sockets (and two copies of every relayed answer) alive.
+        webSocket?.cancel()
         val token = RelayConfig.relayToken(this)
         val request = Request.Builder()
             .url(RELAY_WS_URL)
@@ -83,6 +107,7 @@ class RelayForegroundService : Service() {
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
+                reconnectDelayMs = RECONNECT_DELAY_MS
                 connectionState = ConnectionState.CONNECTED
             }
 
@@ -101,11 +126,13 @@ class RelayForegroundService : Service() {
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                if (webSocket !== this@RelayForegroundService.webSocket) return // superseded socket
                 connectionState = ConnectionState.DISCONNECTED
                 scheduleReconnect()
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                if (webSocket !== this@RelayForegroundService.webSocket) return
                 connectionState = ConnectionState.DISCONNECTED
                 scheduleReconnect()
             }
@@ -115,7 +142,9 @@ class RelayForegroundService : Service() {
     private fun scheduleReconnect() {
         if (!isRunning) return
         scope.launch {
-            kotlinx.coroutines.delay(RECONNECT_DELAY_MS)
+            val wait = reconnectDelayMs
+            reconnectDelayMs = (reconnectDelayMs * 2).coerceAtMost(MAX_RECONNECT_DELAY_MS)
+            kotlinx.coroutines.delay(wait)
             if (isRunning) connect()
         }
     }
@@ -125,18 +154,26 @@ class RelayForegroundService : Service() {
             val channel = NotificationChannel(CHANNEL_ID, "Claude connection active", NotificationManager.IMPORTANCE_LOW)
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         }
+        val stop = PendingIntent.getService(
+            this, 0,
+            Intent(this, RelayForegroundService::class.java).setAction(ACTION_STOP),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_lock_lock)
-            .setContentTitle("InboxIQ connected to Claude")
-            .setContentText("Claude can read messages and, only as drafts you review, propose texts to send.")
+            .setContentTitle("InboxIQ is sharing messages with Claude")
+            .setContentText("Claude can read your texts and draft replies you must approve.")
             .setOngoing(true)
+            .addAction(0, "Disconnect", stop)
             .build()
     }
 
     companion object {
         private const val CHANNEL_ID = "relay_connection"
         private const val NOTIFICATION_ID = 9002
+        const val ACTION_STOP = "com.inboxiq.app.mcp.ACTION_STOP_RELAY"
         private const val RECONNECT_DELAY_MS = 5_000L
+        private const val MAX_RECONNECT_DELAY_MS = 5 * 60_000L
         private const val RELAY_WS_URL = "wss://mcp.kreativekoala.llc/phone-ws"
 
         @Volatile var isRunning: Boolean = false

@@ -2,23 +2,18 @@ package com.inboxiq.app.mcp
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 
 /**
- * Doze/App-Standby exemption for the relay connection. RelayForegroundService holds a
- * WAKE_LOCK while its WebSocket is open, but that alone doesn't stop Doze from tearing the
- * process down in the background — confirmed on a real device that InboxIQ is absent from
- * `adb shell dumpsys deviceidle whitelist` by default. Without this exemption the relay
- * silently stops working whenever the app is backgrounded, with no error surfaced anywhere.
+ * Read-only battery-optimization status plus a link to the system's battery-optimization list.
  *
- * Deliberately not auto-requested on app launch: REQUEST_IGNORE_BATTERY_OPTIMIZATIONS throws
- * up a system dialog, and firing that unprompted on every cold start is the kind of thing that
- * gets an app flagged in Play review and annoys users who haven't even turned the relay on
- * yet. Instead this is surfaced as a banner in the relay settings section (CloudConnectSection)
- * so the request is tied to the user's own decision to enable the relay.
+ * Deliberately does NOT use ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS / the matching
+ * permission: Google Play restricts that permission to apps whose core function breaks without
+ * it, and an optional AI relay does not qualify (incoming SMS reach the default SMS app through
+ * a manifest receiver regardless of Doze). Users who want the connection to stay up in the
+ * background can exempt InboxIQ themselves from the system list this opens.
  */
 object BatteryOptimizationHelper {
     private const val TAG = "BatteryOptHelper"
@@ -29,26 +24,14 @@ object BatteryOptimizationHelper {
         return powerManager.isIgnoringBatteryOptimizations(context.packageName)
     }
 
-    /**
-     * Launches the direct "exempt this app" system dialog. Some OEM ROMs (custom battery
-     * managers on top of AOSP) don't handle the direct-request intent, so this falls back to
-     * the general battery-optimization list where the user can find InboxIQ and exempt it
-     * manually.
-     */
+    /** Opens the system battery-optimization list (needs no special permission). */
     fun requestExemption(context: Context) {
-        val directIntent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-            data = Uri.parse("package:${context.packageName}")
-        }
         try {
-            context.startActivity(directIntent)
+            context.startActivity(
+                Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
         } catch (e: Exception) {
-            Log.w(TAG, "Direct battery-exemption request not handled, falling back to settings list", e)
-            try {
-                val fallbackIntent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-                context.startActivity(fallbackIntent)
-            } catch (e2: Exception) {
-                Log.w(TAG, "Battery-optimization settings list also unavailable", e2)
-            }
+            Log.w(TAG, "Battery-optimization settings list unavailable", e)
         }
     }
 }

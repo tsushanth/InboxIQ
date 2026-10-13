@@ -79,7 +79,7 @@ object McpTools {
             val latest = thread.latestMessage
             val name = ContactResolver.displayNameFor(context, latest.address) ?: latest.address
             val unread = if (thread.unreadCount > 0) " (${thread.unreadCount} unread)" else ""
-            "$name [${latest.address}]$unread — ${dateFormat.format(Date(latest.timestamp))}: ${latest.body.take(80)}"
+            "$name [${latest.address}]$unread — ${dateFormat.format(Date(latest.timestamp))}: ${RelayRedaction.redact(latest.body).take(80)}"
         }
         return textResult(if (lines.isEmpty()) "No conversations." else lines.joinToString("\n"))
     }
@@ -107,7 +107,7 @@ object McpTools {
             "me"
         }
         val addrSuffix = if (includeAddress) " [${message.address}]" else ""
-        return "${dateFormat.format(Date(message.timestamp))} $who$addrSuffix: ${message.body}"
+        return "${dateFormat.format(Date(message.timestamp))} $who$addrSuffix: ${RelayRedaction.redact(message.body)}"
     }
 
     private suspend fun sendMessage(context: Context, address: String, body: String): JsonObject {

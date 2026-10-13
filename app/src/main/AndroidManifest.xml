@@ -14,23 +14,18 @@
          leaves the device. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!-- Optional, off-by-default: connects to inboxiq-mcp-backend so this phone can be added
-         as a Claude Connector (claude.ai / Desktop) from any device — not LAN-restricted.
-         Message content passes through that backend in transit to relay live tool calls; it
-         is not stored there. See mcp/ and inboxiq-mcp-backend's README. -->
+    <!-- Optional, off-by-default, behind an explicit consent dialog: connects to
+         inboxiq-mcp-backend (mcp.kreativekoala.llc) so the user can add this phone as a Claude
+         Connector. When enabled, message text, sender numbers and contact names are sent to
+         that service and on to Claude in response to the user's own requests. See mcp/ and
+         docs/DIAGNOSIS.md. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <!-- Held only while the relay WebSocket is open (see RelayForegroundService), so Doze
-         doesn't silently throttle the connection while it still reports as "connected". -->
+    <!-- specialUse (no 6h cap, unlike dataSync on Android 15+): a user-initiated, visible
+         connection to a service the user chose. Declared in Play Console, see
+         docs/FOREGROUND_SERVICE_DECLARATION.md. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- Held only while the relay WebSocket is open (see RelayForegroundService). -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- Lets BootReceiver restart the relay after a device reboot — otherwise the connection
-         silently stays dark until the user happens to reopen the app themselves. -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- Lets the user exempt InboxIQ from Doze/App Standby so the relay's WebSocket survives
-         being backgrounded. Only the "normal" permission needed to launch the system's
-         ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS dialog — see BatteryOptimizationHelper,
-         surfaced from the relay settings screen, not requested automatically on launch. -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".InboxIqApp"
@@ -119,20 +114,18 @@
         </provider>
 
         <!-- Holds the persistent WebSocket connection to inboxiq-mcp-backend (see
-             mcp/RelayForegroundService.kt) — started from Settings when the user enables the
-             connection, and restarted after reboot by BootReceiver if it was left enabled. -->
+             mcp/RelayForegroundService.kt) — started only from the foreground app UI after the
+             user accepts the consent dialog. NOT restarted at boot: Android 12+ blocks
+             background foreground-service starts and Android 15 blocks dataSync from
+             BOOT_COMPLETED, so the user reopens the app to reconnect. -->
         <service
             android:name=".mcp.RelayForegroundService"
             android:exported="false"
-            android:foregroundServiceType="dataSync" />
-
-        <receiver
-            android:name=".mcp.BootReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-enabled, visible connection to the Claude AI connector relay (mcp.kreativekoala.llc); holds one WebSocket open so the user's own Claude session can read and draft messages. Never started in the background or at boot." />
+        </service>
 
         <!-- Default apps that provide RCS messaging must handle this -->
         <service

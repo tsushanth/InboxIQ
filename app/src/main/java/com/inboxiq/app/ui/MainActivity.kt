@@ -180,7 +180,10 @@ class MainActivity : ComponentActivity() {
         // foreground service from a background-triggered process start hits Android's
         // background-start restrictions; opening the app is always a safe, foregrounded context.
         if (com.inboxiq.app.mcp.RelayConfig.isEnabled(applicationContext) && !com.inboxiq.app.mcp.RelayForegroundService.isRunning) {
-            startForegroundService(android.content.Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
+            // isEnabled() is false unless the user accepted the current consent disclosure.
+            runCatching {
+                startForegroundService(android.content.Intent(this, com.inboxiq.app.mcp.RelayForegroundService::class.java))
+            }
         }
 
         setContent {

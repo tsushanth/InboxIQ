@@ -49,6 +49,7 @@ fun CloudConnectSection() {
     var enabled by remember { mutableStateOf(RelayForegroundService.isRunning) }
     var phoneNumber by remember { mutableStateOf(RelayConfig.phoneNumber(context) ?: "") }
     var isLinking by remember { mutableStateOf(false) }
+    var showConsent by remember { mutableStateOf(false) }
     var statusText by remember { mutableStateOf<String?>(null) }
     var ignoringBatteryOptimizations by remember {
         mutableStateOf(BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context))
@@ -68,11 +69,36 @@ fun CloudConnectSection() {
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
+    val startLinking: () -> Unit = {
+        isLinking = true
+        coroutineScope.launch {
+            val result = RelayApi.linkPhone(phoneNumber, RelayConfig.relayToken(context))
+            isLinking = false
+            if (result.isSuccess) {
+                RelayConfig.setPhoneNumber(context, phoneNumber)
+                RelayConfig.setEnabled(context, true)
+                enabled = true
+                statusText = null
+                context.startForegroundService(Intent(context, RelayForegroundService::class.java))
+            } else {
+                statusText = "Couldn't connect — check your connection and try again."
+            }
+        }
+    }
+    if (showConsent) {
+        RelayConsentDialog(
+            onAccept = {
+                showConsent = false
+                RelayConfig.recordConsent(context)
+                startLinking()
+            },
+            onDecline = { showConsent = false },
+        )
+    }
+
     Text("Connect to Claude", style = MaterialTheme.typography.titleSmall)
     Text(
-        "Add InboxIQ as a Connector in claude.ai or Claude Desktop, on any device — synced " +
-            "to your Claude account, not tied to this Wi-Fi. It can read messages and propose " +
-            "texts, but they're only queued as drafts below for you to review and send yourself.",
+        androidx.compose.ui.res.stringResource(com.inboxiq.app.R.string.relay_section_blurb),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
@@ -100,26 +126,13 @@ fun CloudConnectSection() {
                         statusText = "Enter your phone number first."
                         return@Switch
                     }
-                    val intent = Intent(context, RelayForegroundService::class.java)
                     if (checked) {
-                        isLinking = true
-                        coroutineScope.launch {
-                            val result = RelayApi.linkPhone(phoneNumber, RelayConfig.relayToken(context))
-                            isLinking = false
-                            if (result.isSuccess) {
-                                RelayConfig.setPhoneNumber(context, phoneNumber)
-                                RelayConfig.setEnabled(context, true)
-                                enabled = true
-                                statusText = null
-                                context.startForegroundService(intent)
-                            } else {
-                                statusText = "Couldn't connect — check your connection and try again."
-                            }
-                        }
+                        if (RelayConfig.hasConsent(context)) startLinking() else showConsent = true
                     } else {
-                        RelayConfig.setEnabled(context, false)
+                        // Also discards the relay key, so nothing can reach this phone until re-enabled.
+                        RelayConfig.disable(context)
                         enabled = false
-                        context.stopService(intent)
+                        context.stopService(Intent(context, RelayForegroundService::class.java))
                     }
                 },
             )
@@ -179,13 +192,13 @@ private fun BatteryOptimizationStatusRow(
             )
             Text(
                 "Android's battery optimization can silently stop the relay connection " +
-                    "while InboxIQ is in the background. Exempt it to keep messages flowing.",
+                    "while InboxIQ is in the background. You can exempt InboxIQ in system settings. The connection also stops if you restart your phone; reopen InboxIQ to reconnect.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier.padding(top = 2.dp, bottom = 8.dp),
             )
             Button(onClick = onRequestExemption) {
-                Text("Exempt InboxIQ from battery optimization")
+                Text("Open battery settings")
             }
         }
     }
