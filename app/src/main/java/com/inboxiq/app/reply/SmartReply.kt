@@ -39,7 +39,7 @@ data class ReplyResult(
     val personalized: Int = 0,
 )
 
-interface ReplySuggester {
+fun interface ReplySuggester {
     suspend fun suggest(req: ReplyRequest): ReplyResult
 }
 

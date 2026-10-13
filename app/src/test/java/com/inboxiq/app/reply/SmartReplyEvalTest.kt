@@ -34,6 +34,18 @@ class SmartReplyEvalTest {
                 sb.append("| $name | ${set.size} | $who | ${pct(e.coverage)} | ${pct(e.inappropriate)} (${e.inappropriateCount}/${e.silent.size}) | ${pct(e.markRecall)} | ${e.falseMarks} | ${e.intentAccuracy?.let(::pct) ?: "n/a"} | ${rel?.let(::pct) ?: "n/a"} |\n")
             }
         }
+        val e = fresh(hand)
+        sb.append("\nHand-written misses (new suggester):\n")
+        for (c in hand) {
+            val r = e.results()[c]!!
+            val why = when {
+                c.expect == Expect.REPLY && r.suggestions.isEmpty() -> "no chips"
+                c.expect == Expect.REPLY && !r.needsReply -> "no Needs-a-reply mark"
+                c.expect != Expect.NONE && c.intent != "NONE" && r.intent.name != c.intent -> "read as ${r.intent}, expected ${c.intent}"
+                else -> null
+            }
+            if (why != null) sb.append("- ${c.id} ($why): ${c.thread.last().body}\n")
+        }
         val dir = File("build/smartreply").apply { mkdirs() }
         File(dir, "eval.md").writeText(sb.toString())
         println(sb)

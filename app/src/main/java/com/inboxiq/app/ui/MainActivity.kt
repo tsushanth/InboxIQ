@@ -57,6 +57,10 @@ import com.inboxiq.app.sms.SendPreferences
 import com.inboxiq.app.sms.ImportStatusHolder
 import com.inboxiq.app.sms.ImportTrigger
 import com.inboxiq.app.sms.RoleWatcher
+import com.inboxiq.app.autoreply.AutoReplyConfig
+import com.inboxiq.app.autoreply.AutoReplyLogEntry
+import com.inboxiq.app.autoreply.AutoReplyStore
+import com.inboxiq.app.autoreply.AutoResponder
 import com.inboxiq.app.ui.theme.InboxTheme
 import com.inboxiq.app.ui.theme.ThemePreferences
 import com.inboxiq.app.ui.theme.ThemeSettings
@@ -109,6 +113,11 @@ class MainActivity : ComponentActivity() {
         addressFromIntent(intent)?.let { vm.screen = Screen.Thread(it) }
     }
 
+    private var autoCfg by mutableStateOf(AutoReplyConfig())
+    private var autoLog by mutableStateOf(emptyList<AutoReplyLogEntry>())
+    private fun autoStore() = AutoReplyStore(this)
+    private fun refreshAuto() { val s = autoStore(); autoCfg = s.config(); autoLog = s.log() }
+
     private fun refreshDefault() { isDefault = DefaultSmsRole.isDefault(this) }
 
     /** Starts the history import whenever we are the default SMS app, however that came about (see ImportTrigger). */
@@ -127,6 +136,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         theme = ThemePreferences.get(this)
+        refreshAuto()
         undoSeconds = SendPreferences.undoSeconds(this)
         refreshDefault()
         if (savedInstanceState == null) {
@@ -176,6 +186,8 @@ class MainActivity : ComponentActivity() {
                 is Screen.Viewer -> Screen.Media(screen.address)
                 is Screen.Media -> Screen.Thread(screen.address)
                 is Screen.Blocked -> Screen.Settings
+                is Screen.AutoReply -> Screen.Settings
+                is Screen.AutoReplyLog -> Screen.AutoReply
                 is Screen.Onboarding -> if (screen.firstRun) Screen.Inbox else Screen.Settings
                 else -> Screen.Inbox
             }
@@ -212,7 +224,9 @@ class MainActivity : ComponentActivity() {
                         undoSeconds = undoSeconds,
                         blockedCount = blocked.size,
                         backupStatus = vm.backupStatus,
+                        autoReplySummary = if (AutoResponder.buildEnabled()) (if (autoCfg.enabled) "On" else "Off") else null,
                         callbacks = SettingsCallbacks(
+                            onOpenAutoReply = { refreshAuto(); vm.screen = Screen.AutoReply },
                             onBack = { vm.screen = Screen.Inbox },
                             onSelectTier = { ClassifierTierPreference.set(this@MainActivity, it) },
                             onTheme = { theme = it; ThemePreferences.set(this@MainActivity, it) },
@@ -222,6 +236,22 @@ class MainActivity : ComponentActivity() {
                             onImport = { openBackup.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                             onShowIntro = { vm.screen = Screen.Onboarding(firstRun = false) },
                         ),
+                    )
+                    screen is Screen.AutoReply && AutoResponder.buildEnabled() -> AutoReplyScreen(
+                        config = autoCfg, isDefaultSms = isDefault, sentCount = autoLog.size,
+                        callbacks = AutoReplyCallbacks(
+                            onBack = { vm.screen = Screen.Settings },
+                            onSave = { autoStore().save(it); refreshAuto() },
+                            onEnable = { text -> autoStore().enable(text); refreshAuto() },
+                            onDisable = { autoStore().disable(); refreshAuto() },
+                            onOpenLog = { refreshAuto(); vm.screen = Screen.AutoReplyLog },
+                        ),
+                    )
+                    screen is Screen.AutoReplyLog && AutoResponder.buildEnabled() -> AutoReplyLogScreen(
+                        entries = autoLog, enabled = autoCfg.enabled, nameOf = { names[it] }, bodyOf = { vm.bodyOf(it) },
+                        onTurnOff = { autoStore().disable(); refreshAuto() },
+                        onClear = { autoStore().clearLog(); refreshAuto() },
+                        onBack = { vm.screen = Screen.AutoReply },
                     )
                     screen is Screen.Blocked -> {
                         val entries by vm.blockedEntries.collectAsState()
@@ -306,6 +336,8 @@ class MainActivity : ComponentActivity() {
         val blocked by vm.blocked.collectAsState()
         val draft by produceState<String?>(null, address) { value = vm.draftFor(address) }
         val displayName = names[address]
+        val recentSent by produceState(emptyList<String>(), address) { value = runCatching { vm.recentSent() }.getOrDefault(emptyList()) }
+        val autoIds = remember(messages.size, autoLog) { if (AutoResponder.buildEnabled()) autoStore().sentIds() else emptySet() }
 
         LaunchedEffect(address, messages.count { !it.isRead }) {
             vm.actions.markRead(address)
@@ -351,6 +383,9 @@ class MainActivity : ComponentActivity() {
                 labelConfidence = messages.lastOrNull { it.isIncoming }?.labelConfidence ?: 0f,
                 showBack = showBack,
                 initialDraft = loadedDraft,
+                recentSent = recentSent,
+                isKnownContact = displayName != null,
+                autoSentIds = autoIds,
             )
         }
     }

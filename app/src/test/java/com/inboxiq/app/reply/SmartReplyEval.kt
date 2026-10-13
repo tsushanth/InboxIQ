@@ -69,7 +69,7 @@ class EvalNumbers(val name: String, val cases: List<Case>, val run: (Case) -> Re
     val intentAccuracy: Double? get() {
         val withIntent = cases.filter { it.intent != "NONE" && it.expect != Expect.NONE || it.intent in setOf("ACK", "REACTION", "STATEMENT") }
         val ok = withIntent.count { results[it]?.intent?.name == it.intent }
-        return if (results.values.all { it == null }) null else ok.toDouble() / withIntent.size
+        return if (name == "old") null else ok.toDouble() / withIntent.size
     }
     fun results() = results
 }

@@ -41,6 +41,8 @@ sealed interface Screen {
     data class Thread(val address: String) : Screen
     data object Settings : Screen
     data object Blocked : Screen
+    data object AutoReply : Screen
+    data object AutoReplyLog : Screen
     data class NewConversation(val forwardBody: String? = null) : Screen
     data class Media(val address: String) : Screen
     data class Viewer(val address: String, val startMessageId: Long) : Screen
@@ -99,6 +101,10 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     var screen: Screen by mutableStateOf(Screen.Inbox)
     val snackbar = SnackbarHostState()
     var backupStatus: String? by mutableStateOf(null)
+
+    /** Recent texts the user sent, to learn their phrasing for reply chips. Read-only, derived on the fly, never stored. */
+    suspend fun recentSent(): List<String> = db.replyHistoryDao().recentSentBodies(300)
+    suspend fun bodyOf(id: Long): String? = db.messageDao().getById(id)?.body
 
     suspend fun draftFor(address: String): String = db.threadStateDao().get(address)?.draft.orEmpty()
     val blockedEntries = db.blockedNumberDao().observeAll()

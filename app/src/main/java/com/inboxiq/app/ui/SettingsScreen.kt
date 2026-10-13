@@ -60,6 +60,7 @@ class SettingsCallbacks(
     val onExport: () -> Unit = {},
     val onImport: () -> Unit = {},
     val onShowIntro: () -> Unit = {},
+    val onOpenAutoReply: () -> Unit = {},
 )
 
 @Composable
@@ -72,6 +73,8 @@ fun SettingsScreen(
     callbacks: SettingsCallbacks,
     modifier: Modifier = Modifier,
     showCloudSections: Boolean = true,
+    /** null hides the entry (build flag off); otherwise "On" / "Off". */
+    autoReplySummary: String? = null,
 ) {
     var current by remember { mutableStateOf(selectedTier) }
     val context = LocalContext.current
@@ -149,6 +152,21 @@ fun SettingsScreen(
                         is ModelDownloadState.NotDownloaded -> "Starting download"
                     }
                     Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 40.dp, bottom = 8.dp))
+                }
+            }
+
+            // ---------- auto reply (only when compiled in) ----------
+            if (autoReplySummary != null) {
+                Section("Auto-reply")
+                Row(
+                    Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = callbacks.onOpenAutoReply),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text("Auto-reply when away", style = MaterialTheme.typography.bodyLarge)
+                        Text("$autoReplySummary. Sends one short text for you to people you know.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
                 }
             }
 
