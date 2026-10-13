@@ -1,3 +1,8 @@
+> **Which text to use.** Play ships the `core` variant: use `store-listing/PROPOSED/` (title, short and full
+> description; no mention of Claude, no internet permission). `store-listing/PROPOSED_RELAY/` is the text for the
+> `relay` variant and is for opt-in distribution only. The draft below is the older pre-relay copy.
+> See docs/ARCHITECTURE_RELAY_OPTIONAL.md.
+
 # Play Store listing copy — draft
 
 ## Short description (80 char max)

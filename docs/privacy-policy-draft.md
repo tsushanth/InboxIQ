@@ -10,6 +10,32 @@ draft/reference copy.
 
 _Last updated: 2026-10-13 (draft; the live page still carries the older text)_
 
+## Which build this text covers
+
+InboxIQ is built in two variants. **Core (Google Play)**: everything in sections "What InboxIQ does" through
+"Permissions", read *without* the parts marked "relay build only". The core app has no internet permission, so it
+cannot send your messages, contacts or phone numbers anywhere. **Relay build (direct download only)**: adds the
+optional "Connect to Claude" feature described in the marked sections. Publish the core wording on the Play
+listing's policy page; if a relay build is distributed, say so explicitly on the same page.
+
+## Core-variant policy text (publish this for Play)
+
+InboxIQ is an SMS/MMS messaging app that sorts incoming texts (personal, work, promotional, one-time passcode,
+spam, suspected scam) using a model that runs on your phone.
+
+- Your messages, phone numbers and contact names are read and stored only on your device, in a local database.
+  InboxIQ cannot send them off the phone: it has no internet permission, no accounts, no ads and no analytics.
+- Voice memos use the microphone only while you hold the button and are transcribed on the device.
+- An optional larger on-device model can be downloaded; Google Play performs that download, and it contains no data
+  from your phone. Google's handling of Play downloads is covered by Google's own policies.
+- Uninstalling InboxIQ deletes its local data. We do not receive, sell, or share your data, and do not use it to
+  train AI models.
+- Permissions: SMS/MMS (send, receive, read: required for a default SMS app), Contacts (show names), Notifications,
+  Microphone (voice memos). No internet permission.
+- Contact: support@kreativekoala.llc
+
+## Full reference text (core wording plus relay-build-only parts)
+
 ## What InboxIQ does
 
 InboxIQ is an SMS/MMS messaging app that also automatically categorizes
@@ -20,7 +46,7 @@ suspected scam) to help you triage your inbox.
 
 | Data | Why | Where it goes |
 |---|---|---|
-| SMS/MMS message content | Sending, receiving, displaying, and categorizing your texts | Stored on your device. Not sent anywhere unless you turn on "Connect to Claude" (below). |
+| SMS/MMS message content | Sending, receiving, displaying, and categorizing your texts | Stored on your device. (Relay build only: not sent anywhere unless you turn on "Connect to Claude", below.) |
 | Phone numbers you message | Knowing who a conversation is with | Stored on your device. Included in what Claude sees if you turn on the Claude connection. |
 | Contact names | Showing a name instead of a number | Read from your contacts; included in what Claude sees if you turn on the Claude connection. |
 | Microphone audio | Voice memos | Transcribed on your device; never uploaded. |
@@ -30,7 +56,9 @@ suspected scam) to help you triage your inbox.
 InboxIQ sorts messages with a model that runs on your phone. Message text is not sent to InboxIQ's servers
 or any third party for sorting.
 
-## Optional: Connect to Claude (off by default)
+## Optional: Connect to Claude (off by default) - RELAY BUILD ONLY
+
+This section and the Claude rows above apply only to the relay build. The Google Play (core) build has no such feature.
 
 If you turn on "Connect to Claude" in Settings and accept the on-screen disclosure, InboxIQ opens a
 connection from your phone, only while InboxIQ is open on your screen, to a relay service operated by Kreative Koala (mcp.kreativekoala.llc, hosted on
@@ -77,7 +105,7 @@ same explanations apply here for a general audience:
   numbers.
 - **Notifications**: required to alert you to new messages and drafts.
 - **Microphone**: voice memos, transcribed on device.
-- **Internet**: only used by the optional Claude connection and Google Play downloads.
+- **Internet** (relay build only): used by the optional Claude connection. The core build requests no internet permission; Google Play performs model-pack downloads itself.
 
 ## Changes to this policy
 

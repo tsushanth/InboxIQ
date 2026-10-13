@@ -1,8 +1,27 @@
-# Play Console Data safety answer sheet (draft, version with optional foreground-only Claude connection)
+# Play Console Data safety answer sheets (two variants)
 
-Do not submit until the relay decision (keep / gate / remove) is made. If the relay is removed from the
-app, the "Shared" and "Collected" answers below revert to "no data collected / shared", and the older
-listing text is true again.
+The app is built in two variants (docs/ARCHITECTURE_RELAY_OPTIONAL.md). Use the sheet that matches the build you
+upload. **The Play listing ships the `core` variant: use Answer set A.** Answer set B applies only to a `relay` build
+(direct distribution, or a future separate listing).
+
+# Answer set A: `core` variant (ship to Play)
+
+The core APK has no INTERNET permission and no relay code (verify with `scripts/inspect-variant.py core --build`),
+so it cannot transmit message content or anything else.
+
+- Does your app collect or share any of the required user data types? **No**
+- Encryption in transit, deletion request: not asked when the answer above is No.
+- Data types: none collected, none shared. SMS/MMS, contacts, classification results and voice-memo audio are
+  processed and stored on the device only (voice memos are transcribed on-device).
+- Independent security review: No.
+- Notes for the reviewer: the optional larger on-device model is delivered by Google Play (Play Asset Delivery), not by
+  the app's own network code. Play libraries add `ACCESS_NETWORK_STATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`,
+  `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_DATA_SYNC`; see `FOREGROUND_SERVICE_DECLARATION.md`.
+- Policy URL: https://kreativekoala.llc/privacy (use the core text in `privacy-policy-draft.md`).
+
+# Answer set B: `relay` variant (not for the Play listing)
+
+The text below is the previous sheet, unchanged in substance.
 
 ## Top-level questions
 - Does your app collect or share any of the required user data types? **Yes**
