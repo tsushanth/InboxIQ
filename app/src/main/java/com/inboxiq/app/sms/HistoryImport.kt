@@ -18,7 +18,9 @@ import kotlinx.coroutines.ensureActive
  *
  * Duplicate safety does not depend on the bookkeeping: every insert is IGNOREd against the unique
  * (address, timestamp, body) index, and rows the user deleted in InboxIQ are skipped via
- * [ImportTombstones]. Existing rows are never modified except the existing MMS placeholder heal.
+ * [ImportTombstones]. Existing rows are never modified except the existing MMS placeholder heal and the
+ * two one-time repairs, [SentMmsRepair] and [ReadReconcile] (see docs/READ_STATE.md). New rows carry the
+ * provider's `read` flag; sent rows are read by definition.
  */
 object HistoryImport {
 
@@ -69,9 +71,12 @@ object HistoryImport {
         var inserted = 0
         try {
             val quiet = prepare(env, state, now())
+            // Before any import page, so a stale sent-MMS copy is repaired rather than joined by a second one.
+            SentMmsRepair.runOnce(env, state)
             inserted += backfill(env, state, quiet)
             inserted += incremental(env, state)
             inserted += repairIfDue(env, state, now())
+            ReadReconcile.runOnce(env, state)
             ImportStatusHolder.publish(ImportStatus())
             return Outcome.Done(inserted)
         } catch (e: CancellationException) {

@@ -47,12 +47,13 @@ object MmsSender {
         // SecurityException reading a picker uri from an earlier send). Copy the
         // bytes into our own storage immediately and use that stable uri everywhere.
         val localUri = persistLocally(context, imageUri) ?: run {
-            dao.insert(
+            insertAligned(
+                dao,
                 MessageEntity(
                     threadId = 0,
                     address = address,
                     body = body,
-                    timestamp = System.currentTimeMillis(),
+                    timestamp = sentTimestamp(),
                     isIncoming = false,
                     label = MessageLabel.PERSONAL,
                     sendStatus = SendStatus.FAILED,
@@ -62,12 +63,13 @@ object MmsSender {
             return
         }
 
-        val id = dao.insert(
+        val id = insertAligned(
+            dao,
             MessageEntity(
                 threadId = 0,
                 address = address,
                 body = body,
-                timestamp = System.currentTimeMillis(),
+                timestamp = sentTimestamp(),
                 isIncoming = false,
                 label = MessageLabel.PERSONAL,
                 sendStatus = SendStatus.PENDING,
@@ -136,6 +138,26 @@ object MmsSender {
             }
         }
         return dispatched
+    }
+
+    /**
+     * The clock, cut to whole seconds. content://mms stores `date` in seconds, so a sent MMS stamped in
+     * milliseconds could never line up with its own provider row and the import would add it again.
+     */
+    internal fun sentTimestamp(now: Long = System.currentTimeMillis()): Long = now / 1000 * 1000
+
+    /**
+     * Inserts a sent MMS. Second-level stamps can collide with an identical send in the same second
+     * (the unique index would silently drop it), so move to the next free second instead.
+     */
+    internal suspend fun insertAligned(dao: com.inboxiq.app.data.MessageDao, message: MessageEntity): Long {
+        var m = message
+        repeat(5) {
+            val id = dao.insert(m)
+            if (id != -1L) return id
+            m = m.copy(timestamp = m.timestamp + 1000)
+        }
+        return dao.insert(m)
     }
 
     /** Copies a picked image into app-private storage and returns a stable FileProvider uri for it. */

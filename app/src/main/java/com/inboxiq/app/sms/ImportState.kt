@@ -61,6 +61,19 @@ class ImportState(private val prefs: SharedPreferences) {
         get() = prefs.getLong("repairAt", 0)
         set(v) { prefs.edit().putLong("repairAt", v).commit() }
 
+    /**
+     * Highest version of the one-time read-state reconcile that has completed (see [ReadReconcile]).
+     * Only set after a full successful pass, so an interrupted pass is simply run again.
+     */
+    var readReconcileVersion: Int
+        get() = prefs.getInt("readReconcileV", 0)
+        set(v) { prefs.edit().putInt("readReconcileV", v).commit() }
+
+    /** Same for the one-time sent-MMS address/duplicate repair (see [SentMmsRepair]). */
+    var sentMmsRepairVersion: Int
+        get() = prefs.getInt("sentMmsRepairV", 0)
+        set(v) { prefs.edit().putInt("sentMmsRepairV", v).commit() }
+
     /** True once both sources have finished their first full pass. */
     fun isBackfillComplete(): Boolean =
         SOURCES.all { load(it).let { s -> s.started && s.backfillDone } }

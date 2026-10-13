@@ -93,6 +93,32 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE address = :address AND timestamp = :timestamp AND isIncoming = :isIncoming LIMIT 1")
     suspend fun findByAddressTimestamp(address: String, timestamp: Long, isIncoming: Boolean): MessageEntity?
 
+    /** Outgoing rows for [address] whose timestamp is in [from]..[to] (a sent MMS' whole second). */
+    @Query("SELECT * FROM messages WHERE address = :address AND isIncoming = 0 AND timestamp BETWEEN :from AND :to")
+    suspend fun outgoingBetween(address: String, from: Long, to: Long): List<MessageEntity>
+
+    /** Timestamps of incoming rows still unread here: lets the one-time read reconcile skip provider rows that cannot matter. */
+    @Query("SELECT DISTINCT timestamp FROM messages WHERE isIncoming = 1 AND isRead = 0")
+    suspend fun unreadIncomingTimestamps(): List<Long>
+
+    /** Marks the one incoming row with this natural key read. Never touches a read row and never marks anything unread. */
+    @Query("UPDATE messages SET isRead = 1 WHERE address = :address AND timestamp = :timestamp AND body = :body AND isIncoming = 1 AND isRead = 0")
+    suspend fun markIncomingReadByKey(address: String, timestamp: Long, body: String): Int
+
+    /** Same for an MMS, whose body can still be a placeholder: matched on conversation and provider time only. */
+    @Query("UPDATE messages SET isRead = 1 WHERE address = :address AND timestamp = :timestamp AND isIncoming = 1 AND isRead = 0")
+    suspend fun markIncomingReadByAddressTimestamp(address: String, timestamp: Long): Int
+
+    @Query("SELECT DISTINCT timestamp FROM messages WHERE isIncoming = 0")
+    suspend fun outgoingTimestamps(): List<Long>
+
+    @Query("SELECT * FROM messages WHERE isIncoming = 0 AND imagePartUri IS NOT NULL ORDER BY address, timestamp, id")
+    suspend fun outgoingWithAttachment(): List<MessageEntity>
+
+    /** Re-files a row under another conversation address, keeping everything else about it. */
+    @Query("UPDATE messages SET address = :address WHERE id = :id")
+    suspend fun updateAddress(id: Long, address: String)
+
     @Query("UPDATE messages SET autoHealRetryCount = autoHealRetryCount + 1 WHERE id = :id")
     suspend fun incrementAutoHealRetryCount(id: Long)
 
