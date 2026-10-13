@@ -1,6 +1,6 @@
 # InboxIQ Privacy Policy — draft
 
-**Status: LIVE.** Hosted as a dedicated section within the shared Kreative
+**Status: LIVE copy is OUT OF DATE (says nothing leaves the device). Replace section 10 with the text below before the next release.** Original note: LIVE. Hosted as a dedicated section within the shared Kreative
 Koala LLC privacy policy at:
 **https://kreativekoala.llc/privacy#** (section 10, "App-Specific
 Disclosures: InboxIQ") — source in `~/Documents/GitHub/kreative-koala-legal/privacy.html`,
@@ -20,32 +20,47 @@ suspected scam) to help you triage your inbox.
 
 | Data | Why | Where it goes |
 |---|---|---|
-| SMS/MMS message content | Core app function: sending, receiving, displaying, and categorizing your texts | Stored only on your device. Never transmitted anywhere. |
-| Phone numbers you message | Core app function: knowing who a conversation is with | Stored only on your device. |
-| Contact names | Displaying a name instead of a raw number in your conversation list | Read from your device's contacts; never stored elsewhere or transmitted. |
+| SMS/MMS message content | Sending, receiving, displaying, and categorizing your texts | Stored on your device. Not sent anywhere unless you turn on "Connect to Claude" (below). |
+| Phone numbers you message | Knowing who a conversation is with | Stored on your device. Included in what Claude sees if you turn on the Claude connection. |
+| Contact names | Showing a name instead of a number | Read from your contacts; included in what Claude sees if you turn on the Claude connection. |
+| Microphone audio | Voice memos | Transcribed on your device; never uploaded. |
 
-## Message classification is 100% on-device
+## Message sorting is on-device
 
-InboxIQ uses a machine-learning model that runs entirely on your phone to
-categorize messages. Your message content is never sent to InboxIQ's
-servers, or any third party's, for this or any other purpose. There is no
-cloud AI service involved in classification.
+InboxIQ sorts messages with a model that runs on your phone. Message text is not sent to InboxIQ's servers
+or any third party for sorting.
+
+## Optional: Connect to Claude (off by default)
+
+If you turn on "Connect to Claude" in Settings and accept the on-screen disclosure, InboxIQ opens a
+connection from your phone to a relay service operated by Kreative Koala (mcp.kreativekoala.llc, hosted on
+Fly.io in the United States). Through it, Claude (Anthropic), signed in to your own Claude account, can,
+when you ask it to, list your conversations, search your messages, and read threads. What Claude receives:
+message text, phone numbers, contact names, and timestamps. One-time passcodes are masked. Claude may also
+create text drafts; nothing is sent unless you tap Send in InboxIQ.
+
+- The relay passes this content through in memory and does not store or log it.
+- The relay stores your phone number, the hashed credentials that link your phone to your Claude connector,
+  and one-time verification records. Verification of the connector is done by an automated voice call to your
+  number placed through Twilio.
+- Anthropic's handling of what Claude receives is governed by your Claude account's terms and privacy
+  settings; Kreative Koala does not control it.
+- To stop: turn the switch off (or tap Disconnect in the notification). That disconnects immediately and
+  discards your phone's key. To remove the connector from Claude, delete InboxIQ in Claude's Connectors settings.
+  To delete the relay's record of your phone number, email support@kreativekoala.llc.
+- The connection ends when your phone restarts; you reopen InboxIQ to reconnect.
 
 ## What we don't do
 
-- We don't sell your data. We don't have an ads SDK in the app.
-- We don't read your messages for advertising, profiling, or any purpose
-  other than the categorization feature described above and displaying
-  your own messages back to you.
-- We don't share message content, contacts, or phone numbers with any
-  third party.
+- We don't sell your data and have no ads or analytics SDK in the app.
+- We don't use your messages for advertising or profiling, or to train AI models.
+- Apart from the optional Claude connection you control, we don't share message content, contacts, or phone
+  numbers with third parties.
 
 ## Data storage and deletion
 
-All data described above lives in a local database on your device.
-Uninstalling the app deletes it. [If/when a backup or sync feature is
-added, this section must be rewritten before shipping it — flag any such
-change as requiring a privacy-policy update first.]
+Messages, numbers, and contact names live in a local database on your device; uninstalling deletes them.
+Relay-side records are described above.
 
 ## Permissions this app requests, and why
 
@@ -57,7 +72,9 @@ same explanations apply here for a general audience:
   is a full default SMS/MMS app.
 - **Contacts**: required to show contact names instead of raw phone
   numbers.
-- **Notifications**: required to alert you to new messages.
+- **Notifications**: required to alert you to new messages and drafts.
+- **Microphone**: voice memos, transcribed on device.
+- **Internet**: only used by the optional Claude connection and Google Play downloads.
 
 ## Changes to this policy
 
