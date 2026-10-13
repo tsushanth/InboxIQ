@@ -3,7 +3,8 @@ package com.inboxiq.app.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-enum class AgentDraftStatus { PENDING, SENT, DISCARDED }
+/** SENDING = claimed by SendDraftWorker; guarantees at-most-once dispatch (see AgentDraftDao.claimForSending). */
+enum class AgentDraftStatus { PENDING, SENT, DISCARDED, SENDING }
 
 /**
  * A message a paired agent (see mcp/McpTools.sendMessage) asked to send, held for the user to
