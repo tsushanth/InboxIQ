@@ -12,6 +12,8 @@ class ThreadActions(
     private val db: AppDatabase,
     private val deleteImageFiles: (List<String>) -> Unit = {},
     private val clock: () -> Long = System::currentTimeMillis,
+    /** Remembers deletions so the next history import does not bring them back (see ImportTombstones). */
+    private val tombstones: com.inboxiq.app.sms.ImportTombstones? = null,
 ) {
     data class DeletedThread(
         val address: String,
@@ -40,22 +42,28 @@ class ThreadActions(
     suspend fun deleteMessage(id: Long): MessageEntity? {
         val m = messages.getById(id) ?: return null
         messages.deleteMessage(id)
+        tombstones?.markMessageDeleted(m.address, m.timestamp, m.body)
         return m
     }
 
-    suspend fun restoreMessage(m: MessageEntity) = messages.restoreAll(listOf(m))
+    suspend fun restoreMessage(m: MessageEntity) {
+        messages.restoreAll(listOf(m))
+        tombstones?.clearMessage(m.address, m.timestamp, m.body)
+    }
     fun commitMessageDelete(m: MessageEntity) = deleteImageFiles(listOfNotNull(m.imagePartUri))
 
     suspend fun delete(address: String): DeletedThread {
         val snapshot = DeletedThread(address, messages.messagesForThread(address), states.get(address))
         messages.deleteThread(address)
         states.delete(address)
+        snapshot.messages.maxOfOrNull { it.timestamp }?.let { tombstones?.markThreadDeleted(address, it) }
         return snapshot
     }
 
     suspend fun restore(deleted: DeletedThread) {
         messages.restoreAll(deleted.messages)
         deleted.state?.let { states.ensure(it) }
+        tombstones?.clearThread(deleted.address)
     }
 
     /** Call when the undo window closes without an undo: only now are attachment files removed. */
