@@ -34,6 +34,9 @@ also the core Play Store trust/compliance story (see `docs/`).
 - [x] "Needs a reply" indicator + retrieval-based quick-reply chips (`QuickReplySuggester`) —
       Gmail's original Smart-Reply approach (fixed candidate set via simple heuristics), not
       generative AI drafting, since there's no generative model in the pipeline yet
+- [x] Optional "Auto-reply when away" (0.5.1; off until the user opts in; on-device, rate limited, logged) —
+      `docs/AUTO_RESPONDER.md`, review in `docs/AUTO_RESPONDER_REVIEW.md`. Build flag `AUTO_RESPONDER_ENABLED`
+      (on for `core`; `-PautoResponder=false` compiles it out)
 
 ## Architecture
 

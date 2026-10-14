@@ -14,6 +14,14 @@ so it cannot transmit message content or anything else.
 - Data types: none collected, none shared. SMS/MMS, contacts, classification results and voice-memo audio are
   processed and stored on the device only (voice memos are transcribed on-device).
 - Independent security review: No.
+- **Auto-reply when away (0.5.1, optional, off by default) does not change any answer above.** It is an on-device
+  rule that makes the app send a short text the user wrote and confirmed, as an ordinary SMS from the user's own
+  number to a person who just texted them and whom they have messaged or saved. Nothing is transmitted to the
+  developer or to any third party: the core build still has no INTERNET permission, no accounts, no analytics and no
+  SDK that could receive data. The settings, the per-person timestamps and the list of automatic texts stay in a
+  private on-device file. The recipient of the SMS is the other party in the user's own conversation, the same as
+  for any text the user types; that is the app's core messaging function, not collection or sharing with a third
+  party. So: collected = No, shared = No, for every data type, with the feature on or off.
 - Notes for the reviewer: the optional larger on-device model is delivered by Google Play (Play Asset Delivery), not by
   the app's own network code. Play libraries add `ACCESS_NETWORK_STATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`,
   `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_DATA_SYNC`; see `FOREGROUND_SERVICE_DECLARATION.md`.

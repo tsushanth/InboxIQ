@@ -24,8 +24,18 @@ Core justification, ready to paste for READ_SMS / RECEIVE_SMS / SEND_SMS / RECEI
 > InboxIQ is a full default SMS/MMS handler app. These permissions are required to read, receive and send text
 > messages, the app's entire purpose. It also categorizes incoming messages on the device with a bundled
 > model, and offers quick replies. The app has no internet permission: message content is never transmitted.
+>
+> SEND_SMS is also used for one optional feature, "Auto-reply when away", added in 0.5.1. It is OFF by default and only
+> starts after the user turns it on and accepts an on-screen confirmation that shows the exact text that will be sent.
+> It then sends one short text (single SMS segment, no links, written by the user) to a person who has just messaged
+> the user, and only if the user has previously texted that person or saved them as a contact (one-to-one personal or
+> work conversations; never businesses, short codes, groups, picture messages, spam or blocked numbers). It is rate
+> limited (one automatic text per person per 24 hours at most, 20 a day at most; the user can only lower these), runs
+> only while InboxIQ is the default SMS app, ends at an optional time the user sets, and every text it sends is shown
+> in the conversation marked "Sent automatically" and listed on an "Auto-replies sent" screen with a one-tap Turn off.
+> Nothing is sent to any server; the app has no internet permission.
 
-READ_CONTACTS (core): only to show a sender's saved name instead of a number, read locally, never transmitted.
+READ_CONTACTS (core): to show a sender's saved name instead of a number and, for the optional off-by-default auto-reply, to check locally whether a sender is a saved contact. Read locally, never transmitted.
 
 ## Which permissions are we declaring
 
@@ -54,6 +64,8 @@ READ_CONTACTS (core): only to show a sender's saved name instead of a number, re
 > relay operated by the developer to Anthropic's Claude. Replies are only drafts; the user
 > must tap Send in InboxIQ. One-time passcodes are masked. This feature is a
 > user-directed transfer, not required for the app's core messaging function.
+> (core build only: also add the "Auto-reply when away" paragraph from the core justification at the top of this file
+> to the SEND_SMS answer.)
 
 **READ_CONTACTS**
 

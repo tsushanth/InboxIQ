@@ -21,8 +21,8 @@ android {
         applicationId = "com.inboxiq.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "0.5.0"
+        versionCode = 10
+        versionName = "0.5.1"
 
         // Native whisper.cpp build for on-device voice-memo transcription (zero network).
         ndk {
@@ -78,15 +78,7 @@ android {
     }
 
     buildTypes {
-        // AUTO_RESPONDER_ENABLED: compile the optional "Auto-reply when away" feature in and show it.
-        // Debug builds have it on for testing; release builds ship with it OFF unless the owner
-        // opts in with -PautoResponder=true (docs/AUTO_RESPONDER.md). Off means no settings entry,
-        // no receiver hook and no worker: the code is inert.
-        debug {
-            buildConfigField("boolean", "AUTO_RESPONDER_ENABLED", (project.findProperty("autoResponder") ?: "true").toString())
-        }
         release {
-            buildConfigField("boolean", "AUTO_RESPONDER_ENABLED", (project.findProperty("autoResponder") ?: "false").toString())
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
         }
@@ -184,4 +176,17 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
+}
+
+// AUTO_RESPONDER_ENABLED: whether the optional "Auto-reply when away" feature is compiled in and shown
+// (docs/AUTO_RESPONDER.md). On for every core build, including the Play release; the feature itself is off until the
+// user opts in. The relay flavor's release keeps it off. -PautoResponder=false is the escape hatch that compiles it
+// out of any build (no settings entry, no receiver hook, no worker); -PautoResponder=true forces it on.
+androidComponents {
+    onVariants { variant ->
+        val flavor = variant.flavorName
+        val default = !(variant.buildType == "release" && flavor == "relay")
+        val enabled = (project.findProperty("autoResponder") as String?)?.toBooleanStrictOrNull() ?: default
+        variant.buildConfigFields?.put("AUTO_RESPONDER_ENABLED", com.android.build.api.variant.BuildConfigField("boolean", enabled.toString(), null))
+    }
 }

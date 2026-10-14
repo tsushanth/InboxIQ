@@ -1,8 +1,10 @@
 # Auto-reply when away (optional)
 
-**Shipping this in the first release is an owner decision.** It is compiled behind the build flag
-`AUTO_RESPONDER_ENABLED`: on in debug builds, **off in release builds** unless built with `-PautoResponder=true`.
-With the flag off there is no settings entry, no hook in the receiver, no worker: the code is inert. Smart reply chips ship regardless.
+**Ships in 0.5.1 (10).** It is compiled behind the build flag `AUTO_RESPONDER_ENABLED`: **on for every `core` build (debug and the
+Play release)**, off only for the `relay` flavor's release. `-PautoResponder=false` is the escape hatch that compiles it out of any
+build (no settings entry, no hook in the receiver, no worker: the code is inert); `-PautoResponder=true` forces it on. The flag
+only makes the feature available: **the user's switch is off on first run** and turning it on needs the confirmation dialog.
+It shipped compiled out in 0.5.0 (9). Review findings and fixes: `AUTO_RESPONDER_REVIEW.md`.
 
 ## What it does
 
@@ -24,10 +26,15 @@ InboxIQ is not the default SMS app, because then nothing can run.
 - Only when the message and thread label are PERSONAL or WORK. Never PROMO / SPAM / SCAM / OTP_2FA / unlabelled.
 - Never a blocked number. Never a text that looks automatic ("auto-reply", "do not reply", "STOP", "unsubscribe", out of office) or
   that asks for a code, so two auto-responders cannot ping-pong. Never within 60 s of our own auto reply to that number.
-- At most one per sender per 24 h (can be lowered, never raised), at most 20 a day in total (the kill switch; also lowerable only).
+- At most one per sender per 24 h (can be lowered, never raised), at most 20 in any rolling 24 hours in total (the kill switch;
+  also lowerable only). One person written as +14155550101, 14155550101 or 4155550101 is one sender.
+- The message may only use plain GSM characters (letters, digits, common punctuation; not { } [ ] ~ | ^ ` backslash or emoji) so it
+  can never become a multi-part, multi-billed text. A text that is just our own message coming back is not answered.
 - Never for texts older than 5 minutes (imported or delayed history), never while the history import is running or has not finished
   its first pass, never when InboxIQ is not the default SMS app.
-- The slot is reserved before sending, so racing broadcasts cannot double send; a failed send releases it.
+- The slot is reserved before sending, under one lock so parallel workers cannot overshoot the cap; a failed send releases it; a
+  failure in the bookkeeping after a successful send does not. Each incoming message id is handled once (redelivery safe).
+- The reply leaves on the SIM that received the text (dual-SIM phones).
 - Editing the message switches it off until re-confirmed; `enable()` only accepts the exact confirmation text for the current settings.
 - An end time that has passed switches it off permanently.
 - Sends go through the existing `SmsSender`, so they are written to the Android provider like any sent text and show in the thread,
@@ -40,7 +47,7 @@ exact alarms, no new permissions.
 
 ## Policy and cost considerations (honest)
 
-- **Google Play SMS policy.** InboxIQ already uses the default-SMS-app role, which Play allows for SMS apps. An app that sends
+- **Google Play SMS policy (see AUTO_RESPONDER_REVIEW.md for the recommendation).** InboxIQ already uses the default-SMS-app role, which Play allows for SMS apps. An app that sends
   texts the user did not individually write must be a real default handler and the behaviour must be disclosed. The listing,
   data-safety form and in-app text need to say that it can send texts automatically, only after explicit opt-in. Automatic
   replies to bulk or unknown senders are the kind of thing reviewers and carriers dislike, which is why recipients are narrowed

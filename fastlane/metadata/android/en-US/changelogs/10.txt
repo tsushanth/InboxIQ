@@ -1,0 +1,3 @@
+New: optional "Auto-reply when away", off until you turn it on. It sends one short text you wrote to people you have texted or saved, with daily limits, and shows everything it sent with a one-tap off. Automatic texts may cost money on some plans.
+Safer limits, one text per person per 24 hours even if a number is written two ways, and a rolling daily cap.
+Still no internet access: your messages stay on your phone.

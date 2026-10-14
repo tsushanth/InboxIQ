@@ -10,6 +10,11 @@ WHAT IT DOES
 - Labels verification codes, promotions, and suspected scams, and warns you about risky-looking links.
 - Block numbers, search messages, dark mode, and contact names instead of raw numbers.
 - Voice memos: hold a button to dictate, transcribed on your phone.
+- Auto-reply when away (optional, off by default): see below.
+
+AUTO-REPLY WHEN AWAY (OPTIONAL, OFF BY DEFAULT)
+
+If you choose, InboxIQ can send one short text you wrote (for example "I am driving, I will reply when I can") when someone messages you while you are busy. It is off until you turn it on in Settings and confirm the exact message. It only replies to people you have texted before or saved as contacts, in one-to-one conversations: never to businesses, short codes, groups, spam, or numbers you blocked. It sends at most one text per person per day and at most 20 a day, can run on a schedule or switch itself off at a time you pick, and every text it sends is marked "Sent automatically" and listed so you can see it and turn it off with one tap. These are real texts from your number, so they may cost money on plans that charge per text. Everything happens on your phone.
 
 PRIVATE BY DESIGN
 

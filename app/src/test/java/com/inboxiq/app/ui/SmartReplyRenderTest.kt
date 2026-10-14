@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.assertIsDisplayed
 import com.inboxiq.app.autoreply.AutoReplyConfig
+import com.inboxiq.app.classify.ClassifierTier
 import com.inboxiq.app.reply.ReplyIntent
 import com.inboxiq.app.reply.ReplyResult
 import com.inboxiq.app.reply.ReplySuggester
@@ -51,5 +52,18 @@ class SmartReplyRenderTest {
         rule.onNodeWithText("Off").assertIsDisplayed()
         rule.onNodeWithText("InboxIQ is not your default SMS app", substring = true).assertExists()
         rule.onNodeWithText("Your carrier may charge", substring = true).assertExists()
+        rule.onNodeWithText("may cost money", substring = true).assertExists()
+        rule.onNodeWithText("To turn it off", substring = true).assertExists()
+    }
+
+    @Test fun settings_entry_is_plain_about_cost_recipients_and_turning_it_off() {
+        rule.setContent {
+            InboxTheme(ThemeSettings()) {
+                SettingsScreen(ClassifierTier.DEFAULT, ThemeSettings(), 0, 0, null, SettingsCallbacks(), showCloudSections = false, autoReplySummary = "Off")
+            }
+        }
+        rule.onNodeWithText("Automatic texts may cost money", substring = true).assertExists()
+        rule.onNodeWithText("only to people you have texted or saved", substring = true).assertExists()
+        rule.onNodeWithText("Turn it off here any time", substring = true).assertExists()
     }
 }

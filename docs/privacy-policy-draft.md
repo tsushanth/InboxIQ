@@ -26,11 +26,17 @@ spam, suspected scam) using a model that runs on your phone.
 - Your messages, phone numbers and contact names are read and stored only on your device, in a local database.
   InboxIQ cannot send them off the phone: it has no internet permission, no accounts, no ads and no analytics.
 - Voice memos use the microphone only while you hold the button and are transcribed on the device.
+- Optional "Auto-reply when away" (off until you turn it on): when you switch it on and confirm the exact message,
+  InboxIQ can send that one short text, on your phone and from your number, to an individual who texts you and whom you
+  have texted before or saved as a contact (never to businesses, short codes or groups), at most once per person per
+  day and 20 a day. These are ordinary text messages to the person you are already talking to, and your mobile carrier
+  may charge for them like any text you send. They are listed in the app so you can see and stop them. The feature
+  works entirely on the device; nothing about it is sent to us or to anyone else.
 - An optional larger on-device model can be downloaded; Google Play performs that download, and it contains no data
   from your phone. Google's handling of Play downloads is covered by Google's own policies.
 - Uninstalling InboxIQ deletes its local data. We do not receive, sell, or share your data, and do not use it to
   train AI models.
-- Permissions: SMS/MMS (send, receive, read: required for a default SMS app), Contacts (show names), Notifications,
+- Permissions: SMS/MMS (send, receive, read: required for a default SMS app), Contacts (show names, and check whether a sender is saved for the optional auto-reply), Notifications,
   Microphone (voice memos). No internet permission.
 - Contact: support@kreativekoala.llc
 
@@ -49,6 +55,7 @@ suspected scam) to help you triage your inbox.
 | SMS/MMS message content | Sending, receiving, displaying, and categorizing your texts | Stored on your device. (Relay build only: not sent anywhere unless you turn on "Connect to Claude", below.) |
 | Phone numbers you message | Knowing who a conversation is with | Stored on your device. Included in what Claude sees if you turn on the Claude connection. |
 | Contact names | Showing a name instead of a number | Read from your contacts; included in what Claude sees if you turn on the Claude connection. |
+| Your auto-reply settings and the list of automatic texts sent | Optional "Auto-reply when away": remembering your message, schedule and limits, and showing you what was sent | Stored on your device only. The automatic text itself goes by SMS to the person who messaged you, like any text you send. |
 | Microphone audio | Voice memos | Transcribed on your device; never uploaded. |
 
 ## Message sorting is on-device

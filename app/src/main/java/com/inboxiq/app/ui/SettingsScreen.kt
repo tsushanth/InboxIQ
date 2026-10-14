@@ -164,7 +164,7 @@ fun SettingsScreen(
                 ) {
                     Column(Modifier.weight(1f)) {
                         Text("Auto-reply when away", style = MaterialTheme.typography.bodyLarge)
-                        Text("$autoReplySummary. Sends one short text for you to people you know.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("$autoReplySummary. Optional. Sends a short text for you, only to people you have texted or saved. Automatic texts may cost money on some plans. Turn it off here any time.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
                 }

@@ -104,7 +104,7 @@ fun AutoReplyScreen(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp)) {
             Text(
-                "Sends one short text for you when someone you know messages while you are away. It is off until you turn it on, and it only ever answers people you have texted before or saved as contacts.",
+                "Sends one short text for you when someone you know messages while you are away. It is off until you turn it on, and it only ever answers people you have texted before or saved as contacts. These are real texts sent from your number, so they may cost money on plans that charge per text. To turn it off, switch it off below or tap Turn off in the list of auto-replies sent.",
                 style = MaterialTheme.typography.bodyMedium,
             )
             if (!isDefaultSms) {
