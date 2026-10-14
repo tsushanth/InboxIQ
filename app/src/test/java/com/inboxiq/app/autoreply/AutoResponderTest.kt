@@ -10,6 +10,8 @@ import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.BlockedNumberEntity
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.MessageLabel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -43,7 +45,7 @@ class AutoResponderTest {
         AutoResponder.isDefaultSms = { true }
         AutoResponder.importRunning = { false }
         AutoResponder.savedContact = { _, _ -> false }
-        AutoResponder.sender = AutoReplySender { c, a, b ->
+        AutoResponder.sender = AutoReplySender { c, a, b, _ ->
             sent += a to b
             db.messageDao().insert(MessageEntity(threadId = 0, address = a, body = b, timestamp = now, isIncoming = false, label = MessageLabel.PERSONAL))
         }
@@ -186,10 +188,128 @@ class AutoResponderTest {
 
     @Test fun `a failed send does not use up the sender's slot`() {
         haveTexted(); turnOn()
-        AutoResponder.sender = AutoReplySender { _, _, _ -> throw IllegalStateException("radio off") }
+        AutoResponder.sender = AutoReplySender { _, _, _, _ -> throw IllegalStateException("radio off") }
         work(friend, incoming()); assertEquals(0, store.log().size)
-        AutoResponder.sender = AutoReplySender { _, a, b -> sent += a to b; 7L }
+        AutoResponder.sender = AutoReplySender { _, a, b, _ -> sent += a to b; 7L }
         now += 120_000
         work(friend, incoming(body = "hello?")); assertEquals(1, sent.size)
+    }
+
+    // ------------------------------------------------------------------ release review (docs/AUTO_RESPONDER_REVIEW.md)
+
+    @Test fun `the same person written two ways (plus one and ten digit) is one sender`() {
+        haveTexted("+14155550101"); turnOn()
+        work("4155550101", incoming("4155550101"))
+        assertEquals("a known person is answered however the number is written", 1, sent.size)
+        work("+14155550101", incoming("+14155550101", body = "hello??"))
+        work("14155550101", incoming("14155550101", body = "hello???"))
+        assertEquals("still one text in 24 hours", 1, sent.size)
+    }
+
+    @Test fun `the daily cap is a rolling 24 hours, not reset at midnight`() {
+        now = java.time.LocalDateTime.of(2027, 1, 15, 23, 59).atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
+        turnOn { it.copy(dailyCap = 3) }
+        for (i in 0 until 3) { val a = "+141555503%02d".format(i); haveTexted(a); work(a, incoming(a)) }
+        assertEquals(3, sent.size)
+        now += 2 * 60_000L // 00:01 the next calendar day
+        for (i in 3 until 6) { val a = "+141555503%02d".format(i); haveTexted(a); work(a, incoming(a)) }
+        assertEquals("midnight must not hand out a fresh allowance", 3, sent.size)
+        now += 24 * 3_600_000L
+        val a = "+14155550390"; haveTexted(a); work(a, incoming(a))
+        assertEquals(4, sent.size)
+    }
+
+    @Test fun `many senders at once cannot get past the daily cap`() {
+        turnOn { it.copy(dailyCap = 3) }
+        val ids = (0 until 12).map { i -> val a = "+141555504%02d".format(i); haveTexted(a); a to incoming(a) }
+        AutoResponder.sender = AutoReplySender { _, a, b, _ ->
+            kotlinx.coroutines.delay(20)
+            synchronized(sent) { sent += a to b }
+            7L
+        }
+        runBlocking {
+            ids.map { (a, id) -> async(kotlinx.coroutines.Dispatchers.Default) { AutoResponder.process(context, db, store, a, id) } }
+                .awaitAll()
+        }
+        assertEquals(3, sent.size)
+    }
+
+    @Test fun `a redelivered broadcast for the same message never sends twice, even if the sender slot was lost`() {
+        haveTexted(); turnOn()
+        val id = incoming(); work(friend, id); assertEquals(1, sent.size)
+        context.getSharedPreferences(AutoReplyStore.FILE, Context.MODE_PRIVATE).edit().remove("last.4155550101").remove("sends").commit() // per-sender memory gone
+        work(friend, id)
+        assertEquals(1, sent.size)
+    }
+
+    @Test fun `a failure while writing the log after the text went out does not free the slot`() {
+        haveTexted(); turnOn()
+        val real = context.getSharedPreferences(AutoReplyStore.FILE, Context.MODE_PRIVATE)
+        val failing = AutoReplyStore(failingOn(real, "log"))
+        val id = incoming()
+        runBlocking { AutoResponder.process(context, db, failing, friend, id) }
+        assertEquals(1, sent.size)
+        now += 120_000
+        work(friend, incoming(body = "hello?"))
+        assertEquals("the text was sent, so the slot stays used", 1, sent.size)
+    }
+
+    private fun failingOn(real: android.content.SharedPreferences, key: String): android.content.SharedPreferences {
+        val cl = real.javaClass.classLoader
+        return java.lang.reflect.Proxy.newProxyInstance(cl, arrayOf(android.content.SharedPreferences::class.java)) { _, m, args ->
+            if (m.name == "edit") {
+                val ed = real.edit()
+                var bad = false
+                java.lang.reflect.Proxy.newProxyInstance(cl, arrayOf(android.content.SharedPreferences.Editor::class.java)) { p, em, eargs ->
+                    if (em.name.startsWith("put") && eargs?.get(0) == key) bad = true
+                    if (em.name == "commit" && bad) throw IllegalStateException("disk full")
+                    val r = em.invoke(ed, *(eargs ?: emptyArray()))
+                    if (r === ed) p else r
+                }
+            } else m.invoke(real, *(args ?: emptyArray()))
+        } as android.content.SharedPreferences
+    }
+
+    @Test fun `clearing the list keeps the automatic markers and the memory of who was answered`() {
+        haveTexted(); turnOn()
+        work(friend, incoming())
+        val marked = store.sentIds()
+        assertEquals(1, marked.size)
+        store.clearLog()
+        assertTrue(store.log().isEmpty())
+        assertEquals(marked, store.sentIds())
+        now += 60_000
+        work(friend, incoming(body = "hello?")); assertEquals(1, sent.size)
+    }
+
+    @Test fun `the reply goes out on the SIM that received the text`() {
+        haveTexted(); turnOn()
+        var sim = -2
+        AutoResponder.sender = AutoReplySender { _, a, b, s -> sim = s; sent += a to b; 9L }
+        runBlocking { AutoResponder.process(context, db, store, friend, incoming(), subscriptionId = 3) }
+        assertEquals(3, sim)
+    }
+
+    @Test fun `a text that is just our own message coming back is not answered`() {
+        val custom = "Back at 5 pm, text me then"
+        haveTexted(); turnOn(message = custom)
+        work(friend, incoming(body = custom))
+        assertTrue(sent.isEmpty())
+    }
+
+    @Test fun `changed settings apply to work already queued`() {
+        haveTexted(); turnOn()
+        val id = incoming()
+        store.disable() // user hits the kill switch after the broadcast but before the worker runs
+        work(friend, id)
+        assertTrue(sent.isEmpty())
+    }
+
+    @Test fun `lowering the daily cap takes effect at once`() {
+        turnOn()
+        val a = "+14155550410"; haveTexted(a); work(a, incoming(a))
+        store.save(store.config().copy(dailyCap = 1))
+        val b = "+14155550411"; haveTexted(b); work(b, incoming(b))
+        assertEquals(1, sent.size)
     }
 }

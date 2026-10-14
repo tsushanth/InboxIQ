@@ -172,6 +172,27 @@ class AutoReplyPolicyTest {
         assertEquals(Skip.BAD_MESSAGE, eval(c = on.copy(message = "see example.com")))
     }
 
+    @Test fun `characters that make a text longer or more expensive are refused`() {
+        // GSM extension characters count twice and anything outside the GSM alphabet forces 70-character segments.
+        listOf("call me {later}", "busy [now]", "back ~5", "a|b", "back\\later", "cost^2", "it`s me", "100% sure \u20ac").forEach {
+            assertNotNull(it, AutoReplyConfig.validateMessage(it))
+        }
+        assertNull(AutoReplyConfig.validateMessage("I'm busy: call back (or text) at 5, OK? Thanks! #1 @home $5 & more_"))
+        assertNull(AutoReplyConfig.validateMessage("x".repeat(160)))
+    }
+
+    @Test fun `schedule follows the wall clock across a daylight saving change`() {
+        val la = ZoneId.of("America/Los_Angeles")
+        val c = AutoReplyConfig(enabled = true, scheduleOn = true, startMin = 22 * 60, endMin = 7 * 60)
+        // 2026-11-01: clocks go back at 02:00, so 01:30 happens twice; both are inside the 22:00-07:00 window.
+        val first = LocalDateTime.of(2026, 11, 1, 1, 30).atZone(la).withEarlierOffsetAtOverlap().toInstant().toEpochMilli()
+        val second = LocalDateTime.of(2026, 11, 1, 1, 30).atZone(la).withLaterOffsetAtOverlap().toInstant().toEpochMilli()
+        assertTrue(c.withinSchedule(first, la)); assertTrue(c.withinSchedule(second, la))
+        assertFalse(c.withinSchedule(LocalDateTime.of(2026, 11, 1, 7, 30).atZone(la).toInstant().toEpochMilli(), la))
+        // the spring-forward night: 02:30 does not exist, 03:30 is still inside the window
+        assertTrue(c.withinSchedule(LocalDateTime.of(2027, 3, 14, 3, 30).atZone(la).toInstant().toEpochMilli(), la))
+    }
+
     @Test fun `confirmation shows the exact message, recipients, limits and the carrier warning`() {
         val c = AutoReplyConfig(message = "I am driving, I will reply when I can.", perSenderHours = 12, dailyCap = 10)
         val t = AutoReplyConfirmation.text(c)

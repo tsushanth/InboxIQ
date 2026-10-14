@@ -15,8 +15,8 @@ object SmsSender {
     const val EXTRA_MESSAGE_ID = "message_id"
     const val EXTRA_PROVIDER_URI = "provider_uri"
 
-    /** Returns the id of the stored outgoing row (<= 0 when the insert was ignored). */
-    suspend fun send(context: Context, rawAddress: String, body: String): Long {
+    /** Returns the id of the stored outgoing row (<= 0 when the insert was ignored). [subscriptionId] picks the SIM on dual-SIM phones (-1 = the default one). */
+    suspend fun send(context: Context, rawAddress: String, body: String, subscriptionId: Int = -1): Long {
         val dao = AppDatabase.get(context).messageDao()
         // Same normalisation the history import applies, so the row we store and the provider row it
         // later re-reads share one (address, timestamp, body) key. Idempotent on already-normal numbers.
@@ -50,7 +50,12 @@ object SmsSender {
         )
 
         try {
-            val smsManager = context.getSystemService(SmsManager::class.java)
+            @Suppress("DEPRECATION")
+            val smsManager = if (subscriptionId >= 0) {
+                SmsManager.getSmsManagerForSubscriptionId(subscriptionId)
+            } else {
+                context.getSystemService(SmsManager::class.java)
+            }
             val parts = smsManager.divideMessage(body)
             if (parts.size > 1) {
                 val sentIntents = ArrayList<PendingIntent>().apply { repeat(parts.size) { add(pendingIntent) } }

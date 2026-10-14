@@ -65,7 +65,7 @@ class SmsDeliverReceiver : BroadcastReceiver() {
                 val muted = db.threadStateDao().isMuted(address, System.currentTimeMillis())
                 MessageNotifier.notifyIncoming(context, address, displayName, body, labelForNotification, timestamp, muted)
                 // Optional, off by default (AUTO_RESPONDER_ENABLED + the user's explicit opt-in): see autoreply.AutoResponder.
-                com.inboxiq.app.autoreply.AutoResponder.onIncoming(context, address, id)
+                com.inboxiq.app.autoreply.AutoResponder.onIncoming(context, address, id, subscriptionId)
             } catch (e: Exception) {
                 // Never crash the receiver. If our DB failed after the provider write the text is safe in the
                 // provider and the import recovers it; log the class only, never the message.

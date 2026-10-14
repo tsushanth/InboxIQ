@@ -57,13 +57,20 @@ data class AutoReplyConfig(
             "I am in a meeting and will get back to you soon.",
         )
 
+        /**
+         * Characters of the basic GSM 03.38 alphabet that are also plain ASCII. Anything else (the extension characters
+         * { } [ ] ~ | ^ \\ count double; ` and all non-GSM characters force 70-character UCS-2 segments) could turn the
+         * 160-character message into several billable texts.
+         */
+        private val SMS_SAFE: Set<Char> = (('a'..'z') + ('A'..'Z') + ('0'..'9') + " !\"#$%&'()*+,-./:;<=>?@_".toList()).toSet()
+
         private val url = Regex("https?://|www\\.|\\b[a-z0-9-]+\\.(com|org|net|io|co|app|me|ly|link)\\b", RegexOption.IGNORE_CASE)
 
         fun validateMessage(m: String): String? = when {
             m.isBlank() -> "Write the message to send."
             m.length > MAX_MESSAGE_CHARS -> "Keep it under $MAX_MESSAGE_CHARS characters so it is a single text."
             url.containsMatchIn(m) -> "Leave out links."
-            m.any { it.code > 0x7E || it.isISOControl() } -> "Use plain letters and punctuation so it stays one text (no emoji or accents)."
+            m.any { it !in SMS_SAFE } -> "Use plain letters and common punctuation so it stays one text (no emoji, accents, or characters like { } [ ] ~ | ^ ` or backslash)."
             else -> null
         }
     }
@@ -125,25 +132,40 @@ class AutoReplyStore(private val prefs: SharedPreferences) {
 
     fun disable() { prefs.edit().putBoolean("enabled", false).commit() }
 
-    // ------------------------------------------------------------ per-sender and daily limits
-    fun lastSentAt(address: String): Long = prefs.getLong("last.$address", 0)
+    // ------------------------------------------------------------ per-sender and rolling daily limits
+    /** The same person written "+14155550101", "14155550101" or "4155550101" is one sender. */
+    private fun key(address: String) = canonical(address)
 
-    fun sentOn(day: String): Int = if (prefs.getString("day", "") == day) prefs.getInt("dayCount", 0) else 0
+    fun lastSentAt(address: String): Long = prefs.getLong("last.${key(address)}", 0)
 
-    /** Reserves the slot BEFORE sending, so two racing receivers cannot both send. */
-    fun reserve(address: String, at: Long, day: String) {
-        val n = sentOn(day) + 1
-        prefs.edit().putLong("last.$address", at).putString("day", day).putInt("dayCount", n).commit()
+    /** Automatic texts sent in the 24 hours up to [now] (a rolling window, so midnight does not hand out a new allowance). */
+    fun sentInLast24h(now: Long): Int = sendTimes().count { it > now - DAY_MS }
+
+    private fun sendTimes(): List<Long> = prefs.getString("sends", "").orEmpty().split(',').mapNotNull { it.toLongOrNull() }
+
+    /** Reserves the slot BEFORE sending, so two racing receivers cannot both send. [messageId] is remembered so a redelivery is ignored. */
+    fun reserve(address: String, at: Long, messageId: Long) {
+        val times = (sendTimes().filter { it > at - DAY_MS } + at).takeLast(AutoReplyConfig.MAX_DAILY * 2)
+        prefs.edit().putLong("last.${key(address)}", at).putString("sends", times.joinToString(","))
+            .putString("handled", (handledIds() + messageId).takeLast(MAX_HANDLED).joinToString(",")).commit()
     }
 
-    fun release(address: String, previous: Long, day: String) {
-        val n = (sentOn(day) - 1).coerceAtLeast(0)
-        prefs.edit().putLong("last.$address", previous).putString("day", day).putInt("dayCount", n).commit()
+    /** Gives the slot back after a send that did not happen. */
+    fun release(address: String, previous: Long, at: Long, messageId: Long) {
+        prefs.edit().putLong("last.${key(address)}", previous)
+            .putString("sends", sendTimes().filter { it != at }.joinToString(","))
+            .putString("handled", handledIds().filter { it != messageId }.joinToString(",")).commit()
     }
+
+    private fun handledIds(): List<Long> = prefs.getString("handled", "").orEmpty().split(',').mapNotNull { it.toLongOrNull() }
+
+    /** True when an automatic reply was already sent (or is being sent) for this incoming message. */
+    fun alreadyHandled(messageId: Long): Boolean = messageId in handledIds()
 
     fun record(entry: AutoReplyLogEntry) {
         val lines = (log().map { "${it.at}|${it.address}|${it.messageId}" } + "${entry.at}|${entry.address}|${entry.messageId}").takeLast(MAX_LOG)
-        prefs.edit().putString("log", lines.joinToString("\n")).commit()
+        val ids = (autoIds() + entry.messageId).filter { it > 0 }.takeLast(MAX_AUTO_IDS)
+        prefs.edit().putString("log", lines.joinToString("\n")).putString("autoIds", ids.joinToString(",")).commit()
     }
 
     fun log(): List<AutoReplyLogEntry> = prefs.getString("log", "").orEmpty().lines().mapNotNull { l ->
@@ -151,14 +173,34 @@ class AutoReplyStore(private val prefs: SharedPreferences) {
         if (p.size != 3) null else runCatching { AutoReplyLogEntry(p[0].toLong(), p[1], p[2].toLong()) }.getOrNull()
     }.reversed()
 
-    /** Ids of messages InboxIQ sent automatically: shown as "Sent automatically" in the thread. */
-    fun sentIds(): Set<Long> = log().map { it.messageId }.filter { it > 0 }.toSet()
+    private fun autoIds(): List<Long> = prefs.getString("autoIds", "").orEmpty().split(',').mapNotNull { it.toLongOrNull() }
+
+    /**
+     * Ids of messages InboxIQ sent automatically: shown as "Sent automatically" in the thread, and kept out of
+     * "texts the user wrote". Kept apart from the visible list, so clearing the list does not change either.
+     */
+    fun sentIds(): Set<Long> = (autoIds() + log().map { it.messageId }).filter { it > 0 }.toSet()
 
     fun clearLog() { prefs.edit().remove("log").commit() }
 
     companion object {
         const val FILE = "inboxiq_autoreply"
         const val MAX_LOG = 200
+        const val MAX_AUTO_IDS = 2000
+        const val MAX_HANDLED = 200
+        const val DAY_MS = 24 * 3_600_000L
+
+        /** One key per real-world number: digits only, with the North American "1" country code dropped. */
+        fun canonical(address: String): String {
+            val d = address.filter { it.isDigit() }
+            return if (d.length == 11 && d.startsWith("1")) d.substring(1) else d
+        }
+
+        /** Every way the same number may be stored, for looking up what the user sent to it. */
+        fun variants(address: String): List<String> {
+            val c = canonical(address)
+            return if (c.length == 10) listOf(address, "+1$c", "1$c", c) else listOf(address, "+$c", c)
+        }
     }
 }
 
