@@ -9,6 +9,7 @@ import android.util.Log
 object ContactResolver {
 
     fun displayNameFor(context: Context, address: String): String? {
+        com.inboxiq.app.demo.DemoHooks.contactName(context, address)?.let { return it }
         val uri = Uri.withAppendedPath(
             ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
             Uri.encode(address),

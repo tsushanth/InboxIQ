@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
     private fun autoStore() = AutoReplyStore(this)
     private fun refreshAuto() { val s = autoStore(); autoCfg = s.config(); autoLog = s.log() }
 
-    private fun refreshDefault() { isDefault = DefaultSmsRole.isDefault(this) }
+    private fun refreshDefault() { isDefault = DefaultSmsRole.isDefault(this) || com.inboxiq.app.demo.DemoHooks.shownAsDefault(this) }
 
     /** Starts the history import whenever we are the default SMS app, however that came about (see ImportTrigger). */
     private val roleWatcher = RoleWatcher(
