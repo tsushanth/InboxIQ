@@ -81,6 +81,8 @@ class MainActivity : ComponentActivity() {
     private var isDefault by mutableStateOf(false)
     private var theme by mutableStateOf(ThemeSettings())
     private var undoSeconds by mutableStateOf(0)
+    /** Set when the user sends a text; consumed when they leave the conversation (the rating moment). */
+    private var repliedInThread = false
 
     private val requestRole = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         refreshDefault()
@@ -134,6 +136,7 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
         )
         super.onCreate(savedInstanceState)
+        com.kreativekoala.ratingkit.RatingKit.trackAppOpen(this)
 
         theme = ThemePreferences.get(this)
         refreshAuto()
@@ -180,6 +183,15 @@ class MainActivity : ComponentActivity() {
         val names by vm.names.collectAsState()
         val blocked by vm.blocked.collectAsState()
         val importStatus by ImportStatusHolder.status.collectAsState()
+
+        // Rating moment: the user replied to someone and has now left the conversation (back, archive, ...).
+        // Never while they are still typing or reading the thread.
+        LaunchedEffect(screen) {
+            if (repliedInThread && screen !is Screen.Thread && screen !is Screen.Media && screen !is Screen.Viewer) {
+                repliedInThread = false
+                com.kreativekoala.ratingkit.RatingKit.trackAction(this@MainActivity)
+            }
+        }
 
         BackHandler(enabled = screen != Screen.Inbox) {
             vm.screen = when (screen) {
@@ -348,6 +360,7 @@ class MainActivity : ComponentActivity() {
             ThreadCallbacks(
                 onBack = { vm.screen = Screen.Inbox },
                 onSend = { body, imageUri ->
+                    repliedInThread = true
                     if (imageUri != null) lifecycleScope.launch { MmsSender.send(applicationContext, address, body, imageUri) }
                     else vm.sendText(address, body)
                 },

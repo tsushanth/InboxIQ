@@ -490,6 +490,8 @@ private fun MessageBubble(
         bottomStart = if (isMe) 18.dp else 4.dp, bottomEnd = if (isMe) 4.dp else 18.dp,
     )
     val failed = DeliveryInfo.isFailure(message)
+    // A send failure is on screen: keep the rating prompt quiet for a while.
+    if (failed) androidx.compose.runtime.LaunchedEffect(message.id) { com.kreativekoala.ratingkit.RatingKit.reportError() }
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),

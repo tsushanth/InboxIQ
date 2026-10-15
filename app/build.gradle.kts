@@ -21,8 +21,8 @@ android {
         applicationId = "com.inboxiq.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "0.5.0"
+        versionCode = 11
+        versionName = "0.5.2"
 
         // Native whisper.cpp build for on-device voice-memo transcription (zero network).
         ndk {
@@ -135,6 +135,7 @@ dependencies {
     implementation(composeBom)
 
     implementation("androidx.core:core-ktx:1.13.1")
+    implementation(project(":ratingkit"))
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.lifecycle:lifecycle-service:2.8.4")
     implementation("androidx.lifecycle:lifecycle-process:2.8.4")

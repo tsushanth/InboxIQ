@@ -33,6 +33,7 @@ class InboxIqApp : Application() {
         com.inboxiq.app.sms.ProviderWriteScheduler.enqueueIfPending(this)
 
         CrashLogger.install(this)
+        com.kreativekoala.ratingkit.RatingKit.init(this, appId = "inboxiq")
         com.inboxiq.app.feature.RelayFeatures.instance.onAppStart(this)
     }
 }

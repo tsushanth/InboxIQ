@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "InboxIQ"
 include(":app")
 include(":gemma_model_pack")
+include(":ratingkit")
+project(":ratingkit").projectDir = file("/Users/sushanthtiruvaipati/Documents/GitHub/RatingKit-Android/ratingkit")
