@@ -3,6 +3,7 @@ package com.inboxiq.app.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
@@ -28,7 +29,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -51,6 +54,8 @@ import kotlinx.coroutines.delay
 import com.inboxiq.app.classify.ClassifierTierPreference
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.sms.DefaultSmsRole
+import com.inboxiq.app.sms.RoleRequestMessage
+import com.inboxiq.app.sms.RoleRequestOutcome
 import com.inboxiq.app.sms.MmsSender
 import com.inboxiq.app.sms.ScheduledSend
 import com.inboxiq.app.sms.SendPreferences
@@ -84,6 +89,7 @@ class MainActivity : ComponentActivity() {
     /** Set when the user sends a text; consumed when they leave the conversation (the rating moment). */
     private var repliedInThread = false
 
+    private var roleRequestedAt = 0L
     private val requestRole = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         refreshDefault()
         if (isDefault) {
@@ -91,6 +97,26 @@ class MainActivity : ComponentActivity() {
             if (vm.screen is Screen.Onboarding) vm.screen = Screen.Inbox
         }
         roleWatcher.check(force = true)
+        explainRoleOutcome(RoleRequestOutcome.classify(isDefault, SystemClock.elapsedRealtime() - roleRequestedAt))
+    }
+
+    private fun launchRoleRequest() {
+        roleRequestedAt = SystemClock.elapsedRealtime()
+        requestRole.launch(DefaultSmsRole.requestIntent(this))
+    }
+
+    /** A declined or suppressed prompt used to leave the screen unchanged; say what happened and offer a next step. */
+    private fun explainRoleOutcome(outcome: RoleRequestOutcome) {
+        val msg = RoleRequestMessage.forOutcome(outcome) ?: return
+        lifecycleScope.launch {
+            vm.snackbar.currentSnackbarData?.dismiss()
+            val r = vm.snackbar.showSnackbar(msg.text, actionLabel = msg.action.label, duration = SnackbarDuration.Long)
+            if (r == SnackbarResult.ActionPerformed) when (msg.action) {
+                RoleRequestMessage.Action.TRY_AGAIN -> launchRoleRequest()
+                RoleRequestMessage.Action.OPEN_SETTINGS ->
+                    runCatching { startActivity(DefaultSmsRole.settingsIntent()) }
+            }
+        }
     }
 
     private var onContactPicked: ((String?) -> Unit)? = null
@@ -299,7 +325,7 @@ class MainActivity : ComponentActivity() {
                     screen is Screen.Onboarding -> OnboardingScreen(
                         isDefault = isDefault,
                         firstRun = screen.firstRun,
-                        onChooseDefault = { requestRole.launch(DefaultSmsRole.requestIntent(this@MainActivity)) },
+                        onChooseDefault = { launchRoleRequest() },
                         onSkip = {
                             markOnboarded()
                             vm.screen = if (screen.firstRun) Screen.Inbox else Screen.Settings
@@ -326,7 +352,7 @@ class MainActivity : ComponentActivity() {
         onOpenThread = { vm.screen = Screen.Thread(it) },
         onOpenSettings = { vm.screen = Screen.Settings },
         onNewConversation = { vm.screen = Screen.NewConversation() },
-        onRequestDefault = { requestRole.launch(DefaultSmsRole.requestIntent(this)) },
+        onRequestDefault = { launchRoleRequest() },
         onRetryImport = { ImportTrigger.retry(applicationContext) },
         onPin = { addrs, pin -> vm.launch { addrs.forEach { vm.actions.setPinned(it, pin) } } },
         onArchive = { addrs, archived -> vm.archive(addrs, archived) },

@@ -35,5 +35,9 @@ object DefaultSmsRole {
         }
     }
 
+    /** Android's "Default apps" screen: the only route once the system stops showing the role prompt. */
+    fun settingsIntent(): Intent = Intent(android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
     fun handledResult(resultCode: Int): Boolean = resultCode == Activity.RESULT_OK
 }
