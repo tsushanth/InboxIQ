@@ -74,6 +74,10 @@ interface MessageDao {
     @Query("UPDATE messages SET sendStatus = :status WHERE id = :id")
     suspend fun updateSendStatus(id: Long, status: SendStatus)
 
+    /** A multipart text reports once per part; a later OK must not hide an earlier failure. Returns 1 if the row is now SENT. */
+    @Query("UPDATE messages SET sendStatus = 'SENT' WHERE id = :id AND sendStatus != 'FAILED'")
+    suspend fun markSentUnlessFailed(id: Long): Int
+
     @Query("UPDATE messages SET awaitingAutoHeal = :awaiting WHERE id = :id")
     suspend fun setAwaitingAutoHeal(id: Long, awaiting: Boolean)
 
