@@ -6,6 +6,7 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.room.withTransaction
 import androidx.work.WorkerParameters
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.ScheduledMessageEntity
@@ -65,8 +66,13 @@ object ScheduledSend {
 
     /** Sends it now if nobody else has (used by the undo timer and by the worker). */
     suspend fun dispatch(context: Context, id: Long): Boolean {
-        val row = ScheduledStore(AppDatabase.get(context)).claim(id) ?: return false
-        SmsSender.send(context, row.address, row.body)
+        val db = AppDatabase.get(context)
+        // Claim and record in one transaction: dying between the two must not make the message vanish.
+        val prepared = db.withTransaction {
+            val row = ScheduledStore(db).claim(id) ?: return@withTransaction null
+            SmsSender.prepare(context, row.address, row.body)
+        } ?: return false
+        SmsSender.transmit(context, prepared)
         return true
     }
 

@@ -15,8 +15,19 @@ object SmsSender {
     const val EXTRA_MESSAGE_ID = "message_id"
     const val EXTRA_PROVIDER_URI = "provider_uri"
 
+    /** A stored outgoing row that has not been handed to the radio yet. */
+    internal data class Prepared(val id: Long, val address: String, val body: String, val timestamp: Long)
+
     /** Returns the id of the stored outgoing row (<= 0 when the insert was ignored). */
-    suspend fun send(context: Context, rawAddress: String, body: String): Long {
+    suspend fun send(context: Context, rawAddress: String, body: String): Long =
+        transmit(context, prepare(context, rawAddress, body))
+
+    /**
+     * Step 1: persist the outgoing row as PENDING. Split from [transmit] so a scheduled send can claim its queue row
+     * and record the outgoing message in one database transaction: if the process dies in between, the message is
+     * either still queued or visible in the thread, never silently gone.
+     */
+    internal suspend fun prepare(context: Context, rawAddress: String, body: String): Prepared {
         val dao = AppDatabase.get(context).messageDao()
         // Same normalisation the history import applies, so the row we store and the provider row it
         // later re-reads share one (address, timestamp, body) key. Idempotent on already-normal numbers.
@@ -33,7 +44,13 @@ object SmsSender {
                 sendStatus = SendStatus.PENDING,
             ),
         )
+        return Prepared(id, address, body, timestamp)
+    }
 
+    /** Step 2: hand a [prepare]d row to the radio. */
+    internal suspend fun transmit(context: Context, p: Prepared): Long {
+        val (id, address, body, timestamp) = p
+        val dao = AppDatabase.get(context).messageDao()
         val sync = OutgoingSmsSync.create(context)
         // A default SMS app owns the provider's outbox -> sent transition. Failure is queued, never fatal.
         val providerUri = if (id > 0) sync.begin(id, address, body, timestamp) else null
