@@ -108,6 +108,8 @@ import com.inboxiq.app.inbox.SearchLogic
 import com.inboxiq.app.inbox.ThreadRow
 import com.inboxiq.app.sms.ImportError
 import com.inboxiq.app.sms.ImportStatus
+import androidx.compose.ui.res.stringResource
+import com.inboxiq.app.R
 import com.inboxiq.app.ui.theme.Density
 import com.inboxiq.app.ui.theme.LocalDensityMode
 import kotlinx.coroutines.flow.Flow
@@ -129,6 +131,18 @@ class InboxCallbacks(
     val onCorrectLabel: (String, MessageLabel) -> Unit = { _, _ -> },
     val onReportSpam: (String, Boolean) -> Unit = { _, _ -> },
     val onRetryImport: () -> Unit = {},
+    val onShowIntro: () -> Unit = {},
+    val onEnableNotifications: () -> Unit = {},
+    val onDismissFirstLook: () -> Unit = {},
+)
+
+/** What the first-run cards need to know. Defaults hide everything, so existing previews and tests are unchanged. */
+data class FirstRunUi(
+    /** Non-null shows the "your inbox, sorted" card with this sentence ("12 personal and 3 codes"). */
+    val firstLookSummary: String? = null,
+    val notificationsOff: Boolean = false,
+    /** True once Android will no longer show the permission dialog: the button opens notification settings. */
+    val notificationsOpensSettings: Boolean = false,
 )
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -146,6 +160,7 @@ fun InboxScreen(
     activeAddress: String? = null,
     twoPane: Boolean = false,
     importStatus: ImportStatus = ImportStatus(),
+    firstRun: FirstRunUi = FirstRunUi(),
 ) {
     var tab by rememberSaveable { mutableStateOf(initialTab) }
     var showArchived by rememberSaveable { mutableStateOf(initialShowArchived) }
@@ -224,7 +239,11 @@ fun InboxScreen(
             }
 
             if (!isDefaultHandler && !searching) {
-                DefaultAppBanner(callbacks.onRequestDefault)
+                DefaultAppBanner(callbacks.onRequestDefault, callbacks.onShowIntro)
+            }
+            if (!searching && !inSelection) {
+                if (firstRun.notificationsOff) NotificationsOffCard(firstRun.notificationsOpensSettings, callbacks.onEnableNotifications)
+                firstRun.firstLookSummary?.let { FirstLookCard(it, callbacks.onDismissFirstLook) }
             }
 
             if (searching) {
@@ -245,7 +264,7 @@ fun InboxScreen(
                             shown.isEmpty() && importStatus.running && tab == InboxTab.ALL && !showArchived -> StateMessage(
                                 icon = Icons.Filled.Inbox,
                                 title = "Copying your texts",
-                                body = "Your newest conversations show up here as soon as they are copied. You can keep using the app.",
+                                body = "Your newest conversations show up here as soon as they are copied, then InboxIQ sorts them on this phone. You can keep using the app.",
                                 modifier = Modifier.fillMaxSize(),
                             )
                             shown.isEmpty() -> EmptyInbox(tab, showArchived, isDefaultHandler, callbacks.onRequestDefault)
@@ -365,7 +384,7 @@ private fun SearchBar(query: String, onChange: (String) -> Unit, onClose: () -> 
 }
 
 @Composable
-private fun DefaultAppBanner(onRequest: () -> Unit) {
+private fun DefaultAppBanner(onRequest: () -> Unit, onWhatChanges: () -> Unit) {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
@@ -383,7 +402,10 @@ private fun DefaultAppBanner(onRequest: () -> Unit) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
-            TextButton(onClick = onRequest) { Text("Choose InboxIQ as default") }
+            Row {
+                TextButton(onClick = onRequest) { Text("Choose InboxIQ as default") }
+                TextButton(onClick = onWhatChanges) { Text(stringResource(R.string.banner_what_changes)) }
+            }
         }
     }
 }

@@ -1,3 +1,79 @@
 <resources>
     <string name="app_name">InboxIQ</string>
+
+    <!-- First-run flow (docs/FIRST_RUN.md). English only: the app ships no other locales yet, so these are
+         translation-ready but untranslated. Anything added here needs a native-speaker review before it is
+         localised. -->
+    <string name="intro_title">Texts, sorted on this phone</string>
+    <string name="intro_lead">InboxIQ is a messaging app. It files each conversation as Personal, Work, Promo, Code, Spam or Scam, using a small model that runs on your phone. To do that it has to be your default SMS app.</string>
+
+    <string name="intro_example_badge">EXAMPLE ONLY: made-up messages, not yours</string>
+    <string name="intro_example_caption">Codes get a Copy button. Likely scams are flagged. Your own texts are sorted the same way once you switch.</string>
+    <string name="intro_example_1_name">Avery Park</string>
+    <string name="intro_example_1_body">Are we still on for dinner at 7?</string>
+    <string name="intro_example_2_name">Example Bank</string>
+    <string name="intro_example_2_body">Your verification code is 482913.</string>
+    <string name="intro_example_3_name">Example Shop</string>
+    <string name="intro_example_3_body">FLASH SALE: 40% off today only.</string>
+    <string name="intro_example_4_name">Unknown sender</string>
+    <string name="intro_example_4_body">Your package is held. Pay the fee at usps-redelivery.top.</string>
+    <string name="intro_example_copy_code">Copy code</string>
+
+    <string name="intro_changes_title">What changes when you switch</string>
+    <string name="intro_changes_body_named">Android allows one default SMS app. InboxIQ would take over from %1$s: it receives and sends your texts, and its notifications replace that app\'s.</string>
+    <string name="intro_changes_body_generic">Android allows one default SMS app. InboxIQ would take over from your current one: it receives and sends your texts, and its notifications replace that app\'s.</string>
+    <string name="intro_changes_rcs">InboxIQ handles SMS and picture messages (MMS) only. RCS chat features in Google Messages, such as typing indicators, read receipts and Wi-Fi chats, do not work while InboxIQ is the default, and chats that live only inside Google Messages may not appear here.</string>
+
+    <string name="intro_stays_title">What stays</string>
+    <string name="intro_stays_body">Your existing texts are copied into a private database on this phone. The originals stay in Android\'s message storage; nothing is deleted. Texts you send and receive while InboxIQ is the default are saved there too, so the app you switch back to has them. Your contacts and your old app are untouched.</string>
+
+    <string name="intro_back_title">Switching back</string>
+    <string name="intro_back_body">Open Android Settings, then Apps, Default apps, SMS app, and pick your old app (the wording varies by phone). In InboxIQ, Settings has a button that opens that screen. It is about three taps, and you can do it at any time.</string>
+
+    <string name="intro_does_title">What it will do</string>
+    <string name="intro_does_body">Receive and send SMS and picture messages. Look up names in your contacts if Android allows it. Use the microphone only while you hold the voice memo button.</string>
+    <string name="intro_doesnt_title">What it will not do</string>
+    <string name="intro_doesnt_body">Upload your messages to sort them. Show ads, use analytics or ask you to sign in. Read anything outside your texts and contacts.</string>
+
+    <string name="proof_title">Check the privacy claim yourself</string>
+    <string name="proof_lead">InboxIQ does not have the internet permission, so Android does not let it send anything over Wi-Fi or mobile data. You do not have to take our word for it:</string>
+    <string name="proof_step_1">Turn on airplane mode. Reading, searching and sorting work exactly the same.</string>
+    <string name="proof_step_2">In Android Settings, open the data usage list. InboxIQ should show no data used.</string>
+    <string name="proof_step_3">The code is public at github.com/tsushanth/InboxIQ. The app manifest has no INTERNET entry.</string>
+    <string name="proof_step_4">With a computer and USB debugging: adb shell dumpsys package com.inboxiq.app | grep INTERNET prints nothing.</string>
+    <string name="proof_exception">One optional exception: if you choose the larger sorting model in Settings, Google Play downloads it. InboxIQ itself still opens no connection.</string>
+
+    <string name="intro_next_hint">Next, Android shows its own confirmation screen. Nothing changes until you confirm there.</string>
+    <string name="intro_cta_choose">Choose InboxIQ as default SMS app</string>
+    <string name="intro_cta_declined">Android did not switch your default SMS app, so nothing changed. You can try again whenever you like.</string>
+    <string name="intro_skip_first_run">Not now, look around</string>
+    <string name="intro_continue_default">Continue to inbox</string>
+    <string name="intro_back">Back</string>
+
+    <!-- Settings: default SMS app -->
+    <string name="default_section">Default SMS app</string>
+    <string name="default_status_yes">InboxIQ is your default SMS app.</string>
+    <string name="default_status_no">InboxIQ is not your default SMS app. Android is delivering new texts to another app.</string>
+    <string name="default_back_body_named">To go back to %1$s, open Android\'s default apps screen, choose SMS app, then pick it. Texts that arrived while InboxIQ was the default are already in Android\'s message storage, so nothing is lost.</string>
+    <string name="default_back_body_generic">To go back to your old app, open Android\'s default apps screen, choose SMS app, then pick it. Texts that arrived while InboxIQ was the default are already in Android\'s message storage, so nothing is lost.</string>
+    <string name="default_open_settings">Open Android default apps settings</string>
+    <string name="default_open_previous">Open %1$s</string>
+    <string name="default_make_default">Make InboxIQ the default</string>
+
+    <!-- Inbox: not-default banner, first look, notifications -->
+    <string name="banner_what_changes">What changes?</string>
+    <string name="firstlook_title">Your inbox, sorted</string>
+    <string name="firstlook_summary">InboxIQ has filed %1$s on this phone so far.</string>
+    <string name="firstlook_try_title">Things to try</string>
+    <string name="firstlook_try_codes">Open the Codes tab. A one-time code shows a Copy code button for a few minutes.</string>
+    <string name="firstlook_try_junk">Open Junk to see what was filed as spam or scam. If one is wrong, open it and change its label.</string>
+    <string name="firstlook_try_swipe">Swipe a conversation right to archive it, or select it to pin or mute it.</string>
+    <string name="firstlook_dismiss">Got it</string>
+    <string name="notif_title">Notifications are off</string>
+    <string name="notif_body">While InboxIQ is your default SMS app, new texts only alert you if notifications are on. Without them you would miss messages.</string>
+    <string name="notif_enable">Turn on notifications</string>
+    <string name="notif_open_settings">Open notification settings</string>
+
+    <!-- Debug-only setup log -->
+    <string name="funnel_title">Setup log</string>
 </resources>

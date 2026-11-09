@@ -57,6 +57,12 @@ import com.inboxiq.app.sms.SendPreferences
 import com.inboxiq.app.sms.ImportStatusHolder
 import com.inboxiq.app.sms.ImportTrigger
 import com.inboxiq.app.sms.RoleWatcher
+import com.inboxiq.app.firstrun.DefaultAppHelper
+import com.inboxiq.app.firstrun.FirstLook
+import com.inboxiq.app.firstrun.FirstRunPrefs
+import com.inboxiq.app.firstrun.FunnelLog
+import com.inboxiq.app.firstrun.FunnelStep
+import com.inboxiq.app.firstrun.NotificationNudge
 import com.inboxiq.app.autoreply.AutoReplyConfig
 import com.inboxiq.app.autoreply.AutoReplyLogEntry
 import com.inboxiq.app.autoreply.AutoReplyStore
@@ -73,7 +79,6 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_THREAD_ADDRESS = "com.inboxiq.app.EXTRA_THREAD_ADDRESS"
-        private const val PREF_ONBOARDED = "onboarding_done"
         private const val ROLE_POLL_MS = 3_000L
     }
 
@@ -87,10 +92,18 @@ class MainActivity : ComponentActivity() {
     private val requestRole = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         refreshDefault()
         if (isDefault) {
+            roleDeclined = false
             markOnboarded()
             if (vm.screen is Screen.Onboarding) vm.screen = Screen.Inbox
+        } else {
+            roleDeclined = true
+            funnel.record(FunnelStep.ROLE_DECLINED)
         }
         roleWatcher.check(force = true)
+    }
+
+    private val requestNotifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        refreshNotifications()
     }
 
     private var onContactPicked: ((String?) -> Unit)? = null
@@ -120,15 +133,66 @@ class MainActivity : ComponentActivity() {
     private fun autoStore() = AutoReplyStore(this)
     private fun refreshAuto() { val s = autoStore(); autoCfg = s.config(); autoLog = s.log() }
 
-    private fun refreshDefault() { isDefault = DefaultSmsRole.isDefault(this) || com.inboxiq.app.demo.DemoHooks.shownAsDefault(this) }
+    private fun refreshDefault() {
+        val now = DefaultSmsRole.isDefault(this) || com.inboxiq.app.demo.DemoHooks.shownAsDefault(this)
+        // A real change seen while running is a funnel step; finding the role already held at launch is not.
+        val transition = roleSampled && now && !wasDefault
+        val heldAtLaunch = !roleSampled && now
+        roleSampled = true
+        wasDefault = now
+        isDefault = now
+        if (transition) funnel.record(FunnelStep.ROLE_GRANTED)
+        if (transition || heldAtLaunch) {
+            // No-op for installs that predate the first-look card (see FirstRunPrefs.noteLaunch).
+            firstRun.onRoleGranted()
+            firstLookPending = firstRun.firstLookPending
+            refreshNotifications()
+        }
+    }
+
+    private fun refreshNotifications() {
+        notificationsOn = androidx.core.app.NotificationManagerCompat.from(this).areNotificationsEnabled()
+        if (notificationsOn && funnelNotifCardSeen) {
+            funnelNotifCardSeen = false
+            funnel.record(FunnelStep.NOTIFICATIONS_ON)
+        }
+    }
+
+    /** The one place the system role dialog is launched from (intro screen, inbox banner, empty state, Settings). */
+    private fun requestDefaultRole() {
+        funnel.record(FunnelStep.ROLE_REQUESTED)
+        DefaultAppHelper.rememberPrevious(this, firstRun)
+        requestRole.launch(DefaultSmsRole.requestIntent(this))
+    }
+
+    private fun onNotificationsCardAction() {
+        when (NotificationNudge.action(android.os.Build.VERSION.SDK_INT, firstRun.notificationsAsked)) {
+            NotificationNudge.Action.ASK -> {
+                firstRun.notificationsAsked = true
+                requestNotifications.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+            NotificationNudge.Action.OPEN_SETTINGS -> startActivity(
+                Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, packageName)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        }
+    }
 
     /** Starts the history import whenever we are the default SMS app, however that came about (see ImportTrigger). */
     private val roleWatcher = RoleWatcher(
         isDefault = { DefaultSmsRole.isDefault(this) },
         onDefault = { ImportTrigger.ensure(applicationContext) },
     )
-    private fun prefs() = getSharedPreferences("inboxiq_prefs", MODE_PRIVATE)
-    private fun markOnboarded() = prefs().edit().putBoolean(PREF_ONBOARDED, true).apply()
+    private val firstRun by lazy { FirstRunPrefs(this) }
+    private val funnel by lazy { FunnelLog(this) }
+    private var wasDefault = false
+    private var roleSampled = false
+    private var roleDeclined by mutableStateOf(false)
+    private var notificationsOn by mutableStateOf(true)
+    private var funnelNotifCardSeen = false
+    private var firstLookPending by mutableStateOf(false)
+    private fun markOnboarded() { firstRun.onboardingDone = true }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -141,18 +205,23 @@ class MainActivity : ComponentActivity() {
         theme = ThemePreferences.get(this)
         refreshAuto()
         undoSeconds = SendPreferences.undoSeconds(this)
+        // Before the first role sample: decides once whether this is an install that predates the first-look card.
+        firstRun.noteLaunch(alreadyDefault = DefaultSmsRole.isDefault(this) || com.inboxiq.app.demo.DemoHooks.shownAsDefault(this))
         refreshDefault()
         if (savedInstanceState == null) {
             // Existing users already chose InboxIQ as default; only brand-new installs see the introduction.
             if (isDefault) markOnboarded()
-            if (!prefs().getBoolean(PREF_ONBOARDED, false)) vm.screen = Screen.Onboarding(firstRun = true)
+            if (!firstRun.onboardingDone) {
+                vm.screen = Screen.Onboarding(firstRun = true)
+                funnel.record(FunnelStep.ONBOARDING_SHOWN)
+            }
             addressFromIntent(intent)?.let { vm.screen = Screen.Thread(it) }
         }
 
         lifecycleScope.launch { ScheduledSend.reenqueueAll(applicationContext) }
 
         lifecycle.addObserver(LifecycleEventObserver { _, e ->
-            if (e == Lifecycle.Event.ON_RESUME) refreshDefault()
+            if (e == Lifecycle.Event.ON_RESUME) { refreshDefault(); refreshNotifications() }
             // Back from Settings or a system dialog: the default may have changed while we were away.
             if (e == Lifecycle.Event.ON_START) roleWatcher.check(force = true)
         })
@@ -184,6 +253,28 @@ class MainActivity : ComponentActivity() {
         val blocked by vm.blocked.collectAsState()
         val importStatus by ImportStatusHolder.status.collectAsState()
 
+        // Funnel: copy started / finished (debug builds only; see FunnelLog).
+        var importWasRunning by remember { mutableStateOf(false) }
+        LaunchedEffect(importStatus.running, importStatus.error) {
+            if (importStatus.running && !importWasRunning) funnel.record(FunnelStep.IMPORT_STARTED)
+            if (!importStatus.running && importWasRunning && importStatus.error == null) funnel.record(FunnelStep.IMPORT_FINISHED)
+            importWasRunning = importStatus.running
+        }
+        val firstRunUi = run {
+            val summary = if (firstLookPending) FirstLook.summarize(rows.orEmpty()) else com.inboxiq.app.firstrun.FirstLookSummary(0, emptyList())
+            val showFirstLook = FirstLook.shouldShow(firstLookPending, isDefault, importStatus.running, summary)
+            val showNotif = NotificationNudge.shouldShow(isDefault, notificationsOn)
+            FirstRunUi(
+                firstLookSummary = if (showFirstLook) summary.sentence() else null,
+                notificationsOff = showNotif,
+                notificationsOpensSettings = NotificationNudge.action(android.os.Build.VERSION.SDK_INT, firstRun.notificationsAsked) == NotificationNudge.Action.OPEN_SETTINGS,
+            )
+        }
+        LaunchedEffect(firstRunUi.firstLookSummary != null) { if (firstRunUi.firstLookSummary != null) funnel.record(FunnelStep.FIRST_LOOK_SHOWN) }
+        LaunchedEffect(firstRunUi.notificationsOff) {
+            if (firstRunUi.notificationsOff) { funnelNotifCardSeen = true; funnel.record(FunnelStep.NOTIFICATIONS_CARD_SHOWN) }
+        }
+
         // Rating moment: the user replied to someone and has now left the conversation (back, archive, ...).
         // Never while they are still typing or reading the thread.
         LaunchedEffect(screen) {
@@ -200,6 +291,7 @@ class MainActivity : ComponentActivity() {
                 is Screen.Blocked -> Screen.Settings
                 is Screen.AutoReply -> Screen.Settings
                 is Screen.AutoReplyLog -> Screen.AutoReply
+                is Screen.SetupLog -> Screen.Settings
                 is Screen.Onboarding -> if (screen.firstRun) Screen.Inbox else Screen.Settings
                 else -> Screen.Inbox
             }
@@ -217,7 +309,7 @@ class MainActivity : ComponentActivity() {
                             Row(Modifier.fillMaxSize()) {
                                 InboxScreen(
                                     rows = rows, names = names, isDefaultHandler = isDefault, callbacks = inboxCallbacks,
-                                    search = vm::search, activeAddress = activeAddress, twoPane = true, importStatus = importStatus,
+                                    search = vm::search, activeAddress = activeAddress, twoPane = true, importStatus = importStatus, firstRun = firstRunUi,
                                     modifier = Modifier.width(380.dp).fillMaxHeight(),
                                 )
                                 Box(Modifier.weight(1f).fillMaxHeight()) {
@@ -226,7 +318,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         } else {
-                            InboxScreen(rows, names, isDefault, inboxCallbacks, search = vm::search, importStatus = importStatus)
+                            InboxScreen(rows, names, isDefault, inboxCallbacks, search = vm::search, importStatus = importStatus, firstRun = firstRunUi)
                         }
                     }
                     screen is Screen.Thread -> ThreadHost(screen.address, showBack = true)
@@ -247,7 +339,18 @@ class MainActivity : ComponentActivity() {
                             onExport = { createBackup.launch("inboxiq-backup-" + SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()) + ".json") },
                             onImport = { openBackup.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
                             onShowIntro = { vm.screen = Screen.Onboarding(firstRun = false) },
+                            onOpenDefaultSettings = {
+                                funnel.record(FunnelStep.SWITCH_BACK_OPENED)
+                                startActivity(DefaultAppHelper.defaultAppsIntent(this@MainActivity))
+                            },
+                            onOpenPreviousApp = { DefaultAppHelper.previousLaunchIntent(this@MainActivity, firstRun)?.let { startActivity(it) } },
+                            onMakeDefault = { requestDefaultRole() },
+                            onOpenSetupLog = { vm.screen = Screen.SetupLog },
                         ),
+                        isDefault = isDefault,
+                        previousAppName = remember(isDefault) { DefaultAppHelper.previousLabel(this@MainActivity, firstRun) },
+                        canOpenPreviousApp = remember(isDefault) { DefaultAppHelper.previousLaunchIntent(this@MainActivity, firstRun) != null },
+                        showSetupLog = funnel.isEnabled,
                     )
                     screen is Screen.AutoReply && AutoResponder.buildEnabled() -> AutoReplyScreen(
                         config = autoCfg, isDefaultSms = isDefault, sentCount = autoLog.size,
@@ -265,6 +368,10 @@ class MainActivity : ComponentActivity() {
                         onClear = { autoStore().clearLog(); refreshAuto() },
                         onBack = { vm.screen = Screen.AutoReply },
                     )
+                    screen is Screen.SetupLog -> {
+                        var entries by remember { mutableStateOf(funnel.snapshot()) }
+                        SetupLogScreen(entries, onClear = { funnel.clear(); entries = funnel.snapshot() }, onBack = { vm.screen = Screen.Settings })
+                    }
                     screen is Screen.Blocked -> {
                         val entries by vm.blockedEntries.collectAsState()
                         BlockedNumbersScreen(entries, { names[it] }, onUnblock = { a -> vm.launch { vm.actions.setBlocked(a, false) } }, onBack = { vm.screen = Screen.Settings })
@@ -299,7 +406,9 @@ class MainActivity : ComponentActivity() {
                     screen is Screen.Onboarding -> OnboardingScreen(
                         isDefault = isDefault,
                         firstRun = screen.firstRun,
-                        onChooseDefault = { requestRole.launch(DefaultSmsRole.requestIntent(this@MainActivity)) },
+                        previousAppName = remember { DefaultAppHelper.previousLabel(this@MainActivity, firstRun) },
+                        declined = roleDeclined,
+                        onChooseDefault = { requestDefaultRole() },
                         onSkip = {
                             markOnboarded()
                             vm.screen = if (screen.firstRun) Screen.Inbox else Screen.Settings
@@ -326,7 +435,10 @@ class MainActivity : ComponentActivity() {
         onOpenThread = { vm.screen = Screen.Thread(it) },
         onOpenSettings = { vm.screen = Screen.Settings },
         onNewConversation = { vm.screen = Screen.NewConversation() },
-        onRequestDefault = { requestRole.launch(DefaultSmsRole.requestIntent(this)) },
+        onRequestDefault = { requestDefaultRole() },
+        onShowIntro = { vm.screen = Screen.Onboarding(firstRun = false) },
+        onEnableNotifications = { onNotificationsCardAction() },
+        onDismissFirstLook = { firstRun.dismissFirstLook(); firstLookPending = false; funnel.record(FunnelStep.FIRST_LOOK_DISMISSED) },
         onRetryImport = { ImportTrigger.retry(applicationContext) },
         onPin = { addrs, pin -> vm.launch { addrs.forEach { vm.actions.setPinned(it, pin) } } },
         onArchive = { addrs, archived -> vm.archive(addrs, archived) },

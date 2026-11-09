@@ -47,6 +47,7 @@ sealed interface Screen {
     data class Media(val address: String) : Screen
     data class Viewer(val address: String, val startMessageId: Long) : Screen
     data class Onboarding(val firstRun: Boolean) : Screen
+    data object SetupLog : Screen
 }
 
 /** Data for the inbox: joined rows, resolved contact names, blocked numbers, search. */
