@@ -1,0 +1,4 @@
+<resources>
+    <!-- relay has INTERNET for the optional Connect to Claude feature: never show the no-internet proof. -->
+    <bool name="privacy_no_internet">false</bool>
+</resources>

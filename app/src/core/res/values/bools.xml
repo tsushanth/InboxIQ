@@ -1,0 +1,4 @@
+<resources>
+    <!-- core has no INTERNET permission (CoreHasNoRelayTest): the first-run screen may show the proof steps. -->
+    <bool name="privacy_no_internet">true</bool>
+</resources>
