@@ -13,6 +13,8 @@ class ImportEnv(
     private val normalizer: (String) -> String = { PhoneNumberNormalizer.normalize(context, it) },
     /** Bulk imports read parts for a whole page at once; the small recent-sync path reads per message. */
     val batchParts: Boolean = true,
+    /** When set, every unread incoming MMS row this run newly inserts is added here (the recent sync uses it to notify). */
+    val newIncoming: MutableList<com.inboxiq.app.data.MessageEntity>? = null,
 ) {
     private val cache = HashMap<String, String>()
 
@@ -26,12 +28,13 @@ class ImportEnv(
     companion object {
         private const val MAX_CACHE = 4096
 
-        fun from(context: Context, batchParts: Boolean = true): ImportEnv = ImportEnv(
+        fun from(context: Context, batchParts: Boolean = true, newIncoming: MutableList<com.inboxiq.app.data.MessageEntity>? = null): ImportEnv = ImportEnv(
             context = context.applicationContext,
             resolver = context.applicationContext.contentResolver,
             db = AppDatabase.get(context),
             tombstones = ImportTombstones(context),
             batchParts = batchParts,
+            newIncoming = newIncoming,
         )
     }
 }
