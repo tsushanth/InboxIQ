@@ -120,6 +120,32 @@ class HistoryImportTest {
     }
 
     @Test
+    fun `first copy shows 0 of N before the first page lands`() = runTest {
+        val fake = FakeTelephony.seed(3_000, 600).also { it.register() }
+        var n = 0
+        // 4 count/max queries in prepare, the 5th is the first page: die there.
+        fake.onQuery = { if (++n == 5) throw Killed() }
+        try { run() } catch (_: Killed) {}
+        val s = ImportStatusHolder.status.value
+        assertTrue(s.running)
+        assertEquals(0L, s.processed)
+        assertEquals(3_600L, s.total)
+        assertTrue(s.showStrip)
+    }
+
+    @Test
+    fun `existing user upgrade stays silent`() = runTest {
+        val fake = FakeTelephony.seed(50, 0).also { it.register() }
+        db.messageDao().insert(
+            MessageEntity(threadId = 1, address = "+15550100", body = "already here", timestamp = 5L, isIncoming = true, label = MessageLabel.PERSONAL, labelConfidence = 0.9f, isRead = true),
+        )
+        var shown = false
+        fake.onQuery = { if (ImportStatusHolder.status.value.showStrip) shown = true }
+        run()
+        assertEquals(false, shown)
+    }
+
+    @Test
     fun `kill mid-import then resume completes without duplicates and newest rows land first`() = runTest {
         val fake = FakeTelephony.seed(3_000, 600).also { it.register() }
         var n = 0
