@@ -146,13 +146,9 @@ interface MessageDao {
     @Query("DELETE FROM messages WHERE id = :id")
     suspend fun deleteMessage(id: Long)
 
-    /** Case-insensitive body search across every thread, newest first — feeds the search results list. */
-    @Query("SELECT * FROM messages WHERE body LIKE '%' || :query || '%' ORDER BY timestamp DESC LIMIT 200")
-    fun searchMessages(query: String): Flow<List<MessageEntity>>
-
     /**
      * Literal (wildcard-safe) body search for the in-app search screen. Pass the query through
-     * SearchLogic.escapeLike first. The older [searchMessages] is left as-is for its other callers.
+     * SearchLogic.escapeLike first.
      */
     @Query("SELECT * FROM messages WHERE body LIKE '%' || :escapedQuery || '%' ESCAPE '\\' ORDER BY timestamp DESC LIMIT 200")
     fun searchMessagesLiteral(escapedQuery: String): Flow<List<MessageEntity>>
