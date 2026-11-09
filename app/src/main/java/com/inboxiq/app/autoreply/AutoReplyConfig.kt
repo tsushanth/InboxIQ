@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import java.time.DayOfWeek
 import java.time.Instant
+import com.inboxiq.app.sms.SmsLength
 import java.time.ZoneId
 
 /** The user's settings for "Auto-reply when away". Everything defaults to OFF / the most conservative value. */
@@ -61,9 +62,13 @@ data class AutoReplyConfig(
 
         fun validateMessage(m: String): String? = when {
             m.isBlank() -> "Write the message to send."
-            m.length > MAX_MESSAGE_CHARS -> "Keep it under $MAX_MESSAGE_CHARS characters so it is a single text."
             url.containsMatchIn(m) -> "Leave out links."
-            m.any { it.code > 0x7E || it.isISOControl() } -> "Use plain letters and punctuation so it stays one text (no emoji or accents)."
+            // Printable ASCII is not the same as the 7-bit SMS alphabet: a backtick, for one, is outside it and would
+            // turn the whole text into the 70-character UCS-2 kind, so count what the radio will really send.
+            m.any { it.code > 0x7E || it.isISOControl() } || SmsLength.of(m).encoding != SmsLength.Encoding.GSM_7BIT ->
+                "Use plain letters and punctuation so it stays one text (no emoji, accents or backticks)."
+            // ^ { } [ ] \ ~ | cost two septets each, so 160 characters is not always one segment.
+            SmsLength.of(m).segments > 1 -> "Keep it under $MAX_MESSAGE_CHARS characters so it is a single text."
             else -> null
         }
     }
