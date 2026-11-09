@@ -64,7 +64,14 @@ object ScheduledSend {
         return cancelled
     }
 
-    /** Sends it now if nobody else has (used by the undo timer and by the worker). */
+    /** Swappable in tests; the real check is the platform's. */
+    @Volatile internal var isDefaultSms: (Context) -> Boolean = { DefaultSmsRole.isDefault(it) }
+
+    /**
+     * Sends it now if nobody else has (used by the undo timer and by the worker). When InboxIQ is no longer the
+     * default SMS app it must not use the SMS permissions (Play policy), so the text is not sent: it is recorded in
+     * the thread as not delivered, where the user can see it and send it again from whichever app they use.
+     */
     suspend fun dispatch(context: Context, id: Long): Boolean {
         val db = AppDatabase.get(context)
         // Claim and record in one transaction: dying between the two must not make the message vanish.
@@ -72,6 +79,10 @@ object ScheduledSend {
             val row = ScheduledStore(db).claim(id) ?: return@withTransaction null
             SmsSender.prepare(context, row.address, row.body)
         } ?: return false
+        if (!isDefaultSms(context)) {
+            if (prepared.id > 0) db.messageDao().updateSendStatus(prepared.id, com.inboxiq.app.data.SendStatus.FAILED)
+            return true
+        }
         SmsSender.transmit(context, prepared)
         return true
     }

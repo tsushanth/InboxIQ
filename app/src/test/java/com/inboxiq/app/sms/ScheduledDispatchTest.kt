@@ -28,7 +28,7 @@ class ScheduledDispatchTest {
         setInstance(db)
     }
 
-    @After fun tearDown() { setInstance(null); db.close() }
+    @After fun tearDown() { setInstance(null); ScheduledSend.isDefaultSms = { DefaultSmsRole.isDefault(it) }; db.close() }
 
     private fun setInstance(v: AppDatabase?) = AppDatabase::class.java.getDeclaredField("instance").apply { isAccessible = true }.set(null, v)
 
@@ -42,6 +42,18 @@ class ScheduledDispatchTest {
         val sent = db.messageDao().pageAfter(0, 10).single()
         assertEquals("see you at 6", sent.body)
         assertFalse(sent.isIncoming)
+    }
+
+    @Test fun `when InboxIQ is no longer the default app nothing is sent, the text is kept as not delivered`() = runTest {
+        ScheduledSend.isDefaultSms = { false }
+        val id = ScheduledStore(db).create("+15550100", "later text", 1L, isUndoWindow = false)
+
+        assertTrue(ScheduledSend.dispatch(context, id)) // no exception: the hand-off to the radio never happened
+
+        val row = db.messageDao().pageAfter(0, 10).single()
+        assertEquals("later text", row.body)
+        assertEquals(com.inboxiq.app.data.SendStatus.FAILED, row.sendStatus)
+        assertTrue(db.scheduledMessageDao().all().isEmpty())
     }
 
     @Test fun `a second dispatch of the same row does nothing`() = runTest {
