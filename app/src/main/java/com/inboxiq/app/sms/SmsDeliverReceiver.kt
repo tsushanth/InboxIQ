@@ -22,7 +22,8 @@ class SmsDeliverReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Telephony.Sms.Intents.SMS_DELIVER_ACTION) return
 
-        val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent) ?: return
+        // A PDU the platform could not decode comes back as a null element; drop those instead of crashing the receiver.
+        val messages = (Telephony.Sms.Intents.getMessagesFromIntent(intent) ?: return).filterNotNull().toTypedArray()
         if (messages.isEmpty()) return
 
         val incoming = combine(messages)
