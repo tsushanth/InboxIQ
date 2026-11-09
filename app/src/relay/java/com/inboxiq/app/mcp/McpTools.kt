@@ -87,7 +87,9 @@ object McpTools {
     private suspend fun searchMessages(context: Context, query: String): JsonObject {
         if (query.isBlank()) return textResult("query is required", isError = true)
         val dao = AppDatabase.get(context).messageDao()
-        val results = dao.searchMessages(query).first()
+        // Literal match (a "%" or "_" in the query is not a wildcard), and only against text the agent may see.
+        val results = dao.searchMessagesLiteral(com.inboxiq.app.inbox.SearchLogic.escapeLike(query)).first()
+            .filter { RelayRedaction.matchesVisible(it.body, query) }
         val lines = results.take(50).map { formatMessage(context, it) }
         return textResult(if (lines.isEmpty()) "No matches for \"$query\"." else lines.joinToString("\n"))
     }

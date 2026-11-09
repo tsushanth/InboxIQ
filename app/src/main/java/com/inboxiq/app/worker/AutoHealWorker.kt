@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.inboxiq.app.data.AppDatabase
+import com.inboxiq.app.sms.DefaultSmsRole
 import com.inboxiq.app.sms.MmsSender
 
 /**
@@ -22,6 +23,9 @@ class AutoHealWorker(
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
+        // Play's SMS policy: once InboxIQ is no longer the default SMS app it must stop using the SMS permissions,
+        // and a retry from a non-default app could re-send an old picture message without the user knowing.
+        if (!isDefaultSms(applicationContext)) return Result.success()
         val dao = AppDatabase.get(applicationContext).messageDao()
         val pending = dao.messagesAwaitingAutoHeal()
 
@@ -29,5 +33,10 @@ class AutoHealWorker(
             MmsSender.retry(applicationContext, message)
         }
         return Result.success()
+    }
+
+    companion object {
+        /** Swappable in tests; the real check is the platform's. */
+        @Volatile internal var isDefaultSms: (Context) -> Boolean = { DefaultSmsRole.isDefault(it) }
     }
 }

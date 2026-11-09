@@ -38,7 +38,7 @@ class MmsReceiver : BroadcastReceiver() {
                 val location = contentLocationOf(pdu)
                 if (location != null) {
                     val persister = PduPersister.getPduPersister(context)
-                    val subId = SubscriptionManager.getDefaultSmsSubscriptionId()
+                    val subId = subscriptionOf(intent)
                     val uri = persister.persist(
                         pdu as NotificationInd,
                         Uri.parse("content://mms/inbox"),
@@ -47,12 +47,12 @@ class MmsReceiver : BroadcastReceiver() {
                         null,
                         subId,
                     )
-                    Log.i(TAG, "persisted notification-indication row at $uri, location=$location")
+                    Log.i(TAG, "persisted notification-indication row at $uri")
                 } else {
                     Log.i(TAG, "WAP push PDU was not a NotificationInd (type=${pdu?.messageType})")
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "failed to parse/persist WAP push PDU", e)
+                Log.e(TAG, "failed to parse/persist WAP push PDU: ${e.javaClass.simpleName}")
             }
         }
 
@@ -70,6 +70,12 @@ class MmsReceiver : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "MmsReceiver"
+
+        /** The SIM the WAP push arrived on (dual-SIM phones); falls back to the default SMS SIM. */
+        internal fun subscriptionOf(intent: Intent): Int {
+            val tagged = intent.getIntExtra("subscription", SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+            return if (tagged >= 0) tagged else SubscriptionManager.getDefaultSmsSubscriptionId()
+        }
     }
 }
 

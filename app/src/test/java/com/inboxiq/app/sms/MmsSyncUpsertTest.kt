@@ -176,4 +176,24 @@ class MmsSyncUpsertTest {
         val rows = db.messageDao().observeThread("+18136000258").first()
         assertEquals(1, rows.size)
     }
+
+    @Test
+    fun `a newly received picture message is reported once so the user can be alerted, a re-sync reports nothing`() = runTest {
+        messages[6001L] = Msg(date = 1786927600L, msgBox = Telephony.Mms.MESSAGE_BOX_INBOX, fromAddress = "+18136000258")
+        parts.add(Part(mmsId = 6001L, contentType = "image/jpeg", text = null))
+
+        val first = MmsSync.syncRecent(context, 0L)
+        assertEquals(listOf("+18136000258"), first.map { it.address })
+        assertEquals(false, first.single().isRead)
+        assertEquals("the reported row carries its database id", true, first.single().id > 0)
+
+        assertEquals(emptyList<Any>(), MmsSync.syncRecent(context, 0L))
+    }
+
+    @Test
+    fun `messages we sent are never reported as new incoming`() = runTest {
+        messages[6002L] = Msg(date = 1786927700L, msgBox = Telephony.Mms.MESSAGE_BOX_SENT, fromAddress = "+18136000258")
+        parts.add(Part(mmsId = 6002L, contentType = "image/jpeg", text = null))
+        assertEquals(emptyList<Any>(), MmsSync.syncRecent(context, 0L))
+    }
 }

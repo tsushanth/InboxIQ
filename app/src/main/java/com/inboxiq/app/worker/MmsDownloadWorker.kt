@@ -57,10 +57,10 @@ class MmsDownloadWorker @JvmOverloads constructor(
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
             try {
-                Log.i(TAG, "downloading mms id=$id location=$location")
+                Log.i(TAG, "downloading mms id=$id")
                 downloadTrigger(applicationContext, location, msgUri, pendingIntent)
             } catch (e: Exception) {
-                Log.e(TAG, "downloadMultimediaMessage failed for id=$id", e)
+                Log.e(TAG, "downloadMultimediaMessage failed for id=$id: ${e.javaClass.simpleName}")
                 // Leave it for the next periodic pass — SyncMmsWorker's later read will just
                 // find no content yet, same as if this row hadn't been noticed at all.
             }
@@ -76,17 +76,34 @@ class MmsDownloadWorker @JvmOverloads constructor(
             // getSystemService(SmsManager::class.java) only reliably resolves on API 31+ (can
             // return null below that, silently no-op-ing every download); getDefault() works
             // on every version this app supports (minSdk 26).
-            val smsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Download over the SIM the message arrived on: on a dual-SIM phone the default SMS SIM's data
+            // connection can be the wrong one, and the carrier's download link then expires unused.
+            val subId = subscriptionOf(context, msgUri)
+            val smsManager = if (subId != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                context.getSystemService(SmsManager::class.java).createForSubscriptionId(subId)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 context.getSystemService(SmsManager::class.java)
+            } else if (subId != null) {
+                @Suppress("DEPRECATION")
+                SmsManager.getSmsManagerForSubscriptionId(subId)
             } else {
                 @Suppress("DEPRECATION")
                 SmsManager.getDefault()
             }
             if (smsManager == null) {
-                Log.e(TAG, "SmsManager unavailable — cannot download from $location")
+                Log.e(TAG, "SmsManager unavailable, cannot download")
                 return
             }
             smsManager.downloadMultimediaMessage(context, location, msgUri, null, pendingIntent)
+        }
+
+        /** The subscription id recorded on the provider row (`sub_id`), or null when it is missing or invalid. */
+        private fun subscriptionOf(context: Context, msgUri: Uri): Int? = try {
+            context.contentResolver.query(msgUri, arrayOf(Telephony.Mms.SUBSCRIPTION_ID), null, null, null)?.use {
+                if (it.moveToFirst() && !it.isNull(0)) it.getInt(0).takeIf { id -> id >= 0 } else null
+            }
+        } catch (e: Exception) {
+            null
         }
     }
 }

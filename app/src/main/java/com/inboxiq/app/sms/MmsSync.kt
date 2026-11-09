@@ -31,8 +31,10 @@ object MmsSync {
 
     private const val RECENT_PAGE = 100
 
-    suspend fun syncRecent(context: Context, sinceMillis: Long) {
-        val env = ImportEnv.from(context, batchParts = false)
+    /** Returns the incoming, unread MMS rows this call newly stored, oldest first, so the caller can notify the user. */
+    suspend fun syncRecent(context: Context, sinceMillis: Long): List<MessageEntity> {
+        val fresh = ArrayList<MessageEntity>()
+        val env = ImportEnv.from(context, batchParts = false, newIncoming = fresh)
         // MMS DATE is in seconds, not millis, unlike SMS.
         val sinceSeconds = (sinceMillis / 1000).toString()
         var below = Long.MAX_VALUE
@@ -41,6 +43,7 @@ object MmsSync {
             if (page.read < RECENT_PAGE || page.minId >= below) break
             below = page.minId
         }
+        return fresh.sortedBy { it.timestamp }
     }
 
     fun maxId(env: ImportEnv): Long? {
@@ -138,7 +141,11 @@ object MmsSync {
                     )
                 }
             }
-            (if (pending.isEmpty()) 0 else dao.insertAll(pending).count { id -> id != -1L }) + updated
+            val ids = if (pending.isEmpty()) emptyList() else dao.insertAll(pending)
+            env.newIncoming?.let { sink ->
+                pending.forEachIndexed { i, m -> if (ids[i] != -1L && m.isIncoming && !m.isRead) sink += m.copy(id = ids[i]) }
+            }
+            ids.count { id -> id != -1L } + updated
         }
         return PageResult(rows.size, ids.min(), ids.max(), inserted)
     }

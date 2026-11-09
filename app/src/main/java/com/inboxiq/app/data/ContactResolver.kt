@@ -29,7 +29,7 @@ object ContactResolver {
                 }
             }
         } catch (e: Exception) {
-            Log.w("ContactResolver", "lookup failed for $address", e)
+            Log.w("ContactResolver", "lookup failed: ${e.javaClass.simpleName}")
             null
         }
     }

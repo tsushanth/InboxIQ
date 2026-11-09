@@ -74,6 +74,10 @@ interface MessageDao {
     @Query("UPDATE messages SET sendStatus = :status WHERE id = :id")
     suspend fun updateSendStatus(id: Long, status: SendStatus)
 
+    /** A multipart text reports once per part; a later OK must not hide an earlier failure. Returns 1 if the row is now SENT. */
+    @Query("UPDATE messages SET sendStatus = 'SENT' WHERE id = :id AND sendStatus != 'FAILED'")
+    suspend fun markSentUnlessFailed(id: Long): Int
+
     @Query("UPDATE messages SET awaitingAutoHeal = :awaiting WHERE id = :id")
     suspend fun setAwaitingAutoHeal(id: Long, awaiting: Boolean)
 
@@ -142,13 +146,9 @@ interface MessageDao {
     @Query("DELETE FROM messages WHERE id = :id")
     suspend fun deleteMessage(id: Long)
 
-    /** Case-insensitive body search across every thread, newest first — feeds the search results list. */
-    @Query("SELECT * FROM messages WHERE body LIKE '%' || :query || '%' ORDER BY timestamp DESC LIMIT 200")
-    fun searchMessages(query: String): Flow<List<MessageEntity>>
-
     /**
      * Literal (wildcard-safe) body search for the in-app search screen. Pass the query through
-     * SearchLogic.escapeLike first. The older [searchMessages] is left as-is for its other callers.
+     * SearchLogic.escapeLike first.
      */
     @Query("SELECT * FROM messages WHERE body LIKE '%' || :escapedQuery || '%' ESCAPE '\\' ORDER BY timestamp DESC LIMIT 200")
     fun searchMessagesLiteral(escapedQuery: String): Flow<List<MessageEntity>>
