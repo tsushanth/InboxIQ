@@ -13,6 +13,15 @@
          leaves the device. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- Lets us name and open the SMS app InboxIQ replaced, so Settings can offer a way back.
+         Visibility to SMS apps only; no extra permission. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="smsto" />
+        </intent>
+    </queries>
+
     <application
         android:name=".InboxIqApp"
         android:allowBackup="false"

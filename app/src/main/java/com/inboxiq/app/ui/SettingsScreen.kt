@@ -61,6 +61,10 @@ class SettingsCallbacks(
     val onImport: () -> Unit = {},
     val onShowIntro: () -> Unit = {},
     val onOpenAutoReply: () -> Unit = {},
+    val onOpenDefaultSettings: () -> Unit = {},
+    val onOpenPreviousApp: () -> Unit = {},
+    val onMakeDefault: () -> Unit = {},
+    val onOpenSetupLog: () -> Unit = {},
 )
 
 @Composable
@@ -75,6 +79,12 @@ fun SettingsScreen(
     showCloudSections: Boolean = true,
     /** null hides the entry (build flag off); otherwise "On" / "Off". */
     autoReplySummary: String? = null,
+    isDefault: Boolean = true,
+    /** Name of the SMS app InboxIQ replaced, when known. */
+    previousAppName: String? = null,
+    canOpenPreviousApp: Boolean = false,
+    /** Debug builds only: shows the on-device setup log entry. */
+    showSetupLog: Boolean = false,
 ) {
     var current by remember { mutableStateOf(selectedTier) }
     val context = LocalContext.current
@@ -95,6 +105,33 @@ fun SettingsScreen(
         Column(
             Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp),
         ) {
+            // ---------- default SMS app ----------
+            Section(stringResource(R.string.default_section))
+            Text(
+                stringResource(if (isDefault) R.string.default_status_yes else R.string.default_status_no),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                if (previousAppName != null) stringResource(R.string.default_back_body_named, previousAppName)
+                else stringResource(R.string.default_back_body_generic),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(Modifier.height(8.dp))
+            if (!isDefault) {
+                Button(onClick = callbacks.onMakeDefault, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.default_make_default)) }
+                Spacer(Modifier.height(8.dp))
+            }
+            OutlinedButton(onClick = callbacks.onOpenDefaultSettings, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.default_open_settings))
+            }
+            if (canOpenPreviousApp && previousAppName != null) {
+                Spacer(Modifier.height(8.dp))
+                OutlinedButton(onClick = callbacks.onOpenPreviousApp, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                    Text(stringResource(R.string.default_open_previous, previousAppName))
+                }
+            }
+
             // ---------- appearance ----------
             Section("Appearance")
             ThemeMode.entries.forEach { m ->
@@ -213,7 +250,10 @@ fun SettingsScreen(
                 stringResource(R.string.settings_privacy_note),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp)) { Text("Read what InboxIQ does and does not access") }
+            OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text("Read what InboxIQ does and does not access") }
+            if (showSetupLog) {
+                OutlinedButton(onClick = callbacks.onOpenSetupLog, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.funnel_title) + " (debug build)") }
+            }
 
             if (showCloudSections) {
                 com.inboxiq.app.feature.RelayFeatures.instance.SettingsSection()

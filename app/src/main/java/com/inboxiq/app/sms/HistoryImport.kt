@@ -71,6 +71,8 @@ object HistoryImport {
         var inserted = 0
         try {
             val quiet = prepare(env, state, now())
+            // Show "0 of N" at once instead of an empty inbox until the first page lands.
+            if (!quiet && !state.isBackfillComplete()) publishProgress(state)
             // Before any import page, so a stale sent-MMS copy is repaired rather than joined by a second one.
             SentMmsRepair.runOnce(env, state)
             inserted += backfill(env, state, quiet)
