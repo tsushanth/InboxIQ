@@ -6,6 +6,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.inboxiq.app.worker.AutoHealWorker
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -28,6 +29,11 @@ class InboxIqApp : Application() {
             ExistingPeriodicWorkPolicy.KEEP,
             autoHeal,
         )
+
+        // Drops automatic retries queued by builds that could mark a delivered picture message as failed (once).
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+            runCatching { com.inboxiq.app.sms.LegacyAutoHeal.clearOnce(this@InboxIqApp) }
+        }
 
         // Writes to the Android SMS provider that failed earlier (see ProviderWrites): retry them.
         com.inboxiq.app.sms.ProviderWriteScheduler.enqueueIfPending(this)

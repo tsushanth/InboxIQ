@@ -67,15 +67,12 @@ class MmsStatusReceiver : BroadcastReceiver() {
         const val EXTRA_FILE_PATH = "file_path" // matches mmslib's MmsSentReceiver.EXTRA_FILE_PATH
         const val ACTION_MMS_SENT = "com.klinker.android.messaging.MMS_SENT"
 
-        /** Records the platform's verdict. OK clears any pending auto-retry; anything else queues one. */
+        /**
+         * Records the platform's verdict. OK means SENT with no auto-retry. An error queues one retry unless the
+         * tries are used up, and never downgrades a message already SENT (so a repeated or late callback is harmless).
+         */
         internal suspend fun settle(dao: com.inboxiq.app.data.MessageDao, localId: Long, sent: Boolean) {
-            if (sent) {
-                dao.updateSendStatus(localId, SendStatus.SENT)
-                dao.setAwaitingAutoHeal(localId, false)
-            } else {
-                dao.updateSendStatus(localId, SendStatus.FAILED)
-                dao.setAwaitingAutoHeal(localId, true)
-            }
+            if (sent) dao.markMmsSent(localId) else dao.markMmsFailed(localId, MmsSender.MAX_AUTO_HEAL_RETRIES)
         }
     }
 }

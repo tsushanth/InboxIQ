@@ -83,6 +83,22 @@ interface MessageDao {
     @Query("UPDATE messages SET sendStatus = 'SENT' WHERE id = :id AND sendStatus != 'FAILED'")
     suspend fun markSentUnlessFailed(id: Long): Int
 
+    /** The platform confirmed the MMS left: SENT, and nothing is left to retry. */
+    @Query("UPDATE messages SET sendStatus = 'SENT', awaitingAutoHeal = 0 WHERE id = :id")
+    suspend fun markMmsSent(id: Long)
+
+    /**
+     * The platform reported an MMS send error. A row already SENT stays SENT (a stray or repeated failure callback
+     * must never queue a re-send of a message the carrier took), and the automatic retry is only queued while fewer
+     * than [maxRetries] tries are used. Returns 1 if the row was changed.
+     */
+    @Query("UPDATE messages SET sendStatus = 'FAILED', awaitingAutoHeal = CASE WHEN autoHealRetryCount < :maxRetries THEN 1 ELSE 0 END WHERE id = :id AND sendStatus != 'SENT'")
+    suspend fun markMmsFailed(id: Long, maxRetries: Int): Int
+
+    /** One-time: stops every automatic retry queued by an earlier build (see LegacyAutoHeal). */
+    @Query("UPDATE messages SET awaitingAutoHeal = 0 WHERE awaitingAutoHeal = 1")
+    suspend fun clearAllAutoHeal(): Int
+
     @Query("UPDATE messages SET awaitingAutoHeal = :awaiting WHERE id = :id")
     suspend fun setAwaitingAutoHeal(id: Long, awaiting: Boolean)
 

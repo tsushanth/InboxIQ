@@ -125,12 +125,14 @@ object MmsSender {
         val dispatched = attempt(context, message.id, message.address, message.body, bitmap, MmsStrategy.SYSTEM_DEFAULT) ||
             attempt(context, message.id, message.address, message.body, bitmap, MmsStrategy.RESIZED_IMAGE)
 
+        // Every try counts, whether it failed here or is still in the platform's hands: the receiver stops
+        // queueing retries once MAX_AUTO_HEAL_RETRIES are used.
+        dao.incrementAutoHealRetryCount(message.id)
         if (dispatched) {
             // Still not confirmed — MmsStatusReceiver will finalize it. Clear the retry flag
             // optimistically; if it actually fails again, the receiver re-sets it to true.
             dao.setAwaitingAutoHeal(message.id, false)
         } else {
-            dao.incrementAutoHealRetryCount(message.id)
             if (message.autoHealRetryCount + 1 >= MAX_AUTO_HEAL_RETRIES) {
                 // Both known strategies still fail after repeated tries — nothing left
                 // to switch to, so stop implying a retry might still fix it.
@@ -187,18 +189,27 @@ object MmsSender {
             val message = Message(body, address, payload)
             // Redirect mmslib's completion broadcast to our own receiver so we can correct
             // this row to SENT/FAILED once the real delivery result is known.
-            transaction.setExplicitBroadcastForSentMms(
-                Intent(context, MmsStatusReceiver::class.java).apply {
-                    action = MmsStatusReceiver.ACTION_MMS_SENT
-                    putExtra(MmsStatusReceiver.EXTRA_LOCAL_MESSAGE_ID, localMessageId)
-                },
-            )
+            transaction.setExplicitBroadcastForSentMms(statusIntent(context, localMessageId))
             transaction.sendNewMessage(message)
             true
         } catch (e: Exception) {
             false
         }
     }
+
+    /**
+     * The completion broadcast for one send attempt. mmslib wraps it in PendingIntent.getBroadcast(request code 0,
+     * FLAG_CANCEL_CURRENT), and the platform treats two intents as the same PendingIntent when action, data and
+     * component match (extras do not count). Every send used the same action and component, so sending a second MMS
+     * cancelled the first one's callback and its status never updated. A data uri unique to the message and attempt
+     * keeps each PendingIntent its own.
+     */
+    internal fun statusIntent(context: Context, localMessageId: Long, attemptStamp: Long = System.nanoTime()): Intent =
+        Intent(context, MmsStatusReceiver::class.java).apply {
+            action = MmsStatusReceiver.ACTION_MMS_SENT
+            data = Uri.parse("inboxiq-mms-sent://message/$localMessageId/$attemptStamp")
+            putExtra(MmsStatusReceiver.EXTRA_LOCAL_MESSAGE_ID, localMessageId)
+        }
 
     /** Downsizes to fit common carrier MMS size caps (~300KB) — the most common real-world MMS send failure. */
     private fun resize(bitmap: Bitmap): Bitmap {
