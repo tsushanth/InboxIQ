@@ -79,6 +79,8 @@ class FakeTelephony {
             return when {
                 auth == "sms" && seg.isEmpty() && selection?.startsWith("date = ?") == true ->
                     smsRows(projection, null, null, null, only = sms.filter { it.date == selectionArgs!![0].toLong() && it.body == selectionArgs[1] }.map { it.id })
+                auth == "sms" && seg.isEmpty() && selection?.startsWith("thread_id = ? AND sub_id >= 0") == true ->
+                    smsRows(projection, null, null, sortOrder, only = sms.filter { it.thread == selectionArgs!![0].toLong() && it.subId >= 0 }.map { it.id })
                 auth == "sms" && seg.isEmpty() -> smsRows(projection, selection, selectionArgs, sortOrder)
                 auth == "sms" && seg.size == 1 && seg[0].toLongOrNull() != null -> smsRows(projection, null, null, null, only = listOf(seg[0].toLong()))
                 auth == "mms" && seg.isEmpty() -> mmsRows(projection, selection, selectionArgs, sortOrder)
@@ -117,7 +119,7 @@ class FakeTelephony {
                     when (col) {
                         "_id" -> r.id; "thread_id" -> r.thread; "address" -> r.address
                         "body" -> r.body; "date" -> r.date; "type" -> r.type
-                        "read" -> r.read; "seen" -> r.seen; "date_sent" -> r.dateSent; "error_code" -> r.errorCode; else -> null
+                        "read" -> r.read; "seen" -> r.seen; "date_sent" -> r.dateSent; "error_code" -> r.errorCode; "sub_id" -> r.subId; else -> null
                     }
                 })
             }

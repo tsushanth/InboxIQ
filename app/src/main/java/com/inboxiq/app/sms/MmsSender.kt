@@ -174,9 +174,14 @@ object MmsSender {
         }
     }
 
-    private fun attempt(context: Context, localMessageId: Long, address: String, body: String, bitmap: Bitmap, strategy: MmsStrategy): Boolean {
+    private suspend fun attempt(context: Context, localMessageId: Long, address: String, body: String, bitmap: Bitmap, strategy: MmsStrategy): Boolean {
         return try {
-            val settings = Settings().apply { setUseSystemSending(true) }
+            // Dual-SIM: send over the SIM the conversation is on (null = phone default, as before).
+            val sub = SendSubscription.forAddress(context, address)
+            val settings = Settings().apply {
+                setUseSystemSending(true)
+                if (sub != null) setSubscriptionId(sub)
+            }
             val transaction = Transaction(context, settings)
             val payload = if (strategy == MmsStrategy.RESIZED_IMAGE) resize(bitmap) else bitmap
             val message = Message(body, address, payload)

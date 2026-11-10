@@ -27,6 +27,8 @@ documents in this folder for the details of each path.
 - Scheduled and undo-send: claim and record in one step.
 - Picture and group messages now post a notification when they arrive, like a text does.
 - Picture messages download over the SIM they arrived on (dual-SIM phones).
+- Replies (text and picture) leave over the SIM the conversation is on (dual-SIM phones); see `SendSubscription`.
+- Sending a text no longer depends on `getSystemService(SmsManager)`, which returns null before Android 12 (API 31).
 - Logs no longer contain phone numbers or download links.
 - No retry of an old picture message or scheduled text after the default-app role is lost.
 - Optional assistant connection (sideload build only): search is literal and matches only the text the assistant is allowed to see; grouped codes such as "123 456" are hidden like other codes.
@@ -45,5 +47,5 @@ Run them with `./gradlew :app:testCoreDebugUnitTest :app:testRelayDebugUnitTest`
 - Two identical texts from one number inside the same second are kept as one in InboxIQ (the system store keeps both).
 - A group picture message is filed under the sender's one-to-one conversation, and replies go to that sender only.
 - Deleting in InboxIQ does not delete from Android's shared SMS store, so another SMS app can still show the text.
-- Replies go out on the phone's default SMS SIM, not necessarily the SIM the conversation arrived on.
+- Dual-SIM replies use the SIM the conversation last arrived on when the platform confirms that SIM is active; otherwise (single SIM, SIM removed, Android 8 to 9, no recorded SIM) they use the phone's default SMS SIM. Delivery receipts are not requested, so a text is shown as "Sent", never "Delivered".
 - Real-device behaviour (live receive, MMS on dual-SIM, carrier handling of automatic replies) is covered by the unit tests only where the platform can be simulated; it needs a pass on a spare phone before each release.

@@ -57,6 +57,17 @@ class ProviderSms(private val resolver: ContentResolver) {
         return out
     }
 
+    /**
+     * The SIM (`sub_id`) of the newest row of provider conversation [threadId] that records one, or null.
+     * Rows we write for sent texts carry none, so this follows the SIM the other person last reached us on.
+     */
+    fun latestSubscriptionId(threadId: Long): Int? =
+        resolver.query(
+            Telephony.Sms.CONTENT_URI, arrayOf(Telephony.Sms.SUBSCRIPTION_ID),
+            "${Telephony.Sms.THREAD_ID} = ? AND ${Telephony.Sms.SUBSCRIPTION_ID} >= 0", arrayOf(threadId.toString()),
+            "${Telephony.Sms.DATE} DESC LIMIT 1",
+        )?.use { if (it.moveToFirst() && !it.isNull(0)) it.getInt(0).takeIf { id -> id >= 0 } else null }
+
     /** User opened / marked a conversation: mirror it. Only unread rows are touched. */
     fun markThreadsRead(threadIds: Collection<Long>) {
         val values = ContentValues().apply { put(Telephony.Sms.READ, 1); put(Telephony.Sms.SEEN, 1) }

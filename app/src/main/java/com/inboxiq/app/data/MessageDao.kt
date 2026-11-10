@@ -58,6 +58,10 @@ interface MessageDao {
     )
     fun observeThreadList(): Flow<List<ThreadSummary>>
 
+    /** The provider conversation id of this address's newest row that has one (0 = never had one). */
+    @Query("SELECT threadId FROM messages WHERE address = :address AND threadId != 0 ORDER BY timestamp DESC LIMIT 1")
+    suspend fun latestProviderThreadId(address: String): Long?
+
     @Query("UPDATE messages SET isRead = 1 WHERE address = :address AND isRead = 0")
     suspend fun markThreadRead(address: String)
 
