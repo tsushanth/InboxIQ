@@ -32,13 +32,13 @@ object SmsSender {
         // Same normalisation the history import applies, so the row we store and the provider row it
         // later re-reads share one (address, timestamp, body) key. Idempotent on already-normal numbers.
         val address = PhoneNumberNormalizer.normalize(context, rawAddress)
-        val timestamp = System.currentTimeMillis()
-        val id = dao.insert(
+        val (id, timestamp) = insertUnique(
+            dao,
             MessageEntity(
                 threadId = 0,
                 address = address,
                 body = body,
-                timestamp = timestamp,
+                timestamp = System.currentTimeMillis(),
                 isIncoming = false,
                 label = MessageLabel.PERSONAL, // outgoing messages skip the triage pipeline
                 sendStatus = SendStatus.PENDING,
@@ -46,6 +46,24 @@ object SmsSender {
         )
         return Prepared(id, address, body, timestamp)
     }
+
+    /**
+     * Inserts an outgoing row. Our rows are unique on (address, timestamp, body), so a second identical text in
+     * the same millisecond (a scheduled send landing with a typed one, a double tap) would be ignored: the SMS
+     * would still go out but never show in the thread. Move to the next free millisecond instead; the provider
+     * row is written with the same stamp, so the import still recognises both as one.
+     */
+    internal suspend fun insertUnique(dao: com.inboxiq.app.data.MessageDao, message: MessageEntity): Pair<Long, Long> {
+        var m = message
+        repeat(MAX_TIMESTAMP_BUMPS) {
+            val id = dao.insert(m)
+            if (id != -1L) return id to m.timestamp
+            m = m.copy(timestamp = m.timestamp + 1)
+        }
+        return dao.insert(m) to m.timestamp
+    }
+
+    private const val MAX_TIMESTAMP_BUMPS = 50
 
     /** Step 2: hand a [prepare]d row to the radio. */
     internal suspend fun transmit(context: Context, p: Prepared): Long {

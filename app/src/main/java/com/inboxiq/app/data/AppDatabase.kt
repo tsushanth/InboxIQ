@@ -207,7 +207,7 @@ val MIGRATION_14_15 = object : Migration(14, 15) {
         ThreadStateEntity::class,
         ScheduledMessageEntity::class,
     ],
-    version = 15,
+    version = AppDatabase.VERSION,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -221,20 +221,31 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun replyHistoryDao(): ReplyHistoryDao
 
     companion object {
+        /** Bump together with a MIGRATION_* and an exported schema; see MigrationTest. */
+        const val VERSION = 15
+        const val FILE_NAME = "inboxiq.db"
+
         @Volatile private var instance: AppDatabase? = null
 
         fun get(context: Context): AppDatabase =
             instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "inboxiq.db",
-                )
-                    .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
-                    // Only wipes on a downgrade (e.g. a bad build during dev) — real
-                    // forward upgrades must go through an explicit migration above.
-                    .fallbackToDestructiveMigrationOnDowngrade()
-                    .build().also { instance = it }
+                instance ?: run {
+                    // A database Room would have to wipe (written by a newer build, or older than the first
+                    // migration) is moved aside first, so the rebuild below never destroys the only copy.
+                    DatabaseGuard.setAsideIfWipeAhead(context.applicationContext, FILE_NAME, VERSION)
+                    Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        FILE_NAME,
+                    )
+                        .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
+                        // Forward upgrades from 7 on go through the explicit migrations above. Only a downgrade, or a
+                        // database older than any migration (versions 1-6, which would otherwise crash on open),
+                        // is rebuilt, and DatabaseGuard has kept the old file by then.
+                        .fallbackToDestructiveMigrationOnDowngrade()
+                        .fallbackToDestructiveMigrationFrom(*(1 until DatabaseGuard.OLDEST_MIGRATABLE_VERSION).toList().toIntArray())
+                        .build().also { instance = it }
+                }
             }
     }
 }

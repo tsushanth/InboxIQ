@@ -42,8 +42,20 @@ Run them with `./gradlew :app:testCoreDebugUnitTest :app:testRelayDebugUnitTest`
 
 ## Known limits
 
-- Two identical texts from one number inside the same second are kept as one in InboxIQ (the system store keeps both).
+- Two identical texts RECEIVED from one number inside the same second are kept as one in InboxIQ (the system store keeps both). The cause is the (number, time, text) key, and the time of a received text has one-second resolution. Fixing it needs a provider row id column and a migration, plus changes to every importer and to backup/restore, so it is left for a change that can be tested on a device. Two identical texts SENT in the same millisecond are now both kept.
 - A group picture message is filed under the sender's one-to-one conversation, and replies go to that sender only.
 - Deleting in InboxIQ does not delete from Android's shared SMS store, so another SMS app can still show the text.
 - Replies go out on the phone's default SMS SIM, not necessarily the SIM the conversation arrived on.
 - Real-device behaviour (live receive, MMS on dual-SIM, carrier handling of automatic replies) is covered by the unit tests only where the platform can be simulated; it needs a pass on a spare phone before each release.
+
+## Database downgrade or pre-migration file: set aside, never silently wiped
+
+Room has explicit migrations from schema 7 to the current one. A file Room cannot read (written by a NEWER build, e.g. an
+older build sideloaded over a newer one) or one older than the first migration (versions 1 to 6, which used to crash on open)
+is rebuilt from scratch so the app still starts. Before that happens `DatabaseGuard` renames it to
+`databases/inboxiq.db.v<oldVersion>.<millis>.bak` (with its `-wal` and `-shm`); the two newest are kept.
+
+What a rebuild loses: pins, archive, mute, drafts, scheduled texts, blocked numbers and the corrected labels. Message text is
+re-read from the Android SMS provider by the history import. To get the old file back: close the app, rename the `.bak` files
+to `inboxiq.db` (and `-wal`/`-shm`) while running a build that is not older than the file. Not covered: a future schema change
+still needs its own `Migration`; this is the safety net, not a substitute.
