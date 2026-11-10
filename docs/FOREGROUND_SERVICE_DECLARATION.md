@@ -16,11 +16,35 @@ or turning the screen off). There is no service, wake lock, boot start or ongoin
 
 The earlier `specialUse` service, `FOREGROUND_SERVICE_SPECIAL_USE` and our own `WAKE_LOCK`/`FOREGROUND_SERVICE` entries were removed.
 
+## Why the library entries are kept, not removed (re-checked 2026-11-09)
+Removing `FOREGROUND_SERVICE_DATA_SYNC` and `ExtractionForegroundService` with `tools:node="remove"` looks like the way to avoid
+a declaration, but it is not safe without a device test, and the checks below say it is more likely to break something than not:
+
+1. `AssetPackManagerFactory.getInstance()` (called from `GemmaModelStore`: Settings screen and classifier selection) enables both
+   `AssetPackExtractionService` and `ExtractionForegroundService` with `PackageManager.setComponentEnabledSetting`
+   (library class `assetpacks.s`, via `internal.af.a`, bytecode of asset-delivery 2.3.0). If the component is missing from
+   the manifest, that call is expected to throw `IllegalArgumentException`, which would crash the first Gemma-store call.
+2. When Play hands the pack over for extraction (`assetpacks.b.d`, action 1), the library binds `ExtractionForegroundService`
+   and calls `startForeground` on it. Keeping the service but dropping the permission would make that call throw a
+   `SecurityException` on Android 14+.
+3. So the service and the permission are kept or removed together, and removal needs the Gemma download test in the
+   pre-release checklist. `ForegroundServiceManifestTest` pins the current state (exactly these two library permissions, no
+   InboxIQ service with a foreground type, service and permission together, no foreground-service API in app source), so any
+   change is deliberate.
+
+Only the optional Gemma on-device tier (a Settings opt-in) touches this path. Nothing in the default install does.
+
 ## What the owner must do
-The library-injected `FOREGROUND_SERVICE_DATA_SYNC` is not caused by the relay and was left in place, because
-removing it could break the Gemma on-demand model download and that was not testable without a device. Choose one:
-1. In Play Console > App content > Foreground service permissions, declare `dataSync` as "Play asset pack
-   extraction, system-managed, not started by app code" (the 0.4.x history shows Play flagged this permission once).
-2. Or add `tools:node="remove"` for `FOREGROUND_SERVICE_DATA_SYNC` and `ExtractionForegroundService`, then test the
-   Gemma download on a device before shipping. Only do this after that test.
+Pick one:
+1. Declare it (no code change, recommended until a device test says otherwise). In Play Console > App content > Foreground
+   service permissions, add `dataSync` and answer: "Used only by the Google Play Asset Delivery library while Play extracts the
+   optional on-device model pack the user chose to download in Settings. The app's own code starts no foreground service."
+   Demo video: record Settings > on-device model download. The 0.5.0 review passed without this form appearing, so Play may
+   never ask; if it does, this is the answer.
+2. Remove it, only after a spare-phone test of the Gemma download: add to `AndroidManifest.xml`
+   `<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" tools:node="remove"/>` and
+   `<service android:name="com.google.android.play.core.assetpacks.ExtractionForegroundService" tools:node="remove"/>`, update
+   `ForegroundServiceManifestTest`, then run steps 9 and 10 of `docs/PRE_RELEASE_CHECKLIST.md` (open Settings, start the download
+   on Wi-Fi, background the app, confirm Settings shows the model as ready and nothing crashes). If the app crashes on
+   opening Settings, revert.
 No declaration or demo video is needed for the relay.
