@@ -133,6 +133,10 @@ interface MessageDao {
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE id = :id")
     suspend fun updateLabel(id: Long, label: MessageLabel, confidence: Float)
 
+    /** Label of the newest incoming message of this address (what a restored backup left there), or null if there is none. */
+    @Query("SELECT label FROM messages WHERE address = :address AND isIncoming = 1 ORDER BY timestamp DESC LIMIT 1")
+    suspend fun latestIncomingLabel(address: String): MessageLabel?
+
     @Query("UPDATE messages SET aiGeneratedConfidence = :confidence WHERE id = :id")
     suspend fun updateAiGeneratedConfidence(id: Long, confidence: Float)
 

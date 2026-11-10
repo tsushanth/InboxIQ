@@ -15,6 +15,7 @@ import com.inboxiq.app.classify.MessageClassifier
 import com.inboxiq.app.classify.ThreadContext
 import com.inboxiq.app.classify.TriageClassifier
 import com.inboxiq.app.data.AppDatabase
+import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.data.ThreadLabelEntity
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -97,6 +98,15 @@ class ClassifyMessagesWorker(
         val outcomes = ArrayList<Outcome>(addresses.size)
         val now = System.currentTimeMillis()
         for (address in addresses) {
+            // A conversation the user filed by hand keeps that label, even when its label row is missing (a restored backup
+            // brings back the "filed by hand" flag and the messages' labels, but not the label row).
+            if (db.threadStateDao().get(address)?.labelCorrected == true) {
+                val kept = messages.latestIncomingLabel(address)
+                if (kept != null && kept != MessageLabel.UNLABELED) {
+                    outcomes += Outcome(address, ThreadLabelEntity(address, kept, 1f, now), null)
+                    continue
+                }
+            }
             val bodies = dao.recentIncomingBodies(address, SAMPLE_MESSAGES)
             if (bodies.isEmpty()) { outcomes += Outcome(address, null, null); continue }
             val result = classifier.classifyThread(ThreadContext(address, bodies, dao.substantiveReplies(address)))
@@ -132,8 +142,8 @@ class ClassifyMessagesWorker(
         private const val KEY_PIPELINE_VERSION = "classifier_pipeline_version"
         private const val KEY_REFRESH_CUTOFF = "classifier_refresh_cutoff"
 
-        /** Bump when the rules or model change enough that old labels should be recomputed. 2 = TriageEngine. */
-        const val PIPELINE_VERSION = 2
+        /** Bump when the rules or model change enough that old labels should be recomputed. 2 = TriageEngine, 3 = Transactions label. */
+        const val PIPELINE_VERSION = 3
 
         const val PAGE_SIZE = 50
         const val SAMPLE_MESSAGES = 5

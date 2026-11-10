@@ -165,6 +165,11 @@ fun SettingsScreen(
 
             // ---------- sorting ----------
             Section("Sorting")
+            Text(
+                stringResource(R.string.sorting_transactions_note),
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
             ClassifierTier.entries.forEach { tier ->
                 Row(
                     Modifier.fillMaxWidth().heightIn(min = 48.dp)

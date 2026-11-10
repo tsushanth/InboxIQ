@@ -1,0 +1,122 @@
+label	address	replies	tag	text
+TRANSACTION	VM-TESTBK-T	0	in_bank	Rs 1,250.00 debited from A/c XX0042 on 05-Nov-26 to VPA shop@testbank. UPI Ref No 600000000001. Not you? Call 1800-000-0000. -TestBank
+TRANSACTION	AX-TESTBK-T	0	in_bank	INR 499.00 credited to your A/c XX0042 on 06-Nov-26 by UPI Ref 600000000002. Avl Bal INR 12,340.55
+TRANSACTION	JD-TESTBK-S	0	in_bank	Dear Customer, Rs.2,000.00 withdrawn from A/c XX0042 at ATM on 07-NOV-26. Available Bal Rs.8,100.10. If not done by you call 1800-000-0000.
+TRANSACTION	VM-HDFCBK-T	0	in_bank	Sent Rs.350.00 From TestBank A/c *0042 To DEMO STORE On 08/11/26 Ref 600000000003 Not You? Call 18000000 to block UPI
+TRANSACTION	AX-SBIUPI-S	0	in_bank	Your a/c no. XXXXX00042 is debited by Rs 75.00 on 09Nov26 trf to DEMO PAYEE Refno 600000000004. If not done by you, SMS BLOCK to 9000000000
+TRANSACTION	BZ-CBSSBI-T	0	in_bank	Your A/c XX0042 is credited with Rs 52,000.00 on 01-11-26 salary. Bal Rs 61,200.00 - Test
+TRANSACTION	TESTBK	0	in_bank	Rs 3,999.00 spent on your TestBank Credit Card ending 0042 at DEMO MART on 03-Nov-26. Avl limit Rs 96,001.00.
+TRANSACTION	VK-TESTBK-S	0	in_bank	A/c XX0042 credited with INR 15.00 interest on 30-Sep-26. Balance INR 9,015.00
+TRANSACTION	CP-TESTBK-T	0	in_bank	INR 780.00 deducted from your account XX0042 for FASTag toll on 02-Nov-26. FASTag balance INR 120.00
+TRANSACTION	TM-TESTBK-T	0	in_bank	Payment of Rs 640 received from DEMO PAYER in your a/c XX0042 via UPI. UPI Ref: 600000000005
+TRANSACTION	VM-TESTBK-T	0	in_bank	Rs. 2500 transferred from A/c XX0042 to A/c XX7788 via IMPS Ref No 600000000006 on 04-Nov-26
+TRANSACTION	AD-TESTBK-S	0	in_bank	Mini statement for A/c XX0042: 05-Nov DR 120.00, 06-Nov CR 4,500.00, Avl Bal 9,880.00
+TRANSACTION	TESTBK	0	in_bank	NEFT of Rs 25,000 to DEMO CORP credited to beneficiary A/c XX9911. UTR 600000000007. -TestBank
+TRANSACTION	VM-TESTBK-T	0	in_bank	Your account balance is Rs 421.50. Low balance, please maintain minimum balance of Rs 1,000.
+TRANSACTION	AX-TESTBK-T	0	in_bank	Rs 12,000.00 auto-debit mandate registered for DEMO INSURANCE on A/c XX0042. Next debit 10-Dec-26.
+TRANSACTION	VM-TESTPY-T	0	in_card	Rs 220 paid to DEMO CAFE using UPI from A/c XX0042. UPI Ref No 600000000008
+TRANSACTION	TESTPAY	0	in_card	You have received Rs 1,000 from demo.friend@testbank via UPI. Ref 600000000009
+TRANSACTION	AX-TESTPY-S	0	in_card	Rs 15 sent to demo.shop@ybl via UPI. Txn ID 600000000010. Not you? Call 18000000
+TRANSACTION	JK-TESTCC-T	0	in_card	Your TestCard ending 0042 was used for INR 1,849.00 at DEMO ONLINE on 02-Nov-26.
+TRANSACTION	VM-TESTCC-S	0	in_card	Total Amt Due Rs 8,430.00, Min Amt Due Rs 420.00, Due Date 20-Nov-26 for TestCard XX0042. Pay via app.
+TRANSACTION	TESTBK	0	in_card	Refund of Rs 799.00 for your order has been processed to A/c XX0042. It will reflect in 3-5 days.
+TRANSACTION	VM-TESTPY-T	0	in_card	Payment of Rs 540.00 failed for UPI txn 600000000011. Amount, if debited, will be reversed within 3 days.
+TRANSACTION	AX-TESTBK-S	0	in_card	Reversal of Rs 99.00 credited to A/c XX0042 against failed txn on 03-Nov-26.
+TRANSACTION	VM-TESTEB-S	0	in_bill	Your electricity bill of Rs 1,420 for Oct-26 is due on 18-Nov-26. Pay on the app to avoid disconnection.
+TRANSACTION	AX-TESTLN-T	0	in_bill	Your loan EMI of Rs 6,500 is due on 05-Dec-26. Please keep A/c XX0042 funded for auto-debit.
+TRANSACTION	TESTLN	0	in_bill	EMI of Rs 6,500 for loan A/c XX5566 received on 05-Nov-26. Thank you.
+TRANSACTION	JM-TESTTL-S	0	in_bill	Recharge of Rs 299 is successful. Validity 28 days till 03-Dec-26. Balance Rs 0.50
+TRANSACTION	VM-TESTTL-P	0	in_bill	Your postpaid bill of Rs 599 for Oct-26 has been generated. Due date 15-Nov-26.
+TRANSACTION	TESTIN	0	in_bill	Premium of Rs 12,000 for policy no. 700000001 is due on 28-Nov-26. Pay before due date to avoid lapse.
+TRANSACTION	AX-TESTWT-S	0	in_bill	Your water bill Rs 310 has been paid successfully on 01-Nov-26. Receipt no. 600000000012
+TRANSACTION	TESTGAS	0	in_bill	Your gas cylinder booking is confirmed. Delivery on 10-Nov-26. Booking ID 600000000013
+TRANSACTION	VM-TESTBB-S	0	in_bill	Your broadband plan expires on 12-Nov-26. Payment of Rs 799 is due. Pay now in the app.
+TRANSACTION	VM-TESTSH-S	0	in_delivery	Your order #1000001 has been shipped via DEMOCOURIER. AWB 7000000001. Expected delivery 10-Nov-26.
+TRANSACTION	AX-TESTSH-S	0	in_delivery	Your order is out for delivery today. Delivery partner: Demo. Share the delivery PIN only with the rider.
+TRANSACTION	TESTDLV	0	in_delivery	Your parcel AWB 7000000002 will be delivered by 8 PM today. Track: https://example.com/t/7000000002
+TRANSACTION	VM-BLUDRT-S	0	in_delivery	Shipment 70000000003 delivered successfully on 08-Nov-26 at 4:12 PM. Received by DEMO.
+TRANSACTION	JD-TESTSH-S	0	in_delivery	Delivery attempted for your package, receiver not available. Will be re-attempted tomorrow. AWB 7000000004
+TRANSACTION	KA-ZOMATO-S	0	in_delivery	Your order from Demo Kitchen has been picked up and is on its way. Arriving in 20 mins.
+TRANSACTION	TESTMKT	0	in_delivery	Your order 1000002 is confirmed. Items: 2. Total Rs 1,099. Estimated delivery by 12-Nov-26.
+TRANSACTION	VM-TESTSH-T	0	in_delivery	Pick up your order from Demo Locker 12 before 11-Nov-26. Pickup code is not required, show this SMS.
+TRANSACTION	TESTSHP	0	in_delivery	Your return request for order 1000003 is approved. Pickup scheduled on 09-Nov-26. Refund of Rs 450 will follow.
+TRANSACTION	TESTDLV	0	in_delivery	Out for delivery: AWB 7000000005. Courier executive Demo will reach you today between 2 PM and 6 PM.
+TRANSACTION	VM-TESTBK-T	0	in_hinglish	Aapke account se Rs 500 kat gaye hain. A/c XX0042. Agar aapne nahi kiya to 1800-000-0000 par call karein.
+TRANSACTION	AX-TESTBK-S	0	in_hinglish	Rs 2,000 aapke khate mein jama hue 07-Nov-26. Avl Bal Rs 6,100. UPI Ref 600000000014
+TRANSACTION	TESTSHP	0	in_hinglish	Aapka order deliver ho gaya hai. Order no 1000004. Dhanyavaad!
+TRANSACTION	VM-TESTSH-S	0	in_hinglish	Aapka parcel aaj deliver hoga. AWB 7000000006. Kripya phone ke paas rahein.
+TRANSACTION	TESTBILL	0	in_hinglish	Aapka bijli bill Rs 1,100 baki hai. Aakhri tareekh 20-Nov-26. Bhugtan karein.
+TRANSACTION	JD-TESTBK-T	0	in_hinglish	Rs 350 debit hua A/c XX0042 se UPI ke through. Ref 600000000015
+TRANSACTION	TESTTKT	0	in_hinglish	Aapki ticket confirm hai. PNR 8000000001. Train 12000 Demo Express, coach S3 berth 21.
+TRANSACTION	TESTCLN	0	in_hinglish	Aapka appointment kal 11 baje confirm hai Demo Clinic mein. Booking ID 600000000016
+TRANSACTION	AX-TESTBK-T	0	in_hinglish	Payment safal. Rs 1,299 aapke account XX0042 se kat liye gaye. Txn 600000000017
+TRANSACTION	TESTRLY	0	in_ticket	PNR 8000000002 Train 12001 DEMO EXP 12Nov26 DP 22:10 SL S5 28 Confirmed. Fare Rs 640.
+TRANSACTION	TESTRLY	0	in_ticket	PNR 8000000003 chart prepared. Coach B2 berth 14 CNF. Train departs 18:40 platform 3.
+TRANSACTION	AX-TESTAIR-S	0	in_ticket	Your flight DM101 DEL-BOM on 14-Nov-26 is confirmed. PNR ABC123. Web check-in opens 24 hrs before departure.
+TRANSACTION	TESTBUS	0	in_ticket	E-ticket confirmed. Bus DEMO TRAVELS 14-Nov-26 21:00. Seat 12. Booking ID 600000000018
+TRANSACTION	VM-TESTHS-S	0	in_ticket	Your appointment with Dr Demo is confirmed for 11-Nov-26 at 10:30 AM. Reply C to confirm.
+TRANSACTION	TESTLAB	0	in_ticket	Sample collection for your lab test is scheduled tomorrow between 7 and 9 AM. Booking ID 600000000019
+TRANSACTION	TESTMOV	0	in_ticket	Booking confirmed! Movie: Demo Film, 15-Nov-26 7:00 PM, Seats F4 F5. Booking ID 600000000020
+TRANSACTION	TESTHTL	0	in_ticket	Your hotel booking at Demo Inn is confirmed for 20-Nov-26, 2 nights. Booking ref 600000000021. Check-in 2 PM.
+TRANSACTION	TESTCAB	0	in_ticket	Your ride is arriving in 3 mins. Driver Demo, KA00AA0000. Cab booking ID 600000000022
+TRANSACTION	TESTVAC	0	in_ticket	Reminder: your vaccination appointment is tomorrow at 9:00 AM at Demo Health Centre.
+TRANSACTION	24273	0	us_uk	Chase: Card ending 0042 was charged $54.20 at DEMO MARKET on 11/05. Reply STOP to opt out.
+TRANSACTION	86687	0	us_uk	Venmo: You paid Demo Friend $20.00. Note: lunch.
+TRANSACTION	VENMO	0	us_uk	Venmo: Demo Friend paid you $35.00 for tickets.
+TRANSACTION	UPS	0	us_uk	UPS: Your package 1Z000000000000000 is out for delivery today. Track at ups.com
+TRANSACTION	AMAZON	0	us_uk	Amazon: Your order #000-0000000-0000000 has shipped. Arriving Thursday. Track: https://example.com/t
+TRANSACTION	68933	0	us_uk	Your Instacart order from Demo Foods has been delivered. Total $64.10. Receipt sent by email.
+TRANSACTION	NHS	0	us_uk	NHS: Your appointment at Demo Surgery is on 12 Nov at 09:40. Reply YES to confirm or call 01000 000000.
+TRANSACTION	ROYALMAIL	0	us_uk	Royal Mail: Your parcel will be delivered tomorrow between 10:00 and 14:00. Track at royalmail.com
+TRANSACTION	33281	0	us_uk	Bank of Test: Debit card purchase $12.40 at CORNER CAFE. Not you? Call 555-0100
+TRANSACTION	45678	0	us_uk	Hi Sam, your oil change appointment is confirmed for Mon at 8:30 AM at QuickLube. Reply C to confirm, R to reschedule.
+TRANSACTION	CVS	0	us_uk	CVS Pharmacy: Your prescription is ready for pickup at 1200 Main St. Reply 1 to confirm pickup.
+TRANSACTION	TESTAIR	0	us_uk	Delta test: Your flight 123 to ATL is delayed. New departure 6:45 PM, gate B12.
+TRANSACTION	DEMOBANK	0	us_uk	DemoBank Alert: A $1,200.00 payment to Demo Utility was posted to your account ending 0042. Balance $3,410.77
+TRANSACTION	TESTHSP	0	us_uk	Your statement for account ending 0042 is ready. Minimum payment $35 due Nov 25.
+TRANSACTION	DEMOLEND	0	us_uk	Autopay of $210.00 for your loan scheduled on 11/10. Reply HELP for help.
+TRANSACTION	LYFT	0	us_uk	Lyft: Your ride receipt: $18.40 on 11/04. Thanks for riding!
+OTP_2FA	VM-TESTBK-T	0	neg_otp	482910 is the OTP for txn of INR 1,250.00 at DEMO STORE on your TestBank card ending 0042. Valid for 3 mins. Do not share.
+OTP_2FA	AX-TESTBK-T	0	neg_otp	OTP 104938 for UPI mandate registration of Rs 12,000 on A/c XX0042. Never share OTP with anyone. -TestBank
+OTP_2FA	TESTBK	0	neg_otp	Dear Customer, use 771203 as your one time password to login to TestBank NetBanking. Do not share with anyone.
+OTP_2FA	VM-TESTPY-T	0	neg_otp	Your Test Pay verification code is 5521. Valid for 10 minutes. Never share your OTP, PIN or CVV.
+OTP_2FA	TESTSHP	0	neg_otp	Delivery OTP: 3382. Share with the rider only at the time of delivery. Order 1000005.
+OTP_2FA	JD-TESTBK-S	0	neg_otp	829105 is your OTP to add beneficiary DEMO PAYEE. Do not disclose to anyone. TestBank will never ask for it.
+OTP_2FA	TESTAIR	0	neg_otp	Your booking OTP is 660219. Use it to confirm your flight change. Valid for 5 minutes.
+OTP_2FA	33000	0	neg_otp	Your DemoBank security code is 904417. It expires in 10 minutes. Never share this code.
+TRANSACTION	VM-TESTBK-T	0	neg_warning	Rs 640.00 debited from A/c XX0042 on 05-Nov-26. Avl Bal Rs 9,100.00. Never share OTP, PIN or CVV with anyone. -TestBank
+TRANSACTION	TESTBK	0	neg_warning	Rs 1,500 credited to A/c XX0042. UPI Ref 600000000023. Do not share your OTP/PIN with anyone, including bank staff.
+PROMO	VM-TESTBK-P	0	neg_promo	Pre-approved personal loan of Rs 5,00,000 for you at 10.5%. Apply now at https://example.com/loan. T&C apply. Reply STOP to opt out.
+PROMO	AX-TESTBK-P	0	neg_promo	Get 10% cashback up to Rs 500 on UPI payments this weekend only! Use code UPI10. T&C apply. To opt out, reply STOP.
+PROMO	TESTCC	0	neg_promo	Upgrade to our Platinum credit card and get 5000 reward points + free lounge access. Limited time offer. Apply today https://example.com/cc
+PROMO	VM-TESTSH-P	0	neg_promo	Mega sale! Flat 50% off on fashion. Shop now at example.com. Offer ends Sunday. Unsubscribe: reply STOP
+PROMO	TESTMKT	0	neg_promo	Big Billion Sale starts tomorrow: up to 70% off, free delivery on all orders above Rs 499. Shop now!
+PROMO	JM-TESTTL-P	0	neg_promo	Recharge now with Rs 299 and get 2GB extra data free. Limited period offer. Reply STOP to opt out.
+PROMO	TESTINS	0	known_preexisting	Secure your family today! Life insurance from just Rs 500/month. Exclusive offer, call now: 1800-000-0000.
+PROMO	DEMOSHOP	0	neg_promo	Save $10 off your next order with code SAVE10. Free shipping this week only. Reply STOP to opt out.
+PERSONAL	+919800000001	8	neg_personal	I paid the electricity bill already, don't worry about it
+PERSONAL	+919800000002	12	neg_personal	bhai maine tumhare liye Rs 500 UPI kar diya, check karna
+PERSONAL	+919800000003	5	neg_personal	Did you get my parcel? Courier said it was delivered yesterday
+PERSONAL	+919800000004	20	neg_personal	Dinner is on me tonight, I will pay at the counter lol
+PERSONAL	+919800000005	5	known_preexisting	Bank ne mera account block kar diya, kal branch jana padega yaar
+PERSONAL	+919800000006	14	neg_personal	can you send me the flight details? I want to book the same one
+PERSONAL	+14155550101	11	neg_personal	The order never showed up, I'm so annoyed. Calling them tomorrow
+PERSONAL	+14155550102	7	neg_personal	I just transferred the deposit for the flat, can you confirm you got it?
+PERSONAL	+14155550103	15	neg_personal	Ticket for Saturday is booked! Meet at the gate at 6
+PERSONAL	+447700900001	6	neg_personal	mum said the delivery came, thanks for sorting the bill
+PERSONAL	+919800000007	10	neg_personal	Your appointment tomorrow, don't forget. I'll pick you up at 10
+PERSONAL	+919800000008	4	neg_personal	emi bhar di kya? mujhe bata dena kal tak
+SCAM	VM-TESTBK-S	0	neg_scam	Dear customer your A/c is blocked. Update PAN immediately or account will be suspended: http://secure-testbank-kyc.top/login
+SCAM	+919811111111	0	neg_scam	Your parcel is held at customs. Pay a small delivery fee of Rs 49 to release it: http://bit.ly/demo-fee
+SCAM	+16025550199	0	neg_scam	Final notice: unpaid toll balance of $94.48. Pay now to avoid a late fee: https://toll-pay-help.example-web.shop/x
+SCAM	TESTBK	0	neg_scam	Your account has been credited with Rs 90,000 lottery prize. Claim your prize now, click http://bit.ly/demo-prize
+SCAM	+919822222222	0	neg_scam	Congratulations! You have won a refund of Rs 25,000. Verify your bank details here https://refund-claim.example-web.xyz
+SPAM	+919844444444	0	neg_spam	Need cash urgently? Instant loan up to Rs 2 lakh, no credit check, fast approval. Call 9000000000 now
+SPAM	+16505550123	0	neg_spam	Cheap meds no prescription needed, viagra and cialis, order today, click here
+WORK	+14155550201	6	regress	Standup moved to 10:15, the deploy is going out after. Ping me if staging breaks.
+WORK	+14155550202	9	regress	PTO request approved for Dec 22-24. Please update the shift swap sheet.
+WORK	+919800000009	14	regress	Client ne demo 3 baje shift kar diya, deck ready rakhna. Sprint review ke baad sync karte hain
+PERSONAL	+14155550203	20	regress	lol running late, order me a coffee? see you in 10
+PERSONAL	+919800000010	30	regress	kya haal hai bhai, weekend pe milte hain?
+OTP_2FA	22000	0	regress	123456 is your Microsoft account security code
+OTP_2FA	PAYTM	0	regress	Use 482930 as your Paytm verification code. Do not share it with anyone.

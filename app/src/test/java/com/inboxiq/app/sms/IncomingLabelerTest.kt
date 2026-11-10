@@ -82,4 +82,27 @@ class IncomingLabelerTest {
         val id = incoming("Your verification code is 483920")
         assertEquals(MessageLabel.PERSONAL, resolve("Your verification code is 483920", id) { null })
     }
+
+    @Test fun `a first bank alert is a transaction before it notifies, and the thread follows its newest message`() = runTest {
+        val bank = "VM-TESTBK-T"
+        suspend fun deliver(body: String, ts: Long): MessageLabel {
+            val id = db.messageDao().insert(MessageEntity(threadId = 0, address = bank, body = body, timestamp = ts, isIncoming = true, isRead = false))
+            return IncomingLabeler.resolve(db, bank, body, ts, id, { modelCalls++; null }, { enqueued++ })
+        }
+        assertEquals(MessageLabel.TRANSACTION, deliver("Rs 640.00 debited from A/c XX0042 on 05-Nov-26. Avl Bal Rs 9,100.00. Never share OTP, PIN or CVV with anyone.", 1_000))
+        // the same sender then sends a code: this message is a code, and the alert channel is not used for it
+        assertEquals(MessageLabel.OTP_2FA, deliver("482910 is the OTP for txn of INR 1,250.00 at DEMO STORE. Valid for 3 mins. Do not share.", 2_000))
+        assertEquals(MessageLabel.TRANSACTION, deliver("Rs 1,250.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000001.", 3_000))
+        assertEquals(0, modelCalls)
+    }
+
+    @Test fun `a bank thread the user filed by hand is not moved by a new alert`() = runTest {
+        val bank = "VM-TESTBK-T"
+        db.threadLabelDao().upsert(ThreadLabelEntity(bank, MessageLabel.PERSONAL, 1f, 1))
+        db.threadStateDao().ensure(ThreadStateEntity(bank, labelCorrected = true))
+        val body = "Rs 640.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000001."
+        val id = db.messageDao().insert(MessageEntity(threadId = 0, address = bank, body = body, timestamp = 5_000, isIncoming = true, isRead = false))
+        assertEquals(MessageLabel.PERSONAL, IncomingLabeler.resolve(db, bank, body, 5_000, id, { null }, { }))
+        assertEquals(MessageLabel.PERSONAL, db.threadLabelDao().get(bank)?.label)
+    }
 }

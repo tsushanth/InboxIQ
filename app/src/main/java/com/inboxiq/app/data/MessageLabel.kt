@@ -6,6 +6,8 @@ enum class MessageLabel {
     WORK,
     PROMO,
     OTP_2FA,
+    /** Bank, payment, bill, order, delivery, appointment and ticket notices from automated senders (docs/TRANSACTIONS.md). */
+    TRANSACTION,
     SPAM,
     SCAM,
     UNLABELED,

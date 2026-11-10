@@ -38,7 +38,7 @@ fun interface SpamScorer {
  * The rule layer plus the blend with the spam model. Pure Kotlin so it runs in JVM tests.
  *
  * Order of decisions, per message (see docs/CLASSIFICATION.md for the reasoning):
- *   1. OTP/2FA code  2. SCAM  3. WORK / PROMO  4. transactional notice (kept as PERSONAL)
+ *   1. OTP/2FA code  2. SCAM  3. WORK / PROMO  4. transactional notice (TRANSACTION, or PERSONAL when the evidence is thin)
  *   5. SPAM (text cues blended with the model)  6. PERSONAL by default.
  * Relationship (did the user really talk to this number?) raises the bar for SCAM and SPAM and
  * switches the spam model off for known contacts.
@@ -50,6 +50,15 @@ object TriageEngine {
     internal const val SCAM_THRESHOLD_STRONG = 3.0f
     internal const val PROMO_THRESHOLD = 1.7f
     internal const val WORK_THRESHOLD = 1.4f
+    /**
+     * Evidence needed for the Transactions label. An automated sender needs 1.5. An ordinary phone number needs 2.5 AND not a
+     * single scam hint, and a number the user talks to never qualifies: businesses do text from 10-digit numbers (US 10DLC),
+     * but a text that reads like a bank alert and asks you to call or click is exactly what a callback scam looks like.
+     */
+    internal const val TXN_THRESHOLD_AUTOMATED = 1.5f
+    internal const val TXN_THRESHOLD_PERSON_LIKE = 2.5f
+    /** With this much transaction evidence, one stray spam-looking phrase (a 0800 number, "T&C apply") does not block the label. */
+    internal const val TXN_STRONG = 3.0f
     internal const val SPAM_MODEL_ALONE = 0.90f
     internal const val SPAM_MODEL_WITH_CUE = 0.5f
 
@@ -110,6 +119,17 @@ object TriageEngine {
         }
         val scamHints = if (scamScore >= 1.0f) sig.scam.sortedByDescending { it.weight }.take(2).map { it.why } else emptyList()
 
+        // Transaction evidence is computed before work / promo because it can outrank weak work vocabulary and a thin promo.
+        // A number the user really talks to is a person and never needs the (largest) transaction rule set.
+        val txnScore = if (rel == Relationship.STRONG) 0f else sig.txn.sumOf { it.weight.toDouble() }.toFloat()
+        val spamTextScore = sig.spam.sumOf { it.weight.toDouble() }.toFloat()
+        val txnThreshold = when {
+            sender.isAutomated -> TXN_THRESHOLD_AUTOMATED
+            rel == Relationship.NONE && sender.kind != SenderKind.EMAIL_GATEWAY && scamScore < 1.0f -> TXN_THRESHOLD_PERSON_LIKE
+            else -> Float.MAX_VALUE
+        }
+        val txnHit = txnScore >= txnThreshold && (spamTextScore < 1.5f || (txnScore >= TXN_STRONG && spamTextScore < 2.0f))
+
         // 3. Work / promo
         val workRaw = sig.work.sumOf { it.weight.toDouble() }.toFloat()
         // Casual social chatter ("lol", "dinner", "drinks") around a meeting or team word is not work, unless a strong work rule fired.
@@ -120,12 +140,14 @@ object TriageEngine {
         if (sig.promo.isEmpty()) promoScore = minOf(promoScore, PROMO_THRESHOLD - 0.1f) // opt-out alone is not marketing
         val promoHit = promoScore >= PROMO_THRESHOLD && rel != Relationship.STRONG
         val workHit = workScore >= WORK_THRESHOLD
-        if (workHit && !(promoHit && promoScore >= workScore)) {
+        // For an automated sender, ordinary meeting/account/ticket words do not make a notice "work"; on-call, deploy, PTO still do.
+        val txnOutranksWork = txnHit && sender.isAutomated && sig.work.none { it.weight >= 1.6f } && txnScore >= workScore
+        if (workHit && !txnOutranksWork && !(promoHit && promoScore >= workScore)) {
             val ev = sig.work.sortedByDescending { it.weight }.take(2).map { it.why } + listOfNotNull(contact)
             val conf = (0.6f + 0.1f * (workScore - WORK_THRESHOLD)).coerceIn(0.6f, 0.92f)
             return Verdict(MessageLabel.WORK, conf, Basis.RULE, ev)
         }
-        if (promoHit) {
+        if (promoHit && !(txnHit && txnScore > promoScore)) {
             val ev = mutableListOf<String>()
             ev += sig.promo.sortedByDescending { it.weight }.take(2).map { it.why }
             if (sig.hasOptOut) ev += "It includes opt-out wording (\"reply STOP\"), which bulk senders must add."
@@ -133,9 +155,16 @@ object TriageEngine {
             return Verdict(MessageLabel.PROMO, (0.6f + 0.1f * (promoScore - PROMO_THRESHOLD)).coerceIn(0.6f, 0.9f), Basis.RULE, ev)
         }
 
-        // 4. Account / delivery / appointment notices stay in Personal, and must never be called spam.
-        val txnScore = sig.txn.sumOf { it.weight.toDouble() }.toFloat()
-        val spamTextScore = sig.spam.sumOf { it.weight.toDouble() }.toFloat()
+        // 4. Account / delivery / appointment / booking notices: Transactions when the evidence is specific, otherwise they stay
+        // in Personal. Either way they are never called spam.
+        if (txnHit) {
+            // The registered sender ID is always shown when there is one; the text evidence is the three strongest rules.
+            val (senderEv, textEv) = sig.txn.partition { it.group == "sender" }
+            val ev = textEv.sortedByDescending { it.weight }.take(3).map { it.why } + senderEv.map { it.why } +
+                listOfNotNull(senderNote.takeIf { sender.isAutomated && sender.dlt == null })
+            val conf = (0.6f + 0.08f * (txnScore - txnThreshold)).coerceIn(0.6f, 0.92f)
+            return Verdict(MessageLabel.TRANSACTION, conf, Basis.RULE, ev, scamHints)
+        }
         if (txnScore >= 1.0f && spamTextScore < 1.5f && (sender.isAutomated || rel == Relationship.STRONG || spamTextScore == 0f)) {
             val ev = listOf(sig.txn.first().why + ", so it is kept in Personal and not treated as junk.") + listOfNotNull(senderNote.takeIf { sender.isAutomated })
             return Verdict(MessageLabel.PERSONAL, 0.75f, Basis.RULE, ev, scamHints)

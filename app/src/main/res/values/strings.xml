@@ -5,7 +5,7 @@
          translation-ready but untranslated. Anything added here needs a native-speaker review before it is
          localised. -->
     <string name="intro_title">Texts, sorted on this phone</string>
-    <string name="intro_lead">InboxIQ is a messaging app. It files each conversation as Personal, Work, Promo, Code, Spam or Scam, using a small model that runs on your phone. To do that it has to be your default SMS app.</string>
+    <string name="intro_lead">InboxIQ is a messaging app. It files each conversation as Personal, Work, Transaction, Promo, Code, Spam or Scam, using a small model that runs on your phone. To do that it has to be your default SMS app.</string>
 
     <string name="intro_example_badge">EXAMPLE ONLY: made-up messages, not yours</string>
     <string name="intro_example_caption">Codes get a Copy button. Likely scams are flagged. Your own texts are sorted the same way once you switch.</string>
@@ -73,6 +73,11 @@
     <string name="notif_body">While InboxIQ is your default SMS app, new texts only alert you if notifications are on. Without them you would miss messages.</string>
     <string name="notif_enable">Turn on notifications</string>
     <string name="notif_open_settings">Open notification settings</string>
+
+    <!-- Transactions label. English only; other locales fall back to English (the app has no translations yet). -->
+    <string name="transactions_empty_title">No transactions</string>
+    <string name="transactions_empty_body">Bank and payment alerts, bills, orders, deliveries, tickets and appointments show up here, kept apart from your conversations.</string>
+    <string name="sorting_transactions_note">Transactions are automated alerts about money, orders, deliveries and bookings. They get their own tab and a notification channel with sound but no pop-up. Conversations you filed by hand are never moved.</string>
 
     <!-- Debug-only setup log -->
     <string name="funnel_title">Setup log</string>

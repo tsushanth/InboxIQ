@@ -11,7 +11,13 @@ object ClassificationEvalReport {
     class Run(val name: String, val predictor: ThreadPredictor)
 
     fun legacy(spam: SpamScorer) = Run("baseline (integrate-0.5.0)") { ctx -> LegacyPipeline.classifyThread(ctx, spam).label }
-    fun current(spam: SpamScorer) = Run("current") { ctx -> TriageEngine.classify(ctx, spam).label }
+    /**
+     * The corpora's gold labels predate the Transactions label (bank, delivery and appointment texts are gold PERSONAL), so
+     * this view folds TRANSACTION back into PERSONAL. Transactions are scored on their own in TransactionsEvalTest.
+     */
+    fun current(spam: SpamScorer) = Run("current") { ctx ->
+        TriageEngine.classify(ctx, spam).label.let { if (it == MessageLabel.TRANSACTION) MessageLabel.PERSONAL else it }
+    }
 
     fun uciBinary(rows: List<LabelledThread>, p: ThreadPredictor): String {
         val c = evaluate(rows, p)

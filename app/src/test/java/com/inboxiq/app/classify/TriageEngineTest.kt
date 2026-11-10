@@ -6,6 +6,7 @@ import com.inboxiq.app.data.MessageLabel.PERSONAL
 import com.inboxiq.app.data.MessageLabel.PROMO
 import com.inboxiq.app.data.MessageLabel.SCAM
 import com.inboxiq.app.data.MessageLabel.SPAM
+import com.inboxiq.app.data.MessageLabel.TRANSACTION
 import com.inboxiq.app.data.MessageLabel.WORK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -56,8 +57,8 @@ class TriageEngineTest {
 
     @Test fun `a bank alert from a short code that says call us is not a scam`() {
         val t = "Acme Bank: Card ending 4341 was used for \$441.49 at Acme. If this wasn't you, call 1-888-555-0119 or lock your card in the app."
-        assertEquals(PERSONAL, label("815299", 0, t))
-        assertEquals(PERSONAL, label("ACMEBANK", 0, t))
+        assertEquals(TRANSACTION, label("815299", 0, t))
+        assertEquals(TRANSACTION, label("ACMEBANK", 0, t))
     }
 
     @Test fun `the same words from an ordinary number posing as a company are a scam`() {
@@ -107,13 +108,14 @@ class TriageEngineTest {
 
     @Test fun `marketing with opt-out is promo, appointment reminder with opt-out is not`() {
         assertEquals(PROMO, label("72345", 0, "Acme: 20% off everything this weekend only! Shop now example.com/s. Reply STOP to opt out."))
-        assertEquals(PERSONAL, label("ACMERX", 0, "Acme Pharmacy: Your prescription is ready for pickup. Reply STOP to opt out."))
-        assertEquals(PERSONAL, label("BRIGHTSMILE", 0, "Reminder: you have an appointment on Tuesday at 3:30 PM. Reply C to confirm or R to reschedule."))
+        // Transactions label (docs/TRANSACTIONS.md): notices from an automated sender used to be filed Personal on purpose.
+        assertEquals(TRANSACTION, label("ACMERX", 0, "Acme Pharmacy: Your prescription is ready for pickup. Reply STOP to opt out."))
+        assertEquals(TRANSACTION, label("BRIGHTSMILE", 0, "Reminder: you have an appointment on Tuesday at 3:30 PM. Reply C to confirm or R to reschedule."))
     }
 
-    @Test fun `delivery and account notices are personal and cannot be called spam even when the model is sure`() {
-        assertEquals(PERSONAL, label("ACMEPARCEL", 0, "Your order #48213 has shipped! Track it here: https://acme.example.com/t/1", model = 0.97f))
-        assertEquals(PERSONAL, label("38201", 0, "Initech: Purchase of \$42.18 at Corner Market with card ending 4421.", model = 0.95f))
+    @Test fun `delivery and account notices are transactions and cannot be called spam even when the model is sure`() {
+        assertEquals(TRANSACTION, label("ACMEPARCEL", 0, "Your order #48213 has shipped! Track it here: https://acme.example.com/t/1", model = 0.97f))
+        assertEquals(TRANSACTION, label("38201", 0, "Initech: Purchase of \$42.18 at Corner Market with card ending 4421.", model = 0.95f))
     }
 
     @Test fun `short code broadcasts without a code or account words are promo`() {
@@ -185,5 +187,56 @@ class TriageEngineTest {
     @Test fun `all outputs are real labels`() {
         val v = TriageEngine.classify(thread(friend, 0, "x"), null)
         assertTrue(v.label != MessageLabel.UNLABELED && v.confidence in 0f..1f)
+    }
+
+    // ------------------------------------------------------------------ Transactions (docs/TRANSACTIONS.md)
+    @Test fun `bank, delivery and booking notices from automated senders are transactions`() {
+        assertEquals(TRANSACTION, label("VM-TESTBK-T", 0, "Rs 640.00 debited from A/c XX0042 on 05-Nov-26. Avl Bal Rs 9,100.00."))
+        assertEquals(TRANSACTION, label("AX-TESTSH-S", 0, "Your order is out for delivery today. AWB 7000000005."))
+        assertEquals(TRANSACTION, label("TESTRLY", 0, "PNR 8000000002 Train 12001 12Nov26 Confirmed. Coach S5 berth 28."))
+    }
+
+    @Test fun `an OTP from a bank is a code, and a bank alert that only warns about OTPs is a transaction`() {
+        assertEquals(OTP_2FA, label("VM-TESTBK-T", 0, "482910 is the OTP for txn of INR 1,250.00 at DEMO STORE. Valid for 3 mins. Do not share."))
+        assertEquals(TRANSACTION, label("VM-TESTBK-T", 0, "Rs 640.00 debited from A/c XX0042. Avl Bal Rs 9,100.00. Never share OTP, PIN or CVV with anyone."))
+    }
+
+    @Test fun `a promo from the same bank stays a promo`() {
+        assertEquals(PROMO, label("VM-TESTBK-P", 0, "Get 10% cashback up to Rs 500 on UPI payments this weekend only! Use code UPI10. T&C apply. To opt out, reply STOP."))
+    }
+
+    @Test fun `a person-like number with bank wording is never a transaction when it asks you to call or click`() {
+        val t = "Amazon: A payment of \$899.99 for MacBook Pro was ordered. If not you, call 1-555-0123 to cancel."
+        assertTrue(label("+14155550148", 0, t) != TRANSACTION)
+        assertTrue(label("+919811111111", 0, "Rs 49,999 debited from A/c XX1234 via UPI. If not you, click https://bit.ly/demo-block to cancel the txn immediately.") != TRANSACTION)
+    }
+
+    @Test fun `a friend who says they paid or sent something stays personal`() {
+        assertEquals(PERSONAL, label("+919800000001", 8, "I paid the electricity bill already, don't worry about it"))
+        assertEquals(PERSONAL, label("+919800000002", 12, "Rs 500 UPI kar diya bhai, check karna. Ref 600000000001"))
+        assertEquals(PERSONAL, label("+14155550101", 11, "Your parcel came, the order was delivered to my door. Total \$54.20 debited from my card lol"))
+    }
+
+    @Test fun `a business texting from an ordinary number is a transaction only with strong structure`() {
+        assertEquals(TRANSACTION, label("+13035550116", 0, "Vandelay Airlines: Flight AC2275 is delayed 45 minutes. New departure 11:00 AM, gate B12."))
+        assertEquals(PERSONAL, label("+13035550116", 0, "hey are you free tomorrow"))
+        assertEquals("a number you really talk to is a person", PERSONAL, label("+13035550116", 5, "Vandelay Airlines: Flight AC2275 is delayed 45 minutes. New departure 11:00 AM, gate B12."))
+    }
+
+    @Test fun `weak work vocabulary does not beat a delivery notice, strong work vocabulary does`() {
+        assertEquals(TRANSACTION, label("AX-TESTSH-S", 0, "Your account ticket is confirmed. Booking ID 600000000001"))
+        assertEquals(WORK, label("PAGERDUTY", 0, "On-call: sev 2 incident, deploy rollback needed. Your shift handoff is at 5."))
+    }
+
+    @Test fun `scam messages dressed as bank alerts are still scams`() {
+        assertEquals(SCAM, label("VM-TESTBK-S", 0, "Dear customer your A/c is blocked. Update PAN immediately or account will be suspended: http://secure-testbank-kyc.top/login"))
+        assertEquals(SCAM, label("AX-ICICXB", 0, "Rs 49,999 debited from A/c XX1234 via UPI. If not you, click example.com/block-card to cancel the txn immediately."))
+        assertEquals(SCAM, label("BZ-HDFXRW", 0, "Dear Customer, your reward points worth Rs 9,860 will expire today. Redeem now: example.com/redeem.apk"))
+    }
+
+    @Test fun `transaction evidence explains itself in true statements`() {
+        val v = TriageEngine.classify(ThreadContext("VM-HDFCBK-T", listOf("Rs 640.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000001.")), null)
+        assertEquals(TRANSACTION, v.label); assertEquals(Basis.RULE, v.basis)
+        assertTrue(v.evidence.joinToString(" | "), v.evidence.any { it.startsWith("It reports money debited") })
     }
 }

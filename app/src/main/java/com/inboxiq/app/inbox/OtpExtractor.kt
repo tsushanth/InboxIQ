@@ -18,7 +18,9 @@ object OtpExtractor {
         RegexOption.IGNORE_CASE,
     )
 
-    fun extract(body: String, receivedAt: Long): OtpCode? {
+    fun extract(rawBody: String, receivedAt: Long): OtpCode? {
+        // A bank alert's "Never share OTP or PIN" line names the code words without carrying a code.
+        val body = com.inboxiq.app.classify.TextSignals.withoutOtpWarnings(rawBody)
         if (!keywords.containsMatchIn(body)) return null
         val kwRanges = keywords.findAll(body).map { it.range }.toList()
 

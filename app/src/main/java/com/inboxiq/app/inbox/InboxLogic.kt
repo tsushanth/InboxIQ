@@ -10,6 +10,7 @@ enum class InboxTab(val title: String, val labels: Set<MessageLabel>?) {
     ALL("All", null),
     PERSONAL("Personal", setOf(MessageLabel.PERSONAL)),
     WORK("Work", setOf(MessageLabel.WORK)),
+    TRANSACTIONS("Transactions", setOf(MessageLabel.TRANSACTION)),
     PROMO("Promos", setOf(MessageLabel.PROMO)),
     CODES("Codes", setOf(MessageLabel.OTP_2FA)),
     JUNK("Junk", setOf(MessageLabel.SPAM, MessageLabel.SCAM)),

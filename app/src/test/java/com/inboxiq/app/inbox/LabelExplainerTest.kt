@@ -77,4 +77,24 @@ class LabelExplainerTest {
         val e = LabelExplainer.explain(MessageLabel.PERSONAL, 0.75f, false, body, "Personal", address = "38201", recentIncoming = listOf(body))
         assertTrue(e.reasons.any { it.contains("account or payment notice") })
     }
+
+    private val bankAlert = "Rs 1,250.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000001."
+
+    @Test fun `a transaction is explained by the rule and the registered sender ID`() {
+        val e = LabelExplainer.explain(MessageLabel.TRANSACTION, 0.8f, false, bankAlert, "Transaction", "VM-HDFCBK-T", listOf(bankAlert), 0)
+        assertEquals("Filed as Transaction by a rule", e.headline)
+        assertTrue(e.reasons.joinToString(" "), e.reasons.any { it.contains("debited") })
+        assertTrue(e.reasons.joinToString(" "), e.reasons.any { it.contains("HDFCBK-T") && it.contains("transactional") })
+    }
+
+    @Test fun `a bank thread still filed as Personal from the earlier version says so`() {
+        val e = LabelExplainer.explain(MessageLabel.PERSONAL, 0.75f, false, bankAlert, "Personal", "VM-HDFCBK-T", listOf(bankAlert), 0)
+        assertEquals("Filed as Personal before Transactions existed", e.headline)
+        assertTrue(e.reasons.any { it.contains("used to be filed under Personal") })
+    }
+
+    @Test fun `a hand-filed bank thread is explained as the user's choice, not moved`() {
+        val e = LabelExplainer.explain(MessageLabel.PERSONAL, 1f, true, bankAlert, "Personal", "VM-HDFCBK-T", listOf(bankAlert), 0)
+        assertEquals("You filed this under Personal", e.headline)
+    }
 }

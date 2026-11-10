@@ -4,25 +4,31 @@ Everything here runs on the phone. No message text, score or label leaves the de
 evaluation touched real user data: it uses the public UCI SMS Spam Collection, a synthetic corpus and three
 hand-written challenge sets (see "Evaluation").
 
-Labels (`data/MessageLabel.kt`): PERSONAL, WORK, PROMO, OTP_2FA, SPAM, SCAM (UNLABELED means "not sorted yet").
+Labels (`data/MessageLabel.kt`): PERSONAL, WORK, PROMO, OTP_2FA, TRANSACTION, SPAM, SCAM (UNLABELED means "not sorted yet").
+TRANSACTION was added after the evaluation below was written; see `docs/TRANSACTIONS.md` for its definition, rules, evaluation
+and upgrade behaviour, and `docs/INDIA_SENDER_IDS.md` for the India sender-ID table.
 
 ## Taxonomy decisions
 
-There is no "transactional" label, so these are the rules the classifier and the test corpora follow:
+These are the rules the classifier and the test corpora follow. **Bank, delivery and appointment notices were deliberately
+filed as PERSONAL when this was written, because there was no label for them. That is reversed on purpose** (rows marked below);
+the reasoning is in `docs/TRANSACTIONS.md`.
 
 | Message | Label | Why |
 |---|---|---|
 | Verification, login and one-time codes | OTP_2FA | the message exists to deliver a code |
-| Bank and card alerts, fraud alerts ("Did you attempt..."), balance and payment notices | PERSONAL | wanted, must notify loudly; a quiet label would hide fraud alerts |
-| Delivery and shipping updates, appointment and flight reminders, pharmacy and utility notices | PERSONAL | same reason |
+| Bank and card alerts, fraud alerts ("Did you attempt..."), balance and payment notices from an automated sender | **TRANSACTION** (was PERSONAL) | wanted; its own tab and a notification channel with sound but no pop-up, so they are neither buried nor silent; a quiet label would still hide fraud alerts |
+| Delivery and shipping updates, appointment and flight reminders, pharmacy and utility notices, bills, EMIs, tickets and bookings | **TRANSACTION** (was PERSONAL) | same reason |
+| A bank's one-time code, with or without a bank name | OTP_2FA | the code rule runs first; a bank alert that only says "never share OTP" is TRANSACTION |
+| The same notice from an ordinary phone number | PERSONAL (or TRANSACTION only with strong structure and no scam hint) | a callback scam looks exactly like a bank alert from a phone number |
 | Marketing with a discount, offer or opt-out, store and restaurant broadcasts, political and charity fundraising, surveys | PROMO | legitimate bulk senders; quiet notifications |
 | Unsolicited pitches: loans, warranties, casino, "we buy houses", solar, adult bait, SEO, easy-money | SPAM | unwanted but not trying to steal |
 | Smishing and fraud: fake toll/parcel fees, locked account, tax and government threats, prizes, gift-card requests, crypto and fake jobs, romance and wrong-number lures, "is this you in this video" | SCAM | tries to get money, credentials or a download |
 | Colleagues, clients, recruiters, on-call and incident alerts, shifts, PTO, meetings, deploys | WORK | |
 | Family, friends, plans, short replies | PERSONAL | |
 
-A TRANSACTIONAL label would be a better product answer than folding these into PERSONAL; it needs a new enum
-value, UI for it and notification-channel work, which was out of scope.
+The label that was out of scope here has since been built (TRANSACTION, tab, channel, India sender IDs): `docs/TRANSACTIONS.md`.
+The numbers below are from before it existed; their tests now fold TRANSACTION back into PERSONAL, so every floor still holds.
 
 ## The pipeline before this change (integrate-0.5.0, 3bd45fb)
 
@@ -60,12 +66,12 @@ ClassifyMessagesWorker (one pass at a time per process, pages of 50 addresses, 1
          1 OTP_2FA   digits + code wording (strong words, or "is your / enter / expires" context); not "zip/promo/gift code"
          2 SCAM      weighted signals, threshold depends on relationship (below)
          3 WORK / PROMO   work vocabulary; promo = opt-out wording + offer/fundraising cues (+ short code bonus)
-         4 transactional notice -> PERSONAL (can never become spam or promo)
+         4 transactional notice -> TRANSACTION (PERSONAL when the evidence is thin; never spam or promo)
          4b short code / named sender broadcasting a link or opt-out that is not a code or account notice -> PROMO
          5 SPAM      strong cue, or weak cue + model, or model >= 0.90 alone; never for a known contact
          6 PERSONAL  default
        recency-weighted vote across the messages; a scam in the NEWEST message wins outright
-  -> thread_labels + messages.label/labelConfidence (unchanged storage, no schema change)
+  -> thread_labels + messages.label/labelConfidence (unchanged storage; TRANSACTION is a new enum name in the same text column, no schema change)
 ```
 
 ### Signals
@@ -235,7 +241,7 @@ Measured here (desktop JVM / desktop onnxruntime 1.2x; not a phone):
 
 ## Upgrade behaviour
 
-`PIPELINE_VERSION = 2` in `ClassifyMessagesWorker`. On the first pass after the update, every `thread_labels` row
+`PIPELINE_VERSION = 3` in `ClassifyMessagesWorker` (2 = TriageEngine, 3 = the Transactions label; the same mechanism ran for 2). On the first pass after the update, every `thread_labels` row
 older than that moment is re-classified once, except threads the user filed by hand (`thread_state.labelCorrected`).
 Labels from the old pipeline were weak; this is what turns the owner's 0 WORK / 0 SCAM into real values without a
 re-import. A bump of the constant repeats it. No schema change.
@@ -264,7 +270,7 @@ score; if today's rules would disagree with an older stored label, it says the l
 2. **Safe on-phone evaluation.** Add a debug-only "audit" screen that shows the label, the evidence list and two
    buttons (right / wrong) for a random sample of 50 threads, counts only, stored locally; export the counts, not the
    text. That gives real precision per label within a day.
-3. Add a TRANSACTIONAL label (UI and notification channel) so alerts stop sharing PERSONAL.
+3. ~~Add a TRANSACTIONAL label~~ Done: `docs/TRANSACTIONS.md`.
 4. Label outgoing messages with the thread label, or stop counting them as "unlabeled".
 5. Gate the Gemma tier on the same relationship rule inside `GemmaClassifier` itself.
 

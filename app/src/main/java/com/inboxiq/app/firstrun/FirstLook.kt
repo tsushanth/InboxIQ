@@ -7,7 +7,7 @@ import com.inboxiq.app.inbox.ThreadRow
 data class FirstLookSummary(val sorted: Int, val parts: List<Pair<String, Int>>) {
     /** "12 personal, 4 promos and 2 codes". Empty groups are left out. */
     fun sentence(): String {
-        val items = parts.filter { it.second > 0 }.map { (name, n) -> "$n " + if (n == 1) name.removeSuffix("s").takeIf { name == "promos" || name == "codes" } ?: name else name }
+        val items = parts.filter { it.second > 0 }.map { (name, n) -> "$n " + if (n == 1) name.removeSuffix("s").takeIf { name == "promos" || name == "codes" || name == "transactions" } ?: name else name }
         return when (items.size) {
             0 -> ""
             1 -> items[0]
@@ -25,6 +25,7 @@ object FirstLook {
         val parts = listOf(
             "personal" to n(MessageLabel.PERSONAL),
             "work" to n(MessageLabel.WORK),
+            "transactions" to n(MessageLabel.TRANSACTION),
             "promos" to n(MessageLabel.PROMO),
             "codes" to n(MessageLabel.OTP_2FA),
             "junk" to n(MessageLabel.SPAM, MessageLabel.SCAM),

@@ -51,4 +51,19 @@ class OtpExtractorTest {
     @Test fun `absurd validity is clamped`() {
         assertEquals(t + 24L * 3_600_000, OtpExtractor.extract("Code 482913 valid for 999 hours", t)!!.expiresAt)
     }
+
+    @Test fun `a never-share warning in a bank alert is not a code`() {
+        val alerts = listOf(
+            "Rs 5,000 debited from A/c XX0042. Avl Bal Rs 12,345. Never share OTP, PIN or CVV with anyone.",
+            "INR 1200 credited to A/c XX0042. UPI Ref 600000000001. Do not share your PIN with anyone.",
+            "Aapke A/c XX0042 se Rs 4500 kat gaye. OTP kisi ke saath share na karein.",
+        )
+        for (t in alerts) assertEquals(t, null, OtpExtractor.extract(t, 0L))
+    }
+
+    @Test fun `a real code that also carries a warning is still found`() {
+        assertEquals("482910", OtpExtractor.extract("482910 is your OTP for txn of Rs 500. Do not share it with anyone.", 0L)?.code)
+        assertEquals("637271", OtpExtractor.extract("Use 637271 to log in to your account. Never share this code.", 0L)?.code)
+        assertEquals("482910", OtpExtractor.extract("Do not share this OTP 482910 with anyone.", 0L)?.code)
+    }
 }
