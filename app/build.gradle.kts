@@ -130,6 +130,15 @@ kotlin {
     }
 }
 
+// A store build must carry the real RatingKit, not the no-op stand-in (see settings.gradle.kts).
+gradle.taskGraph.whenReady {
+    val usesStub = gradle.extra["ratingkitIsStub"] == true
+    val releaseTask = allTasks.any { it.project == project && (it.name.contains("Release") && (it.name.startsWith("bundle") || it.name.startsWith("assemble") || it.name.startsWith("publish"))) }
+    if (usesStub && releaseTask && project.findProperty("allowRatingKitStub") != "true") {
+        throw GradleException("This release build would use ratingkit-stub (the real RatingKit module was not found). Point -Pratingkit.dir at it, or pass -PallowRatingKitStub=true to build without it on purpose.")
+    }
+}
+
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2024.09.00")
     implementation(composeBom)
