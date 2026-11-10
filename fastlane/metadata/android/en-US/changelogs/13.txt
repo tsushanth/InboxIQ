@@ -1,0 +1,1 @@
+Fixes a bug where a picture message that had been sent was shown as failed and could be sent again.
