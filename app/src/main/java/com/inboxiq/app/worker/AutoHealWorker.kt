@@ -5,7 +5,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.sms.DefaultSmsRole
+import com.inboxiq.app.data.SendStatus
 import com.inboxiq.app.sms.MmsSender
+import com.inboxiq.app.sms.SentMmsLookup
 
 /**
  * Periodic retry for MMS sends that failed and are still pending (see
@@ -29,7 +31,15 @@ class AutoHealWorker(
         val dao = AppDatabase.get(applicationContext).messageDao()
         val pending = dao.messagesAwaitingAutoHeal()
 
-        for (message in pending) {
+        for (listed in pending) {
+            // Read the row again: a result callback may have settled it since the list was taken.
+            val message = dao.getById(listed.id) ?: continue
+            if (!message.awaitingAutoHeal || message.sendStatus == SendStatus.SENT) continue
+            // Never send a picture the platform already has as sent: settle the row instead.
+            if (hasSentCopy(applicationContext, message.address, message.timestamp)) {
+                dao.markMmsSent(message.id)
+                continue
+            }
             MmsSender.retry(applicationContext, message)
         }
         return Result.success()
@@ -38,5 +48,8 @@ class AutoHealWorker(
     companion object {
         /** Swappable in tests; the real check is the platform's. */
         @Volatile internal var isDefaultSms: (Context) -> Boolean = { DefaultSmsRole.isDefault(it) }
+
+        /** Swappable in tests; whether the MMS provider already holds this message as sent (see SentMmsLookup). */
+        @Volatile internal var hasSentCopy: (Context, String, Long) -> Boolean = { c, a, t -> SentMmsLookup.hasSentCopy(c, a, t) }
     }
 }
