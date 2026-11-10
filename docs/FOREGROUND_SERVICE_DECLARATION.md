@@ -44,7 +44,7 @@ Pick one:
 2. Remove it, only after a spare-phone test of the Gemma download: add to `AndroidManifest.xml`
    `<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" tools:node="remove"/>` and
    `<service android:name="com.google.android.play.core.assetpacks.ExtractionForegroundService" tools:node="remove"/>`, update
-   `ForegroundServiceManifestTest`, then run steps 9 to 11 of `docs/PRE_RELEASE_CHECKLIST.md` (open Settings, start the download
+   `ForegroundServiceManifestTest`, then run steps 9 and 10 of `docs/PRE_RELEASE_CHECKLIST.md` (open Settings, start the download
    on Wi-Fi, background the app, confirm Settings shows the model as ready and nothing crashes). If the app crashes on
    opening Settings, revert.
 No declaration or demo video is needed for the relay.
