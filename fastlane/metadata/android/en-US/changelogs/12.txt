@@ -1,0 +1,1 @@
+New Transactions tab: bank, payment, bill, order, delivery and appointment texts now have their own place instead of filling Personal. Replies on a dual-SIM phone leave over the SIM the conversation is on. Safer database handling, identical texts sent at the same moment are both kept, and fixes to sending on older Android versions. Pin and restore now confirm what they did.
