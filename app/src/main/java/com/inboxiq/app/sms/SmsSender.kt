@@ -85,7 +85,8 @@ object SmsSender {
         )
 
         try {
-            val smsManager = context.getSystemService(SmsManager::class.java)
+            // The SIM the conversation is on (dual-SIM); null keeps the phone's default SIM.
+            val smsManager = SendSubscription.manager(context, SendSubscription.forAddress(context, address))
             val parts = smsManager.divideMessage(body)
             if (parts.size > 1) {
                 val sentIntents = ArrayList<PendingIntent>().apply { repeat(parts.size) { add(pendingIntent) } }
