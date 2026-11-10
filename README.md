@@ -129,8 +129,15 @@ delivery confirmed, `sendStatus=SENT` in the DB).
 ## Build
 
 ```bash
-./gradlew assembleDebug
+./gradlew assembleCoreDebug   # the Play Store variant; assembleRelayDebug is the optional-connector variant
+./gradlew testCoreDebugUnitTest testRelayDebugUnitTest
 ```
+
+Needs JDK 17 and the Android SDK (`sdk.dir` in `local.properties`). A plain clone builds as is: the in-app review prompt
+comes from a separate, non-public module, and when `settings.gradle.kts` cannot find it, it uses `ratingkit-stub`, which has the same API
+and does nothing. Release builds refuse to use the stub unless you pass `-PallowRatingKitStub=true`. Release signing
+reads `RELEASE_STORE_PASSWORD` / `RELEASE_KEY_PASSWORD` from `local.properties` and uses the maintainer's keystore path in `app/build.gradle.kts` (use your own key if you build a release); debug builds need neither. The on-device
+Gemma model is not in the repository (`docs/gemma-model-pack.md`), so only bundles need it.
 
 Open in Android Studio for the emulator/device run loop (SMS testing requires
 a real device or an emulator with SMS injection via `adb emu sms send`).
