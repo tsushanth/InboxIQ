@@ -15,10 +15,13 @@ class TextSignals private constructor(
     val scam: List<Signal>,
     val promo: List<Signal>,
     val work: List<Signal>,
-    val txn: List<Signal>,
+    private val txnSignals: Lazy<List<Signal>>,
     val spam: List<Signal>,
     val hasOptOut: Boolean,
 ) {
+    /** Transaction evidence. Computed on first use: it is the largest rule set, and known contacts never need it. */
+    val txn: List<Signal> get() = txnSignals.value
+
     companion object {
         private val I = RegexOption.IGNORE_CASE
 
@@ -39,7 +42,7 @@ class TextSignals private constructor(
         )
         private val weakOtpWord = Regex("\\b(code|pin|verification)\\b", I)
         private val otpContext = Regex(
-            "\\b(is your|your .{0,25}code|enter|use|do not share|don'?t share|never share|expires?|valid (for|until)|will never ask|to (log|sign) in|to verify|to confirm)\\b",
+            "\\b(is your|your .{0,25}code|enter|use|do not (share|give)|don'?t (share|give)|never (share|give)|expires?|valid (for|until)|will never ask|to (log|sign) in|to verify|to confirm)\\b",
             I,
         )
         private val notOtpCode = Regex("\\b(promo|coupon|discount|zip|area|country|postal|gift|referral|tracking|confirmation number|reservation|order|invoice|ticket|flight)\\s+(code|number|#)\\b", I)
@@ -103,6 +106,9 @@ class TextSignals private constructor(
             r("call", 1.2, "It says to call if the charge was not you", "\\b(if|was)\\b.{0,15}(this|it|that)?\\s*(was\\s*not|wasn'?t|is\\s*not|isn'?t|did\\s*not|didn'?t)\\b.{0,15}\\b(you|authori[sz]ed|your)\\b.{0,50}\\bcall\\b"),
             r("call", 0.8, "It tells you to call or contact a phone number", "\\b(call|contact|dial|phone)\\b.{0,30}\\b\\d{3}[-. ]?\\d{4}\\b"),
             r("call", 0.8, "It tells you to call straight away", "\\bcall\\b.{0,15}\\b(now|immediately|right away|within)\\b"),
+            r("acct", 1.5, "It tells you to click a link to cancel, block or dispute a payment", "\\b(click|tap|visit|open)\\b.{0,40}\\b(cancel|block|dispute|reverse|stop)\\b.{0,30}\\b(txn|transaction|payment|card|debit)\\b|\\b(cancel|block|dispute|reverse)\\b.{0,30}\\b(txn|transaction|payment)\\b.{0,40}\\b(click|link|https?://|www\\.)"),
+            r("pay", 1.5, "It asks for a small fee to rearrange or release a delivery", "\\bpay\\b.{0,30}\\bto\\b.{0,15}\\b(rearrange|reschedule|release|redeliver|re-deliver)\\b"),
+            r("link", 1.5, "It links to an app installer file (.apk)", "\\.apk\\b"),
             r("urgent", 0.7, "It uses pressure wording", "\\b(urgent(ly)?|immediately|right away|final (notice|warning|reminder)|last chance|act now|expires? (today|tonight|soon)|within \\d+ ?(hours?|hrs?|minutes?|mins?)|before (it'?s|it is) too late|you will be (arrested|fined|charged))\\b"),
             r("urgent", 0.7, "It threatens consequences if you do not act", "\\bor (your|the) [a-z ]{0,25}(will be |is )?(suspended|terminated|closed|cancell?ed|returned|forfeited|deactivated|disconnected)\\b|\\bto avoid (suspension|termination|closure|cancell?ation|arrest)\\b"),
         )
@@ -123,12 +129,25 @@ class TextSignals private constructor(
         )
 
         // -------------------------------------------------------------------- transactional rules
-        private val txnRules = listOf(
-            r("txn", 1.0, "It reads like an order or delivery update", "\\b(your )?order\\b.{0,20}(#?\\d|has |was |is |shipped|delivered|ready|confirmed)|\\b(shipped|out for delivery|delivered to|tracking|your (driver|ride|courier)|arriving in|delivery (update|window)|arriv(e|es|ing) (today|tomorrow|between)|pickup counter|ready for pickup|parcel|package)\\b"),
-            r("txn", 1.0, "It reads like an appointment, booking or travel notice", "\\b(appointment|reservation|reminder|reschedule|check-in|boarding|flight|gate|delayed|closure|prescription|refill|your visit|your table)\\b"),
-            r("txn", 1.0, "It reads like an account or payment notice", "\\b(purchase of|payment|deposit|transaction|charged|balance|statement|bill|receipt|transfer|withdrawal|autopay|card ending|account ending|ending (in )?\\d{4}|ride receipt|sent you \\$)\\b"),
-            r("txn", 1.0, "It asks a fraud-alert or confirmation question", "\\b(fraud alert|did you (attempt|make|authorize)|not you\\??|reply (yes|no|y|n|c|r|1|2)\\b)"),
-        )
+        // Data, not code: app/src/main/resources/classify/transaction_rules.tsv (group, weight, why, regex).
+        private val txnRules: List<Rule> by lazy { loadTxnRules() }
+
+        /** Number of transaction rules that loaded; a unit test asserts it so a packaging mistake cannot go unnoticed. */
+        val transactionRuleCount: Int get() = txnRules.size
+
+        private fun loadTxnRules(): List<Rule> {
+            val stream = TextSignals::class.java.classLoader?.getResourceAsStream("classify/transaction_rules.tsv") ?: return emptyList()
+            val out = ArrayList<Rule>()
+            stream.bufferedReader(Charsets.UTF_8).useLines { lines ->
+                for (line in lines) {
+                    if (line.isBlank() || line.startsWith("#")) continue
+                    val f = line.split('\t')
+                    if (f.size < 4) continue
+                    out += Rule(f[0], f[1].toFloat(), f[2], Regex(f[3], I))
+                }
+            }
+            return out
+        }
 
         // -------------------------------------------------------------------- work rules
         private val workRules = listOf(
@@ -190,15 +209,44 @@ class TextSignals private constructor(
 
         private val alnumCode = Regex("\\b(?:code|password|passcode|pin)\\s*(?:is|:)\\s*([A-Za-z0-9]{4,8})\\b", I)
 
-        private fun detectOtp(text: String): OtpHit? {
+        /**
+         * Warning sentences such as "Never share OTP, PIN or CVV with anyone" end almost every bank alert. They name the
+         * code words without carrying a code, so they must not make a debit or balance alert look like a code message.
+         */
+        private val otpWarning = Regex(
+            "\\b(do not|don'?t|dont|never|not to)\\s+(ever\\s+)?(share|disclose|reveal|give|tell)\\b[^.\\n]{0,70}|" +
+                "\\b(otp|pin|cvv|password|passcode)\\b[^.\\n]{0,40}\\b(share na|mat share|na batay\\w*|kisi ko na|kisi ke saath share)\\b[^.\\n]{0,20}|" +
+                "\\b(bank|we|company|sbi|hdfc|icici|axis)\\b[^.\\n]{0,20}\\b(will never|never) ask\\b[^.\\n]{0,60}",
+            I,
+        )
+
+        /** [text] without its "never share ..." sentences, unless such a sentence itself carries the number ("do not share OTP 123456"). */
+        fun withoutOtpWarnings(text: String): String {
+            val stripped = otpWarning.replace(text) { m -> if (digitGroup.containsMatchIn(m.value)) m.value else " " }
+            // "482910. Never share this code." and "Acme: 482910. Never share your OTP." are real code messages whose only code
+            // word sits in the warning: what is left is a bare number (with at most a short sender name), so keep the original.
+            // A short alert that is about an amount ("Debited Rs 5000. Never share OTP") is not.
+            return if (stripped != text && bareCode.matches(stripped) && !amountBeforeNumber.containsMatchIn(stripped)) text else stripped
+        }
+
+        private val bareCode = Regex("^\\W*(?:\\p{L}[\\p{L}\\p{N}_-]{0,19}\\W{1,3}){0,2}(?:\\d{3}[- ]\\d{3}|\\d{4,8})\\W*$")
+        private val amountBeforeNumber = Regex("(?:\\b(?:rs|inr|usd|eur|gbp|aed|amt|amount|bal|balance)\\b\\.?|[$₹£€])\\W{0,3}\\d", I)
+
+        private fun detectOtp(rawText: String): OtpHit? {
+            val text = withoutOtpWarnings(rawText)
             val digits = digitGroup.find(text)?.value ?: prefixedCode.find(text)?.groupValues?.get(1)
                 ?: alnumCode.find(text)?.groupValues?.get(1)?.takeIf { c -> c.any { it.isDigit() } && c.any { it.isLetter() } }
                 ?: return null
             if (notOtpCode.containsMatchIn(text) && !strongOtpWord.containsMatchIn(text)) return null
             val strong = strongOtpWord.find(text)
             if (strong != null) return OtpHit(digits.count { it.isDigit() }, true, strong.value.lowercase())
-            val weak = weakOtpWord.find(text) ?: return null
-            if (!otpContext.containsMatchIn(text)) return null
+            // The code word may sit only in the warning ("Use 123456 to log in. Never share this code."): that still counts when the
+            // rest of the message reads like a code message. A bank alert whose only code word is "Never share OTP" has no such context.
+            val weak = weakOtpWord.find(text)
+                ?: weakOtpWord.find(rawText)?.takeIf { otpContext.containsMatchIn(text) }
+                ?: strongOtpWord.find(rawText)?.takeIf { otpContext.containsMatchIn(text) }
+                ?: return null
+            if (!otpContext.containsMatchIn(rawText)) return null
             return OtpHit(digits.count { it.isDigit() }, false, weak.value.lowercase())
         }
 
@@ -238,15 +286,33 @@ class TextSignals private constructor(
                 if (n >= 2) spamSignals += Signal("spam", minOf(1.5f, 0.5f * n), "It reads like a sales pitch: commercial wording plus a call to act")
             }
             val opt = optOut.containsMatchIn(text)
+            val promo = ArrayList(scan(promoRules, text))
+            // India headers: the registered class and a known brand are supporting evidence, never decisive alone.
+            val senderTxn = ArrayList<Signal>(3)
+            sender.dlt?.let { d ->
+                val label = d.header + (d.suffix?.let { "-${it.letter}" } ?: "")
+                val txn = senderTxn
+                when (d.suffix) {
+                    DltSuffix.TRANSACTIONAL -> txn += Signal("sender", 0.8f, "Its sender ID ($label) is registered in India for transactional messages")
+                    DltSuffix.SERVICE -> txn += Signal("sender", 0.4f, "Its sender ID ($label) is registered in India for service messages")
+                    DltSuffix.GOVERNMENT -> txn += Signal("sender", 0.4f, "Its sender ID ($label) is registered in India as a government header")
+                    DltSuffix.PROMOTIONAL -> promo += Signal("sender", 1.0f, "Its sender ID ($label) is registered in India for promotional messages")
+                    null -> Unit
+                }
+                d.brand?.takeIf { it.source != "heuristic" && it.category != HeaderCategory.TELECOM }?.let {
+                    txn += Signal("sender", 0.5f, "Its sender ID ${d.header} belongs to ${it.name}, a ${it.category.name.lowercase()} sender")
+                }
+                if (d.brand?.source == "heuristic") txn += Signal("sender", 0.3f, "Its sender ID ${d.header} ends like a ${d.brand.category.name.lowercase()} header")
+            }
 
             return TextSignals(
                 text = text,
                 links = links,
                 otp = detectOtp(text),
                 scam = scam,
-                promo = scan(promoRules, text),
+                promo = promo,
                 work = scan(workRules, text),
-                txn = scan(txnRules, text),
+                txnSignals = lazy(LazyThreadSafetyMode.NONE) { scan(txnRules, text) + senderTxn },
                 spam = spamSignals,
                 hasOptOut = opt,
             )

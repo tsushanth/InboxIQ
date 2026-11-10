@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.Work
@@ -30,6 +31,7 @@ object LabelPalette {
         MessageLabel.WORK -> Pair2(Color(0xFFDFE7F7), Color(0xFF254586))
         MessageLabel.PROMO -> Pair2(Color(0xFFF8EACB), Color(0xFF7A4E00))
         MessageLabel.OTP_2FA -> Pair2(Color(0xFFE8E1F6), Color(0xFF50358F))
+        MessageLabel.TRANSACTION -> Pair2(Color(0xFFD8EEF0), Color(0xFF0B5560))
         MessageLabel.SPAM -> Pair2(Color(0xFFEBE4DC), Color(0xFF5E4F40))
         MessageLabel.SCAM -> Pair2(Color(0xFFF9DDDA), Color(0xFF9A1B15))
         MessageLabel.UNLABELED -> Pair2(Color(0xFFE4E8E6), Color(0xFF4D5B64))
@@ -40,6 +42,7 @@ object LabelPalette {
         MessageLabel.WORK -> Pair2(Color(0xFF1F3158), Color(0xFFB4C6F2))
         MessageLabel.PROMO -> Pair2(Color(0xFF4A3608), Color(0xFFF2CB78))
         MessageLabel.OTP_2FA -> Pair2(Color(0xFF33265B), Color(0xFFD0C2F2))
+        MessageLabel.TRANSACTION -> Pair2(Color(0xFF123F46), Color(0xFF9DDDE6))
         MessageLabel.SPAM -> Pair2(Color(0xFF3B3229), Color(0xFFD9C9B8))
         MessageLabel.SCAM -> Pair2(Color(0xFF5A1A16), Color(0xFFFAB8B2))
         MessageLabel.UNLABELED -> Pair2(Color(0xFF28323A), Color(0xFFB3C0C8))
@@ -50,6 +53,7 @@ object LabelPalette {
         MessageLabel.WORK -> "Work"
         MessageLabel.PROMO -> "Promo"
         MessageLabel.OTP_2FA -> "Code"
+        MessageLabel.TRANSACTION -> "Transaction"
         MessageLabel.SPAM -> "Spam"
         MessageLabel.SCAM -> "Scam"
         MessageLabel.UNLABELED -> "Not sorted yet"
@@ -60,6 +64,7 @@ object LabelPalette {
         MessageLabel.WORK -> Icons.Filled.Work
         MessageLabel.PROMO -> Icons.Filled.LocalOffer
         MessageLabel.OTP_2FA -> Icons.Filled.Key
+        MessageLabel.TRANSACTION -> Icons.Filled.Receipt
         MessageLabel.SPAM -> Icons.Filled.Report
         MessageLabel.SCAM -> Icons.Filled.Warning
         MessageLabel.UNLABELED -> Icons.Filled.Inbox

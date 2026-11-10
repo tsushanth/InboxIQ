@@ -14,7 +14,7 @@ class NotificationPolicyTest {
         val channels = MessageLabel.entries.map { NotificationPolicy.channelFor(it) }
         assertEquals(MessageChannel.JUNK, NotificationPolicy.channelFor(MessageLabel.SCAM))
         assertEquals(MessageChannel.JUNK, NotificationPolicy.channelFor(MessageLabel.SPAM))
-        assertEquals(6, channels.toSet().size)
+        assertEquals(7, channels.toSet().size)
         assertTrue(MessageChannel.JUNK.importance <= 2 && MessageChannel.PROMO.importance <= 2)
         assertEquals("incoming_messages", MessageChannel.GENERAL.id) // existing users keep their settings for this channel
     }
@@ -47,5 +47,21 @@ class NotificationPolicyTest {
 
     @Test fun `plain numbers in personal texts never become copy actions`() {
         assertNull(NotificationPolicy.plan(MessageLabel.PERSONAL, "my code is 482913", t, t, false).code)
+    }
+
+    @Test fun `transactions have their own channel with sound but no heads-up pop-up, and no inline reply`() {
+        assertEquals(MessageChannel.TRANSACTIONS, NotificationPolicy.channelFor(MessageLabel.TRANSACTION))
+        assertEquals("msg_transactions", MessageChannel.TRANSACTIONS.id)
+        assertEquals(3, MessageChannel.TRANSACTIONS.importance)
+        assertTrue(MessageChannel.TRANSACTIONS.importance > MessageChannel.PROMO.importance && MessageChannel.TRANSACTIONS.importance < MessageChannel.PERSONAL.importance)
+        val plan = NotificationPolicy.plan(MessageLabel.TRANSACTION, "Rs 640.00 debited from A/c XX0042. Never share OTP, PIN or CVV with anyone.", t, t, muted = false)
+        assertTrue(plan.notify); assertEquals(false, plan.canReply); assertEquals(null, plan.code)
+        assertEquals("a muted conversation stays muted", false, NotificationPolicy.plan(MessageLabel.TRANSACTION, "x", t, t, muted = true).notify)
+    }
+
+    @Test fun `an unsorted bank alert that ends with never share OTP does not get a copy-code button`() {
+        val plan = NotificationPolicy.plan(MessageLabel.UNLABELED, "Rs 5,000 debited from A/c XX0042. Avl Bal Rs 12,345. Never share OTP or PIN.", t, t, muted = false)
+        assertEquals(null, plan.code)
+        assertEquals(MessageChannel.GENERAL, plan.channel)
     }
 }

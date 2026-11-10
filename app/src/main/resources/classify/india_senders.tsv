@@ -1,0 +1,72 @@
+# India SMS sender IDs (TRAI "headers"): structure, suffix meaning and a short list of verified brand headers.
+# Tab separated. First column is the record type. Lines starting with # are comments.
+# Maintainer notes are in docs/INDIA_SENDER_IDS.md. Add a header only with a public source you can cite in SRC.
+#
+# SRC  key  url  accessed  what it supports
+# OAP  X  operator              first letter of the 2-letter prefix (originating access provider)
+# LSA  Y  circle                second letter of the prefix (licence service area)
+# SUF  letter  KIND  meaning    suffix added by the access provider (TRAI 2nd amendment 2025)
+# HDR  header  CATEGORY  brand  src-key   exact 6-character header (without prefix and suffix)
+# ENDS text  CATEGORY  src-key  heuristic: a header ending in this text (not a brand claim)
+#
+SRC	trai-prefix	https://cms.trai.gov.in/sites/default/files/2024-09/Detail_Header_Prefixes_16062020.pdf	2026-11-09	Header = XY-ABCDEF; X operator, Y circle; six alphanumeric characters (TRAI, 16 Jun 2020)
+SRC	trai-suffix	https://trai.gov.in/sites/default/files/2025-02/Regulation_12022025.pdf	2026-11-09	Suffix -P -S -T -G for promotional, service, transactional, government (TCCCPR Second Amendment Regulations 2025, 12 Feb 2025)
+SRC	hdfc-security	https://www.hdfc.bank.in/security	2026-11-09	HDFC Bank security page: SMS "will always include a header like HDFCBK / HDFCBN" (read from a search excerpt; the page itself redirected and was not opened)
+SRC	sbi-phishing	https://sbi.bank.in/hi/web/yono/phishing-attacks-how-to-spot-scams-and-protect-yourself	2026-11-09	SBI YONO page: legitimate SMS headers SBIINB, SBIPSG or SBICRD (read from a search excerpt)
+SRC	axis-fraud	https://axisbank.com/Fraud-Awareness/Genuine-Vs-Fraudulent-Bank-Notifications.Html	2026-11-09	Axis Bank fraud-awareness pages name AXISBK and AXISMR as its SMS senders (read from search excerpts; AXISMR is shown as promotional, AXISMR-P, in the bank's RBI notice booklet)
+SRC	moneylife-2023	https://www.mlfoundation.in/fraud-alert/fraud-alert-stay-away-from-dangerous-links-in-bank-sms/199.html	2023-03-03	Consumer article listing VM-SBIINB, BV-SBIPSG, VM-SBIPSG, BZ-CBSSBI as SBI headers
+SRC	storyboard-2025	https://www.storyboard18.com/how-it-works/why-your-sms-now-looks-like-a-code-trais-new-message-format-explained-70270.htm	2025-06-14	Trade press examples of suffixed headers: VM-BLUDRT-S (Blue Dart), KA-ZOMATO-S (Zomato), GJ-MEESHO-P (Meesho)
+SRC	heuristic	-	-	Not a brand claim: a header that ends in these letters usually names a bank or a UPI service. Weak evidence only.
+#
+OAP	D	Aircel / Dishnet
+OAP	A	Bharti Airtel
+OAP	B	BSNL
+OAP	Q	Quadrant Televentures
+OAP	M	MTNL
+OAP	R	Reliance Communications
+OAP	J	Reliance Jio
+OAP	E	Reliance Telecom
+OAP	T	Tata Teleservices
+OAP	V	Vodafone Idea
+OAP	C	V-CON Mobile and Infra
+LSA	A	Andhra Pradesh
+LSA	S	Assam
+LSA	B	Bihar
+LSA	D	Delhi
+LSA	G	Gujarat
+LSA	H	Haryana
+LSA	I	Himachal Pradesh
+LSA	J	Jammu and Kashmir
+LSA	X	Karnataka
+LSA	L	Kerala
+LSA	K	Kolkata
+LSA	Y	Madhya Pradesh
+LSA	Z	Maharashtra
+LSA	M	Mumbai
+LSA	N	North East
+LSA	O	Orissa
+LSA	P	Punjab
+LSA	R	Rajasthan
+LSA	T	Tamil Nadu
+LSA	E	UP East
+LSA	W	UP West
+LSA	V	West Bengal
+#
+SUF	T	TRANSACTIONAL	transactional (bank and payment alerts, codes)
+SUF	S	SERVICE	service (order, delivery, appointment and account notices)
+SUF	P	PROMOTIONAL	promotional (offers and marketing; the old "service explicit" class now falls here)
+SUF	G	GOVERNMENT	government (headers exempted by TRAI)
+#
+HDR	HDFCBK	BANK	HDFC Bank	hdfc-security
+HDR	HDFCBN	BANK	HDFC Bank	hdfc-security
+HDR	SBIINB	BANK	State Bank of India	sbi-phishing
+HDR	SBIPSG	BANK	State Bank of India	sbi-phishing
+HDR	SBICRD	CARD	SBI Card	sbi-phishing
+HDR	CBSSBI	BANK	State Bank of India	moneylife-2023
+HDR	AXISBK	BANK	Axis Bank	axis-fraud
+HDR	AXISMR	BANK	Axis Bank	axis-fraud
+HDR	BLUDRT	DELIVERY	Blue Dart	storyboard-2025
+HDR	ZOMATO	ECOMMERCE	Zomato	storyboard-2025
+HDR	MEESHO	ECOMMERCE	Meesho	storyboard-2025
+ENDS	UPI	PAYMENTS	heuristic
+ENDS	BANK	BANK	heuristic

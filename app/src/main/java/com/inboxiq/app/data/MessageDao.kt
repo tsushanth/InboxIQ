@@ -48,7 +48,8 @@ interface MessageDao {
         SELECT m.*, (
             SELECT COUNT(*) FROM messages u
             WHERE u.address = m.address AND u.isIncoming = 1 AND u.isRead = 0
-        ) AS unreadCount
+        ) AS unreadCount,
+        (SELECT t.label FROM thread_labels t WHERE t.address = m.address) AS threadLabel
         FROM messages m
         INNER JOIN (SELECT address, MAX(timestamp) AS maxTs FROM messages GROUP BY address) latest
         ON m.address = latest.address AND m.timestamp = latest.maxTs
@@ -136,6 +137,10 @@ interface MessageDao {
 
     @Query("UPDATE messages SET label = :label, labelConfidence = :confidence WHERE id = :id")
     suspend fun updateLabel(id: Long, label: MessageLabel, confidence: Float)
+
+    /** Label of the newest incoming message of this address (what a restored backup left there), or null if there is none. */
+    @Query("SELECT label FROM messages WHERE address = :address AND isIncoming = 1 ORDER BY timestamp DESC LIMIT 1")
+    suspend fun latestIncomingLabel(address: String): MessageLabel?
 
     @Query("UPDATE messages SET aiGeneratedConfidence = :confidence WHERE id = :id")
     suspend fun updateAiGeneratedConfidence(id: Long, confidence: Float)

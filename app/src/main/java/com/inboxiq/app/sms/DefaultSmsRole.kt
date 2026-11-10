@@ -12,14 +12,18 @@ import android.util.Log
 object DefaultSmsRole {
 
     fun isDefault(context: Context): Boolean {
-        val legacy = Telephony.Sms.getDefaultSmsPackage(context)
+        // From Android 10 the role is the source of truth. Ask it first and only fall back to the legacy getter when the role
+        // does not say yes (older Android, or a role that is not reported): on a phone where InboxIQ is the default app, the
+        // platform logs a line inside the legacy getter on every call ("lost android:read_cell_broadcasts"), and this is called often.
         val roleHeld = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             context.getSystemService(RoleManager::class.java)?.isRoleHeld(RoleManager.ROLE_SMS) == true
         } else {
             false
         }
+        if (roleHeld) return true
+        val legacy = Telephony.Sms.getDefaultSmsPackage(context)
         Log.d("DefaultSmsRole", "legacy=$legacy pkg=${context.packageName} roleHeld=$roleHeld")
-        return roleHeld || legacy == context.packageName
+        return legacy == context.packageName
     }
 
     /** Launches the system's "make this app your SMS app" prompt. Result handled in onActivityResult / ActivityResultContract. */

@@ -9,6 +9,8 @@ enum class MessageChannel(val id: String, val title: String, val description: St
     GENERAL("incoming_messages", "Messages", "Texts that have not been sorted yet", 4),
     PERSONAL("msg_personal", "Personal", "Texts from people you know", 4),
     WORK("msg_work", "Work", "Texts about work", 4),
+    // Default importance (sound, no heads-up pop-up): bank and delivery alerts can be dozens a day, but must not be silent.
+    TRANSACTIONS("msg_transactions", "Transactions", "Bank, payment, delivery and booking alerts", 3),
     CODES("msg_codes", "Verification codes", "One-time codes, with a Copy code button", 4),
     PROMO("msg_promo", "Promos", "Marketing and sales texts, kept quiet", 2),
     JUNK("msg_junk", "Spam and scams", "Texts filed as spam or scam, silent", 2),
@@ -27,6 +29,7 @@ object NotificationPolicy {
         MessageLabel.PERSONAL -> MessageChannel.PERSONAL
         MessageLabel.WORK -> MessageChannel.WORK
         MessageLabel.OTP_2FA -> MessageChannel.CODES
+        MessageLabel.TRANSACTION -> MessageChannel.TRANSACTIONS
         MessageLabel.PROMO -> MessageChannel.PROMO
         MessageLabel.SPAM, MessageLabel.SCAM -> MessageChannel.JUNK
         MessageLabel.UNLABELED -> MessageChannel.GENERAL

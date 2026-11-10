@@ -10,6 +10,7 @@ enum class InboxTab(val title: String, val labels: Set<MessageLabel>?) {
     ALL("All", null),
     PERSONAL("Personal", setOf(MessageLabel.PERSONAL)),
     WORK("Work", setOf(MessageLabel.WORK)),
+    TRANSACTIONS("Transactions", setOf(MessageLabel.TRANSACTION)),
     PROMO("Promos", setOf(MessageLabel.PROMO)),
     CODES("Codes", setOf(MessageLabel.OTP_2FA)),
     JUNK("Junk", setOf(MessageLabel.SPAM, MessageLabel.SCAM)),
@@ -21,7 +22,7 @@ data class ThreadRow(
     val state: ThreadStateEntity? = null,
 ) {
     val address: String get() = summary.latestMessage.address
-    val label: MessageLabel get() = summary.latestMessage.label
+    val label: MessageLabel get() = summary.threadLabel?.takeIf { it != MessageLabel.UNLABELED } ?: summary.latestMessage.label
     val unread: Int get() = summary.unreadCount
     val lastTimestamp: Long get() = summary.latestMessage.timestamp
     val pinned: Boolean get() = state?.pinnedAt != null

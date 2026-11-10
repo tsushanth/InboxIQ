@@ -14,7 +14,8 @@ class Converters {
     fun fromLabel(label: MessageLabel): String = label.name
 
     @TypeConverter
-    fun toLabel(value: String): MessageLabel = MessageLabel.valueOf(value)
+    // A name this build does not know (data written by a newer build, or a downgrade) reads as "not sorted yet", never a crash.
+    fun toLabel(value: String): MessageLabel = MessageLabel.entries.firstOrNull { it.name == value } ?: MessageLabel.UNLABELED
 
     @TypeConverter
     fun fromSendStatus(status: SendStatus): String = status.name

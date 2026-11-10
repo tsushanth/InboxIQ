@@ -73,9 +73,17 @@ class FirstRunLogicTest {
     @Test fun `summary counts conversations by label and drops empty groups from the sentence`() {
         val s = FirstLook.summarize(Fixtures.rows())
         // Fixture: 3 personal-labelled (incl. outgoing), 1 work, 1 code, 1 promo, 1 scam, 1 spam
-        assertEquals(mapOf("personal" to 2, "work" to 1, "promos" to 1, "codes" to 1, "junk" to 2), s.parts.toMap())
+        assertEquals(mapOf("personal" to 2, "work" to 1, "transactions" to 0, "promos" to 1, "codes" to 1, "junk" to 2), s.parts.toMap())
         assertEquals(7, s.sorted)
         assertEquals("2 personal, 1 work, 1 promo, 1 code and 2 junk", s.sentence())
+    }
+
+    @Test fun `transactions are counted and worded in the singular for one`() {
+        assertEquals("3 transactions", FirstLookSummary(3, listOf("transactions" to 3)).sentence())
+        assertEquals("1 transaction and 2 codes", FirstLookSummary(3, listOf("transactions" to 1, "codes" to 2)).sentence())
+        val row = Fixtures.rows().first { it.label == MessageLabel.PERSONAL }
+        val txn = row.copy(summary = row.summary.copy(latestMessage = row.summary.latestMessage.copy(label = MessageLabel.TRANSACTION)))
+        assertEquals(1, FirstLook.summarize(listOf(txn)).parts.toMap()["transactions"])
     }
 
     @Test fun `sentence handles one and two groups and nothing`() {

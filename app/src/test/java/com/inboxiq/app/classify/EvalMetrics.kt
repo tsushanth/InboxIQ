@@ -39,22 +39,22 @@ class Confusion {
 
     fun unlabeledRate() = predTotal(MessageLabel.UNLABELED).toDouble() / total.coerceAtLeast(1)
 
-    fun render(title: String): String {
+    fun render(title: String, labels: List<MessageLabel> = EVAL_LABELS): String {
         val sb = StringBuilder()
         sb.appendLine("### $title (n=$total)")
         sb.appendLine()
         sb.appendLine("| label | precision | recall | F1 | support |")
         sb.appendLine("|---|---|---|---|---|")
-        for (l in EVAL_LABELS) {
+        for (l in labels) {
             if (goldTotal(l) == 0 && predTotal(l) == 0) continue
             sb.appendLine("| ${l.name} | ${"%.3f".format(precision(l))} | ${"%.3f".format(recall(l))} | ${"%.3f".format(f1(l))} | ${goldTotal(l)} |")
         }
-        sb.appendLine("| macro F1 | | | ${"%.3f".format(macroF1(EVAL_LABELS.filter { goldTotal(it) > 0 }))} | |")
+        sb.appendLine("| macro F1 | | | ${"%.3f".format(macroF1(labels.filter { goldTotal(it) > 0 }))} | |")
         sb.appendLine()
-        val cols = EVAL_LABELS + MessageLabel.UNLABELED
+        val cols = labels + MessageLabel.UNLABELED
         sb.appendLine("| gold \\ predicted | " + cols.joinToString(" | ") { it.name } + " |")
         sb.appendLine("|---|" + cols.joinToString("|") { "---" } + "|")
-        for (g in EVAL_LABELS) {
+        for (g in labels) {
             if (goldTotal(g) == 0) continue
             sb.appendLine("| ${g.name} | " + cols.joinToString(" | ") { count(g, it).toString() } + " |")
         }

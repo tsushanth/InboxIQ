@@ -94,4 +94,31 @@ class BackupTest {
         assertTrue(fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"address\":\"+1\",\"body\":\"x\"").contains("damaged"))
         assertTrue(fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"body\":\"no sender\",\"timestamp\":5}]}").contains("no sender"))
     }
+
+    @Test fun `a Transactions label round trips`() = runTest {
+        src.messageDao().insert(MessageEntity(threadId = 0, address = "VM-TESTBK-T", body = "Rs 5 debited from A/c XX0042", timestamp = 10, isIncoming = true, label = MessageLabel.TRANSACTION, labelConfidence = 0.8f))
+        val out = ByteArrayOutputStream(); BackupManager(src).export(out)
+        assertTrue(out.toString("UTF-8").contains("\"label\":\"TRANSACTION\""))
+        BackupManager(dst).import(ByteArrayInputStream(out.toByteArray()))
+        assertEquals(MessageLabel.TRANSACTION, dst.messageDao().messagesForThread("VM-TESTBK-T").single().label)
+    }
+
+    @Test fun `a backup made before Transactions existed restores, labels and hand-filed flag included`() = runTest {
+        // Written by hand in the exact shape the previous version produced (format version 1, no Transactions anywhere).
+        val old = """{"format":"inboxiq-backup","version":1,"exportedAt":1,"messages":[
+            {"address":"VM-TESTBK-T","body":"Rs 5 debited from A/c XX0042","timestamp":10,"isIncoming":true,"label":"PERSONAL","labelConfidence":0.75,"isRead":true,"sendStatus":"NONE","hasPhoto":false},
+            {"address":"+15550100","body":"Lunch?","timestamp":20,"isIncoming":true,"label":"PERSONAL","labelConfidence":0.9,"isRead":false,"sendStatus":"NONE","hasPhoto":false}],
+            "threadState":[{"address":"VM-TESTBK-T","archived":false,"labelCorrected":true}],"blocked":[]}"""
+        val r = BackupManager(dst).import(ByteArrayInputStream(old.toByteArray()))
+        assertEquals(2, r.added)
+        assertEquals(MessageLabel.PERSONAL, dst.messageDao().messagesForThread("VM-TESTBK-T").single().label)
+        assertTrue("the choice to keep it Personal survives", dst.threadStateDao().get("VM-TESTBK-T")!!.labelCorrected)
+    }
+
+    @Test fun `a label name this version does not know reads as not sorted yet, never an error`() = runTest {
+        val newer = """{"format":"inboxiq-backup","version":1,"messages":[
+            {"address":"+15550100","body":"x","timestamp":20,"isIncoming":true,"label":"A_FUTURE_LABEL","labelConfidence":0.9,"isRead":true,"sendStatus":"NONE"}]}"""
+        BackupManager(dst).import(ByteArrayInputStream(newer.toByteArray()))
+        assertEquals(MessageLabel.UNLABELED, dst.messageDao().messagesForThread("+15550100").single().label)
+    }
 }

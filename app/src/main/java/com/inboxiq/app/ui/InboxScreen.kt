@@ -804,7 +804,7 @@ fun MuteDialog(anyMuted: Boolean, onPick: (MuteDuration?) -> Unit, onDismiss: ()
 @Composable
 fun LabelPickerDialog(current: MessageLabel?, onPick: (MessageLabel) -> Unit, onDismiss: () -> Unit) {
     val choices = listOf(
-        MessageLabel.PERSONAL, MessageLabel.WORK, MessageLabel.PROMO, MessageLabel.OTP_2FA, MessageLabel.SPAM, MessageLabel.SCAM,
+        MessageLabel.PERSONAL, MessageLabel.WORK, MessageLabel.TRANSACTION, MessageLabel.PROMO, MessageLabel.OTP_2FA, MessageLabel.SPAM, MessageLabel.SCAM,
     )
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -930,6 +930,7 @@ private fun EmptyInbox(tab: InboxTab, archived: Boolean, isDefault: Boolean, onR
         tab == InboxTab.ALL -> "No conversations" to "New texts land here, already sorted. Tap New message to start one."
         tab == InboxTab.PERSONAL -> "No personal messages" to "Texts from people you know show up here."
         tab == InboxTab.WORK -> "No work messages" to "Texts about meetings, shifts and deadlines show up here."
+        tab == InboxTab.TRANSACTIONS -> stringResource(R.string.transactions_empty_title) to stringResource(R.string.transactions_empty_body)
         tab == InboxTab.PROMO -> "No promos" to "Sales and marketing texts are kept here, out of your main inbox."
         tab == InboxTab.CODES -> "No codes" to "Verification codes show up here with a Copy button, and expire after a few minutes."
         else -> "Nothing in Junk" to "Texts the model files as spam or scam go here. If it gets one wrong, open the conversation and change its label."

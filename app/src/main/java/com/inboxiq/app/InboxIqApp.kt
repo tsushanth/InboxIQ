@@ -32,6 +32,13 @@ class InboxIqApp : Application() {
         // Writes to the Android SMS provider that failed earlier (see ProviderWrites): retry them.
         com.inboxiq.app.sms.ProviderWriteScheduler.enqueueIfPending(this)
 
+        // Every notification channel exists from the first start, so Android's notification settings list them all
+        // (creating one again is a no-op that keeps the user's choices).
+        com.inboxiq.app.sms.MessageNotifier.ensureAllChannels(this)
+
+        // After an upgrade that changed the classifier, re-sort old conversations once (see ClassifyMessagesWorker.PIPELINE_VERSION).
+        com.inboxiq.app.worker.ClassifyMessagesWorker.enqueueIfRefreshPending(this)
+
         CrashLogger.install(this)
         com.kreativekoala.ratingkit.RatingKit.init(this, appId = "inboxiq")
         com.inboxiq.app.feature.RelayFeatures.instance.onAppStart(this)

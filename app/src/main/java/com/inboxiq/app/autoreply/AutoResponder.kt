@@ -96,7 +96,7 @@ object AutoResponder {
             .filter { it.id !in autoIds && it.sendStatus != com.inboxiq.app.data.SendStatus.FAILED && it.body.isNotBlank() && !BareReplies.isBare(it.body) }
         val threadLabel = db.threadLabelDao().get(address)?.label
         // A junk thread label wins even if this one message was read as personal.
-        val label = if (threadLabel in setOf(MessageLabel.PROMO, MessageLabel.SPAM, MessageLabel.SCAM, MessageLabel.OTP_2FA)) threadLabel!! else row.label
+        val label = if (threadLabel in setOf(MessageLabel.PROMO, MessageLabel.SPAM, MessageLabel.SCAM, MessageLabel.OTP_2FA, MessageLabel.TRANSACTION)) threadLabel!! else row.label
         val facts = Facts(
             isDefaultSmsApp = isDefaultSms(context),
             importRunning = importRunning(context),

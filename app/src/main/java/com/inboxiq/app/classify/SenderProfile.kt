@@ -23,7 +23,7 @@ enum class SenderKind {
     UNKNOWN,
 }
 
-data class SenderProfile(val kind: SenderKind) {
+data class SenderProfile(val kind: SenderKind, val dlt: DltHeader? = null) {
     /** Short codes, alphanumeric IDs and toll-free numbers do not hold conversations. */
     val isAutomated: Boolean get() = kind == SenderKind.SHORT_CODE || kind == SenderKind.ALPHA_ID || kind == SenderKind.TOLL_FREE
 
@@ -33,7 +33,7 @@ data class SenderProfile(val kind: SenderKind) {
     val description: String
         get() = when (kind) {
             SenderKind.SHORT_CODE -> "a short code, the kind businesses use for automated texts"
-            SenderKind.ALPHA_ID -> "a named sender ID, the kind businesses use for automated texts"
+            SenderKind.ALPHA_ID -> dlt?.description ?: "a named sender ID, the kind businesses use for automated texts"
             SenderKind.TOLL_FREE -> "a toll-free number, usually a business"
             SenderKind.PHONE -> "an ordinary phone number"
             SenderKind.INTL_PHONE -> "a phone number from another country"
@@ -50,7 +50,7 @@ data class SenderProfile(val kind: SenderKind) {
             val a = address?.trim().orEmpty()
             if (a.isEmpty()) return UNKNOWN
             if (a.contains('@')) return SenderProfile(SenderKind.EMAIL_GATEWAY)
-            if (a.any { it.isLetter() }) return SenderProfile(SenderKind.ALPHA_ID)
+            if (a.any { it.isLetter() }) return SenderProfile(SenderKind.ALPHA_ID, IndiaSenders.parse(a))
             val hasPlus = a.startsWith("+")
             val digits = a.filter { it.isDigit() }
             if (digits.isEmpty()) return UNKNOWN

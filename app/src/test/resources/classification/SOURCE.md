@@ -14,3 +14,11 @@
 * `spam_probs.tsv`: output of the bundled bert-tiny ONNX model for every text above, keyed by
   SHA-1 of the UTF-8 text. Produced by `scripts/classification/score_spam_model.py` so the JVM
   tests need no native ONNX runtime. Regenerate with `scripts/classification/build_eval_data.sh`.
+
+## transactions.tsv and transactions_blind.tsv (Transactions label)
+
+Synthetic. Every row was written from public SMS formats (India bank / UPI / card / bill / delivery / ticket, Hinglish, US
+and UK transactional texts, plus negatives: bank OTPs, promos, personal texts, scams). Account numbers are masked
+(`XX0042`), references and phone numbers are made up, links are example.com. No real message and no personal data.
+`transactions.tsv` was written by the rule author; `transactions_blind.tsv` by a separate author who never saw the
+rules (see `docs/TRANSACTIONS.md`, "Evaluation"). Tag `known_preexisting` marks misses that exist without the Transactions change.

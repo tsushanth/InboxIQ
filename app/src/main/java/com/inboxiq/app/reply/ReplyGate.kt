@@ -15,7 +15,8 @@ import com.inboxiq.app.inbox.OtpExtractor
 object ReplyGate {
 
     private val I = RegexOption.IGNORE_CASE
-    private val junkLabels = setOf(MessageLabel.PROMO, MessageLabel.SPAM, MessageLabel.SCAM, MessageLabel.OTP_2FA)
+    // Automated notices too: a bank or delivery alert is not a question to answer with a one-tap reply.
+    private val junkLabels = setOf(MessageLabel.PROMO, MessageLabel.SPAM, MessageLabel.SCAM, MessageLabel.OTP_2FA, MessageLabel.TRANSACTION)
 
     /** A person asking for a verification code is the classic account-takeover; offer nothing, not even "no". */
     private val asksForCode = Regex(
@@ -58,7 +59,7 @@ object ReplyGate {
         val verdict = TriageEngine.rulesOnly(body, sender, replies)
         when (verdict.label) {
             MessageLabel.OTP_2FA -> return Suppression.OTP_OR_CODE
-            MessageLabel.SCAM, MessageLabel.PROMO, MessageLabel.SPAM -> return Suppression.JUNK_TEXT
+            MessageLabel.SCAM, MessageLabel.PROMO, MessageLabel.SPAM, MessageLabel.TRANSACTION -> return Suppression.JUNK_TEXT
             else -> Unit
         }
         val stranger = Relationship.of(sender, replies) == Relationship.NONE && !known

@@ -50,6 +50,16 @@ object LabelExplainer {
             return Explanation("Filed as $labelName by a rule", reasons)
         }
 
+        if (verdict != null && verdict.basis == Basis.RULE && verdict.label == MessageLabel.TRANSACTION && label == MessageLabel.PERSONAL) {
+            return Explanation(
+                "Filed as $labelName before Transactions existed",
+                verdict.evidence + listOf(
+                    "Bank, payment, delivery and booking texts used to be filed under Personal. InboxIQ now files them under Transactions, and this conversation moves there the next time sorting runs. You can also change the label now.",
+                    "This check runs on your phone and sends nothing anywhere.",
+                ),
+            )
+        }
+
         if (verdict != null && verdict.basis == Basis.RULE && verdict.label != label) {
             return Explanation(
                 "Filed as $labelName by the on-device classifier",

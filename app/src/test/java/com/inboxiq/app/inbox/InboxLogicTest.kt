@@ -118,4 +118,13 @@ class InboxLogicTest {
         val s = SearchLogic.snippet("hello world", "zzz")
         assertEquals("hello world", s.text)
     }
+
+    @Test fun `transactions tab sits after work, holds only transactions, and all still shows them`() {
+        assertEquals(listOf("All", "Personal", "Work", "Transactions", "Promos", "Codes", "Junk"), InboxTab.entries.map { it.title })
+        val txn = listOf(row("VM-TESTBK-T", MessageLabel.TRANSACTION, 500, unread = 3), row("+15550101", MessageLabel.PERSONAL, 100))
+        assertEquals(listOf("VM-TESTBK-T"), InboxLogic.visible(txn, InboxTab.TRANSACTIONS).map { it.address })
+        assertEquals(listOf("+15550101"), InboxLogic.visible(txn, InboxTab.PERSONAL).map { it.address })
+        assertEquals(2, InboxLogic.visible(txn, InboxTab.ALL).size)
+        assertEquals(1, InboxLogic.unreadCounts(txn)[InboxTab.TRANSACTIONS])
+    }
 }

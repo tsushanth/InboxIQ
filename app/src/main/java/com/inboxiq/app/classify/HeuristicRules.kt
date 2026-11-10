@@ -34,7 +34,8 @@ object HeuristicRules {
     private fun evaluate(text: String, address: String? = null, replies: Int = 0): Reason? {
         val v = TriageEngine.rulesOnly(text, SenderProfile.of(address), replies)
         if (v.basis != Basis.RULE) return null
-        // A text-only view cannot tell a transactional notice from an ordinary message: leave that to the full pipeline.
+        // Weak transactional evidence ("PERSONAL kept") and spam need the full pipeline. A TRANSACTION verdict already passed the
+        // sender-aware thresholds (an automated sender, or very strong structure), so it may label a single incoming text.
         if (v.label == MessageLabel.PERSONAL || v.label == MessageLabel.SPAM) return null
         return Reason(v.toResult(), v.evidence.joinToString(" "))
     }

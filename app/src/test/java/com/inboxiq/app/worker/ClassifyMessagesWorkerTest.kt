@@ -123,7 +123,7 @@ class ClassifyMessagesWorkerTest {
         assertEquals("hand-filed thread untouched", MessageLabel.SPAM, threadLabel("+14155550201"))
         assertEquals(MessageLabel.OTP_2FA, threadLabel("22001"))
         assertEquals(old, db.threadLabelDao().get("+14155550201")!!.classifiedAt)
-        assertEquals(2, context.getSharedPreferences("inboxiq_prefs", Context.MODE_PRIVATE).getInt("classifier_pipeline_version", 0))
+        assertEquals(ClassifyMessagesWorker.PIPELINE_VERSION, context.getSharedPreferences("inboxiq_prefs", Context.MODE_PRIVATE).getInt("classifier_pipeline_version", 0))
 
         // flipping the stored label by hand afterwards is not undone by a second run (refresh happens once)
         db.threadLabelDao().upsert(ThreadLabelEntity("+14155550200", MessageLabel.WORK, 1f, old))
@@ -137,6 +137,56 @@ class ClassifyMessagesWorkerTest {
         db.threadLabelDao().upsert(ThreadLabelEntity("+14155550300", MessageLabel.PERSONAL, 0.7f, old))
         run()
         assertTrue(db.threadLabelDao().get("+14155550300")!!.classifiedAt > old)
-        assertEquals(2, context.getSharedPreferences("inboxiq_prefs", Context.MODE_PRIVATE).getInt("classifier_pipeline_version", 0))
+        assertEquals(ClassifyMessagesWorker.PIPELINE_VERSION, context.getSharedPreferences("inboxiq_prefs", Context.MODE_PRIVATE).getInt("classifier_pipeline_version", 0))
+    }
+
+    private val prefs get() = context.getSharedPreferences("inboxiq_prefs", Context.MODE_PRIVATE)
+
+    @Test fun `upgrade from the previous pipeline moves bank and delivery threads to Transactions once, and leaves hand-filed ones`() = runBlocking {
+        val old = clock - 1_000_000
+        prefs.edit().putInt("classifier_pipeline_version", 2).commit()
+        val bank = "VM-TESTBK-T"; val kept = "VM-TESTBK-S"; val friend = "+919800000001"; val promo = "VM-TESTBK-P"
+        msg(bank, "Rs 1,250.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000001. Avl Bal Rs 9,000.00")
+        msg(kept, "Rs 75.00 debited from A/c XX0042 on 05-Nov-26. UPI Ref No 600000000002")
+        msg(friend, "I paid the bill already"); msg(friend, "ok thanks", incoming = false)
+        msg(promo, "Get 10% cashback on UPI payments this weekend only! T&C apply. Reply STOP to opt out.")
+        // what version 2 did: the notices were filed Personal
+        for (a in listOf(bank, kept, friend)) db.threadLabelDao().upsert(ThreadLabelEntity(a, MessageLabel.PERSONAL, 0.75f, old))
+        db.threadLabelDao().upsert(ThreadLabelEntity(promo, MessageLabel.PROMO, 0.7f, old))
+        db.messageDao().applyThreadLabel(bank, MessageLabel.PERSONAL, 0.75f)
+        // the user kept this one under Personal on purpose
+        db.threadStateDao().ensure(ThreadStateEntity(kept, labelCorrected = true))
+
+        run()
+        assertEquals(MessageLabel.TRANSACTION, threadLabel(bank))
+        assertEquals("every incoming message of the thread follows", MessageLabel.TRANSACTION, db.messageDao().messagesForThread(bank).single { it.isIncoming }.label)
+        assertEquals("a choice the user made is never undone", MessageLabel.PERSONAL, threadLabel(kept))
+        assertEquals(old, db.threadLabelDao().get(kept)!!.classifiedAt)
+        assertEquals(MessageLabel.PERSONAL, threadLabel(friend))
+        assertEquals(MessageLabel.PROMO, threadLabel(promo))
+        assertEquals(3, prefs.getInt("classifier_pipeline_version", 0))
+
+        // idempotent: a second pass changes nothing, even if a label is flipped by hand in between
+        db.threadLabelDao().upsert(ThreadLabelEntity(bank, MessageLabel.WORK, 1f, old))
+        run()
+        assertEquals(MessageLabel.WORK, threadLabel(bank))
+    }
+
+    @Test fun `a restored backup keeps the label of a hand-filed thread even though its label row is missing`() = runBlocking {
+        val a = "VM-TESTBK-T"
+        // what BackupManager.import leaves behind: messages with their labels, the "filed by hand" flag, no thread_labels row
+        db.messageDao().insert(MessageEntity(threadId = 0, address = a, body = "Rs 5.00 debited from A/c XX0042. UPI Ref No 600000000003", timestamp = clock++, isIncoming = true, label = MessageLabel.PERSONAL, labelConfidence = 1f))
+        db.threadStateDao().ensure(ThreadStateEntity(a, labelCorrected = true))
+        run()
+        assertEquals(MessageLabel.PERSONAL, threadLabel(a))
+        assertEquals(MessageLabel.PERSONAL, db.messageDao().messagesForThread(a).single().label)
+    }
+
+    @Test fun `a hand-filed thread whose restored messages carry no label is sorted like any other`() = runBlocking {
+        val a = "VM-TESTBK-T"
+        msg(a, "Rs 5.00 debited from A/c XX0042. UPI Ref No 600000000003")
+        db.threadStateDao().ensure(ThreadStateEntity(a, labelCorrected = true))
+        run()
+        assertEquals(MessageLabel.TRANSACTION, threadLabel(a))
     }
 }

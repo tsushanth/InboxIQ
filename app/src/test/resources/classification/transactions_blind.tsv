@@ -1,0 +1,141 @@
+label	address	replies	tag	text
+TRANSACTION	VM-ICICXB-T	0	bank_debit	Rs 2,450.00 debited from A/c XX4821 on 07-11-26 to VPA shopkart@okaxis (UPI Ref 431298776512). Not you? Call 1800-000-111 -ICICXB
+TRANSACTION	AX-ZENBNK-S	0	upi	Sent Rs.350.00 From Zenith Bank A/C *7743 To RAJESH KUMAR On 08/11/26 Ref 630812345678 Not You? Call 18002586161 / SMS BLOCK UPI to 7308080808
+TRANSACTION	VK-KOTAXB-T	0	bank_credit	Your A/c XX2290 is credited with INR 45,000.00 on 05-Nov-26 by NEFT-N309261234567-ACME TECH PVT LTD. Avl Bal INR 1,12,430.55
+TRANSACTION	JM-HDFXBK-S	0	card	Spent Rs 1,299 on Card XX5512 at AMAZON PAY INDIA on 08-Nov-26. Avl limit Rs 78,420. Not you? Block: call 1860-000-1234
+TRANSACTION	AD-FINBNK-S	0	bill	Your Statement for Card XX5512 is generated. Total due Rs 14,230.00, Min due Rs 710. Pay by 25-Nov-26 to avoid late fee. -FinBank
+TRANSACTION	VM-KOTAXB-T	0	emi	Dear Customer, EMI of Rs 8,540 for Loan A/c LN00918XXXX is due on 05-Dec-26. Pls maintain sufficient balance in A/c XX3301. -KotakX
+TRANSACTION	AX-BAJFIN-S	0	emi	EMI of Rs.8540 for loan XX9182 could not be debited due to insufficient funds. Pls pay immediately to avoid bounce charges Rs 450 + GST.
+TRANSACTION	BZ-BESCMX-S	0	bill	Your electricity bill for CA 1000XXXX45 of Rs.1842 is due on 15-NOV. Ignore if already paid. Pay via app/website.
+TRANSACTION	VM-JIOTEL-S	0	bill	Recharge of Rs 299 successful for 98XXXXX210. Validity 28 days, 1.5GB/day. Thank you for choosing Jiotel.
+TRANSACTION	AX-IRCTCX-G	0	ticket	PNR:4521896307 Train:12627 Date:12-Nov-26 From:SBC To:MAS Class:3A Fare:Rs.1245 Status:CNF/B2/34. Happy Journey. -IRCTC
+TRANSACTION	VM-INDGOX-S	0	ticket	Your flight 6E 2145 DEL-BLR on 14Nov departs 06:25. PNR XJ7K2P. Web check-in open. Terminal 3. Carry valid photo ID.
+TRANSACTION	AD-REDBSX-T	0	ticket	Ticket confirmed! TIN 5X8K2L9 Hyderabad-Vijayawada 10-Nov 22:30. Boarding: Miyapur X Roads. Seat 12U. Fare Rs 780.
+TRANSACTION	VK-SHPKRT-S	0	delivery	Your Shopkart order #OD332145 (Redmi Earbuds 2C) is out for delivery today. Delivery executive: Manoj 98XXXXX345. Track: example.com/t/od332145
+TRANSACTION	JD-EKRTLG-T	0	delivery	Shipment AWB 7788991234 will be delivered today between 2 PM-6 PM. Pls keep Rs 0 / prepaid. Track: https://example.com/t/ab12
+TRANSACTION	BZ-LOTUSI-S	0	hotel	Booking confirmed at Lotus Inn, Jaipur for 20-22 Nov. Booking ID HT889123. Check-in 12 PM. Pay Rs 3,200 at hotel.
+TRANSACTION	VM-SUNCLN-S	0	appointment	Reminder: Appt with Dr. Mehta at Sunrise Clinic on 10-Nov at 5:30 PM. Reply C to confirm. -SUNCLN
+TRANSACTION	AX-RAPIDX-T	0	ride	Ride completed. Fare Rs 142 paid via UPI to Rapido. Trip ID RD90021X. Rate your captain: example.com/r/abc
+TRANSACTION	VM-LIFSUR-S	0	bill	Premium of Rs 12,400 for policy 2345XXXX is due on 28-Nov-26. Pay online to avoid lapse. -Lifesure
+TRANSACTION	AX-SHPKRT-T	0	refund	Refund of Rs 799 for order OD998877 has been initiated to your original payment method. Will reflect in 5-7 working days.
+TRANSACTION	VM-INDGAS-S	0	delivery	Your LPG cylinder refill booking is confirmed. Ref 1234567. Delivery in 2-3 days. Cash memo Rs 903. -IndGas
+TRANSACTION	JD-FASTAG-T	0	bank_debit	Rs 135 debited from FASTag wallet linked to MH12XX1234 at Khed Shivapur toll plaza on 08-Nov 14:12. Bal Rs 412.
+TRANSACTION	AX-PUNBNK-S	0	balance	Avl Bal in A/c XX6620 as on 09-Nov-26 is INR 23,118.40. -BankIN
+TRANSACTION	VM-ICICXB-S	0	hinglish	Aapke A/c XX4821 se Rs 500 UPI se debit hue hain, Ref 4312XXXX. Agar aapne nahi kiya to turant 1930 par call karein.
+TRANSACTION	VK-SHPKRT-T	0	hinglish	Aapka order #OD55231 kal tak deliver ho jayega. Courier boy aapko call karega. Kripya ghar par rahein.
+TRANSACTION	AX-JIOTEL-S	0	hinglish	Aapke Jio number ka recharge Rs 239 safal raha. Validity 22 din tak. Dhanyavaad.
+TRANSACTION	BZ-BAJFIN-T	0	hinglish	Priya grahak, aapke loan A/c ki EMI Rs 4,250 kal aapke bank se kat jayegi. Kripya khate me balance rakhein.
+TRANSACTION	VM-MSEDCL-S	0	hinglish	Aapka bijli bill Rs 2,310 jama ho gaya hai. Dhanyavad. Receipt no. 55XXXX12
+TRANSACTION	AD-KOTAXB-T	0	hinglish	Aapke A/c XX7731 me Rs 12,000 credit hue hain (SALARY). Upalabdh balance Rs 18,432.10
+TRANSACTION	VM-IRCTCX-G	0	hinglish	Aapki train ticket PNR 8412XXXXXX confirm ho gayi hai. Seat: S5/41. Yatra mangalmay ho.
+TRANSACTION	AX-SHPKRT-S	0	hinglish	Aapke refund ka Rs 1,150 aapke bank account me bhej diya gaya hai, 3-5 din me aa jayega.
+TRANSACTION	VK-CTYHSP-S	0	hinglish	Aapka doctor appointment kal subah 10 baje hai, Dr Sharma, City Hospital. Kripya 15 min pehle aayein.
+TRANSACTION	JD-PAYWLT-T	0	hinglish	Rs 75 ka UPI payment Chai Point ko safal. Txn ID 42XXXXXX9. Balance Rs 1,204
+TRANSACTION	86753	0	us	BrightBank Alert: A card ending in 4410 was used at TRADER JOES #123 for $54.21 on 11/08. Reply STOP to opt out.
+TRANSACTION	33669	0	us	Zenith Fraud Alert: Did you attempt a $842.00 purchase at BESTBUYX on card x2231 at 3:14PM? Reply YES or NO.
+TRANSACTION	89241	0	us	You received $120.00 from JAMIE L via QuickPay. Funds are available now.
+TRANSACTION	AMAZON	0	us	Amazon: Your package with Anker USB-C Cable will be delivered tomorrow. Track: https://example.com/amz/x1
+TRANSACTION	UPS	0	us	UPS: Your package 1Z999AA10123456784 is out for delivery today. Track https://example.com/ups
+TRANSACTION	28777	0	us	USPS: Package 9400 1000 0000 0000 0000 00 arrived at Austin TX facility, expected delivery Nov 11.
+TRANSACTION	UBER	0	us	Your Uber is arriving now. Look for a gray Toyota Camry, plate 7ABC123.
+TRANSACTION	52391	0	us	Reminder: You have an appointment at Lakeview Family Medicine on 11/12 at 2:15 PM. Reply C to confirm or R to reschedule.
+TRANSACTION	GREENLEAF	0	us	Rx Ready: Your prescription #8812XXXX is ready for pickup at Greenleaf Pharmacy, 12 Main St. Pickup by 11/14.
+TRANSACTION	827438	0	us	Your Target order is ready for pickup. Head to the Drive Up spot and check in: example.com/dr
+TRANSACTION	LONESTAR	0	us	Your Lonestar Energy bill of $142.37 is ready. Due 11/25. Autopay is scheduled for 11/25.
+TRANSACTION	DELTAX	0	us	Flight SK 482 SFO-JFK Nov 15 is on time. Boarding 7:10 AM Gate B12. Seat 14C. Conf K9L2PQ.
+TRANSACTION	64110	0	us	Your reservation at Harbor View Hotel is confirmed. Conf# 7782913. Check-in Nov 20 after 3PM.
+TRANSACTION	86753	0	us	We received your payment of $250.00 on 11/07. Thank you. Card ending 8821 -ArborCard
+TRANSACTION	33669	0	us	Low balance alert: Your checking acct ending 3390 balance is $42.18 as of 11/09.
+TRANSACTION	AMAZON	0	us	Amazon: Refund of $39.99 for your order #112-9983 has been issued to card ending 4410. Allow 3-5 business days.
+TRANSACTION	DOORDASH	0	us	Your Dasher is on the way with your order from Taco Hut. ETA 12:42 PM.
+TRANSACTION	89241	0	us	Direct deposit of $2,340.55 posted to checking x3390 on 11/06.
+TRANSACTION	BARCLZ	0	uk	Barclaiz: GBP23.40 spent with TESCO STORES 4412 on card ending 7781 on 08/11. Not you? Call 0800 000 0000
+TRANSACTION	RoyalMail	0	uk	Royal Mail: Your parcel RM123456789GB will be delivered today between 11:20-13:20.
+TRANSACTION	EVRI	0	uk	Evri: Your parcel from ASOS is on its way and will arrive tomorrow. Track: example.com/evri
+TRANSACTION	80062	0	uk	Reminder: appt at Elm Road Surgery with Dr Patel on Tue 11 Nov at 09:40. To cancel reply CANCEL
+TRANSACTION	TRAINLN	0	uk	Your e-ticket: London Euston to Manchester, 12 Nov 08:30, coach C seat 42. Collect ref ABC123.
+TRANSACTION	COUNCIL	0	uk	Your direct debit of GBP142.00 for council tax will be taken on 01/12.
+TRANSACTION	NATBNK	0	uk	You've received GBP500.00 from J SMITH. Balance GBP1,203.77.
+TRANSACTION	ENBD	0	other	Emirates NBD: AED 120.00 spent on card ending 4411 at CARREFOUR DXB 08-NOV. Avl bal AED 3,200
+TRANSACTION	GRABXX	0	other	GrabFood: Your order from Kopi Corner is being prepared. Driver will arrive in about 15 mins.
+OTP_2FA	VM-ICICXB-T	0	otp	482913 is OTP for txn of Rs 2,450.00 at SHOPKART on card XX5512. Valid 10 mins. Do not share. -ICICXB
+OTP_2FA	AX-PAYWLT-S	0	otp	Use 482913 as your UPI registration OTP. Do not share with anyone. -PayWallet
+OTP_2FA	VK-SHPKRT-T	0	otp	Your Shopkart delivery OTP is 7391. Share with the delivery agent only on receiving your order OD332145.
+OTP_2FA	JD-KOTAXB-T	0	hinglish	Aapka OTP 650218 hai. Ise kisi ke saath share na karein. Bank kabhi OTP nahi maangta. -KotakX
+OTP_2FA	ZIPPYX	0	otp	<#> 5521 is your Zippy verification code. Ab3dEf9xYz1
+OTP_2FA	86753	0	otp	Your verification code is 482913. Don't share it with anyone. -BrightBank
+OTP_2FA	PAYQCK	0	otp	PayQuick: 918273 is your security code. It expires in 5 minutes. Never share this code.
+OTP_2FA	BARCLZ	0	otp	Your Barclaiz one time passcode is 482913 to approve payment of GBP120.00 to AMAZON. Don't share.
+OTP_2FA	AD-GOVPRT-G	0	otp	OTP 394822 for registration on example.gov.in portal. Valid for 10 minutes. Do not disclose.
+OTP_2FA	RIDEOX	0	otp	Rideo: Your code is 7714. Reply STOP to end
+OTP_2FA	+14155550142	0	otp	Your WhatsPing code: 482-913. You can also tap on this link to verify your phone: v.example.com/482913
+OTP_2FA	AX-EKRTLG-T	0	otp	OTP 4821 for delivery of AWB 77889912. Give to delivery partner only.
+OTP_2FA	TELEGX	0	otp	Telegraph code: 18273. Do not give this code to anyone, even if they say they are from Telegraph!
+OTP_2FA	VM-HDFXBK-T	0	otp	OTP is 238191 for Rs.12,999.00 txn at FLIPMART on HDFX Credit Card ending 4421. Valid 3 min. Never share OTP
+OTP_2FA	42525	0	otp	Your Stackly password reset code is 884213. If you didn't request it, ignore this message.
+PROMO	JD-FINBNK-P	0	promo	Dear Customer, Pre-approved Personal Loan of Rs 5,00,000 @10.49% waiting for you! Apply now: example.com/pl T&C apply. -FinBank
+PROMO	VM-FINBNK-P	0	promo	Get Lifetime Free Platinum Credit Card with 5% cashback on Swiggy orders. Apply: example.com/cc T&C
+PROMO	AX-PAYWLT-P	0	promo	PayWallet: Pay your electricity bill via app & win up to Rs 500 cashback! Offer valid till 15 Nov. T&C apply
+PROMO	VM-SHPKRT-P	0	promo	SHOPKART Big Billion Sale starts tonight 12AM! Up to 80% off. Your cart items are waiting. example.com/sale
+PROMO	AD-JIOTEL-P	0	promo	Rs 299 plan expiring? Recharge with Rs 349 and get 2GB/day + OTT sub free. Recharge now example.com/r -Jiotel
+PROMO	VK-AIRTLX-P	0	promo	Your plan expires in 2 days. Recharge now with Rs 239 and get 5% cashback on PayWallet. example.com/rc
+PROMO	JM-HDFXBK-P	0	promo	Exclusive for you: Get Rs 750 cashback on spends above Rs 10,000 on your Card XX5512 this weekend. Register: example.com/cb T&C
+PROMO	GLADSTN	0	promo	Gladstone Home: 40% off everything this weekend! Use code FALL40. Reply STOP to end.
+PROMO	89241	0	promo	BrightBank: You're pre-approved for a $15,000 auto loan at 5.9% APR. Apply at example.com/auto. Msg&data rates may apply.
+PROMO	GRNGRC	0	promo	GreenGrocer: Double points this week on all fresh produce. Shop in-store or online. Opt out: text STOP
+PROMO	MAPLEDN	0	promo	Thanks for your recent visit to Maple Diner! Take our 2-min survey and get 10% off next time: example.com/s/ab12
+PROMO	+14155550177	0	promo	Hi from Riverside Animal Rescue: winter is coming and our shelter needs your help. Donate $10 at example.com/give
+PROMO	BZ-FOODZP-P	0	hinglish	Diwali dhamaka! Sirf aaj Rs 1 me paye Rs 100 cashback. Abhi order karein example.com/d -FoodZap
+PROMO	VM-LIFSUR-P	0	promo	Protect your family with Term Plan starting Rs 490/month. Get a free quote: example.com/term. -Lifesure
+PROMO	AX-TRVKRO-P	0	promo	FLASH SALE! Flights from Rs 1,499 on TravelKaro. Book by 12 Nov. example.com/f
+PERSONAL	+14155550101	8	personal	Bro did the parcel come? Amazon says delivered but I dont see it anywhere
+PERSONAL	+919800000111	14	personal	I paid the electricity bill already, check ur email for the receipt
+PERSONAL	+919800000112	19	personal	Beta I sent you 5000 on gpay, check if it came
+PERSONAL	+919800000113	12	hinglish	Bhai paise bhej diye PhonePe se, dekh le aa gaye kya
+PERSONAL	+14155550102	6	personal	Flight lands at 6:40 pm, can u pick me up from T3?
+PERSONAL	+14155550103	5	personal	Doctors appointment got moved to thurs, will tell you more after
+PERSONAL	+919800000114	9	hinglish	Yaar tera courier aaya tha, guard ke paas rakha hai le lena
+PERSONAL	+14155550104	11	personal	hey can you send me $40 for the dinner? venmo is fine
+PERSONAL	+14155550105	4	personal	Bank called me about some suspicious transaction on my card, did you use it?
+PERSONAL	+447700900101	7	personal	Cheers mate, I'll pay you back the 15 quid on Friday
+PERSONAL	+919800000115	16	personal	Ticket booked for saturday, will forward the PNR on whatsapp
+PERSONAL	+14155550106	13	personal	Rent is due on the 1st, I will send it tonight ok?
+PERSONAL	+919800000116	10	hinglish	Aaj ka bill maine bhar diya, tum tension mat lo
+PERSONAL	+14155550107	20	personal	Happy birthday!! Hope you have a great day :)
+PERSONAL	+14155550108	3	personal	Order the pizza, I will pay when I get there
+PERSONAL	+447700900102	5	personal	did my insurance cheque clear? pls check ur app when u get a sec
+PERSONAL	+919800000117	17	personal	Running late, 10 mins. save me a seat
+PERSONAL	+919800000118	6	hinglish	Kal ka plan kya hai? Movie chalein ya ghar pe hi rehna hai
+PERSONAL	+14155550109	12	personal	Parcel from mum arrived!! thank u so much, the pickles are amazing
+PERSONAL	+919800000119	15	personal	Your EMI date is 5th right? Ill keep money in my account for it, dont worry
+WORK	+14155550120	18	work	Prod deploy of v2.14 starts at 4pm, freeze merges till it is done
+WORK	+14155550121	7	work	You're on-call this weekend, I swapped with Dan. PagerDuty is updated.
+WORK	+14155550122	12	work	Standup moved to 10:30, link is in the invite
+WORK	+14155550123	0	work	Hi, this is Maria from TalentBridge. I have a Senior Backend role at a fintech, 140-170k base. Open to a quick chat this week?
+WORK	+14155550124	3	work	Can you cover Saturday 7am-3pm shift? Reply yes/no by 5pm pls
+WORK	+919800000125	9	work	Sir client call 3 baje hai, deck ready kar lena please
+WORK	+14155550126	5	work	Build #4412 failed on main, can you look? Logs are in slack
+WORK	+447700900127	2	work	Interview with Priya at 2pm tomorrow confirmed, please send feedback by EOD Fri
+SPAM	+14155550130	0	spam	URGENT!! Need cash fast? Instant loans up to $5000 no credit check. Reply YES. Stop2end
+SPAM	+447700900131	0	spam	Win big at LuckySpin Casino! 200 free spins on signup + 100% bonus. example.com/spin
+SPAM	+14155550132	0	spam	Hot singles near u want to meet tonight. Click example.com/m18
+SPAM	+14155550133	0	spam	Buy ViagrA/CiaIis 90% off no prescription needed example.com/rx
+SPAM	+14155550134	0	spam	Boost your website to #1 on Google! Guaranteed SEO from $99/mo. Reply for a free audit
+SPAM	+14155550135	0	spam	Cut your electricity bill by 80% with solar. Free site survey, call 555-0142 today
+SPAM	+919800000136	0	spam	Need a Personal loan in 10 mins without documents? Call 98XXXXXX10 now. Limited offer!
+SCAM	VM-SBXBNK	0	scam	Dear customer your SBX account will be blocked today. Update KYC immediately: http://sbx-kyc-update.example.com
+SCAM	+919800000141	0	scam	India Post: your parcel is held due to incomplete address. Pay Rs 25 redelivery fee: example.com/ip
+SCAM	+14155550142	0	scam	USPS: Your package could not be delivered due to incorrect address. Confirm within 12 hrs: example.com/usps-redeliver
+SCAM	+14155550143	0	scam	TollPay: You have an unpaid toll balance of $6.85. Pay now to avoid late fee $50: example.com/toll
+SCAM	+447700900144	0	scam	HMRC: You are eligible for a tax refund of GBP384.50. Claim here within 24h: example.com/hmrc-refund
+SCAM	+919800000145	0	scam	Congratulations! You won Rs 25,00,000 in KBC lucky draw. Contact Mr. Rana on WhatsApp 98XXXXXX11 to claim.
+SCAM	+14155550146	0	scam	Hi Ann, are we still on for dinner on Friday?
+SCAM	AX-ICICXB	0	scam	Rs 49,999 debited from A/c XX1234 via UPI. If not you, click example.com/block-card to cancel the txn immediately.
+SCAM	BZ-HDFXRW	0	scam	Dear Customer, your HDFX reward points worth Rs 9,860 will expire today. Redeem now: example.com/redeem.apk
+SCAM	+919800000147	0	scam	Dear consumer, your electricity will be disconnected tonight 9:30 PM due to unpaid bill. Contact officer 98XXXXXX22 immediately.
+SCAM	+14155550148	0	scam	Amazon: A payment of $899.99 for MacBook Pro was ordered. If not you, call 1-555-0123 to cancel.
+SCAM	+919800000149	0	scam	Part-time job: earn Rs 5000-15000 daily by liking videos. WhatsApp 98XXXXXX33 to join.
+SCAM	+14155550150	0	scam	Your Netfix account is suspended. Update payment method now: example.com/nflx-billing
+SCAM	+447700900151	0	scam	DPD: We missed you. Pay GBP1.45 to rearrange delivery: example.com/dpd-fee
+SCAM	+14155550152	0	scam	Hello, I'm Linda, I saw your profile. I made 12k USDT this week with my mentor, want to learn how? Add me on Telegram
+TRANSACTION	VM-SWGGYX-T	0	delivery	Your Swiggo order #4471920 has been picked up by Imran. Arriving in 18 mins. Pay Rs 386 on delivery (COD).

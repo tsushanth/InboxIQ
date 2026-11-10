@@ -71,4 +71,42 @@ class MigrationTest {
         db.openHelper.writableDatabase // forces open + schema validation
         db.close()
     }
+
+    /**
+     * The Transactions label adds an enum value only. Labels are stored as text, so the schema (and the exported 15.json) is
+     * unchanged and there is deliberately no 15 to 16 migration. This proves what that relies on: a real v15 file with every
+     * existing label, plus a TRANSACTION row and a name from the future, opens through the production builder chain and reads back.
+     */
+    @Test
+    fun `a v15 database with every label, Transactions and an unknown name opens and reads back`() {
+        helper.createDatabase("labels", 15).use { db ->
+            val names = MessageLabel.entries.map { it.name } + "SOME_FUTURE_LABEL"
+            names.forEachIndexed { i, n ->
+                db.execSQL(
+                    "INSERT INTO messages (threadId, address, body, timestamp, isIncoming, label, labelConfidence, sendStatus, isRead, awaitingAutoHeal, autoHealRetryCount) " +
+                        "VALUES (1, '+1555010$i', 'b$i', ${1000 + i}, 1, '$n', 0.5, 'NONE', 1, 0, 0)",
+                )
+            }
+            db.execSQL("INSERT INTO thread_labels (address, label, confidence, classifiedAt) VALUES ('+15550100', 'PERSONAL', 0.9, 5)")
+        }
+        val db = androidx.room.Room.databaseBuilder(
+            androidx.test.core.app.ApplicationProvider.getApplicationContext(),
+            AppDatabase::class.java,
+            "labels",
+        ).addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
+            .allowMainThreadQueries().build()
+        try {
+            val read = kotlinx.coroutines.runBlocking { db.messageDao().pageAfter(0, 100) }.associate { it.body to it.label }
+            MessageLabel.entries.forEachIndexed { i, l -> assertEquals(l, read["b$i"]) }
+            assertEquals("unknown name reads as not sorted yet", MessageLabel.UNLABELED, read["b${MessageLabel.entries.size}"])
+            assertTrue(read.values.contains(MessageLabel.TRANSACTION))
+            // and a Transactions row can be written back through the DAO
+            kotlinx.coroutines.runBlocking {
+                db.messageDao().insert(MessageEntity(threadId = 0, address = "VM-TESTBK-T", body = "new", timestamp = 9_999, isIncoming = true, label = MessageLabel.TRANSACTION))
+                assertEquals(MessageLabel.TRANSACTION, db.messageDao().messagesForThread("VM-TESTBK-T").single().label)
+            }
+        } finally {
+            db.close()
+        }
+    }
 }
