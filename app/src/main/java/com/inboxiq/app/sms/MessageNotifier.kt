@@ -85,7 +85,13 @@ object MessageNotifier {
         NotificationManagerCompat.from(context).cancel(address.hashCode())
     }
 
-    private fun ensureMessageChannels(context: Context) {
+    /** All channels this app posts to, created together (idempotent). Called at app start; the posting paths still call their own. */
+    fun ensureAllChannels(context: Context) {
+        ensureChannel(context)
+        ensureMessageChannels(context)
+    }
+
+    internal fun ensureMessageChannels(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val nm = context.getSystemService(NotificationManager::class.java)
         MessageChannel.entries.forEach { c ->

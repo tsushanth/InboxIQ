@@ -29,6 +29,11 @@ class TriageEngineTest {
         )) assertEquals(t, OTP_2FA, label("22000", 0, t))
     }
 
+    @Test fun `a code whose only code word is in the never-share sentence is still a code`() {
+        for (t in listOf("482910. Never share this code.", "Acme: 123456. Never share your OTP with anyone."))
+            assertEquals(t, OTP_2FA, label("22000", 0, t))
+    }
+
     @Test fun `numbers that are not codes stay out of OTP`() {
         assertEquals(PERSONAL, label(friend, 9, "my zip code is 78666, right?"))
         assertEquals(PERSONAL, label(friend, 9, "send me the wifi code again"))

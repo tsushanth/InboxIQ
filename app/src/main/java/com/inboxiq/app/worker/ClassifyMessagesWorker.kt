@@ -145,6 +145,26 @@ class ClassifyMessagesWorker(
         /** Bump when the rules or model change enough that old labels should be recomputed. 2 = TriageEngine, 3 = Transactions label. */
         const val PIPELINE_VERSION = 3
 
+        const val WORK_NAME_REFRESH = "classify_refresh"
+
+        /** True while the stored pipeline version is older than [PIPELINE_VERSION], i.e. old labels still await the one-time re-sort. */
+        fun refreshPending(context: Context): Boolean =
+            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getInt(KEY_PIPELINE_VERSION, 0) < PIPELINE_VERSION
+
+        /**
+         * App start: after an upgrade nothing else would start the re-sort (the worker is otherwise only enqueued by an import,
+         * an incoming text or an MMS sync), so queue one pass when the stored pipeline version is old. Unique and KEEP, so
+         * repeated starts never stack passes; the pass itself is paged and resumable, and records the new version when it finishes.
+         */
+        fun enqueueIfRefreshPending(context: Context) {
+            if (!refreshPending(context)) return
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                WORK_NAME_REFRESH,
+                androidx.work.ExistingWorkPolicy.KEEP,
+                OneTimeWorkRequestBuilder<ClassifyMessagesWorker>().build(),
+            )
+        }
+
         const val PAGE_SIZE = 50
         const val SAMPLE_MESSAGES = 5
         private const val TIME_BUDGET_MS = 8 * 60 * 1000L

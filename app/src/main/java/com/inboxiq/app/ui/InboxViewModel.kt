@@ -143,6 +143,17 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /** Pin or unpin, and say so (a snackbar is announced by screen readers; the pin icon alone is not a confirmation). */
+    fun pin(addresses: Set<String>, pinned: Boolean) {
+        viewModelScope.launch {
+            addresses.forEach { actions.setPinned(it, pinned) }
+            snackbar.currentSnackbarData?.dismiss()
+            val text = (if (addresses.size == 1) "Conversation" else "${addresses.size} conversations") + if (pinned) " pinned" else " unpinned"
+            val result = snackbar.showSnackbar(text, actionLabel = "Undo", duration = SnackbarDuration.Short)
+            if (result == SnackbarResult.ActionPerformed) addresses.forEach { actions.setPinned(it, !pinned) }
+        }
+    }
+
     fun mute(addresses: Set<String>, choice: MuteDuration?) {
         viewModelScope.launch {
             val until = choice?.until(System.currentTimeMillis())
@@ -203,6 +214,11 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
                 e.message
             } catch (e: Exception) {
                 "Couldn't read that file. Choose an InboxIQ backup file."
+            }
+            // The text under the Restore button can be off-screen: also say it where every screen shows it.
+            backupStatus?.let {
+                snackbar.currentSnackbarData?.dismiss()
+                snackbar.showSnackbar(it, duration = SnackbarDuration.Short)
             }
         }
     }

@@ -22,7 +22,7 @@ data class ThreadRow(
     val state: ThreadStateEntity? = null,
 ) {
     val address: String get() = summary.latestMessage.address
-    val label: MessageLabel get() = summary.latestMessage.label
+    val label: MessageLabel get() = summary.threadLabel?.takeIf { it != MessageLabel.UNLABELED } ?: summary.latestMessage.label
     val unread: Int get() = summary.unreadCount
     val lastTimestamp: Long get() = summary.latestMessage.timestamp
     val pinned: Boolean get() = state?.pinnedAt != null

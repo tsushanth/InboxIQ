@@ -48,7 +48,8 @@ interface MessageDao {
         SELECT m.*, (
             SELECT COUNT(*) FROM messages u
             WHERE u.address = m.address AND u.isIncoming = 1 AND u.isRead = 0
-        ) AS unreadCount
+        ) AS unreadCount,
+        (SELECT t.label FROM thread_labels t WHERE t.address = m.address) AS threadLabel
         FROM messages m
         INNER JOIN (SELECT address, MAX(timestamp) AS maxTs FROM messages GROUP BY address) latest
         ON m.address = latest.address AND m.timestamp = latest.maxTs

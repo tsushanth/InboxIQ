@@ -66,4 +66,11 @@ class OtpExtractorTest {
         assertEquals("637271", OtpExtractor.extract("Use 637271 to log in to your account. Never share this code.", 0L)?.code)
         assertEquals("482910", OtpExtractor.extract("Do not share this OTP 482910 with anyone.", 0L)?.code)
     }
+
+    @Test fun `a bare code whose only code word is in the warning is still a code`() {
+        assertEquals("482910", code("482910. Never share this code."))
+        assertEquals("123456", code("Acme: 123456. Never share your OTP with anyone."))
+        // ...but a short alert about an amount is not a code.
+        assertNull(code("Debited Rs 5000. Never share OTP."))
+    }
 }

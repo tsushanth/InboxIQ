@@ -221,8 +221,16 @@ class TextSignals private constructor(
         )
 
         /** [text] without its "never share ..." sentences, unless such a sentence itself carries the number ("do not share OTP 123456"). */
-        fun withoutOtpWarnings(text: String): String =
-            otpWarning.replace(text) { m -> if (digitGroup.containsMatchIn(m.value)) m.value else " " }
+        fun withoutOtpWarnings(text: String): String {
+            val stripped = otpWarning.replace(text) { m -> if (digitGroup.containsMatchIn(m.value)) m.value else " " }
+            // "482910. Never share this code." and "Acme: 482910. Never share your OTP." are real code messages whose only code
+            // word sits in the warning: what is left is a bare number (with at most a short sender name), so keep the original.
+            // A short alert that is about an amount ("Debited Rs 5000. Never share OTP") is not.
+            return if (stripped != text && bareCode.matches(stripped) && !amountBeforeNumber.containsMatchIn(stripped)) text else stripped
+        }
+
+        private val bareCode = Regex("^\\W*(?:\\p{L}[\\p{L}\\p{N}_-]{0,19}\\W{1,3}){0,2}(?:\\d{3}[- ]\\d{3}|\\d{4,8})\\W*$")
+        private val amountBeforeNumber = Regex("(?:\\b(?:rs|inr|usd|eur|gbp|aed|amt|amount|bal|balance)\\b\\.?|[$₹£€])\\W{0,3}\\d", I)
 
         private fun detectOtp(rawText: String): OtpHit? {
             val text = withoutOtpWarnings(rawText)
