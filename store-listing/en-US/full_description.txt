@@ -6,7 +6,7 @@ WHAT MAKES IT DIFFERENT
 
 • 100% on-device classification. Your messages are never sent to a server — ours or anyone else's — for sorting. The machine learning model that categorizes your texts runs entirely on your phone.
 
-• Full SMS and MMS support. InboxIQ is a complete replacement for your default messaging app, not an add-on — send, receive, and view photo messages right in the app.
+• SMS and MMS in one app. InboxIQ works as your default messaging app for texts and picture messages: send, receive, and view photos right in the app. It does not support RCS chat features (typing indicators, read receipts, Wi-Fi chats) or group picture-message conversations.
 
 • Know what needs a reply. InboxIQ flags conversations that are waiting on you, and offers quick-reply suggestions so you can respond in one tap.
 
@@ -18,4 +18,6 @@ YOUR PRIVACY
 
 InboxIQ was built around a simple rule: your text messages are yours. There is no cloud AI service involved in reading or categorizing your messages. Your message content, contacts, and phone numbers stay on your device. Full privacy policy: https://kreativekoala.llc/privacy
 
-InboxIQ requests SMS, MMS, and Contacts permissions because it is a full default SMS app — these permissions are what let it send and receive your texts and show contact names instead of raw phone numbers, nothing more.
+Permissions, and why: SMS and MMS let InboxIQ receive, send and read your texts and picture messages, which any default SMS app must do. Contacts shows a saved contact's name instead of a raw phone number. Notifications alert you to new messages. The microphone is used only while you hold the voice-memo button; the audio is turned into text on your phone and is not saved or sent. Nothing more.
+
+Questions or problems: puzzleverseai@gmail.com

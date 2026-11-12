@@ -27,3 +27,13 @@ Notes for the coordinator:
   produced live by the classifier.
 - Message times follow the capture time (about 07:00 to 07:50) while the status bar clock says 09:41.
 - Not captured: swipe-to-archive with the Undo bar (multi-select shown instead).
+
+## Listing text mirror
+
+`en-US/title.txt`, `en-US/short_description.txt` and `en-US/full_description.txt` are a byte-for-byte
+mirror of the live Google Play listing, copied from the Play Developer API on 2026-11-12 (en-US is the
+only live locale). They are not the source of truth: the live listing is edited through the Play API /
+Play Console, so refresh these files from a fresh read of the live listing after any change there.
+`PROPOSED/` and `PROPOSED_RELAY/` are unapplied drafts, not live. The Fastfile lanes do not upload
+listing text, images or screenshots; keep `skip_upload_metadata`, `skip_upload_images` and
+`skip_upload_screenshots` true.
