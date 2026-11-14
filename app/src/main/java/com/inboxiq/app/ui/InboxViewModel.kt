@@ -71,7 +71,11 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     /** address -> saved contact name (null when none). Resolved off the main thread, once per address. */
     val names: StateFlow<Map<String, String?>> = _names
 
+    val reactions = com.inboxiq.app.data.ReactionRepository(db)
+
     init {
+        // A delete whose undo window never closed (process killed) leaves reactions behind; no undo can be open at startup.
+        viewModelScope.launch(Dispatchers.IO) { runCatching { reactions.sweepOrphans() } }
         viewModelScope.launch {
             rows.collect { list ->
                 val missing = list.orEmpty().map { it.address }.filter { it !in _names.value }

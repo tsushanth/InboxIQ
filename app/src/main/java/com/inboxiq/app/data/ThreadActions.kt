@@ -7,6 +7,10 @@ package com.inboxiq.app.data
  * Deleting is two-phase for undo: [delete] removes the rows but hands back a [DeletedThread]
  * snapshot, and the attachment files are only removed by [commitDelete] once the undo window
  * has passed. [restore] puts everything back with the original message ids.
+ *
+ * Reactions are not tied to message rows by a foreign key, so they stay in place while an undo is
+ * possible (a restore needs no extra work) and are removed by the same commit step that removes
+ * the attachment files.
  */
 class ThreadActions(
     private val db: AppDatabase,
@@ -60,7 +64,10 @@ class ThreadActions(
         messages.restoreAll(listOf(m))
         tombstones?.clearMessage(m.address, m.timestamp, m.body)
     }
-    fun commitMessageDelete(m: MessageEntity) = deleteImageFiles(listOfNotNull(m.imagePartUri))
+    suspend fun commitMessageDelete(m: MessageEntity) {
+        deleteImageFiles(listOfNotNull(m.imagePartUri))
+        db.reactionDao().delete(m.address, m.timestamp, m.isIncoming, listOf(ReactionKey.bodyHash(m), "").distinct())
+    }
 
     suspend fun delete(address: String): DeletedThread {
         val snapshot = DeletedThread(address, messages.messagesForThread(address), states.get(address))
@@ -77,7 +84,10 @@ class ThreadActions(
     }
 
     /** Call when the undo window closes without an undo: only now are attachment files removed. */
-    fun commitDelete(deleted: DeletedThread) = deleteImageFiles(deleted.imageUris)
+    suspend fun commitDelete(deleted: DeletedThread) {
+        deleteImageFiles(deleted.imageUris)
+        db.reactionDao().deleteForThread(deleted.address)
+    }
 
     /**
      * Files a conversation under a label the user chose. Future messages from this number
