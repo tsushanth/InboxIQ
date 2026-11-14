@@ -79,6 +79,43 @@
     <string name="transactions_empty_body">Bank and payment alerts, bills, orders, deliveries, tickets and appointments show up here, kept apart from your conversations.</string>
     <string name="sorting_transactions_note">Transactions are automated alerts about money, orders, deliveries and bookings. They get their own tab and a notification channel with sound but no pop-up. Conversations you filed by hand are never moved.</string>
 
+    <!-- Emoji reactions. English only; other locales fall back to English. Emoji names double as what a screen reader says. -->
+    <string name="reaction_react_with">React with %1$s</string>
+    <string name="reaction_remove_named">Remove %1$s reaction</string>
+    <string name="reaction_remove_action">Remove reaction</string>
+    <string name="reaction_chip_description">You reacted %1$s to this message</string>
+    <string name="reaction_more">More reactions</string>
+    <string name="reaction_strip_description">Reactions</string>
+    <string name="reaction_picker_title">Choose a reaction</string>
+    <string name="reaction_picker_search">Search emoji</string>
+    <string name="reaction_picker_clear">Clear search</string>
+    <string name="reaction_picker_empty">No emoji found</string>
+    <string name="reaction_picker_recent">Recent</string>
+    <string name="emoji_category_smileys">Smileys</string>
+    <string name="emoji_category_people">People and gestures</string>
+    <string name="emoji_category_hearts">Hearts and symbols</string>
+    <string name="emoji_category_nature">Animals and nature</string>
+    <string name="emoji_category_food">Food and drink</string>
+    <string name="emoji_category_activities">Activities</string>
+    <string name="emoji_category_objects">Objects and places</string>
+    <string name="reaction_sheet_title">Reactions</string>
+    <string name="reaction_sheet_body">Reactions are sent as an ordinary text message that quotes the original. It uses one SMS and cannot be recalled. People with iPhone see it as text; Google Messages shows a reaction.</string>
+    <string name="reaction_sheet_private_note">Keep private saves it on this phone only. You can change this in Settings.</string>
+    <string name="reaction_sheet_send">Send as text</string>
+    <string name="reaction_sheet_private">Keep private</string>
+    <string name="reaction_sheet_ask_title">Send %1$s as a text?</string>
+    <string name="reaction_sheet_ask_body">It goes out as one text message that quotes the original, and cannot be recalled.</string>
+    <string name="reaction_snackbar_sending">Sending your reaction as a text</string>
+    <string name="reaction_snackbar_sending_removal">Sending a removal text</string>
+    <string name="reaction_snackbar_undo">Undo</string>
+    <string name="settings_reactions_section">Reactions</string>
+    <string name="settings_reactions_mode_send">Send as text</string>
+    <string name="settings_reactions_mode_private">Keep private</string>
+    <string name="settings_reactions_mode_ask">Ask each time</string>
+    <string name="settings_reactions_note">A reaction always shows on this phone. Send as text also sends the other person an ordinary text that quotes the message. It uses one SMS and cannot be recalled. Short codes, businesses, group messages, picture messages and one-time codes are always kept private.</string>
+    <string name="settings_reactions_removal_title">Send a text when I remove a reaction</string>
+    <string name="settings_reactions_removal_body">Only for reactions that were sent as a text. The earlier text cannot be unsent.</string>
+
     <!-- Debug-only setup log -->
     <string name="funnel_title">Setup log</string>
 </resources>

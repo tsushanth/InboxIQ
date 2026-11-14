@@ -65,6 +65,8 @@ class SettingsCallbacks(
     val onOpenPreviousApp: () -> Unit = {},
     val onMakeDefault: () -> Unit = {},
     val onOpenSetupLog: () -> Unit = {},
+    val onReactionMode: (com.inboxiq.app.reactions.ReactionMode) -> Unit = {},
+    val onSendRemovalText: (Boolean) -> Unit = {},
 )
 
 @Composable
@@ -85,6 +87,7 @@ fun SettingsScreen(
     canOpenPreviousApp: Boolean = false,
     /** Debug builds only: shows the on-device setup log entry. */
     showSetupLog: Boolean = false,
+    reactions: com.inboxiq.app.reactions.ReactionSettings = com.inboxiq.app.reactions.ReactionSettings(),
 ) {
     var current by remember { mutableStateOf(selectedTier) }
     val context = LocalContext.current
@@ -161,6 +164,26 @@ fun SettingsScreen(
             Text(
                 "Applies to text messages. Picture messages always send immediately.",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            // ---------- reactions ----------
+            Section(stringResource(R.string.settings_reactions_section))
+            // Until the user has read the explainer, Ask each time is what is in force, so that is what is shown.
+            val shownMode = if (reactions.explained) reactions.mode else com.inboxiq.app.reactions.ReactionMode.ASK
+            listOf(
+                com.inboxiq.app.reactions.ReactionMode.SEND_AS_TEXT to R.string.settings_reactions_mode_send,
+                com.inboxiq.app.reactions.ReactionMode.KEEP_PRIVATE to R.string.settings_reactions_mode_private,
+                com.inboxiq.app.reactions.ReactionMode.ASK to R.string.settings_reactions_mode_ask,
+            ).forEach { (mode, label) ->
+                ChoiceRow(stringResource(label), shownMode == mode) { callbacks.onReactionMode(mode) }
+            }
+            Text(
+                stringResource(R.string.settings_reactions_note),
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            SwitchRow(
+                stringResource(R.string.settings_reactions_removal_title), stringResource(R.string.settings_reactions_removal_body),
+                reactions.sendRemovalText, callbacks.onSendRemovalText,
             )
 
             // ---------- sorting ----------
