@@ -31,6 +31,8 @@ object SendSubscription {
         null
     }
 
+    // READ_PHONE_STATE may be missing on some phones: the SecurityException is caught below and the default SIM is kept.
+    @android.annotation.SuppressLint("MissingPermission")
     private fun isActive(context: Context): (Int) -> Boolean = { sub ->
         // isActiveSubscriptionId is API 29+; below that (or if the platform refuses) keep the default SIM.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) false

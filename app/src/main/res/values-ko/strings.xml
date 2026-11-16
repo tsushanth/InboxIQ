@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">예시 은행</string>
     <string name="intro_example_2_body">인증번호는 482913입니다.</string>
     <string name="intro_example_3_name">예시 쇼핑몰</string>
-    <string name="intro_example_3_body">깜짝 세일: 오늘 하루만 40% off.</string>
+    <string name="intro_example_3_body">깜짝 세일: 오늘 하루만 40% off.</string>
     <string name="intro_example_4_name">알 수 없는 발신자</string>
     <string name="intro_example_4_body">택배가 보관 중입니다. usps-redelivery.top에서 수수료를 결제하세요.</string>
     <string name="intro_example_copy_code">코드 복사</string>

@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Példa Bank</string>
     <string name="intro_example_2_body">Az ellenőrző kódod: 482913.</string>
     <string name="intro_example_3_name">Példa Bolt</string>
-    <string name="intro_example_3_body">VILLÁMAKCIÓ: 40% kedvezmény, csak ma.</string>
+    <string name="intro_example_3_body">VILLÁMAKCIÓ: 40% kedvezmény, csak ma.</string>
     <string name="intro_example_4_name">Ismeretlen feladó</string>
     <string name="intro_example_4_body">A csomagod fennakadt. Fizesd be a díjat: usps-redelivery.top.</string>
     <string name="intro_example_copy_code">Kód másolása</string>

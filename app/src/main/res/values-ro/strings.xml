@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Banca Exemplu</string>
     <string name="intro_example_2_body">Codul tău de verificare este 482913.</string>
     <string name="intro_example_3_name">Magazin Exemplu</string>
-    <string name="intro_example_3_body">OFERTĂ FULGER: reducere de 40% numai azi.</string>
+    <string name="intro_example_3_body">OFERTĂ FULGER: reducere de 40% numai azi.</string>
     <string name="intro_example_4_name">Expeditor necunoscut</string>
     <string name="intro_example_4_body">Coletul tău este reținut. Plătește taxa la usps-redelivery.top.</string>
     <string name="intro_example_copy_code">Copiază codul</string>

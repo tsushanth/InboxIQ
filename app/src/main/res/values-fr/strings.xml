@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Banque Exemple</string>
     <string name="intro_example_2_body">Ton code de vérification est 482913.</string>
     <string name="intro_example_3_name">Boutique Exemple</string>
-    <string name="intro_example_3_body">VENTE FLASH : -40% aujourd’hui seulement.</string>
+    <string name="intro_example_3_body">VENTE FLASH : -40% aujourd’hui seulement.</string>
     <string name="intro_example_4_name">Expéditeur inconnu</string>
     <string name="intro_example_4_body">Ton colis est retenu. Règle les frais sur usps-redelivery.top.</string>
     <string name="intro_example_copy_code">Copier le code</string>

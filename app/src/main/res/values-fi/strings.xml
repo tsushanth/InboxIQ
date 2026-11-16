@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Esimerkkipankki</string>
     <string name="intro_example_2_body">Vahvistuskoodisi on 482913.</string>
     <string name="intro_example_3_name">Esimerkkikauppa</string>
-    <string name="intro_example_3_body">SALAMA-ALE: tänään vain -40 % ostoksista.</string>
+    <string name="intro_example_3_body">SALAMA-ALE: tänään vain -40 % ostoksista.</string>
     <string name="intro_example_4_name">Tuntematon lähettäjä</string>
     <string name="intro_example_4_body">Pakettisi on pysäytetty. Maksa maksu osoitteessa usps-redelivery.top.</string>
     <string name="intro_example_copy_code">Kopioi koodi</string>
