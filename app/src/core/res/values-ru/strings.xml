@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Сортировка выполняется на этом телефоне. В InboxIQ нет аккаунтов, рекламы и аналитики, и у него нет доступа в интернет: ваши сообщения не могут покинуть телефон.</string>
+</resources>

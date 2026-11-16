@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Sortarea are loc pe acest telefon. InboxIQ nu are conturi, reclame sau analiză de utilizare. Nimic nu părăsește telefonul decât dacă activezi mai jos Conectare la Claude și, chiar și atunci, doar cât timp InboxIQ este deschis.</string>
+    <string name="intro_relay_exception">Conectare la Claude, din Setări, este dezactivată până o activezi. Este singura funcție care trimite conținutul mesajelor în afara telefonului, și doar după ce o configurezi. Funcționează doar cât timp InboxIQ este deschis pe ecranul tău.</string>
+    <string name="relay_section_blurb">Opțional. Cât timp InboxIQ este deschis pe ecranul tău, Claude (claude.ai sau Claude Desktop, autentificat în contul tău) îți poate citi SMS-urile și poate redacta răspunsuri. Închiderea aplicației pune capăt accesului. Dezactivat până îl activezi.</string>
+    <string name="relay_consent_title">Partajezi mesajele tale cu Claude cât timp InboxIQ este deschis?</string>
+    <string name="relay_consent_body">Dacă activezi asta:\n\n- Claude îți poate accesa mesajele doar cât timp InboxIQ este deschis pe ecranul tău. Când închizi aplicația, treci la altă aplicație sau stingi ecranul, conexiunea se încheie în câteva secunde și nu rulează nimic în fundal. Nu se reconectează până nu deschizi din nou InboxIQ.\n- Cât timp este conectat și doar când îi ceri tu lui Claude, acesta poate lista conversațiile tale, poate căuta în SMS-uri și poate citi fire de discuție întregi. Vede textul mesajelor, numerele de telefon ale expeditorilor, numele din contacte și orele mesajelor pe care le solicită, inclusiv mesaje de la bănci și de la alte servicii. Parolele de unică folosință sunt ascunse.\n- Aceste date merg de pe acest telefon la serviciul releu InboxIQ (mcp.kreativekoala.llc, administrat de editorul InboxIQ pe Fly.io), iar de acolo la Claude prin conectorul din propriul tău cont Claude, care le tratează conform termenilor și setărilor de confidențialitate ale acelui cont. Releul transmite mesajele mai departe și nu le stochează. Numărul tău de telefon este stocat pentru ca releul să poată găsi acest telefon. Pentru a confirma că numărul este al tău, releul efectuează către el un apel vocal automat care citește un cod de 6 cifre, pe care îl introduci în InboxIQ.\n- Claude poate redacta doar mesaje text. Nu se trimite nimic până nu deschizi InboxIQ și nu atingi Trimite pentru fiecare ciornă.\n- Dezactivarea deconectează imediat, șterge cheia de releu a acestui telefon și cere releului să o revoce, împreună cu accesul conectorului tău Claude. Pentru a elimina și conectorul, șterge InboxIQ din Setări, Conectori în Claude.\n\nSortarea mesajelor tale primite de către InboxIQ rămâne pe acest telefon în ambele cazuri.</string>
+    <string name="relay_consent_accept">Partajează mesajele mele</string>
+    <string name="relay_consent_decline">Nu acum</string>
+    <string name="relay_status_off">Stare: Dezactivat</string>
+    <string name="relay_status_connecting">Stare: Se conectează</string>
+    <string name="relay_status_connected">Stare: Conectat. Claude îți poate accesa mesajele cât timp acest ecran este deschis.</string>
+    <string name="relay_status_offline">Stare: Offline. Releul nu poate fi contactat, se reîncearcă cât timp InboxIQ este deschis.</string>
+    <string name="relay_status_paused">Stare: În pauză (aplicație închisă). Redeschide InboxIQ pentru a te reconecta.</string>
+    <string name="relay_status_reconnect_needed">Este necesară reconectarea. Releul nu mai acceptă cheia acestui telefon, așa că verifică din nou acest telefon.</string>
+    <string name="relay_reconnect_action">Reconectează</string>
+    <string name="relay_status_replaced">Este necesară reconectarea. O altă instalare InboxIQ a preluat acest număr sau a fost deconectat în altă parte. Verifică cu un cod pentru a-l folosi din nou pe acest telefon.</string>
+    <string name="relay_verify_action">Verifică cu un cod</string>
+    <string name="relay_code_label">Codul de 6 cifre din apel</string>
+    <string name="relay_code_confirm">Confirmă</string>
+    <string name="relay_code_resend">Sună din nou</string>
+    <string name="relay_code_resend_wait">Sună din nou în %1$d s</string>
+    <string name="relay_code_cancel">Anulează</string>
+    <string name="relay_try_again_in">Poți încerca din nou peste %1$s.</string>
+    <string name="relay_notice_enter_phone">Introdu mai întâi numărul tău de telefon.</string>
+    <string name="relay_notice_code_sent">Sunăm acum la acest număr. Introdu codul de 6 cifre pe care îl auzi.</string>
+    <string name="relay_notice_wrong_code">Codul nu este corect. Verifică cifrele și încearcă din nou.</string>
+    <string name="relay_notice_code_expired">Codul a expirat. Solicită un nou apel.</string>
+    <string name="relay_notice_six_digits">Introdu toate cele 6 cifre.</string>
+    <string name="relay_notice_locked">Prea multe coduri greșite pentru acest număr. Este blocat pentru cel mult o oră. Încearcă din nou mai târziu.</string>
+    <string name="relay_notice_locked_after">Prea multe coduri greșite pentru acest număr. Încearcă din nou peste %1$s.</string>
+    <string name="relay_notice_rate_limited">Prea multe apeluri de verificare pentru acest număr. Încearcă din nou mai târziu.</string>
+    <string name="relay_notice_rate_limited_after">Prea multe apeluri de verificare pentru acest număr. Încearcă din nou peste %1$s.</string>
+    <string name="relay_notice_invalid_phone">Nu pare un număr de telefon valid. Folosește formatul internațional, de exemplu +14155551234.</string>
+    <string name="relay_notice_destination">Apelurile de verificare către acest număr nu sunt acceptate.</string>
+    <string name="relay_notice_delivery_failed">Apelul de verificare nu a putut fi efectuat. Încearcă din nou în câteva minute.</string>
+    <string name="relay_notice_network">Nu s-a putut conecta. Verifică conexiunea și încearcă din nou.</string>
+    <string name="relay_notice_conflict">Acest număr este asociat unei alte instalări InboxIQ. Verifică cu un cod pentru a-l prelua.</string>
+    <string name="relay_notice_disconnected_unreachable">Deconectat pe acest telefon; serverul nu a putut fi contactat, accesul se oprește la expirarea tokenului.</string>
+    <string name="relay_notice_disconnected_no_revoke">Deconectat pe acest telefon. Această versiune de releu nu poate revoca accesul de la distanță, așa că vechea cheie rămâne valabilă pe server, dar acest telefon a șters-o.</string>
+    <string name="relay_foreground_only_note">Funcționează doar cât timp InboxIQ este deschis pe ecranul tău. Închiderea aplicației, trecerea la altă aplicație sau stingerea ecranului pun capăt accesului în câteva secunde.</string>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Het sorteren gebeurt op deze telefoon. InboxIQ heeft geen accounts, advertenties of analyses. Er verlaat niets de telefoon, tenzij je hieronder Verbinden met Claude aanzet, en dan alleen zolang InboxIQ open is.</string>
+    <string name="intro_relay_exception">Verbinden met Claude, in Instellingen, staat uit totdat je het aanzet. Het is de enige functie die berichtinhoud van de telefoon verstuurt, en pas nadat je het hebt ingesteld. Het werkt alleen zolang InboxIQ open is op je scherm.</string>
+    <string name="relay_section_blurb">Optioneel. Zolang InboxIQ open is op je scherm, kan Claude (claude.ai of Claude Desktop, ingelogd op je account) je sms-berichten lezen en antwoorden opstellen. Als je de app sluit, stopt de toegang. Staat uit totdat je het aanzet.</string>
+    <string name="relay_consent_title">Je berichten met Claude delen zolang InboxIQ open is?</string>
+    <string name="relay_consent_body">Als je dit aanzet:\n\n- Claude heeft alleen toegang tot je berichten zolang InboxIQ open is op je scherm. Wanneer je de app sluit, overschakelt naar een andere app of het scherm uitzet, wordt de verbinding binnen enkele seconden verbroken en draait er niets op de achtergrond. Er wordt pas weer verbinding gemaakt als je InboxIQ opnieuw opent.\n- Zolang er verbinding is, en alleen wanneer je het Claude vraagt, kan Claude je gesprekken weergeven, in je sms\'jes zoeken en volledige gesprekken lezen. Het ziet de berichttekst, telefoonnummers van afzenders, contactnamen en tijdstempels van de berichten waarom het vraagt, inclusief berichten van banken en andere diensten. Eenmalige toegangscodes worden verborgen.\n- Die gegevens gaan van deze telefoon naar de InboxIQ-relayservice (mcp.kreativekoala.llc, beheerd door de uitgever van InboxIQ op Fly.io) en vandaar naar Claude via de connector op je eigen Claude-account, die ze verwerkt volgens de voorwaarden en privacy-instellingen van dat account. De relay geeft berichten alleen door en slaat ze niet op. Je telefoonnummer wordt opgeslagen zodat de relay deze telefoon kan vinden. Om te bevestigen dat het nummer van jou is, plaatst de relay een geautomatiseerd belletje naar dat nummer waarin een code van 6 cijfers wordt voorgelezen, die je in InboxIQ typt.\n- Claude kan alleen sms\'jes opstellen. Er wordt niets verzonden totdat je InboxIQ opent en bij elk concept op Verzenden tikt.\n- Als je dit uitzet, wordt de verbinding direct verbroken, wordt de relaysleutel van deze telefoon verwijderd en wordt de relay gevraagd die en de toegang van je Claude-connector in te trekken. Om ook de connector te verwijderen, verwijder je InboxIQ onder Instellingen, Connectoren in Claude.\n\nHet sorteren van je inbox door InboxIQ blijft in beide gevallen op deze telefoon.</string>
+    <string name="relay_consent_accept">Mijn berichten delen</string>
+    <string name="relay_consent_decline">Nu niet</string>
+    <string name="relay_status_off">Status: Uit</string>
+    <string name="relay_status_connecting">Status: Verbinden</string>
+    <string name="relay_status_connected">Status: Verbonden. Claude heeft toegang tot je berichten zolang dit scherm open is.</string>
+    <string name="relay_status_offline">Status: Offline. Kan de relay niet bereiken, er wordt opnieuw geprobeerd zolang InboxIQ open is.</string>
+    <string name="relay_status_paused">Status: Gepauzeerd (app gesloten). Open InboxIQ opnieuw om weer te verbinden.</string>
+    <string name="relay_status_reconnect_needed">Opnieuw verbinden nodig. De relay accepteert de sleutel van deze telefoon niet meer, dus verifieer deze telefoon opnieuw.</string>
+    <string name="relay_reconnect_action">Opnieuw verbinden</string>
+    <string name="relay_status_replaced">Opnieuw verbinden nodig. Een andere InboxIQ-installatie heeft dit nummer overgenomen, of de verbinding is elders verbroken. Verifieer met een code om het weer op deze telefoon te gebruiken.</string>
+    <string name="relay_verify_action">Verifiëren met een code</string>
+    <string name="relay_code_label">Code van 6 cijfers uit het telefoongesprek</string>
+    <string name="relay_code_confirm">Bevestigen</string>
+    <string name="relay_code_resend">Opnieuw bellen</string>
+    <string name="relay_code_resend_wait">Opnieuw bellen over %1$d s</string>
+    <string name="relay_code_cancel">Annuleren</string>
+    <string name="relay_try_again_in">Je kunt het opnieuw proberen over %1$s.</string>
+    <string name="relay_notice_enter_phone">Voer eerst je telefoonnummer in.</string>
+    <string name="relay_notice_code_sent">We bellen nu naar dit nummer. Voer de code van 6 cijfers in die je hoort.</string>
+    <string name="relay_notice_wrong_code">Die code klopt niet. Controleer de cijfers en probeer het opnieuw.</string>
+    <string name="relay_notice_code_expired">Die code is verlopen. Vraag een nieuw telefoontje aan.</string>
+    <string name="relay_notice_six_digits">Voer alle 6 cijfers in.</string>
+    <string name="relay_notice_locked">Te veel onjuiste codes voor dit nummer. Het is maximaal een uur geblokkeerd. Probeer het later opnieuw.</string>
+    <string name="relay_notice_locked_after">Te veel onjuiste codes voor dit nummer. Probeer het opnieuw over %1$s.</string>
+    <string name="relay_notice_rate_limited">Te veel verificatiegesprekken voor dit nummer. Probeer het later opnieuw.</string>
+    <string name="relay_notice_rate_limited_after">Te veel verificatiegesprekken voor dit nummer. Probeer het opnieuw over %1$s.</string>
+    <string name="relay_notice_invalid_phone">Dat lijkt geen geldig telefoonnummer. Gebruik de internationale notatie, bijvoorbeeld +14155551234.</string>
+    <string name="relay_notice_destination">Verificatiegesprekken naar dit nummer worden niet ondersteund.</string>
+    <string name="relay_notice_delivery_failed">Het verificatiegesprek kon niet worden gestart. Probeer het over een paar minuten opnieuw.</string>
+    <string name="relay_notice_network">Kan geen verbinding maken. Controleer je verbinding en probeer het opnieuw.</string>
+    <string name="relay_notice_conflict">Dit nummer is gekoppeld aan een andere InboxIQ-installatie. Verifieer met een code om het over te nemen.</string>
+    <string name="relay_notice_disconnected_unreachable">Verbroken op deze telefoon; de server kon niet worden bereikt, de toegang stopt wanneer het token verloopt.</string>
+    <string name="relay_notice_disconnected_no_revoke">Verbroken op deze telefoon. Deze relayversie kan de toegang niet op afstand intrekken, dus de oude sleutel blijft geldig op de server, maar deze telefoon heeft hem verwijderd.</string>
+    <string name="relay_foreground_only_note">Werkt alleen zolang InboxIQ open is op je scherm. Als je de app sluit, naar een andere app overschakelt of het scherm uitzet, stopt de toegang binnen enkele seconden.</string>
+</resources>

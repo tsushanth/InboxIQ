@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Le tri se fait sur ce téléphone. InboxIQ n’a ni compte, ni publicité, ni outil d’analyse. Rien ne quitte le téléphone sauf si tu actives Connecter à Claude ci-dessous, et alors uniquement tant qu’InboxIQ est ouverte.</string>
+    <string name="intro_relay_exception">Connecter à Claude, dans les Paramètres, est désactivé tant que tu ne l’actives pas. C’est la seule fonction qui envoie le contenu des messages hors du téléphone, et seulement après que tu l’as configurée. Elle ne fonctionne que tant qu’InboxIQ est ouverte sur ton écran.</string>
+    <string name="relay_section_blurb">Facultatif. Tant qu’InboxIQ est ouverte sur ton écran, Claude (claude.ai ou Claude Desktop, connecté à ton compte) peut lire tes SMS et rédiger des brouillons de réponses. Fermer l’application met fin à l’accès. Désactivé tant que tu ne l’actives pas.</string>
+    <string name="relay_consent_title">Partager tes messages avec Claude pendant qu’InboxIQ est ouverte ?</string>
+    <string name="relay_consent_body">Si tu l’actives :\n\n- Claude ne peut accéder à tes messages que tant qu’InboxIQ est ouverte sur ton écran. Quand tu fermes l’application, passes à une autre application ou éteins l’écran, la connexion prend fin en quelques secondes et rien ne s’exécute en arrière-plan. Elle ne se rétablit pas tant que tu n’as pas rouvert InboxIQ.\n- Pendant la connexion, et seulement quand tu le demandes à Claude, il peut lister tes conversations, rechercher dans tes SMS et lire des fils complets. Il voit le texte des messages, les numéros de téléphone des expéditeurs, les noms des contacts et les horodatages des messages qu’il demande, y compris les messages de banques et d’autres services. Les codes à usage unique sont masqués.\n- Ces données vont de ce téléphone au service relais d’InboxIQ (mcp.kreativekoala.llc, exploité par l’éditeur d’InboxIQ sur Fly.io), puis à Claude via le connecteur de ton propre compte Claude, qui les traite selon les conditions et les paramètres de confidentialité de ce compte. Le relais transmet les messages et ne les stocke pas. Ton numéro de téléphone est conservé pour que le relais puisse retrouver ce téléphone. Pour confirmer que le numéro est bien le tien, le relais lui passe un appel vocal automatisé qui lit un code à 6 chiffres, que tu saisis dans InboxIQ.\n- Claude ne peut que rédiger des brouillons de SMS. Rien n’est envoyé tant que tu n’ouvres pas InboxIQ et n’appuies pas sur Envoyer pour chaque brouillon.\n- La désactivation coupe immédiatement la connexion, supprime la clé de relais de ce téléphone et demande au relais de la révoquer, ainsi que l’accès de ton connecteur Claude. Pour supprimer aussi le connecteur, supprime InboxIQ dans Paramètres, Connecteurs, dans Claude.\n\nLe tri de ta boîte de réception par InboxIQ reste de toute façon sur ce téléphone.</string>
+    <string name="relay_consent_accept">Partager mes messages</string>
+    <string name="relay_consent_decline">Pas maintenant</string>
+    <string name="relay_status_off">État : désactivé</string>
+    <string name="relay_status_connecting">État : connexion en cours</string>
+    <string name="relay_status_connected">État : connecté. Claude peut accéder à tes messages tant que cet écran est ouvert.</string>
+    <string name="relay_status_offline">État : hors ligne. Impossible de joindre le relais, nouvelle tentative tant qu’InboxIQ est ouverte.</string>
+    <string name="relay_status_paused">État : en pause (application fermée). Rouvre InboxIQ pour te reconnecter.</string>
+    <string name="relay_status_reconnect_needed">Reconnexion nécessaire. Le relais n’accepte plus la clé de ce téléphone, donc vérifie à nouveau ce téléphone.</string>
+    <string name="relay_reconnect_action">Se reconnecter</string>
+    <string name="relay_status_replaced">Reconnexion nécessaire. Une autre installation d’InboxIQ a repris ce numéro, ou il a été déconnecté ailleurs. Vérifie avec un code pour l’utiliser à nouveau sur ce téléphone.</string>
+    <string name="relay_verify_action">Vérifier avec un code</string>
+    <string name="relay_code_label">Code à 6 chiffres de l’appel</string>
+    <string name="relay_code_confirm">Confirmer</string>
+    <string name="relay_code_resend">Rappeler</string>
+    <string name="relay_code_resend_wait">Rappeler dans %1$d s</string>
+    <string name="relay_code_cancel">Annuler</string>
+    <string name="relay_try_again_in">Tu pourras réessayer dans %1$s.</string>
+    <string name="relay_notice_enter_phone">Saisis d’abord ton numéro de téléphone.</string>
+    <string name="relay_notice_code_sent">Nous appelons ce numéro maintenant. Saisis le code à 6 chiffres que tu entends.</string>
+    <string name="relay_notice_wrong_code">Ce code n’est pas correct. Vérifie les chiffres et réessaie.</string>
+    <string name="relay_notice_code_expired">Ce code a expiré. Demande un nouvel appel.</string>
+    <string name="relay_notice_six_digits">Saisis les 6 chiffres.</string>
+    <string name="relay_notice_locked">Trop de codes erronés pour ce numéro. Il est verrouillé pendant une heure au maximum. Réessaie plus tard.</string>
+    <string name="relay_notice_locked_after">Trop de codes erronés pour ce numéro. Réessaie dans %1$s.</string>
+    <string name="relay_notice_rate_limited">Trop d’appels de vérification pour ce numéro. Réessaie plus tard.</string>
+    <string name="relay_notice_rate_limited_after">Trop d’appels de vérification pour ce numéro. Réessaie dans %1$s.</string>
+    <string name="relay_notice_invalid_phone">Ce numéro de téléphone ne semble pas valide. Utilise le format international, par exemple +14155551234.</string>
+    <string name="relay_notice_destination">Les appels de vérification vers ce numéro ne sont pas pris en charge.</string>
+    <string name="relay_notice_delivery_failed">L’appel de vérification n’a pas pu être passé. Réessaie dans quelques minutes.</string>
+    <string name="relay_notice_network">Connexion impossible. Vérifie ta connexion et réessaie.</string>
+    <string name="relay_notice_conflict">Ce numéro est lié à une autre installation d’InboxIQ. Vérifie avec un code pour le reprendre.</string>
+    <string name="relay_notice_disconnected_unreachable">Déconnecté sur ce téléphone ; le serveur n’a pas pu être joint, l’accès prend fin à l’expiration du jeton.</string>
+    <string name="relay_notice_disconnected_no_revoke">Déconnecté sur ce téléphone. Cette version du relais ne peut pas révoquer l’accès à distance, donc l’ancienne clé reste valide sur le serveur, mais ce téléphone l’a supprimée.</string>
+    <string name="relay_foreground_only_note">Ne fonctionne que tant qu’InboxIQ est ouverte sur ton écran. Fermer l’application, passer à une autre application ou éteindre l’écran met fin à l’accès en quelques secondes.</string>
+</resources>

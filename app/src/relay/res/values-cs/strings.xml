@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Třídění probíhá v tomto telefonu. InboxIQ nemá účty, reklamy ani analytiku. Nic telefon neopustí, dokud níže nezapneš Připojení ke Claude, a i pak jen dokud je InboxIQ otevřený.</string>
+    <string name="intro_relay_exception">Připojení ke Claude v Nastavení je vypnuté, dokud ho nezapneš. Je to jediná funkce, která odesílá obsah zpráv mimo telefon, a to až po jejím nastavení. Funguje jen dokud je InboxIQ otevřený na tvé obrazovce.</string>
+    <string name="relay_section_blurb">Volitelné. Dokud je InboxIQ otevřený na tvé obrazovce, může Claude (claude.ai nebo Claude Desktop, přihlášený k tvému účtu) číst tvé textové zprávy a navrhovat odpovědi. Zavřením aplikace přístup skončí. Vypnuto, dokud to nezapneš.</string>
+    <string name="relay_consent_title">Sdílet tvé zprávy s Claude, dokud je InboxIQ otevřený?</string>
+    <string name="relay_consent_body">Pokud to zapneš:\n\n- Claude se ke tvým zprávám dostane, jen dokud je InboxIQ otevřený na tvé obrazovce. Když aplikaci zavřeš, přepneš do jiné aplikace nebo vypneš obrazovku, spojení se během několika sekund ukončí a na pozadí nic neběží. Dokud InboxIQ znovu neotevřeš, znovu se nepřipojí.\n- Dokud je spojení aktivní a jen když o to Claude požádáš, může vypisovat tvé konverzace, prohledávat tvé zprávy a číst celá vlákna. Vidí text zpráv, telefonní čísla odesílatelů, jména kontaktů a časové údaje u zpráv, o které požádá, včetně zpráv od bank a dalších služeb. Jednorázové kódy jsou skryté.\n- Tato data jdou z tohoto telefonu do přenosové služby InboxIQ (mcp.kreativekoala.llc, provozuje ji vydavatel InboxIQ na Fly.io) a odtud ke Claude přes konektor ve tvém vlastním účtu Claude, který s nimi nakládá podle podmínek a nastavení soukromí tohoto účtu. Přenosová služba zprávy jen předává a neukládá je. Ukládá se tvé telefonní číslo, aby služba tento telefon našla. Pro potvrzení, že je číslo tvé, na něj služba zavolá automatickým hlasovým hovorem, který přečte 6místný kód, a ten zadáš do InboxIQ.\n- Claude může zprávy jen navrhovat. Nic se neodešle, dokud neotevřeš InboxIQ a u každého návrhu neklepneš na Odeslat.\n- Vypnutím se okamžitě odpojíš, smaže se klíč přenosové služby pro tento telefon a služba je požádána, aby ho i přístup tvého konektoru Claude zrušila. Chceš-li konektor odstranit také, smaž InboxIQ v Claude v Nastavení, Konektory.\n\nTřídění tvé schránky v InboxIQ zůstává v tomto telefonu v obou případech.</string>
+    <string name="relay_consent_accept">Sdílet mé zprávy</string>
+    <string name="relay_consent_decline">Teď ne</string>
+    <string name="relay_status_off">Stav: Vypnuto</string>
+    <string name="relay_status_connecting">Stav: Připojování</string>
+    <string name="relay_status_connected">Stav: Připojeno. Claude se ke tvým zprávám dostane, dokud je tato obrazovka otevřená.</string>
+    <string name="relay_status_offline">Stav: Offline. Nelze se spojit s přenosovou službou, opakuji pokus, dokud je InboxIQ otevřený.</string>
+    <string name="relay_status_paused">Stav: Pozastaveno (aplikace zavřená). Pro opětovné připojení znovu otevři InboxIQ.</string>
+    <string name="relay_status_reconnect_needed">Je nutné se znovu připojit. Přenosová služba už nepřijímá klíč tohoto telefonu, proto tento telefon znovu ověř.</string>
+    <string name="relay_reconnect_action">Připojit znovu</string>
+    <string name="relay_status_replaced">Je nutné se znovu připojit. Toto číslo převzala jiná instalace InboxIQ, nebo bylo odpojeno jinde. Ověř se kódem, abys ho mohl znovu používat v tomto telefonu.</string>
+    <string name="relay_verify_action">Ověřit kódem</string>
+    <string name="relay_code_label">6místný kód z hovoru</string>
+    <string name="relay_code_confirm">Potvrdit</string>
+    <string name="relay_code_resend">Zavolat znovu</string>
+    <string name="relay_code_resend_wait">Zavolat znovu za %1$d s</string>
+    <string name="relay_code_cancel">Zrušit</string>
+    <string name="relay_try_again_in">Zkusit to znovu můžeš za %1$s.</string>
+    <string name="relay_notice_enter_phone">Nejdřív zadej své telefonní číslo.</string>
+    <string name="relay_notice_code_sent">Právě na toto číslo voláme. Zadej 6místný kód, který uslyšíš.</string>
+    <string name="relay_notice_wrong_code">Tento kód není správný. Zkontroluj číslice a zkus to znovu.</string>
+    <string name="relay_notice_code_expired">Platnost kódu vypršela. Vyžádej si nový hovor.</string>
+    <string name="relay_notice_six_digits">Zadej všech 6 číslic.</string>
+    <string name="relay_notice_locked">Příliš mnoho chybných kódů pro toto číslo. Je zamčeno až na hodinu. Zkus to později.</string>
+    <string name="relay_notice_locked_after">Příliš mnoho chybných kódů pro toto číslo. Zkus to znovu za %1$s.</string>
+    <string name="relay_notice_rate_limited">Příliš mnoho ověřovacích hovorů na toto číslo. Zkus to později.</string>
+    <string name="relay_notice_rate_limited_after">Příliš mnoho ověřovacích hovorů na toto číslo. Zkus to znovu za %1$s.</string>
+    <string name="relay_notice_invalid_phone">To nevypadá jako platné telefonní číslo. Použij mezinárodní formát, například +14155551234.</string>
+    <string name="relay_notice_destination">Ověřovací hovory na toto číslo nejsou podporovány.</string>
+    <string name="relay_notice_delivery_failed">Ověřovací hovor se nepodařilo uskutečnit. Zkus to znovu za několik minut.</string>
+    <string name="relay_notice_network">Nepodařilo se připojit. Zkontroluj připojení a zkus to znovu.</string>
+    <string name="relay_notice_conflict">Toto číslo je propojeno s jinou instalací InboxIQ. Ověř se kódem, abys ho převzal.</string>
+    <string name="relay_notice_disconnected_unreachable">V tomto telefonu odpojeno; server nebyl dosažitelný, přístup skončí, až vyprší platnost tokenu.</string>
+    <string name="relay_notice_disconnected_no_revoke">V tomto telefonu odpojeno. Tato verze přenosové služby nemůže přístup zrušit na dálku, takže starý klíč zůstává na serveru platný, ale tento telefon ho smazal.</string>
+    <string name="relay_foreground_only_note">Funguje jen dokud je InboxIQ otevřený na tvé obrazovce. Zavření aplikace, přepnutí do jiné aplikace nebo vypnutí obrazovky ukončí přístup během několika sekund.</string>
+</resources>

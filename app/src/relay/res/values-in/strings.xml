@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Pemilahan terjadi di ponsel ini. InboxIQ tidak memiliki akun, iklan, atau analitik. Tidak ada yang keluar dari ponsel kecuali Anda mengaktifkan Hubungkan ke Claude di bawah, dan itu pun hanya saat InboxIQ terbuka.</string>
+    <string name="intro_relay_exception">Hubungkan ke Claude, di Setelan, nonaktif sampai Anda mengaktifkannya. Ini satu-satunya fitur yang mengirim isi pesan keluar dari ponsel, dan hanya setelah Anda menyiapkannya. Fitur ini hanya berfungsi saat InboxIQ terbuka di layar Anda.</string>
+    <string name="relay_section_blurb">Opsional. Saat InboxIQ terbuka di layar Anda, Claude (claude.ai atau Claude Desktop, yang masuk ke akun Anda) dapat membaca SMS Anda dan menyusun draf balasan. Menutup aplikasi mengakhiri akses. Nonaktif sampai Anda mengaktifkannya.</string>
+    <string name="relay_consent_title">Bagikan pesan Anda dengan Claude saat InboxIQ terbuka?</string>
+    <string name="relay_consent_body">Jika Anda mengaktifkan ini:\n\n- Claude dapat mengakses pesan Anda hanya saat InboxIQ terbuka di layar Anda. Saat Anda menutup aplikasi, beralih ke aplikasi lain, atau mematikan layar, koneksi berakhir dalam beberapa detik dan tidak ada yang berjalan di latar belakang. Koneksi tidak tersambung kembali sampai Anda membuka InboxIQ lagi.\n- Selama terhubung, dan hanya saat Anda memintanya, Claude dapat menampilkan daftar percakapan Anda, mencari SMS Anda, dan membaca seluruh utas. Claude melihat teks pesan, nomor telepon pengirim, nama kontak, dan stempel waktu untuk pesan yang diminta, termasuk pesan dari bank dan layanan lain. Kode sandi sekali pakai disembunyikan.\n- Data tersebut dikirim dari ponsel ini ke layanan relai InboxIQ (mcp.kreativekoala.llc, dijalankan oleh penerbit InboxIQ di Fly.io), lalu dari sana ke Claude melalui konektor di akun Claude Anda sendiri, yang menanganinya sesuai ketentuan dan setelan privasi akun tersebut. Relai meneruskan pesan dan tidak menyimpannya. Nomor telepon Anda disimpan agar relai dapat menemukan ponsel ini. Untuk memastikan nomor tersebut milik Anda, relai melakukan panggilan suara otomatis ke nomor itu yang membacakan kode 6 digit, yang Anda ketik di InboxIQ.\n- Claude hanya dapat menyusun draf SMS. Tidak ada yang dikirim sampai Anda membuka InboxIQ dan mengetuk Kirim pada setiap draf.\n- Menonaktifkan ini langsung memutus koneksi, membuang kunci relai ponsel ini, dan meminta relai mencabutnya beserta akses konektor Claude Anda. Untuk menghapus konektor juga, hapus InboxIQ di Setelan, Konektor di Claude.\n\nPemilahan kotak masuk InboxIQ tetap berada di ponsel ini, baik fitur ini aktif maupun tidak.</string>
+    <string name="relay_consent_accept">Bagikan pesan saya</string>
+    <string name="relay_consent_decline">Nanti saja</string>
+    <string name="relay_status_off">Status: Nonaktif</string>
+    <string name="relay_status_connecting">Status: Menghubungkan</string>
+    <string name="relay_status_connected">Status: Terhubung. Claude dapat mengakses pesan Anda selama layar ini terbuka.</string>
+    <string name="relay_status_offline">Status: Offline. Tidak dapat menjangkau relai, mencoba lagi selama InboxIQ terbuka.</string>
+    <string name="relay_status_paused">Status: Dijeda (aplikasi ditutup). Buka kembali InboxIQ untuk menyambung kembali.</string>
+    <string name="relay_status_reconnect_needed">Perlu menyambung kembali. Relai tidak lagi menerima kunci ponsel ini, jadi verifikasi ponsel ini lagi.</string>
+    <string name="relay_reconnect_action">Sambungkan kembali</string>
+    <string name="relay_status_replaced">Perlu menyambung kembali. Instalasi InboxIQ lain mengambil alih nomor ini, atau koneksinya diputus di tempat lain. Verifikasi dengan kode untuk menggunakannya lagi di ponsel ini.</string>
+    <string name="relay_verify_action">Verifikasi dengan kode</string>
+    <string name="relay_code_label">Kode 6 digit dari panggilan</string>
+    <string name="relay_code_confirm">Konfirmasi</string>
+    <string name="relay_code_resend">Telepon lagi</string>
+    <string name="relay_code_resend_wait">Telepon lagi dalam %1$d dtk</string>
+    <string name="relay_code_cancel">Batal</string>
+    <string name="relay_try_again_in">Anda dapat mencoba lagi dalam %1$s.</string>
+    <string name="relay_notice_enter_phone">Masukkan nomor telepon Anda terlebih dahulu.</string>
+    <string name="relay_notice_code_sent">Kami sedang menelepon nomor ini. Masukkan kode 6 digit yang Anda dengar.</string>
+    <string name="relay_notice_wrong_code">Kode itu tidak benar. Periksa digitnya dan coba lagi.</string>
+    <string name="relay_notice_code_expired">Kode itu telah kedaluwarsa. Minta panggilan baru.</string>
+    <string name="relay_notice_six_digits">Masukkan semua 6 digit.</string>
+    <string name="relay_notice_locked">Terlalu banyak kode salah untuk nomor ini. Nomor dikunci hingga satu jam. Coba lagi nanti.</string>
+    <string name="relay_notice_locked_after">Terlalu banyak kode salah untuk nomor ini. Coba lagi dalam %1$s.</string>
+    <string name="relay_notice_rate_limited">Terlalu banyak panggilan verifikasi untuk nomor ini. Coba lagi nanti.</string>
+    <string name="relay_notice_rate_limited_after">Terlalu banyak panggilan verifikasi untuk nomor ini. Coba lagi dalam %1$s.</string>
+    <string name="relay_notice_invalid_phone">Itu tidak tampak seperti nomor telepon yang valid. Gunakan format internasional, misalnya +14155551234.</string>
+    <string name="relay_notice_destination">Panggilan verifikasi ke nomor ini tidak didukung.</string>
+    <string name="relay_notice_delivery_failed">Panggilan verifikasi tidak dapat dilakukan. Coba lagi dalam beberapa menit.</string>
+    <string name="relay_notice_network">Tidak dapat terhubung. Periksa koneksi Anda dan coba lagi.</string>
+    <string name="relay_notice_conflict">Nomor ini tertaut ke instalasi InboxIQ lain. Verifikasi dengan kode untuk mengambil alih.</string>
+    <string name="relay_notice_disconnected_unreachable">Terputus di ponsel ini; server tidak dapat dijangkau, akses berhenti saat token kedaluwarsa.</string>
+    <string name="relay_notice_disconnected_no_revoke">Terputus di ponsel ini. Versi relai ini tidak dapat mencabut akses dari jarak jauh, jadi kunci lama tetap valid di server tetapi ponsel ini telah menghapusnya.</string>
+    <string name="relay_foreground_only_note">Hanya berfungsi saat InboxIQ terbuka di layar Anda. Menutup aplikasi, berpindah aplikasi, atau mematikan layar mengakhiri akses dalam beberapa detik.</string>
+</resources>

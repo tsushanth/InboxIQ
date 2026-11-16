@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">A rendezés ezen a telefonon történik. Az InboxIQ-nak nincsenek fiókjai, hirdetései vagy analitikája. Semmi sem hagyja el a telefont, hacsak nem kapcsolod be lent a Csatlakozás a Claude-hoz funkciót, és akkor is csak amíg az InboxIQ nyitva van.</string>
+    <string name="intro_relay_exception">A Beállításokban található Csatlakozás a Claude-hoz funkció ki van kapcsolva, amíg be nem kapcsolod. Ez az egyetlen funkció, amely üzenettartalmat küld le a telefonról, és csak a beállítása után. Csak akkor működik, amíg az InboxIQ nyitva van a képernyődön.</string>
+    <string name="relay_section_blurb">Opcionális. Amíg az InboxIQ nyitva van a képernyődön, a Claude (a claude.ai vagy a Claude Desktop, a fiókodba bejelentkezve) elolvashatja az SMS-eidet, és válaszokat fogalmazhat. Az app bezárásával a hozzáférés megszűnik. Addig ki van kapcsolva, amíg be nem kapcsolod.</string>
+    <string name="relay_consent_title">Megosztod az üzeneteidet a Claude-dal, amíg az InboxIQ nyitva van?</string>
+    <string name="relay_consent_body">Ha bekapcsolod:\n\n- A Claude csak akkor éri el az üzeneteidet, amíg az InboxIQ nyitva van a képernyődön. Ha bezárod az appot, másik appra váltasz, vagy kikapcsolod a képernyőt, a kapcsolat néhány másodpercen belül megszakad, és a háttérben semmi sem fut. Nem csatlakozik újra, amíg újra meg nem nyitod az InboxIQ-t.\n- Amíg csatlakozva van, és csak akkor, ha kéred a Claude-ot, felsorolhatja a beszélgetéseidet, kereshet az SMS-eid között, és elolvashatja a teljes szálakat. Azoknak az üzeneteknek látja a szövegét, a feladók telefonszámát, a névjegyneveket és az időbélyegeket, amelyeket lekér, beleértve a bankoktól és más szolgáltatóktól érkező üzeneteket is. Az egyszer használatos kódok el vannak rejtve.\n- Ezek az adatok erről a telefonról az InboxIQ relé szolgáltatásba (mcp.kreativekoala.llc, az InboxIQ kiadója üzemelteti a Fly.io-n) kerülnek, onnan pedig a saját Claude-fiókodhoz tartozó csatlakozón keresztül a Claude-hoz, amely a fiók feltételei és adatvédelmi beállításai szerint kezeli őket. A relé átadja az üzeneteket, és nem tárolja őket. A telefonszámodat eltároljuk, hogy a relé megtalálja ezt a telefont. Annak megerősítésére, hogy a szám a tiéd, a relé automatikus hanghívást indít hozzá, amely felolvas egy 6 jegyű kódot, és ezt a kódot te írod be az InboxIQ-ba.\n- A Claude csak SMS-vázlatokat tud készíteni. Semmi sem kerül elküldésre, amíg meg nem nyitod az InboxIQ-t, és az egyes vázlatoknál a Küldés gombra nem koppintasz.\n- A kikapcsolás azonnal megszakítja a kapcsolatot, elveti ennek a telefonnak a relékulcsát, és megkéri a relét, hogy vonja vissza azt és a Claude-csatlakozóhoz való hozzáférésedet. A csatlakozó eltávolításához töröld az InboxIQ-t a Claude Beállítások, Csatlakozók menüpontjában.\n\nAz InboxIQ bejövő üzeneteid rendezése mindkét esetben ezen a telefonon marad.</string>
+    <string name="relay_consent_accept">Üzeneteim megosztása</string>
+    <string name="relay_consent_decline">Most nem</string>
+    <string name="relay_status_off">Állapot: Ki</string>
+    <string name="relay_status_connecting">Állapot: Csatlakozás</string>
+    <string name="relay_status_connected">Állapot: Csatlakozva. A Claude eléri az üzeneteidet, amíg ez a képernyő nyitva van.</string>
+    <string name="relay_status_offline">Állapot: Offline. A relé nem érhető el, újrapróbálkozás, amíg az InboxIQ nyitva van.</string>
+    <string name="relay_status_paused">Állapot: Szüneteltetve (az app be van zárva). Az újracsatlakozáshoz nyisd meg újra az InboxIQ-t.</string>
+    <string name="relay_status_reconnect_needed">Újracsatlakozás szükséges. A relé már nem fogadja el ennek a telefonnak a kulcsát, ezért igazold újra ezt a telefont.</string>
+    <string name="relay_reconnect_action">Újracsatlakozás</string>
+    <string name="relay_status_replaced">Újracsatlakozás szükséges. Egy másik InboxIQ-telepítés átvette ezt a számot, vagy máshol megszakították a kapcsolatot. Igazolj kóddal, hogy újra ezen a telefonon használhasd.</string>
+    <string name="relay_verify_action">Igazolás kóddal</string>
+    <string name="relay_code_label">A hívásban hallott 6 jegyű kód</string>
+    <string name="relay_code_confirm">Megerősítés</string>
+    <string name="relay_code_resend">Újrahívás</string>
+    <string name="relay_code_resend_wait">Újrahívás %1$d mp múlva</string>
+    <string name="relay_code_cancel">Mégse</string>
+    <string name="relay_try_again_in">Újrapróbálhatod ennyi idő múlva: %1$s.</string>
+    <string name="relay_notice_enter_phone">Először add meg a telefonszámodat.</string>
+    <string name="relay_notice_code_sent">Most hívjuk ezt a számot. Add meg a hallott 6 jegyű kódot.</string>
+    <string name="relay_notice_wrong_code">Ez a kód nem helyes. Ellenőrizd a számjegyeket, és próbáld újra.</string>
+    <string name="relay_notice_code_expired">Ez a kód lejárt. Kérj új hívást.</string>
+    <string name="relay_notice_six_digits">Add meg mind a 6 számjegyet.</string>
+    <string name="relay_notice_locked">Túl sok helytelen kód ehhez a számhoz. Legfeljebb egy órára zárolva van. Próbáld újra később.</string>
+    <string name="relay_notice_locked_after">Túl sok helytelen kód ehhez a számhoz. Próbáld újra ennyi idő múlva: %1$s.</string>
+    <string name="relay_notice_rate_limited">Túl sok igazoló hívás ehhez a számhoz. Próbáld újra később.</string>
+    <string name="relay_notice_rate_limited_after">Túl sok igazoló hívás ehhez a számhoz. Próbáld újra ennyi idő múlva: %1$s.</string>
+    <string name="relay_notice_invalid_phone">Ez nem tűnik érvényes telefonszámnak. Használd a nemzetközi formátumot, például +14155551234.</string>
+    <string name="relay_notice_destination">Ehhez a számhoz nem támogatottak az igazoló hívások.</string>
+    <string name="relay_notice_delivery_failed">Az igazoló hívást nem sikerült elindítani. Próbáld újra néhány perc múlva.</string>
+    <string name="relay_notice_network">Nem sikerült csatlakozni. Ellenőrizd a kapcsolatot, és próbáld újra.</string>
+    <string name="relay_notice_conflict">Ez a szám egy másik InboxIQ-telepítéshez van kötve. Igazolj kóddal, hogy átvedd.</string>
+    <string name="relay_notice_disconnected_unreachable">A kapcsolat megszakadt ezen a telefonon; a szerver nem volt elérhető, a hozzáférés a token lejártakor megszűnik.</string>
+    <string name="relay_notice_disconnected_no_revoke">A kapcsolat megszakadt ezen a telefonon. Ez a relé-verzió nem tudja távolról visszavonni a hozzáférést, ezért a régi kulcs érvényes marad a szerveren, de ez a telefon törölte.</string>
+    <string name="relay_foreground_only_note">Csak akkor működik, amíg az InboxIQ nyitva van a képernyődön. Az app bezárása, másik appra váltás vagy a képernyő kikapcsolása néhány másodpercen belül megszünteti a hozzáférést.</string>
+</resources>

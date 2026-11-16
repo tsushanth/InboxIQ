@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Sıralama bu telefonda yapılır. InboxIQ\'da hesap, reklam veya analiz yoktur. Aşağıdaki Claude\'a Bağlan\'ı açmadıkça hiçbir şey telefondan çıkmaz; açsan bile yalnızca InboxIQ açıkken çıkar.</string>
+    <string name="intro_relay_exception">Ayarlar\'daki Claude\'a Bağlan, sen açana kadar kapalıdır. Mesaj içeriğini telefondan dışarı gönderen tek özelliktir ve yalnızca sen kurduktan sonra çalışır. Yalnızca InboxIQ ekranında açıkken çalışır.</string>
+    <string name="relay_section_blurb">İsteğe bağlı. InboxIQ ekranında açıkken Claude (hesabında oturum açmış claude.ai veya Claude Desktop) kısa mesajlarını okuyabilir ve yanıt taslakları hazırlayabilir. Uygulamayı kapatmak erişimi sonlandırır. Sen açana kadar kapalıdır.</string>
+    <string name="relay_consent_title">InboxIQ açıkken mesajların Claude ile paylaşılsın mı?</string>
+    <string name="relay_consent_body">Bunu açarsan:\n\n- Claude mesajlarına yalnızca InboxIQ ekranında açıkken erişebilir. Uygulamayı kapattığında, başka bir uygulamaya geçtiğinde veya ekranı kapattığında bağlantı birkaç saniye içinde sona erer ve arka planda hiçbir şey çalışmaz. InboxIQ\'yu yeniden açana kadar tekrar bağlanmaz.\n- Bağlıyken ve yalnızca Claude\'dan bir şey istediğinde sohbetlerini listeleyebilir, mesajlarında arama yapabilir ve konuşmaların tamamını okuyabilir. İstediği mesajların metnini, gönderenlerin telefon numaralarını, kişi adlarını ve zaman damgalarını görür; bankalardan ve diğer hizmetlerden gelen mesajlar da buna dahildir. Tek kullanımlık parolalar gizlenir.\n- Bu veriler bu telefondan InboxIQ aktarım hizmetine (mcp.kreativekoala.llc, InboxIQ\'nun yayıncısı tarafından Fly.io üzerinde işletilir), oradan da kendi Claude hesabındaki bağlayıcı üzerinden Claude\'a gider; Claude bu veriyi o hesabın şartlarına ve gizlilik ayarlarına göre işler. Aktarım hizmeti mesajları yalnızca iletir ve saklamaz. Telefon numaran, aktarım hizmetinin bu telefonu bulabilmesi için saklanır. Numaranın sana ait olduğunu doğrulamak için aktarım hizmeti bu numarayı arayıp 6 haneli bir kodu sesli okuyan otomatik bir arama yapar; bu kodu InboxIQ\'ya yazarsın.\n- Claude yalnızca mesaj taslağı hazırlayabilir. Sen InboxIQ\'yu açıp her taslak için Gönder\'e dokunmadıkça hiçbir şey gönderilmez.\n- Bunu kapatmak bağlantıyı hemen keser, bu telefonun aktarım anahtarını siler ve aktarım hizmetinden bu anahtarı ile Claude bağlayıcı erişimini iptal etmesini ister. Bağlayıcıyı da kaldırmak için Claude\'da Ayarlar, Bağlayıcılar bölümünden InboxIQ\'yu sil.\n\nInboxIQ\'nun gelen kutunu sıralaması her iki durumda da bu telefonda kalır.</string>
+    <string name="relay_consent_accept">Mesajlarımı paylaş</string>
+    <string name="relay_consent_decline">Şimdi değil</string>
+    <string name="relay_status_off">Durum: Kapalı</string>
+    <string name="relay_status_connecting">Durum: Bağlanıyor</string>
+    <string name="relay_status_connected">Durum: Bağlı. Bu ekran açıkken Claude mesajlarına erişebilir.</string>
+    <string name="relay_status_offline">Durum: Çevrimdışı. Aktarım hizmetine ulaşılamıyor, InboxIQ açıkken yeniden denenecek.</string>
+    <string name="relay_status_paused">Durum: Duraklatıldı (uygulama kapalı). Yeniden bağlanmak için InboxIQ\'yu tekrar aç.</string>
+    <string name="relay_status_reconnect_needed">Yeniden bağlanmak gerekiyor. Aktarım hizmeti artık bu telefonun anahtarını kabul etmiyor; bu yüzden bu telefonu yeniden doğrula.</string>
+    <string name="relay_reconnect_action">Yeniden bağlan</string>
+    <string name="relay_status_replaced">Yeniden bağlanmak gerekiyor. Başka bir InboxIQ kurulumu bu numarayı devraldı veya bağlantı başka bir yerden kesildi. Bu telefonda tekrar kullanmak için kodla doğrula.</string>
+    <string name="relay_verify_action">Kodla doğrula</string>
+    <string name="relay_code_label">Aramadaki 6 haneli kod</string>
+    <string name="relay_code_confirm">Onayla</string>
+    <string name="relay_code_resend">Tekrar ara</string>
+    <string name="relay_code_resend_wait">%1$d sn sonra tekrar ara</string>
+    <string name="relay_code_cancel">İptal</string>
+    <string name="relay_try_again_in">%1$s sonra tekrar deneyebilirsin.</string>
+    <string name="relay_notice_enter_phone">Önce telefon numaranı gir.</string>
+    <string name="relay_notice_code_sent">Şu anda bu numarayı arıyoruz. Duyduğun 6 haneli kodu gir.</string>
+    <string name="relay_notice_wrong_code">Bu kod doğru değil. Rakamları kontrol edip tekrar dene.</string>
+    <string name="relay_notice_code_expired">Bu kodun süresi doldu. Yeni bir arama iste.</string>
+    <string name="relay_notice_six_digits">6 haneyi de gir.</string>
+    <string name="relay_notice_locked">Bu numara için çok fazla yanlış kod girildi. Numara en fazla bir saat kilitli kalır. Daha sonra tekrar dene.</string>
+    <string name="relay_notice_locked_after">Bu numara için çok fazla yanlış kod girildi. %1$s sonra tekrar dene.</string>
+    <string name="relay_notice_rate_limited">Bu numara için çok fazla doğrulama araması yapıldı. Daha sonra tekrar dene.</string>
+    <string name="relay_notice_rate_limited_after">Bu numara için çok fazla doğrulama araması yapıldı. %1$s sonra tekrar dene.</string>
+    <string name="relay_notice_invalid_phone">Bu geçerli bir telefon numarasına benzemiyor. Uluslararası biçimi kullan, örneğin +14155551234.</string>
+    <string name="relay_notice_destination">Bu numaraya doğrulama aramaları desteklenmiyor.</string>
+    <string name="relay_notice_delivery_failed">Doğrulama araması yapılamadı. Birkaç dakika sonra tekrar dene.</string>
+    <string name="relay_notice_network">Bağlanılamadı. Bağlantını kontrol edip tekrar dene.</string>
+    <string name="relay_notice_conflict">Bu numara başka bir InboxIQ kurulumuna bağlı. Devralmak için kodla doğrula.</string>
+    <string name="relay_notice_disconnected_unreachable">Bu telefonda bağlantı kesildi; sunucuya ulaşılamadı, erişim belirteç süresi dolunca sona erer.</string>
+    <string name="relay_notice_disconnected_no_revoke">Bu telefonda bağlantı kesildi. Bu aktarım hizmeti sürümü erişimi uzaktan iptal edemez; bu yüzden eski anahtar sunucuda geçerli kalır, ancak bu telefon onu sildi.</string>
+    <string name="relay_foreground_only_note">Yalnızca InboxIQ ekranında açıkken çalışır. Uygulamayı kapatmak, başka uygulamaya geçmek veya ekranı kapatmak erişimi birkaç saniye içinde sonlandırır.</string>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">仕分けはこのスマートフォン上で行われます。InboxIQにはアカウント、広告、分析がありません。下の「Claudeに接続」をオンにしない限り、スマートフォンの外には何も送信されず、オンにした場合もInboxIQを開いている間だけです。</string>
+    <string name="intro_relay_exception">設定の「Claudeに接続」は、オンにするまで無効です。これはメッセージの内容をスマートフォンの外に送信する唯一の機能で、設定を行った後にのみ動作します。InboxIQが画面に表示されている間だけ動作します。</string>
+    <string name="relay_section_blurb">オプション機能です。InboxIQが画面に表示されている間、Claude（お使いのアカウントでサインインしたclaude.aiまたはClaude Desktop）がテキストメッセージを読み取り、返信の下書きを作成できます。アプリを閉じるとアクセスは終了します。オンにするまでは無効です。</string>
+    <string name="relay_consent_title">InboxIQを開いている間、メッセージをClaudeと共有しますか？</string>
+    <string name="relay_consent_body">オンにした場合：\n\n- Claudeがメッセージにアクセスできるのは、InboxIQが画面に表示されている間だけです。アプリを閉じる、別のアプリに切り替える、または画面をオフにすると、数秒以内に接続が終了し、バックグラウンドでは何も実行されません。InboxIQをもう一度開くまで再接続されません。\n- 接続中は、あなたがClaudeに依頼したときに限り、会話の一覧表示、メッセージの検索、スレッド全体の読み取りができます。Claudeが要求したメッセージについて、メッセージ本文、送信者の電話番号、連絡先名、タイムスタンプが見えます。これには銀行やその他のサービスからのメッセージも含まれます。ワンタイムパスコードは非表示になります。\n- そのデータは、このスマートフォンからInboxIQのリレーサービス（mcp.kreativekoala.llc、InboxIQの発行元がFly.ioで運用）に送られ、そこからお客様ご自身のClaudeアカウントのコネクタを通じてClaudeに届きます。Claudeでは、そのアカウントの利用規約とプライバシー設定に従って扱われます。リレーはメッセージを中継するだけで、保存しません。リレーがこのスマートフォンを特定できるよう、電話番号は保存されます。番号がご本人のものであることを確認するため、リレーはその番号に6桁のコードを読み上げる自動音声通話をかけます。そのコードをInboxIQに入力してください。\n- Claudeにできるのはメッセージの下書きだけです。InboxIQを開いて各下書きの「送信」をタップするまで、何も送信されません。\n- オフにすると、すぐに接続が解除され、このスマートフォンのリレーキーが破棄されます。また、リレーに対して、そのキーとClaudeコネクタへのアクセスの取り消しを依頼します。コネクタも削除する場合は、Claudeの「設定」の「コネクタ」でInboxIQを削除してください。\n\nInboxIQによる受信トレイの仕分けは、どちらの場合もこのスマートフォン上で行われます。</string>
+    <string name="relay_consent_accept">メッセージを共有する</string>
+    <string name="relay_consent_decline">今はしない</string>
+    <string name="relay_status_off">ステータス：オフ</string>
+    <string name="relay_status_connecting">ステータス：接続中</string>
+    <string name="relay_status_connected">ステータス：接続済み。この画面を開いている間、Claudeがメッセージにアクセスできます。</string>
+    <string name="relay_status_offline">ステータス：オフライン。リレーに接続できません。InboxIQを開いている間、再試行します。</string>
+    <string name="relay_status_paused">ステータス：一時停止中（アプリを閉じました）。再接続するにはInboxIQを開き直してください。</string>
+    <string name="relay_status_reconnect_needed">再接続が必要です。リレーがこのスマートフォンのキーを受け付けなくなったため、このスマートフォンをもう一度認証してください。</string>
+    <string name="relay_reconnect_action">再接続</string>
+    <string name="relay_status_replaced">再接続が必要です。別のInboxIQがこの番号を引き継いだか、他の場所で接続が解除されました。このスマートフォンで再び使うには、コードで認証してください。</string>
+    <string name="relay_verify_action">コードで認証</string>
+    <string name="relay_code_label">通話で伝えられた6桁のコード</string>
+    <string name="relay_code_confirm">確認</string>
+    <string name="relay_code_resend">もう一度発信</string>
+    <string name="relay_code_resend_wait">%1$d秒後にもう一度発信できます</string>
+    <string name="relay_code_cancel">キャンセル</string>
+    <string name="relay_try_again_in">%1$s後にもう一度お試しいただけます。</string>
+    <string name="relay_notice_enter_phone">先に電話番号を入力してください。</string>
+    <string name="relay_notice_code_sent">今、この番号に発信しています。聞こえた6桁のコードを入力してください。</string>
+    <string name="relay_notice_wrong_code">コードが正しくありません。数字を確認して、もう一度お試しください。</string>
+    <string name="relay_notice_code_expired">コードの有効期限が切れました。もう一度発信を依頼してください。</string>
+    <string name="relay_notice_six_digits">6桁すべてを入力してください。</string>
+    <string name="relay_notice_locked">この番号に対する誤ったコードの入力が多すぎます。最長1時間ロックされます。しばらくしてからもう一度お試しください。</string>
+    <string name="relay_notice_locked_after">この番号に対する誤ったコードの入力が多すぎます。%1$s後にもう一度お試しください。</string>
+    <string name="relay_notice_rate_limited">この番号への認証通話が多すぎます。しばらくしてからもう一度お試しください。</string>
+    <string name="relay_notice_rate_limited_after">この番号への認証通話が多すぎます。%1$s後にもう一度お試しください。</string>
+    <string name="relay_notice_invalid_phone">有効な電話番号ではないようです。国際形式で入力してください（例：+14155551234）。</string>
+    <string name="relay_notice_destination">この番号への認証通話には対応していません。</string>
+    <string name="relay_notice_delivery_failed">認証通話を発信できませんでした。数分後にもう一度お試しください。</string>
+    <string name="relay_notice_network">接続できませんでした。接続を確認して、もう一度お試しください。</string>
+    <string name="relay_notice_conflict">この番号は別のInboxIQに紐付けられています。コードで認証すると、この番号を引き継げます。</string>
+    <string name="relay_notice_disconnected_unreachable">このスマートフォンでの接続を解除しました。サーバーに接続できなかったため、トークンの有効期限が切れるとアクセスは停止します。</string>
+    <string name="relay_notice_disconnected_no_revoke">このスマートフォンでの接続を解除しました。このリレーのバージョンではリモートでアクセスを取り消せないため、古いキーはサーバー上では有効なままですが、このスマートフォンからは削除されています。</string>
+    <string name="relay_foreground_only_note">InboxIQが画面に表示されている間だけ動作します。アプリを閉じる、アプリを切り替える、または画面をオフにすると、数秒以内にアクセスが終了します。</string>
+</resources>

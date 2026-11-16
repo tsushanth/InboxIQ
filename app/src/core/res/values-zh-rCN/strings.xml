@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">分类在本机上进行。InboxIQ 没有账号、广告或分析功能，也没有互联网访问权限：您的短信不会离开手机。</string>
+</resources>

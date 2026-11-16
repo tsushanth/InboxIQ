@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">การจัดเรียงเกิดขึ้นบนโทรศัพท์เครื่องนี้ InboxIQ ไม่มีบัญชี โฆษณา หรือการวิเคราะห์ จะไม่มีอะไรออกจากโทรศัพท์ เว้นแต่คุณจะเปิดเชื่อมต่อกับ Claude ด้านล่าง และแม้เปิดแล้วก็จะเกิดขึ้นเฉพาะขณะที่ InboxIQ เปิดอยู่เท่านั้น</string>
+    <string name="intro_relay_exception">เชื่อมต่อกับ Claude ในการตั้งค่า จะปิดอยู่จนกว่าคุณจะเปิด เป็นฟีเจอร์เดียวที่ส่งเนื้อหาข้อความออกจากโทรศัพท์ และจะทำงานหลังจากที่คุณตั้งค่าแล้วเท่านั้น ทำงานเฉพาะขณะที่ InboxIQ เปิดอยู่บนหน้าจอของคุณ</string>
+    <string name="relay_section_blurb">ไม่บังคับ ขณะที่ InboxIQ เปิดอยู่บนหน้าจอของคุณ Claude (claude.ai หรือ Claude Desktop ที่ลงชื่อเข้าใช้บัญชีของคุณ) สามารถอ่านข้อความของคุณและร่างข้อความตอบกลับได้ การปิดแอปจะสิ้นสุดการเข้าถึง ปิดอยู่จนกว่าคุณจะเปิด</string>
+    <string name="relay_consent_title">แชร์ข้อความของคุณกับ Claude ขณะที่ InboxIQ เปิดอยู่ไหม</string>
+    <string name="relay_consent_body">หากคุณเปิดใช้งานนี้:\n\n- Claude เข้าถึงข้อความของคุณได้เฉพาะขณะที่ InboxIQ เปิดอยู่บนหน้าจอ เมื่อคุณปิดแอป สลับไปแอปอื่น หรือปิดหน้าจอ การเชื่อมต่อจะสิ้นสุดภายในไม่กี่วินาที และจะไม่มีอะไรทำงานเบื้องหลัง จะไม่เชื่อมต่อใหม่จนกว่าคุณจะเปิด InboxIQ อีกครั้ง\n- ขณะที่เชื่อมต่ออยู่ และเฉพาะเมื่อคุณสั่ง Claude เท่านั้น Claude จะแสดงรายการการสนทนา ค้นหาข้อความ และอ่านเธรดทั้งหมดได้ Claude จะเห็นเนื้อหาข้อความ หมายเลขโทรศัพท์ผู้ส่ง ชื่อผู้ติดต่อ และเวลาของข้อความที่ร้องขอ รวมถึงข้อความจากธนาคารและบริการอื่น ๆ รหัสผ่านแบบใช้ครั้งเดียวจะถูกซ่อนไว้\n- ข้อมูลนั้นจะส่งจากโทรศัพท์เครื่องนี้ไปยังบริการรีเลย์ของ InboxIQ (mcp.kreativekoala.llc ดูแลโดยผู้เผยแพร่ InboxIQ บน Fly.io) และจากนั้นไปยัง Claude ผ่านตัวเชื่อมต่อในบัญชี Claude ของคุณเอง ซึ่งจะจัดการข้อมูลตามข้อกำหนดและการตั้งค่าความเป็นส่วนตัวของบัญชีนั้น รีเลย์เพียงส่งต่อข้อความและไม่เก็บไว้ หมายเลขโทรศัพท์ของคุณจะถูกจัดเก็บเพื่อให้รีเลย์หาโทรศัพท์เครื่องนี้พบ เพื่อยืนยันว่าหมายเลขนั้นเป็นของคุณ รีเลย์จะโทรออกอัตโนมัติด้วยเสียงไปยังหมายเลขนั้นและอ่านรหัส 6 หลักให้ฟัง ซึ่งคุณพิมพ์ลงใน InboxIQ\n- Claude ร่างข้อความได้เท่านั้น จะไม่มีอะไรถูกส่งจนกว่าคุณจะเปิด InboxIQ และแตะส่งในแต่ละฉบับร่าง\n- การปิดฟีเจอร์นี้จะตัดการเชื่อมต่อทันที ทิ้งคีย์รีเลย์ของโทรศัพท์เครื่องนี้ และขอให้รีเลย์เพิกถอนคีย์นั้นและการเข้าถึงของตัวเชื่อมต่อ Claude ของคุณ หากต้องการลบตัวเชื่อมต่อด้วย ให้ลบ InboxIQ ใน การตั้งค่า ตัวเชื่อมต่อ ใน Claude\n\nการจัดเรียงกล่องข้อความของ InboxIQ ยังคงอยู่บนโทรศัพท์เครื่องนี้ไม่ว่าจะเปิดหรือปิดก็ตาม</string>
+    <string name="relay_consent_accept">แชร์ข้อความของฉัน</string>
+    <string name="relay_consent_decline">ไว้ทีหลัง</string>
+    <string name="relay_status_off">สถานะ: ปิด</string>
+    <string name="relay_status_connecting">สถานะ: กำลังเชื่อมต่อ</string>
+    <string name="relay_status_connected">สถานะ: เชื่อมต่อแล้ว Claude เข้าถึงข้อความของคุณได้ขณะที่หน้าจอนี้เปิดอยู่</string>
+    <string name="relay_status_offline">สถานะ: ออฟไลน์ เข้าถึงรีเลย์ไม่ได้ จะลองใหม่ขณะที่ InboxIQ เปิดอยู่</string>
+    <string name="relay_status_paused">สถานะ: หยุดชั่วคราว (ปิดแอปแล้ว) เปิด InboxIQ อีกครั้งเพื่อเชื่อมต่อใหม่</string>
+    <string name="relay_status_reconnect_needed">ต้องเชื่อมต่อใหม่ รีเลย์ไม่ยอมรับคีย์ของโทรศัพท์เครื่องนี้อีกต่อไป โปรดยืนยันโทรศัพท์เครื่องนี้อีกครั้ง</string>
+    <string name="relay_reconnect_action">เชื่อมต่อใหม่</string>
+    <string name="relay_status_replaced">ต้องเชื่อมต่อใหม่ InboxIQ ที่ติดตั้งในเครื่องอื่นเข้ามาใช้หมายเลขนี้แทน หรือการเชื่อมต่อถูกตัดจากที่อื่น ยืนยันด้วยรหัสเพื่อใช้บนโทรศัพท์เครื่องนี้อีกครั้ง</string>
+    <string name="relay_verify_action">ยืนยันด้วยรหัส</string>
+    <string name="relay_code_label">รหัส 6 หลักจากสายโทรเข้า</string>
+    <string name="relay_code_confirm">ยืนยัน</string>
+    <string name="relay_code_resend">โทรอีกครั้ง</string>
+    <string name="relay_code_resend_wait">โทรอีกครั้งใน %1$d วินาที</string>
+    <string name="relay_code_cancel">ยกเลิก</string>
+    <string name="relay_try_again_in">คุณลองอีกครั้งได้ใน %1$s</string>
+    <string name="relay_notice_enter_phone">กรอกหมายเลขโทรศัพท์ของคุณก่อน</string>
+    <string name="relay_notice_code_sent">เรากำลังโทรไปยังหมายเลขนี้ กรอกรหัส 6 หลักที่คุณได้ยิน</string>
+    <string name="relay_notice_wrong_code">รหัสไม่ถูกต้อง ตรวจสอบตัวเลขแล้วลองอีกครั้ง</string>
+    <string name="relay_notice_code_expired">รหัสหมดอายุแล้ว ขอให้โทรใหม่</string>
+    <string name="relay_notice_six_digits">กรอกให้ครบ 6 หลัก</string>
+    <string name="relay_notice_locked">กรอกรหัสผิดสำหรับหมายเลขนี้มากเกินไป หมายเลขถูกล็อกนานสูงสุดหนึ่งชั่วโมง ลองใหม่ภายหลัง</string>
+    <string name="relay_notice_locked_after">กรอกรหัสผิดสำหรับหมายเลขนี้มากเกินไป ลองอีกครั้งใน %1$s</string>
+    <string name="relay_notice_rate_limited">มีการโทรยืนยันไปยังหมายเลขนี้มากเกินไป ลองใหม่ภายหลัง</string>
+    <string name="relay_notice_rate_limited_after">มีการโทรยืนยันไปยังหมายเลขนี้มากเกินไป ลองอีกครั้งใน %1$s</string>
+    <string name="relay_notice_invalid_phone">ดูเหมือนไม่ใช่หมายเลขโทรศัพท์ที่ถูกต้อง ใช้รูปแบบสากล เช่น +14155551234</string>
+    <string name="relay_notice_destination">ไม่รองรับการโทรยืนยันไปยังหมายเลขนี้</string>
+    <string name="relay_notice_delivery_failed">ไม่สามารถโทรยืนยันได้ ลองอีกครั้งในอีกสองสามนาที</string>
+    <string name="relay_notice_network">เชื่อมต่อไม่ได้ ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง</string>
+    <string name="relay_notice_conflict">หมายเลขนี้เชื่อมโยงกับ InboxIQ ที่ติดตั้งในเครื่องอื่น ยืนยันด้วยรหัสเพื่อใช้แทน</string>
+    <string name="relay_notice_disconnected_unreachable">ตัดการเชื่อมต่อบนโทรศัพท์เครื่องนี้แล้ว แต่เข้าถึงเซิร์ฟเวอร์ไม่ได้ การเข้าถึงจะสิ้นสุดเมื่อโทเค็นหมดอายุ</string>
+    <string name="relay_notice_disconnected_no_revoke">ตัดการเชื่อมต่อบนโทรศัพท์เครื่องนี้แล้ว รีเลย์เวอร์ชันนี้เพิกถอนการเข้าถึงจากระยะไกลไม่ได้ คีย์เก่าจึงยังใช้ได้บนเซิร์ฟเวอร์ แต่โทรศัพท์เครื่องนี้ลบคีย์นั้นแล้ว</string>
+    <string name="relay_foreground_only_note">ทำงานเฉพาะขณะที่ InboxIQ เปิดอยู่บนหน้าจอของคุณ การปิดแอป สลับแอป หรือปิดหน้าจอจะสิ้นสุดการเข้าถึงภายในไม่กี่วินาที</string>
+</resources>
