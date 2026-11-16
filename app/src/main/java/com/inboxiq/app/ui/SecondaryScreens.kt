@@ -1,5 +1,7 @@
 package com.inboxiq.app.ui
 
+import com.inboxiq.app.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -64,21 +66,21 @@ fun NewConversationScreen(
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.padding(16.dp)) {
             forwardingText?.let {
-                Text("Forwarding:", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ui_forwarding), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(it, maxLines = 3, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 16.dp))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
                     value = number,
                     onValueChange = { number = it },
-                    label = { Text("Phone number") },
-                    supportingText = { Text("Include the area code. Add +1 and the country code for numbers abroad.") },
+                    label = { Text(stringResource(R.string.ui_phone_number)) },
+                    supportingText = { Text(stringResource(R.string.ui_include_the_area_code_add)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                 )
                 IconButton(onClick = { onPickContact { picked -> if (picked != null) number = picked } }, modifier = Modifier.size(56.dp)) {
-                    Icon(Icons.Filled.Contacts, contentDescription = "Pick from contacts")
+                    Icon(Icons.Filled.Contacts, contentDescription = stringResource(R.string.ui_pick_from_contacts))
                 }
             }
             Spacer(Modifier.height(12.dp))
@@ -94,7 +96,7 @@ fun BlockedNumbersScreen(blocked: List<BlockedNumberEntity>, nameOf: (String) ->
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to settings") }
-            Text("Blocked numbers", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+            Text(stringResource(R.string.ui_blocked_numbers), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         if (blocked.isEmpty()) {
@@ -111,7 +113,7 @@ fun BlockedNumbersScreen(blocked: List<BlockedNumberEntity>, nameOf: (String) ->
                             Text(nameOf(b.address) ?: b.address, style = MaterialTheme.typography.titleSmall)
                             if (nameOf(b.address) != null) Text(b.address, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        TextButton(onClick = { onUnblock(b.address) }) { Text("Unblock") }
+                        TextButton(onClick = { onUnblock(b.address) }) { Text(stringResource(R.string.ui_unblock)) }
                     }
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }

@@ -1,5 +1,7 @@
 package com.inboxiq.app.ui
 
+import com.inboxiq.app.R
+import androidx.compose.ui.res.stringResource
 import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -99,18 +101,18 @@ fun AutoReplyScreen(
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to settings") }
-            Text("Auto-reply when away", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+            Text(stringResource(R.string.ui_auto_reply_when_away), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(horizontal = 16.dp, vertical = 8.dp)) {
             Text(
-                "Sends one short text for you when someone you know messages while you are away. It is off until you turn it on, and it only ever answers people you have texted before or saved as contacts.",
+                stringResource(R.string.ui_sends_one_short_text_for),
                 style = MaterialTheme.typography.bodyMedium,
             )
             if (!isDefaultSms) {
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    "InboxIQ is not your default SMS app right now, so nothing can be sent automatically. Make it the default from the inbox to use this.",
+                    stringResource(R.string.ui_inboxiq_is_not_your_default),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error,
                 )
             }
@@ -135,7 +137,7 @@ fun AutoReplyScreen(
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AutoReplyConfig.TEMPLATES.forEach { t -> AssistChip(onClick = { text = t; if (AutoReplyConfig.validateMessage(t) == null) callbacks.onSave(config.copy(message = t)) }, label = { Text(t) }) }
             }
-            OutlinedButton(onClick = { callbacks.onSave(config.copy(message = text.trim())) }, enabled = problem == null && text.trim() != config.message, modifier = Modifier.padding(top = 8.dp)) { Text("Save message") }
+            OutlinedButton(onClick = { callbacks.onSave(config.copy(message = text.trim())) }, enabled = problem == null && text.trim() != config.message, modifier = Modifier.padding(top = 8.dp)) { Text(stringResource(R.string.ui_save_message)) }
 
             ASection("Schedule")
             ASwitch("Only at certain times", "Otherwise it answers whenever it is on.", config.scheduleOn) { callbacks.onSave(config.copy(scheduleOn = it)) }
@@ -166,18 +168,18 @@ fun AutoReplyScreen(
             if (config.untilMillis != 0L) Text("Switches off at " + java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(config.untilMillis)) + ".", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
             ASection("Limits")
-            Text("One automatic text per person every:", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.ui_one_automatic_text_per_person), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             listOf(24, 12, 6, 1).forEach { h -> ChoiceRowA("$h ${if (h == 1) "hour" else "hours"}", config.perSenderHours == h) { callbacks.onSave(config.copy(perSenderHours = h)) } }
-            Text("At most this many a day in total:", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+            Text(stringResource(R.string.ui_at_most_this_many_a), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
             listOf(20, 10, 5).forEach { n -> ChoiceRowA("$n a day", config.dailyCap == n) { callbacks.onSave(config.copy(dailyCap = n)) } }
-            Text("These can be lowered but not raised. It never replies to businesses, short codes, groups, spam, blocked numbers, picture messages, old texts, or texts that look automatic.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.ui_these_can_be_lowered_but), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
             ASection("Sent so far")
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = callbacks.onOpenLog), verticalAlignment = Alignment.CenterVertically) {
                 Text("Auto-replies sent ($sentCount)", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             }
-            Text("Your carrier may charge for these texts, as for any text you send.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp, bottom = 32.dp))
+            Text(stringResource(R.string.ui_your_carrier_may_charge_for), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp, bottom = 32.dp))
         }
     }
 
@@ -185,10 +187,10 @@ fun AutoReplyScreen(
         val body = AutoReplyConfirmation.text(config)
         AlertDialog(
             onDismissRequest = { confirm = false },
-            title = { Text("Turn on auto-reply?") },
+            title = { Text(stringResource(R.string.ui_turn_on_auto_reply)) },
             text = { Column(Modifier.verticalScroll(rememberScrollState())) { Text(body) } },
-            confirmButton = { Button(onClick = { confirm = false; callbacks.onEnable(body) }, enabled = config.validate() == null) { Text("Turn on") } },
-            dismissButton = { TextButton(onClick = { confirm = false }) { Text("Cancel") } },
+            confirmButton = { Button(onClick = { confirm = false; callbacks.onEnable(body) }, enabled = config.validate() == null) { Text(stringResource(R.string.ui_turn_on)) } },
+            dismissButton = { TextButton(onClick = { confirm = false }) { Text(stringResource(R.string.ui_cancel)) } },
         )
     }
 }
@@ -214,8 +216,8 @@ fun AutoReplyLogScreen(
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
-            Text("Auto-replies sent", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
-            if (enabled) Button(onClick = onTurnOff, modifier = Modifier.padding(end = 12.dp)) { Text("Turn off") }
+            Text(stringResource(R.string.ui_auto_replies_sent), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
+            if (enabled) Button(onClick = onTurnOff, modifier = Modifier.padding(end = 12.dp)) { Text(stringResource(R.string.ui_turn_off)) }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         if (entries.isEmpty()) {
@@ -231,7 +233,7 @@ fun AutoReplyLogScreen(
                     }
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 }
-                item { TextButton(onClick = onClear, modifier = Modifier.padding(8.dp)) { Text("Clear this list") } }
+                item { TextButton(onClick = onClear, modifier = Modifier.padding(8.dp)) { Text(stringResource(R.string.ui_clear_this_list)) } }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.inboxiq.app.ui
 
+import com.inboxiq.app.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -80,7 +82,7 @@ fun MmsImage(partUri: String, modifier: Modifier = Modifier, maxDim: Int = 800, 
         Image(b.asImageBitmap(), contentDescription = description, contentScale = contentScale, modifier = modifier)
     } else {
         Box(modifier.background(MaterialTheme.colorScheme.surfaceVariant), contentAlignment = Alignment.Center) {
-            Icon(Icons.Filled.BrokenImage, contentDescription = "Photo could not be loaded", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Icon(Icons.Filled.BrokenImage, contentDescription = stringResource(R.string.ui_photo_could_not_be_loaded), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -91,7 +93,7 @@ fun MediaGalleryScreen(title: String, images: List<MessageEntity>, onBack: () ->
         Row(Modifier.fillMaxWidth().statusBarsPadding().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to conversation") }
             Column(Modifier.weight(1f)) {
-                Text("Photos", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.ui_photos), style = MaterialTheme.typography.titleLarge)
                 Text(title, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
@@ -137,7 +139,7 @@ fun ImageViewerScreen(images: List<MessageEntity>, startIndex: Int, onClose: () 
                 color = Color.White, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f),
             )
             IconButton(onClick = { shareImage(context, images[pager.currentPage].imagePartUri!!) }) {
-                Icon(Icons.Filled.Share, contentDescription = "Share photo", tint = Color.White)
+                Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.ui_share_photo), tint = Color.White)
             }
         }
     }

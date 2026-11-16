@@ -251,14 +251,14 @@ fun SetupLogScreen(entries: List<com.inboxiq.app.firstrun.FunnelEntry>, onClear:
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding().navigationBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.material3.IconButton(onClick = onBack) {
-                Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to settings")
+                Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.ui_back_to_settings))
             }
             Text(stringResource(R.string.funnel_title), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
-                "Counts of first-run steps on this phone. Step names and times only: no message text, numbers or names. Nothing is sent anywhere, and release builds keep no such log.",
+                stringResource(R.string.ui_counts_of_first_run_steps),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             val fmt = remember { java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US) }
@@ -269,6 +269,6 @@ fun SetupLogScreen(entries: List<com.inboxiq.app.firstrun.FunnelEntry>, onClear:
                 }
             }
         }
-        OutlinedButton(onClick = onClear, modifier = Modifier.fillMaxWidth().padding(16.dp).heightIn(min = 48.dp)) { Text("Clear log") }
+        OutlinedButton(onClick = onClear, modifier = Modifier.fillMaxWidth().padding(16.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_clear_log)) }
     }
 }

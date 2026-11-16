@@ -218,7 +218,7 @@ fun InboxScreen(
                         IconButton(onClick = { menuOpen = true }) { Icon(Icons.Filled.MoreVert, contentDescription = "More options") }
                         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                             DropdownMenuItem(
-                                text = { Text("Mark all as read") },
+                                text = { Text(stringResource(R.string.ui_mark_all_as_read)) },
                                 leadingIcon = { Icon(Icons.Filled.DoneAll, null) },
                                 enabled = unreadTotal > 0,
                                 onClick = { menuOpen = false; callbacks.onMarkAllRead() },
@@ -229,7 +229,7 @@ fun InboxScreen(
                                 onClick = { menuOpen = false; showArchived = !showArchived },
                             )
                             DropdownMenuItem(
-                                text = { Text("Settings") },
+                                text = { Text(stringResource(R.string.ui_settings)) },
                                 leadingIcon = { Icon(Icons.Filled.Settings, null) },
                                 onClick = { menuOpen = false; callbacks.onOpenSettings() },
                             )
@@ -301,7 +301,7 @@ fun InboxScreen(
             ExtendedFloatingActionButton(
                 onClick = callbacks.onNewConversation,
                 icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                text = { Text("New message") },
+                text = { Text(stringResource(R.string.ui_new_message)) },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).navigationBarsPadding(),
@@ -375,7 +375,7 @@ private fun SearchBar(query: String, onChange: (String) -> Unit, onClose: () -> 
             value = query,
             onValueChange = onChange,
             modifier = Modifier.weight(1f).focusRequester(focus),
-            placeholder = { Text("Search people, numbers and message text") },
+            placeholder = { Text(stringResource(R.string.ui_search_people_numbers_and_message)) },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
         )
@@ -392,18 +392,18 @@ private fun DefaultAppBanner(onRequest: () -> Unit, onWhatChanges: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                "InboxIQ is not your default SMS app yet",
+                stringResource(R.string.ui_inboxiq_is_not_your_default_2),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                "Until it is, Android keeps delivering texts to another app, so nothing new arrives here and nothing sent from here goes out.",
+                stringResource(R.string.ui_until_it_is_android_keeps),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Row {
-                TextButton(onClick = onRequest) { Text("Choose InboxIQ as default") }
+                TextButton(onClick = onRequest) { Text(stringResource(R.string.ui_choose_inboxiq_as_default)) }
                 TextButton(onClick = onWhatChanges) { Text(stringResource(R.string.banner_what_changes)) }
             }
         }
@@ -674,7 +674,7 @@ fun ThreadRowContent(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.AutoMirrored.Filled.Reply, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(14.dp))
                             Spacer(Modifier.width(3.dp))
-                            Text("Needs a reply", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                            Text(stringResource(R.string.ui_needs_a_reply), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                         }
                     }
                     Spacer(Modifier.weight(1f))
@@ -742,24 +742,24 @@ private fun SelectionBar(
                         onClick = { more = false; onMute() },
                     )
                     DropdownMenuItem(
-                        text = { Text("Mark as read") },
+                        text = { Text(stringResource(R.string.ui_mark_as_read)) },
                         leadingIcon = { Icon(Icons.Filled.DoneAll, null) },
                         onClick = { more = false; onMarkRead() },
                     )
                     if (single) {
                         DropdownMenuItem(
-                            text = { Text("Change label") },
+                            text = { Text(stringResource(R.string.ui_change_label)) },
                             leadingIcon = { Icon(Icons.Filled.Label, null) },
                             onClick = { more = false; onChangeLabel() },
                         )
                         DropdownMenuItem(
-                            text = { Text("Report as spam") },
+                            text = { Text(stringResource(R.string.ui_report_as_spam)) },
                             leadingIcon = { Icon(Icons.Filled.Report, null) },
                             onClick = { more = false; onReportSpam() },
                         )
                     }
                     DropdownMenuItem(
-                        text = { Text("Block number") },
+                        text = { Text(stringResource(R.string.ui_block_number)) },
                         leadingIcon = { Icon(Icons.Filled.Block, null) },
                         onClick = { more = false; onBlock() },
                     )
@@ -775,11 +775,11 @@ private fun SelectionBar(
 fun MuteDialog(anyMuted: Boolean, onPick: (MuteDuration?) -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Mute notifications") },
+        title = { Text(stringResource(R.string.ui_mute_notifications)) },
         text = {
             Column {
                 Text(
-                    "Messages still arrive and are sorted. You just will not be notified.",
+                    stringResource(R.string.ui_messages_still_arrive_and_are),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -791,13 +791,13 @@ fun MuteDialog(anyMuted: Boolean, onPick: (MuteDuration?) -> Unit, onDismiss: ()
                 }
                 if (anyMuted) {
                     TextButton(onClick = { onPick(null) }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Unmute now", modifier = Modifier.fillMaxWidth())
+                        Text(stringResource(R.string.ui_unmute_now), modifier = Modifier.fillMaxWidth())
                     }
                 }
             }
         },
         confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_cancel)) } },
     )
 }
 
@@ -808,7 +808,7 @@ fun LabelPickerDialog(current: MessageLabel?, onPick: (MessageLabel) -> Unit, on
     )
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("File this conversation under") },
+        title = { Text(stringResource(R.string.ui_file_this_conversation_under)) },
         text = {
             Column {
                 choices.forEach { l ->
@@ -824,19 +824,19 @@ fun LabelPickerDialog(current: MessageLabel?, onPick: (MessageLabel) -> Unit, on
                     ) {
                         LabelChip(l)
                         Spacer(Modifier.weight(1f))
-                        if (l == current) Text("Current", style = MaterialTheme.typography.labelSmall, color = style.content)
+                        if (l == current) Text(stringResource(R.string.ui_current), style = MaterialTheme.typography.labelSmall, color = style.content)
                     }
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "Future texts from this number go to the same place. Your choice stays on this phone and the model is not retrained.",
+                    stringResource(R.string.ui_future_texts_from_this_number),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
         confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_cancel)) } },
     )
 }
 
@@ -849,7 +849,7 @@ fun ReportSpamDialog(name: String, onConfirm: (alsoBlock: Boolean) -> Unit, onDi
         text = {
             Column {
                 Text(
-                    "The conversation moves to Junk, where you can restore it. Nothing is sent anywhere; reports stay on this phone.",
+                    stringResource(R.string.ui_the_conversation_moves_to_junk),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Row(
@@ -858,12 +858,12 @@ fun ReportSpamDialog(name: String, onConfirm: (alsoBlock: Boolean) -> Unit, onDi
                 ) {
                     Checkbox(checked = block, onCheckedChange = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Also block this number")
+                    Text(stringResource(R.string.ui_also_block_this_number))
                 }
             }
         },
-        confirmButton = { TextButton(onClick = { onConfirm(block) }) { Text("Report spam") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        confirmButton = { TextButton(onClick = { onConfirm(block) }) { Text(stringResource(R.string.ui_report_spam)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_cancel)) } },
     )
 }
 
@@ -891,7 +891,7 @@ private fun ImportStrip(status: ImportStatus, onRetry: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
-                TextButton(onClick = onRetry) { Text("Try again") }
+                TextButton(onClick = onRetry) { Text(stringResource(R.string.ui_try_again)) }
             } else {
                 Text(
                     "Copying your texts: ${nf.format(status.processed)} of ${nf.format(maxOf(status.total, status.processed))}. You can keep using the app.",
@@ -917,7 +917,7 @@ private fun LoadingState() {
     ) {
         CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 3.dp)
         Spacer(Modifier.height(12.dp))
-        Text("Opening your messages", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.ui_opening_your_messages), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

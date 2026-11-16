@@ -1,5 +1,7 @@
 package com.inboxiq.app.ui
 
+import com.inboxiq.app.R
+import androidx.compose.ui.res.stringResource
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -243,7 +245,7 @@ fun ThreadScreen(
                                 }
                                 Spacer(Modifier.width(6.dp))
                                 Text(
-                                    "Why?",
+                                    stringResource(R.string.ui_why),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.clickable { showWhy = true }.padding(vertical = 8.dp),
@@ -255,7 +257,7 @@ fun ThreadScreen(
                             }
                             if (muted) {
                                 Spacer(Modifier.width(8.dp))
-                                Icon(Icons.Filled.NotificationsOff, contentDescription = "Muted", modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Icon(Icons.Filled.NotificationsOff, contentDescription = stringResource(R.string.ui_muted), modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     }
@@ -280,12 +282,12 @@ fun ThreadScreen(
                                 onClick = { menuOpen = false; if (muted) callbacks.onMute(null) else showMute = true },
                             )
                             DropdownMenuItem(
-                                text = { Text("Change label") },
+                                text = { Text(stringResource(R.string.ui_change_label)) },
                                 leadingIcon = { Icon(Icons.Filled.Label, null) },
                                 onClick = { menuOpen = false; showLabelPicker = true },
                             )
                             DropdownMenuItem(
-                                text = { Text("Report as spam") },
+                                text = { Text(stringResource(R.string.ui_report_as_spam)) },
                                 leadingIcon = { Icon(Icons.Filled.Report, null) },
                                 onClick = { menuOpen = false; showSpam = true },
                             )
@@ -295,7 +297,7 @@ fun ThreadScreen(
                                 onClick = { menuOpen = false; callbacks.onToggleBlock() },
                             )
                             DropdownMenuItem(
-                                text = { Text("Delete conversation") },
+                                text = { Text(stringResource(R.string.ui_delete_conversation)) },
                                 leadingIcon = { Icon(Icons.Filled.Delete, null) },
                                 onClick = { menuOpen = false; callbacks.onDeleteConversation() },
                             )
@@ -304,7 +306,7 @@ fun ThreadScreen(
                 }
                 if (isBlocked) {
                     Text(
-                        "This number is blocked. New texts from it are not saved. Unblock it from the menu.",
+                        stringResource(R.string.ui_this_number_is_blocked_new),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.errorContainer).padding(horizontal = 16.dp, vertical = 8.dp),
@@ -403,8 +405,8 @@ fun ThreadScreen(
             onDismissRequest = { showWhy = false },
             title = { Text(e.headline) },
             text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { e.reasons.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) } } },
-            confirmButton = { TextButton(onClick = { showWhy = false; showLabelPicker = true }) { Text("Change label") } },
-            dismissButton = { TextButton(onClick = { showWhy = false }) { Text("Close") } },
+            confirmButton = { TextButton(onClick = { showWhy = false; showLabelPicker = true }) { Text(stringResource(R.string.ui_change_label)) } },
+            dismissButton = { TextButton(onClick = { showWhy = false }) { Text(stringResource(R.string.ui_close)) } },
         )
     }
     if (showMute) MuteDialog(anyMuted = muted, onPick = { callbacks.onMute(it); showMute = false }, onDismiss = { showMute = false })
@@ -520,20 +522,20 @@ private fun MessageBubble(
                 }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                     if (message.body.isNotBlank()) {
-                        DropdownMenuItem(text = { Text("Copy text") }, leadingIcon = { Icon(Icons.Filled.ContentCopy, null) },
+                        DropdownMenuItem(text = { Text(stringResource(R.string.ui_copy_text)) }, leadingIcon = { Icon(Icons.Filled.ContentCopy, null) },
                             onClick = { menu = false; copyToClipboard(context, "Message", message.body); Toast.makeText(context, "Text copied", Toast.LENGTH_SHORT).show() })
-                        DropdownMenuItem(text = { Text("Share") }, leadingIcon = { Icon(Icons.Filled.Share, null) },
+                        DropdownMenuItem(text = { Text(stringResource(R.string.ui_share)) }, leadingIcon = { Icon(Icons.Filled.Share, null) },
                             onClick = { menu = false; shareText(context, message.body) })
-                        DropdownMenuItem(text = { Text("Forward") }, leadingIcon = { Icon(Icons.AutoMirrored.Filled.Forward, null) },
+                        DropdownMenuItem(text = { Text(stringResource(R.string.ui_forward)) }, leadingIcon = { Icon(Icons.AutoMirrored.Filled.Forward, null) },
                             onClick = { menu = false; onForward() })
                     }
-                    DropdownMenuItem(text = { Text("Details") }, leadingIcon = { Icon(Icons.Filled.Info, null) },
+                    DropdownMenuItem(text = { Text(stringResource(R.string.ui_details)) }, leadingIcon = { Icon(Icons.Filled.Info, null) },
                         onClick = { menu = false; onDetails() })
                     if (message.awaitingAutoHeal || message.sendStatus == com.inboxiq.app.data.SendStatus.FAILED) {
-                        DropdownMenuItem(text = { Text("Retry now") }, leadingIcon = { Icon(Icons.Filled.Refresh, null) },
+                        DropdownMenuItem(text = { Text(stringResource(R.string.ui_retry_now)) }, leadingIcon = { Icon(Icons.Filled.Refresh, null) },
                             onClick = { menu = false; onRetry() })
                     }
-                    DropdownMenuItem(text = { Text("Delete message") }, leadingIcon = { Icon(Icons.Filled.Delete, null) },
+                    DropdownMenuItem(text = { Text(stringResource(R.string.ui_delete_message)) }, leadingIcon = { Icon(Icons.Filled.Delete, null) },
                         onClick = { menu = false; onDelete() })
                 }
             }
@@ -563,7 +565,7 @@ private fun MessageBubble(
                 modifier = Modifier.padding(top = 2.dp, start = 4.dp, end = 4.dp),
             )
             if (failed) {
-                TextButton(onClick = onRetry) { Text("Retry now") }
+                TextButton(onClick = onRetry) { Text(stringResource(R.string.ui_retry_now)) }
             }
         }
     }
@@ -666,17 +668,17 @@ private fun LinkWarningDialog(a: LinkAssessment, onOpen: () -> Unit, onDismiss: 
         title = { Text(if (a.risk == LinkRisk.DANGER) "This link looks unsafe" else "Check this link first") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("It would open:", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.ui_it_would_open), style = MaterialTheme.typography.bodyMedium)
                 Text(a.host, style = MaterialTheme.typography.titleMedium)
                 a.reasons.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
                 Text(
-                    "InboxIQ checks links on your phone only. No warning would not mean a link is safe.",
+                    stringResource(R.string.ui_inboxiq_checks_links_on_your),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Don't open") } },
-        dismissButton = { TextButton(onClick = onOpen) { Text("Open anyway") } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_don_t_open)) } },
+        dismissButton = { TextButton(onClick = onOpen) { Text(stringResource(R.string.ui_open_anyway)) } },
     )
 }
 
@@ -686,7 +688,7 @@ private fun LinkWarningDialog(a: LinkAssessment, onOpen: () -> Unit, onDismiss: 
 private fun MessageDetailsDialog(m: MessageEntity, address: String, name: String?, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Message details") },
+        title = { Text(stringResource(R.string.ui_message_details)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 DetailRow(if (m.isIncoming) "From" else "To", name?.let { "$it ($address)" } ?: address)
@@ -700,7 +702,7 @@ private fun MessageDetailsDialog(m: MessageEntity, address: String, name: String
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("Close") } },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_close)) } },
     )
 }
 
@@ -724,14 +726,14 @@ private fun ScheduleDialog(canSchedule: Boolean, now: Long, onPick: (Long) -> Un
     val options = remember(now) { com.inboxiq.app.inbox.ScheduleOptions.quick(now) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Send later") },
+        title = { Text(stringResource(R.string.ui_send_later)) },
         text = {
             Column {
                 if (!canSchedule) {
-                    Text("Write a text message first. Picture messages cannot be scheduled.", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(R.string.ui_write_a_text_message_first), style = MaterialTheme.typography.bodyMedium)
                 } else {
                     Text(
-                        "InboxIQ sends it for you, so the app does not need to be open. Android decides the exact moment, so it may go a few minutes after the time you pick.",
+                        stringResource(R.string.ui_inboxiq_sends_it_for_you),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(Modifier.height(8.dp))
@@ -753,12 +755,12 @@ private fun ScheduleDialog(canSchedule: Boolean, now: Long, onPick: (Long) -> Un
                             }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                    ) { Text("Pick a date and time", modifier = Modifier.fillMaxWidth()) }
+                    ) { Text(stringResource(R.string.ui_pick_a_date_and_time), modifier = Modifier.fillMaxWidth()) }
                 }
             }
         },
         confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.ui_cancel)) } },
     )
 }
 
@@ -796,13 +798,13 @@ private fun Composer(
             }
             Row(Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 8.dp), verticalAlignment = Alignment.Bottom) {
                 IconButton(onClick = { onPickImage { uri -> if (uri != null) onPendingImage(uri) } }, modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Filled.AttachFile, contentDescription = "Attach a photo")
+                    Icon(Icons.Filled.AttachFile, contentDescription = stringResource(R.string.ui_attach_a_photo))
                 }
                 if (voiceEnabled) VoiceButton { text -> onBodyChange(if (body.isBlank()) text else "$body $text") }
                 TextField(
                     value = body,
                     onValueChange = onBodyChange,
-                    placeholder = { Text("Text message", maxLines = 1) },
+                    placeholder = { Text(stringResource(R.string.ui_text_message), maxLines = 1) },
                     shape = RoundedCornerShape(24.dp),
                     colors = TextFieldDefaults.colors(
                         unfocusedIndicatorColor = Color.Transparent, focusedIndicatorColor = Color.Transparent,
@@ -814,7 +816,7 @@ private fun Composer(
                 )
                 if (body.isNotBlank() && pendingImage == null) {
                     IconButton(onClick = onSchedule, modifier = Modifier.size(48.dp)) {
-                        Icon(Icons.Filled.Schedule, contentDescription = "Send later")
+                        Icon(Icons.Filled.Schedule, contentDescription = stringResource(R.string.ui_send_later))
                     }
                 }
                 FilledIconButton(
@@ -827,7 +829,7 @@ private fun Composer(
                     modifier = Modifier.size(48.dp),
                 ) {
                     Icon(
-                        Icons.AutoMirrored.Filled.Send, contentDescription = "Send",
+                        Icons.AutoMirrored.Filled.Send, contentDescription = stringResource(R.string.ui_send),
                         tint = if (canSend) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -909,11 +911,11 @@ private fun RiddleInviteCard(url: String, isMe: Boolean) {
     val content = if (isMe) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
     Surface(color = container, shape = RoundedCornerShape(16.dp)) {
         Column(modifier = Modifier.padding(14.dp).width(220.dp)) {
-            Text("RiddleVerse invite", style = MaterialTheme.typography.titleSmall, color = content)
+            Text(stringResource(R.string.ui_riddleverse_invite), style = MaterialTheme.typography.titleSmall, color = content)
             Spacer(Modifier.height(6.dp))
-            Text("You've been invited to solve a puzzle", style = MaterialTheme.typography.bodySmall, color = content)
+            Text(stringResource(R.string.ui_you_ve_been_invited_to), style = MaterialTheme.typography.bodySmall, color = content)
             Spacer(Modifier.height(10.dp))
-            Button(onClick = { openUrl(context, url) }, modifier = Modifier.fillMaxWidth()) { Text("Play now") }
+            Button(onClick = { openUrl(context, url) }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.ui_play_now)) }
         }
     }
 }
