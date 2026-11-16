@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Пример Банк</string>
     <string name="intro_example_2_body">Ваш код подтверждения: 482913.</string>
     <string name="intro_example_3_name">Пример Магазин</string>
-    <string name="intro_example_3_body">МОЛНИЕНОСНАЯ РАСПРОДАЖА: скидка 40% только сегодня.</string>
+    <string name="intro_example_3_body">МОЛНИЕНОСНАЯ РАСПРОДАЖА: скидка 40% только сегодня.</string>
     <string name="intro_example_4_name">Неизвестный отправитель</string>
     <string name="intro_example_4_body">Ваша посылка задержана. Оплатите сбор на usps-redelivery.top.</string>
     <string name="intro_example_copy_code">Копировать код</string>

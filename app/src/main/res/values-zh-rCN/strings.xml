@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">示例银行</string>
     <string name="intro_example_2_body">您的验证码是 482913。</string>
     <string name="intro_example_3_name">示例商店</string>
-    <string name="intro_example_3_body">限时抢购：仅限今天 40% off。</string>
+    <string name="intro_example_3_body">限时抢购：仅限今天 40% off。</string>
     <string name="intro_example_4_name">未知发件人</string>
     <string name="intro_example_4_body">您的包裹已被扣留。请在 usps-redelivery.top 支付费用。</string>
     <string name="intro_example_copy_code">复制验证码</string>

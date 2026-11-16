@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">サンプル銀行</string>
     <string name="intro_example_2_body">認証コードは 482913 です。</string>
     <string name="intro_example_3_name">サンプルショップ</string>
-    <string name="intro_example_3_body">緊急セール：本日限り 40% off。</string>
+    <string name="intro_example_3_body">緊急セール：本日限り 40% off。</string>
     <string name="intro_example_4_name">不明な送信者</string>
     <string name="intro_example_4_body">お荷物を保管中です。usps-redelivery.top で手数料をお支払いください。</string>
     <string name="intro_example_copy_code">コードをコピー</string>

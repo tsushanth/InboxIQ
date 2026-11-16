@@ -11,7 +11,7 @@
     <string name="intro_example_2_name">Örnek Banka</string>
     <string name="intro_example_2_body">Doğrulama kodunuz 482913.</string>
     <string name="intro_example_3_name">Örnek Mağaza</string>
-    <string name="intro_example_3_body">FLAŞ İNDİRİM: sadece bugün 40% oranında indirim.</string>
+    <string name="intro_example_3_body">FLAŞ İNDİRİM: sadece bugün 40% oranında indirim.</string>
     <string name="intro_example_4_name">Bilinmeyen gönderen</string>
     <string name="intro_example_4_body">Paketiniz bekletiliyor. Ücreti usps-redelivery.top adresinde ödeyin.</string>
     <string name="intro_example_copy_code">Kodu kopyala</string>
