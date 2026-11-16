@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Sa phone na ito nagaganap ang pag-aayos. Walang account, ad o analytics ang InboxIQ. Walang lalabas sa phone maliban kung i-on mo ang Kumonekta sa Claude sa ibaba, at kahit noon, habang nakabukas lang ang InboxIQ.</string>
+    <string name="intro_relay_exception">Naka-off ang Kumonekta sa Claude, sa Mga Setting, hanggang i-on mo. Ito lang ang feature na nagpapadala ng nilalaman ng mensahe palabas ng phone, at pagkatapos mo lang itong i-set up. Gumagana lang ito habang nakabukas ang InboxIQ sa screen mo.</string>
+    <string name="relay_section_blurb">Opsyonal. Habang nakabukas ang InboxIQ sa screen mo, mababasa ng Claude (claude.ai o Claude Desktop, naka-sign in sa account mo) ang mga text message mo at makakagawa ng mga draft ng sagot. Natatapos ang access kapag isinara ang app. Naka-off hanggang i-on mo.</string>
+    <string name="relay_consent_title">Ibahagi ang mga mensahe mo sa Claude habang nakabukas ang InboxIQ?</string>
+    <string name="relay_consent_body">Kung i-on mo ito:\n\n- Maaabot lang ng Claude ang mga mensahe mo habang nakabukas ang InboxIQ sa screen mo. Kapag isinara mo ang app, lumipat sa ibang app, o pinatay ang screen, matatapos ang koneksyon sa loob ng ilang segundo at walang tatakbo sa background. Hindi ito muling kokonekta hangga\'t hindi mo ulit binubuksan ang InboxIQ.\n- Habang nakakonekta, at kapag hiniling mo lang sa Claude, maaari nitong ilista ang mga usapan mo, hanapin ang mga text mo, at basahin ang buong thread. Nakikita nito ang text ng mensahe, mga numero ng telepono ng nagpadala, mga pangalan ng contact at mga timestamp para sa mga mensaheng hinihingi nito, kasama ang mga mensahe mula sa mga bangko at iba pang serbisyo. Nakatago ang mga one-time passcode.\n- Mula sa phone na ito, napupunta ang data na iyon sa InboxIQ relay service (mcp.kreativekoala.llc, pinapatakbo ng publisher ng InboxIQ sa Fly.io), at mula roon ay sa Claude sa pamamagitan ng connector sa sarili mong Claude account, na humahawak nito ayon sa mga tuntunin at setting ng privacy ng account na iyon. Ipinapasa lang ng relay ang mga mensahe at hindi ito nag-iimbak ng mga ito. Sine-save ang numero ng telepono mo para mahanap ng relay ang phone na ito. Para kumpirmahing sa iyo ang numero, tatawag ang relay dito gamit ang awtomatikong voice call na bumabasa ng 6-digit na code, na ita-type mo sa InboxIQ.\n- Draft lang ng mga text ang magagawa ng Claude. Walang ipapadala hangga\'t hindi mo binubuksan ang InboxIQ at tina-tap ang Ipadala sa bawat draft.\n- Kapag in-off mo ito, agad itong madidiskonekta, itatapon ang relay key ng phone na ito, at hihilingin sa relay na bawiin ito at ang access ng Claude connector mo. Para alisin din ang connector, burahin ang InboxIQ sa Mga Setting, Connectors sa Claude.\n\nSa phone na ito pa rin nananatili ang pag-aayos ng InboxIQ sa inbox mo, naka-on man ito o hindi.</string>
+    <string name="relay_consent_accept">Ibahagi ang mga mensahe ko</string>
+    <string name="relay_consent_decline">Mamaya na</string>
+    <string name="relay_status_off">Status: Naka-off</string>
+    <string name="relay_status_connecting">Status: Kumokonekta</string>
+    <string name="relay_status_connected">Status: Nakakonekta. Maaabot ng Claude ang mga mensahe mo habang nakabukas ang screen na ito.</string>
+    <string name="relay_status_offline">Status: Offline. Hindi maabot ang relay, sinusubukan ulit habang nakabukas ang InboxIQ.</string>
+    <string name="relay_status_paused">Status: Naka-pause (nakasara ang app). Buksan ulit ang InboxIQ para kumonekta muli.</string>
+    <string name="relay_status_reconnect_needed">Kailangang kumonekta muli. Hindi na tinatanggap ng relay ang key ng phone na ito, kaya i-verify ulit ang phone na ito.</string>
+    <string name="relay_reconnect_action">Kumonekta muli</string>
+    <string name="relay_status_replaced">Kailangang kumonekta muli. Inagaw ng ibang pag-install ng InboxIQ ang numerong ito, o na-disconnect ito sa ibang lugar. Mag-verify gamit ang code para magamit ito ulit sa phone na ito.</string>
+    <string name="relay_verify_action">Mag-verify gamit ang code</string>
+    <string name="relay_code_label">6-digit na code mula sa tawag</string>
+    <string name="relay_code_confirm">Kumpirmahin</string>
+    <string name="relay_code_resend">Tumawag ulit</string>
+    <string name="relay_code_resend_wait">Tumawag ulit sa loob ng %1$d s</string>
+    <string name="relay_code_cancel">Kanselahin</string>
+    <string name="relay_try_again_in">Maaari mong subukan ulit sa loob ng %1$s.</string>
+    <string name="relay_notice_enter_phone">Ilagay muna ang numero ng telepono mo.</string>
+    <string name="relay_notice_code_sent">Tinatawagan na namin ang numerong ito. Ilagay ang 6-digit na code na maririnig mo.</string>
+    <string name="relay_notice_wrong_code">Hindi tama ang code na iyon. Tingnan ang mga digit at subukan ulit.</string>
+    <string name="relay_notice_code_expired">Nag-expire na ang code na iyon. Humiling ng bagong tawag.</string>
+    <string name="relay_notice_six_digits">Ilagay ang lahat ng 6 na digit.</string>
+    <string name="relay_notice_locked">Masyadong maraming maling code para sa numerong ito. Naka-lock ito nang hanggang isang oras. Subukan ulit mamaya.</string>
+    <string name="relay_notice_locked_after">Masyadong maraming maling code para sa numerong ito. Subukan ulit sa loob ng %1$s.</string>
+    <string name="relay_notice_rate_limited">Masyadong maraming verification call para sa numerong ito. Subukan ulit mamaya.</string>
+    <string name="relay_notice_rate_limited_after">Masyadong maraming verification call para sa numerong ito. Subukan ulit sa loob ng %1$s.</string>
+    <string name="relay_notice_invalid_phone">Mukhang hindi ito valid na numero ng telepono. Gamitin ang international format, halimbawa +14155551234.</string>
+    <string name="relay_notice_destination">Hindi sinusuportahan ang mga verification call sa numerong ito.</string>
+    <string name="relay_notice_delivery_failed">Hindi maisagawa ang verification call. Subukan ulit sa loob ng ilang minuto.</string>
+    <string name="relay_notice_network">Hindi makakonekta. Tingnan ang koneksyon mo at subukan ulit.</string>
+    <string name="relay_notice_conflict">Naka-link ang numerong ito sa ibang pag-install ng InboxIQ. Mag-verify gamit ang code para kunin ito.</string>
+    <string name="relay_notice_disconnected_unreachable">Na-disconnect sa phone na ito; hindi maabot ang server, titigil ang access kapag nag-expire ang token.</string>
+    <string name="relay_notice_disconnected_no_revoke">Na-disconnect sa phone na ito. Hindi kayang bawiin nang malayuan ng bersyong ito ng relay ang access, kaya nananatiling valid ang lumang key sa server pero binura na ito ng phone na ito.</string>
+    <string name="relay_foreground_only_note">Gumagana lang habang nakabukas ang InboxIQ sa screen mo. Natatapos ang access sa loob ng ilang segundo kapag isinara ang app, lumipat ng app, o pinatay ang screen.</string>
+</resources>

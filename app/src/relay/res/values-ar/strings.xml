@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">يتم الفرز على هذا الهاتف. لا يوجد في InboxIQ حسابات أو إعلانات أو تحليلات. لا يغادر أي شيء الهاتف ما لم تفعّل «الاتصال بـ Claude» أدناه، وحتى حينها فقط أثناء فتح InboxIQ.</string>
+    <string name="intro_relay_exception">يظل «الاتصال بـ Claude» في الإعدادات متوقفًا إلى أن تفعّله. وهو الميزة الوحيدة التي ترسل محتوى الرسائل خارج الهاتف، ولا يحدث ذلك إلا بعد إعدادها. ولا تعمل إلا أثناء فتح InboxIQ على شاشتك.</string>
+    <string name="relay_section_blurb">اختياري. أثناء فتح InboxIQ على شاشتك، يمكن لـ Claude (على claude.ai أو Claude Desktop، بعد تسجيل الدخول إلى حسابك) قراءة رسائلك النصية وصياغة مسودات الردود. يؤدي إغلاق التطبيق إلى إنهاء الوصول. متوقف إلى أن تفعّله.</string>
+    <string name="relay_consent_title">هل تريد مشاركة رسائلك مع Claude أثناء فتح InboxIQ؟</string>
+    <string name="relay_consent_body">إذا فعّلت هذا الخيار:\n\n- يمكن لـ Claude الوصول إلى رسائلك فقط أثناء فتح InboxIQ على شاشتك. عند إغلاق التطبيق أو الانتقال إلى تطبيق آخر أو إطفاء الشاشة، ينتهي الاتصال خلال ثوانٍ قليلة ولا يعمل شيء في الخلفية. ولا يعاد الاتصال إلى أن تفتح InboxIQ مرة أخرى.\n- أثناء الاتصال، وفقط عندما تطلب ذلك من Claude، يمكنه عرض قائمة محادثاتك والبحث في رسائلك وقراءة سلاسل المحادثة كاملة. ويرى نص الرسائل وأرقام هواتف المرسلين وأسماء جهات الاتصال والطوابع الزمنية للرسائل التي يطلبها، بما في ذلك رسائل البنوك والخدمات الأخرى. أما رموز المرور لمرة واحدة فتكون مخفية.\n- تنتقل تلك البيانات من هذا الهاتف إلى خدمة ترحيل InboxIQ (mcp.kreativekoala.llc، التي يديرها ناشر InboxIQ على Fly.io)، ومنها إلى Claude عبر الموصل في حساب Claude الخاص بك، الذي يتعامل معها وفق شروط ذلك الحساب وإعدادات الخصوصية فيه. تمرّر خدمة الترحيل الرسائل ولا تخزّنها. يتم تخزين رقم هاتفك حتى تتمكن الخدمة من العثور على هذا الهاتف. وللتأكد من أن الرقم لك، تجري الخدمة مكالمة صوتية آلية إليه تقرأ رمزًا من 6 أرقام، تكتبه في InboxIQ.\n- يمكن لـ Claude صياغة مسودات الرسائل فقط. لا يُرسل شيء حتى تفتح InboxIQ وتضغط على «إرسال» لكل مسودة.\n- يؤدي إيقاف هذا الخيار إلى قطع الاتصال فورًا، وحذف مفتاح الترحيل الخاص بهذا الهاتف، وطلب إلغائه من خدمة الترحيل مع إلغاء وصول موصل Claude الخاص بك. ولإزالة الموصل أيضًا، احذف InboxIQ من «الإعدادات» ثم «الموصلات» في Claude.\n\nيبقى فرز InboxIQ لبريدك الوارد على هذا الهاتف في الحالتين.</string>
+    <string name="relay_consent_accept">مشاركة رسائلي</string>
+    <string name="relay_consent_decline">ليس الآن</string>
+    <string name="relay_status_off">الحالة: متوقف</string>
+    <string name="relay_status_connecting">الحالة: جارٍ الاتصال</string>
+    <string name="relay_status_connected">الحالة: متصل. يمكن لـ Claude الوصول إلى رسائلك أثناء فتح هذه الشاشة.</string>
+    <string name="relay_status_offline">الحالة: غير متصل. تعذّر الوصول إلى خدمة الترحيل، وتتم إعادة المحاولة أثناء فتح InboxIQ.</string>
+    <string name="relay_status_paused">الحالة: متوقف مؤقتًا (التطبيق مغلق). أعد فتح InboxIQ لإعادة الاتصال.</string>
+    <string name="relay_status_reconnect_needed">إعادة الاتصال مطلوبة. لم تعد خدمة الترحيل تقبل مفتاح هذا الهاتف، لذا تحقق من هذا الهاتف مرة أخرى.</string>
+    <string name="relay_reconnect_action">إعادة الاتصال</string>
+    <string name="relay_status_replaced">إعادة الاتصال مطلوبة. استحوذ تثبيت آخر لـ InboxIQ على هذا الرقم، أو تم قطع الاتصال في مكان آخر. تحقق باستخدام رمز لاستخدامه على هذا الهاتف مجددًا.</string>
+    <string name="relay_verify_action">التحقق باستخدام رمز</string>
+    <string name="relay_code_label">الرمز المكوّن من 6 أرقام من المكالمة</string>
+    <string name="relay_code_confirm">تأكيد</string>
+    <string name="relay_code_resend">اتصل مرة أخرى</string>
+    <string name="relay_code_resend_wait">الاتصال مجددًا بعد %1$d ث</string>
+    <string name="relay_code_cancel">إلغاء</string>
+    <string name="relay_try_again_in">يمكنك المحاولة مرة أخرى بعد %1$s.</string>
+    <string name="relay_notice_enter_phone">أدخل رقم هاتفك أولًا.</string>
+    <string name="relay_notice_code_sent">نتصل بهذا الرقم الآن. أدخل الرمز المكوّن من 6 أرقام الذي تسمعه.</string>
+    <string name="relay_notice_wrong_code">هذا الرمز غير صحيح. تحقق من الأرقام وحاول مرة أخرى.</string>
+    <string name="relay_notice_code_expired">انتهت صلاحية هذا الرمز. اطلب مكالمة جديدة.</string>
+    <string name="relay_notice_six_digits">أدخل الأرقام الستة كلها.</string>
+    <string name="relay_notice_locked">تم إدخال رموز خاطئة كثيرة لهذا الرقم. هو مقفل لمدة تصل إلى ساعة. حاول مرة أخرى لاحقًا.</string>
+    <string name="relay_notice_locked_after">تم إدخال رموز خاطئة كثيرة لهذا الرقم. حاول مرة أخرى بعد %1$s.</string>
+    <string name="relay_notice_rate_limited">تم إجراء مكالمات تحقق كثيرة جدًا لهذا الرقم. حاول مرة أخرى لاحقًا.</string>
+    <string name="relay_notice_rate_limited_after">تم إجراء مكالمات تحقق كثيرة جدًا لهذا الرقم. حاول مرة أخرى بعد %1$s.</string>
+    <string name="relay_notice_invalid_phone">لا يبدو هذا رقم هاتف صالحًا. استخدم الصيغة الدولية، مثل +14155551234.</string>
+    <string name="relay_notice_destination">مكالمات التحقق إلى هذا الرقم غير مدعومة.</string>
+    <string name="relay_notice_delivery_failed">تعذّر إجراء مكالمة التحقق. حاول مرة أخرى بعد بضع دقائق.</string>
+    <string name="relay_notice_network">تعذّر الاتصال. تحقق من اتصالك وحاول مرة أخرى.</string>
+    <string name="relay_notice_conflict">هذا الرقم مرتبط بتثبيت آخر لـ InboxIQ. تحقق باستخدام رمز للاستحواذ عليه.</string>
+    <string name="relay_notice_disconnected_unreachable">تم قطع الاتصال على هذا الهاتف؛ تعذّر الوصول إلى الخادم، وسيتوقف الوصول عند انتهاء صلاحية الرمز المميز.</string>
+    <string name="relay_notice_disconnected_no_revoke">تم قطع الاتصال على هذا الهاتف. لا يمكن لهذا الإصدار من خدمة الترحيل إلغاء الوصول عن بُعد، لذا يظل المفتاح القديم صالحًا على الخادم لكن هذا الهاتف حذفه.</string>
+    <string name="relay_foreground_only_note">يعمل فقط أثناء فتح InboxIQ على شاشتك. يؤدي إغلاق التطبيق أو التبديل بين التطبيقات أو إطفاء الشاشة إلى إنهاء الوصول خلال ثوانٍ قليلة.</string>
+</resources>

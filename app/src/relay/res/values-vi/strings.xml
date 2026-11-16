@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Việc sắp xếp diễn ra trên điện thoại này. InboxIQ không có tài khoản, quảng cáo hay phân tích. Không có gì rời khỏi điện thoại trừ khi bạn bật Kết nối với Claude bên dưới, và khi đó cũng chỉ trong lúc InboxIQ đang mở.</string>
+    <string name="intro_relay_exception">Kết nối với Claude, trong Cài đặt, ở trạng thái tắt cho đến khi bạn bật. Đây là tính năng duy nhất gửi nội dung tin nhắn ra khỏi điện thoại, và chỉ sau khi bạn thiết lập. Tính năng chỉ hoạt động khi InboxIQ đang mở trên màn hình của bạn.</string>
+    <string name="relay_section_blurb">Tùy chọn. Khi InboxIQ đang mở trên màn hình của bạn, Claude (claude.ai hoặc Claude Desktop, đã đăng nhập vào tài khoản của bạn) có thể đọc tin nhắn SMS và soạn nháp trả lời. Đóng ứng dụng sẽ chấm dứt quyền truy cập. Tắt cho đến khi bạn bật.</string>
+    <string name="relay_consent_title">Chia sẻ tin nhắn của bạn với Claude khi InboxIQ đang mở?</string>
+    <string name="relay_consent_body">Nếu bạn bật tính năng này:\n\n- Claude chỉ có thể truy cập tin nhắn của bạn khi InboxIQ đang mở trên màn hình. Khi bạn đóng ứng dụng, chuyển sang ứng dụng khác hoặc tắt màn hình, kết nối sẽ kết thúc trong vài giây và không có gì chạy nền. Kết nối sẽ không tự nối lại cho đến khi bạn mở InboxIQ lần nữa.\n- Khi đã kết nối, và chỉ khi bạn yêu cầu Claude, Claude có thể liệt kê các cuộc trò chuyện, tìm kiếm tin nhắn và đọc toàn bộ chuỗi tin nhắn. Claude thấy nội dung tin nhắn, số điện thoại người gửi, tên liên hệ và dấu thời gian của các tin nhắn mà Claude yêu cầu, bao gồm cả tin nhắn từ ngân hàng và các dịch vụ khác. Mật khẩu dùng một lần được ẩn đi.\n- Dữ liệu đó đi từ điện thoại này đến dịch vụ chuyển tiếp của InboxIQ (mcp.kreativekoala.llc, do nhà phát hành InboxIQ vận hành trên Fly.io), rồi từ đó đến Claude thông qua trình kết nối trên tài khoản Claude của chính bạn; tài khoản đó xử lý dữ liệu theo điều khoản và cài đặt quyền riêng tư của mình. Dịch vụ chuyển tiếp chỉ chuyển tin nhắn qua và không lưu trữ chúng. Số điện thoại của bạn được lưu để dịch vụ chuyển tiếp tìm được điện thoại này. Để xác nhận số đó là của bạn, dịch vụ chuyển tiếp thực hiện một cuộc gọi thoại tự động đến số đó và đọc to mã 6 chữ số, bạn nhập mã này vào InboxIQ.\n- Claude chỉ có thể soạn nháp tin nhắn. Không có gì được gửi cho đến khi bạn mở InboxIQ và nhấn Gửi cho từng bản nháp.\n- Tắt tính năng này sẽ ngắt kết nối ngay lập tức, hủy khóa chuyển tiếp của điện thoại này và yêu cầu dịch vụ chuyển tiếp thu hồi khóa đó cùng quyền truy cập của trình kết nối Claude của bạn. Để gỡ cả trình kết nối, hãy xóa InboxIQ trong Cài đặt, Trình kết nối trong Claude.\n\nViệc sắp xếp hộp thư của InboxIQ vẫn diễn ra trên điện thoại này trong cả hai trường hợp.</string>
+    <string name="relay_consent_accept">Chia sẻ tin nhắn của tôi</string>
+    <string name="relay_consent_decline">Để sau</string>
+    <string name="relay_status_off">Trạng thái: Tắt</string>
+    <string name="relay_status_connecting">Trạng thái: Đang kết nối</string>
+    <string name="relay_status_connected">Trạng thái: Đã kết nối. Claude có thể truy cập tin nhắn của bạn khi màn hình này đang mở.</string>
+    <string name="relay_status_offline">Trạng thái: Ngoại tuyến. Không thể kết nối với dịch vụ chuyển tiếp, sẽ thử lại khi InboxIQ đang mở.</string>
+    <string name="relay_status_paused">Trạng thái: Tạm dừng (ứng dụng đã đóng). Hãy mở lại InboxIQ để kết nối lại.</string>
+    <string name="relay_status_reconnect_needed">Cần kết nối lại. Dịch vụ chuyển tiếp không còn chấp nhận khóa của điện thoại này, nên hãy xác minh lại điện thoại này.</string>
+    <string name="relay_reconnect_action">Kết nối lại</string>
+    <string name="relay_status_replaced">Cần kết nối lại. Một bản cài đặt InboxIQ khác đã chiếm số này, hoặc kết nối đã bị ngắt từ nơi khác. Hãy xác minh bằng mã để dùng lại trên điện thoại này.</string>
+    <string name="relay_verify_action">Xác minh bằng mã</string>
+    <string name="relay_code_label">Mã 6 chữ số từ cuộc gọi</string>
+    <string name="relay_code_confirm">Xác nhận</string>
+    <string name="relay_code_resend">Gọi lại</string>
+    <string name="relay_code_resend_wait">Gọi lại sau %1$d giây</string>
+    <string name="relay_code_cancel">Hủy</string>
+    <string name="relay_try_again_in">Bạn có thể thử lại sau %1$s.</string>
+    <string name="relay_notice_enter_phone">Hãy nhập số điện thoại của bạn trước.</string>
+    <string name="relay_notice_code_sent">Chúng tôi đang gọi đến số này. Hãy nhập mã 6 chữ số bạn nghe được.</string>
+    <string name="relay_notice_wrong_code">Mã này không đúng. Hãy kiểm tra các chữ số và thử lại.</string>
+    <string name="relay_notice_code_expired">Mã này đã hết hạn. Hãy yêu cầu một cuộc gọi mới.</string>
+    <string name="relay_notice_six_digits">Hãy nhập đủ 6 chữ số.</string>
+    <string name="relay_notice_locked">Nhập sai mã quá nhiều lần cho số này. Số bị khóa tối đa một giờ. Hãy thử lại sau.</string>
+    <string name="relay_notice_locked_after">Nhập sai mã quá nhiều lần cho số này. Hãy thử lại sau %1$s.</string>
+    <string name="relay_notice_rate_limited">Có quá nhiều cuộc gọi xác minh cho số này. Hãy thử lại sau.</string>
+    <string name="relay_notice_rate_limited_after">Có quá nhiều cuộc gọi xác minh cho số này. Hãy thử lại sau %1$s.</string>
+    <string name="relay_notice_invalid_phone">Đây không giống số điện thoại hợp lệ. Hãy dùng định dạng quốc tế, ví dụ +14155551234.</string>
+    <string name="relay_notice_destination">Không hỗ trợ cuộc gọi xác minh đến số này.</string>
+    <string name="relay_notice_delivery_failed">Không thể thực hiện cuộc gọi xác minh. Hãy thử lại sau vài phút.</string>
+    <string name="relay_notice_network">Không thể kết nối. Hãy kiểm tra kết nối của bạn và thử lại.</string>
+    <string name="relay_notice_conflict">Số này đang được liên kết với một bản cài đặt InboxIQ khác. Hãy xác minh bằng mã để chuyển sang dùng trên máy này.</string>
+    <string name="relay_notice_disconnected_unreachable">Đã ngắt kết nối trên điện thoại này; không thể kết nối với máy chủ, quyền truy cập sẽ chấm dứt khi mã thông báo hết hạn.</string>
+    <string name="relay_notice_disconnected_no_revoke">Đã ngắt kết nối trên điện thoại này. Phiên bản dịch vụ chuyển tiếp này không thể thu hồi quyền truy cập từ xa, nên khóa cũ vẫn còn hiệu lực trên máy chủ nhưng điện thoại này đã xóa nó.</string>
+    <string name="relay_foreground_only_note">Chỉ hoạt động khi InboxIQ đang mở trên màn hình của bạn. Đóng ứng dụng, chuyển ứng dụng hoặc tắt màn hình sẽ chấm dứt quyền truy cập trong vài giây.</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">La clasificación se hace en este teléfono. InboxIQ no tiene cuentas, anuncios ni analíticas, y no tiene acceso a internet: tus mensajes no pueden salir del teléfono.</string>
+</resources>

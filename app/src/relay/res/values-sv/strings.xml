@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Sorteringen sker på den här telefonen. InboxIQ har inga konton, ingen reklam och ingen analys. Inget lämnar telefonen om du inte slår på Anslut till Claude nedan, och då bara medan InboxIQ är öppen.</string>
+    <string name="intro_relay_exception">Anslut till Claude, i Inställningar, är avstängt tills du slår på det. Det är den enda funktionen som skickar meddelandeinnehåll från telefonen, och bara efter att du har ställt in den. Den fungerar bara medan InboxIQ är öppen på din skärm.</string>
+    <string name="relay_section_blurb">Valfritt. Medan InboxIQ är öppen på din skärm kan Claude (claude.ai eller Claude Desktop, inloggad på ditt konto) läsa dina sms och skriva utkast till svar. När du stänger appen upphör åtkomsten. Avstängt tills du slår på det.</string>
+    <string name="relay_consent_title">Dela dina meddelanden med Claude medan InboxIQ är öppen?</string>
+    <string name="relay_consent_body">Om du slår på detta:\n\n- Claude kommer åt dina meddelanden bara medan InboxIQ är öppen på din skärm. När du stänger appen, byter till en annan app eller släcker skärmen avslutas anslutningen inom några sekunder och inget körs i bakgrunden. Den ansluter inte igen förrän du öppnar InboxIQ på nytt.\n- Medan den är ansluten, och bara när du ber Claude om det, kan Claude lista dina konversationer, söka i dina sms och läsa hela trådar. Claude ser meddelandetext, avsändarnas telefonnummer, kontaktnamn och tidsstämplar för de meddelanden som efterfrågas, inklusive meddelanden från banker och andra tjänster. Engångskoder är dolda.\n- Dessa data går från den här telefonen till InboxIQ:s relätjänst (mcp.kreativekoala.llc, som drivs av InboxIQ:s utgivare på Fly.io), och därifrån till Claude via kopplingen på ditt eget Claude-konto, som hanterar dem enligt det kontots villkor och integritetsinställningar. Reläet för meddelandena vidare och lagrar dem inte. Ditt telefonnummer lagras så att reläet kan hitta den här telefonen. För att bekräfta att numret är ditt ringer reläet ett automatiskt röstsamtal till det som läser upp en 6-siffrig kod, som du skriver in i InboxIQ.\n- Claude kan bara skriva utkast till sms. Inget skickas förrän du öppnar InboxIQ och trycker på Skicka för varje utkast.\n- Om du stänger av detta kopplas anslutningen ned direkt, den här telefonens relänyckel kasseras och reläet ombeds återkalla den samt din Claude-kopplings åtkomst. Om du också vill ta bort kopplingen raderar du InboxIQ under Inställningar, Kopplingar i Claude.\n\nInboxIQ:s sortering av din inkorg stannar på den här telefonen oavsett.</string>
+    <string name="relay_consent_accept">Dela mina meddelanden</string>
+    <string name="relay_consent_decline">Inte nu</string>
+    <string name="relay_status_off">Status: Av</string>
+    <string name="relay_status_connecting">Status: Ansluter</string>
+    <string name="relay_status_connected">Status: Ansluten. Claude kommer åt dina meddelanden medan den här skärmen är öppen.</string>
+    <string name="relay_status_offline">Status: Offline. Kan inte nå reläet, försöker igen medan InboxIQ är öppen.</string>
+    <string name="relay_status_paused">Status: Pausad (appen är stängd). Öppna InboxIQ igen för att ansluta på nytt.</string>
+    <string name="relay_status_reconnect_needed">Du behöver ansluta på nytt. Reläet godtar inte längre den här telefonens nyckel, så verifiera den här telefonen igen.</string>
+    <string name="relay_reconnect_action">Anslut igen</string>
+    <string name="relay_status_replaced">Du behöver ansluta på nytt. En annan InboxIQ-installation tog över det här numret, eller så kopplades det från någon annanstans. Verifiera med en kod för att använda det på den här telefonen igen.</string>
+    <string name="relay_verify_action">Verifiera med en kod</string>
+    <string name="relay_code_label">6-siffrig kod från samtalet</string>
+    <string name="relay_code_confirm">Bekräfta</string>
+    <string name="relay_code_resend">Ring igen</string>
+    <string name="relay_code_resend_wait">Ring igen om %1$d s</string>
+    <string name="relay_code_cancel">Avbryt</string>
+    <string name="relay_try_again_in">Du kan försöka igen om %1$s.</string>
+    <string name="relay_notice_enter_phone">Ange ditt telefonnummer först.</string>
+    <string name="relay_notice_code_sent">Vi ringer upp det här numret nu. Ange den 6-siffriga koden du hör.</string>
+    <string name="relay_notice_wrong_code">Koden är inte rätt. Kontrollera siffrorna och försök igen.</string>
+    <string name="relay_notice_code_expired">Koden har gått ut. Begär ett nytt samtal.</string>
+    <string name="relay_notice_six_digits">Ange alla 6 siffror.</string>
+    <string name="relay_notice_locked">För många felaktiga koder för det här numret. Det är låst i upp till en timme. Försök igen senare.</string>
+    <string name="relay_notice_locked_after">För många felaktiga koder för det här numret. Försök igen om %1$s.</string>
+    <string name="relay_notice_rate_limited">För många verifieringssamtal för det här numret. Försök igen senare.</string>
+    <string name="relay_notice_rate_limited_after">För många verifieringssamtal för det här numret. Försök igen om %1$s.</string>
+    <string name="relay_notice_invalid_phone">Det där ser inte ut som ett giltigt telefonnummer. Använd det internationella formatet, till exempel +14155551234.</string>
+    <string name="relay_notice_destination">Verifieringssamtal till det här numret stöds inte.</string>
+    <string name="relay_notice_delivery_failed">Verifieringssamtalet kunde inte läggas. Försök igen om några minuter.</string>
+    <string name="relay_notice_network">Det gick inte att ansluta. Kontrollera din anslutning och försök igen.</string>
+    <string name="relay_notice_conflict">Det här numret är kopplat till en annan InboxIQ-installation. Verifiera med en kod för att ta över det.</string>
+    <string name="relay_notice_disconnected_unreachable">Frånkopplad på den här telefonen; servern kunde inte nås, åtkomsten upphör när token går ut.</string>
+    <string name="relay_notice_disconnected_no_revoke">Frånkopplad på den här telefonen. Den här relåversionen kan inte återkalla åtkomst på distans, så den gamla nyckeln förblir giltig på servern men den här telefonen har raderat den.</string>
+    <string name="relay_foreground_only_note">Fungerar bara medan InboxIQ är öppen på din skärm. Om du stänger appen, byter app eller släcker skärmen upphör åtkomsten inom några sekunder.</string>
+</resources>

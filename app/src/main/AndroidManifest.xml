@@ -23,6 +23,7 @@
     </queries>
 
     <application
+        android:localeConfig="@xml/locales_config"
         android:name=".InboxIqApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

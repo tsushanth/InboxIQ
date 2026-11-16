@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">सॉर्टिंग इसी फ़ोन पर होती है। InboxIQ में कोई खाता, विज्ञापन या एनालिटिक्स नहीं है। जब तक आप नीचे “Claude से कनेक्ट करें” चालू नहीं करते, कुछ भी फ़ोन से बाहर नहीं जाता, और चालू करने पर भी केवल तब तक जब InboxIQ खुला हो।</string>
+    <string name="intro_relay_exception">सेटिंग में “Claude से कनेक्ट करें” तब तक बंद रहता है जब तक आप इसे चालू नहीं करते। यही एकमात्र सुविधा है जो संदेशों की सामग्री फ़ोन से बाहर भेजती है, और वह भी आपके सेट अप करने के बाद ही। यह केवल तब काम करती है जब InboxIQ आपकी स्क्रीन पर खुला हो।</string>
+    <string name="relay_section_blurb">वैकल्पिक। जब InboxIQ आपकी स्क्रीन पर खुला हो, तब Claude (claude.ai या Claude Desktop, आपके खाते में साइन इन) आपके टेक्स्ट संदेश पढ़ सकता है और जवाब के ड्राफ़्ट बना सकता है। ऐप बंद करते ही एक्सेस खत्म हो जाता है। जब तक आप चालू नहीं करते, यह बंद रहता है।</string>
+    <string name="relay_consent_title">InboxIQ खुला होने पर अपने संदेश Claude के साथ साझा करें?</string>
+    <string name="relay_consent_body">यदि आप इसे चालू करते हैं:\n\n- Claude आपके संदेशों तक केवल तब पहुँच सकता है जब InboxIQ आपकी स्क्रीन पर खुला हो। जब आप ऐप बंद करते हैं, किसी दूसरे ऐप पर जाते हैं या स्क्रीन बंद करते हैं, तो कनेक्शन कुछ ही सेकंड में खत्म हो जाता है और बैकग्राउंड में कुछ भी नहीं चलता। जब तक आप InboxIQ दोबारा नहीं खोलते, यह फिर से कनेक्ट नहीं होता।\n- कनेक्ट रहने के दौरान, और केवल जब आप Claude से कहें, वह आपकी बातचीत की सूची देख सकता है, आपके टेक्स्ट खोज सकता है और पूरे थ्रेड पढ़ सकता है। जिन संदेशों को वह माँगता है, उनके संदेश का टेक्स्ट, भेजने वालों के फ़ोन नंबर, संपर्कों के नाम और समय-चिह्न उसे दिखते हैं, जिनमें बैंकों और अन्य सेवाओं के संदेश भी शामिल हैं। वन-टाइम पासकोड छिपे रहते हैं।\n- वह डेटा इस फ़ोन से InboxIQ रिले सेवा (mcp.kreativekoala.llc, जिसे InboxIQ का प्रकाशक Fly.io पर चलाता है) तक जाता है, और वहाँ से आपके अपने Claude खाते के कनेक्टर के ज़रिए Claude तक पहुँचता है, जो उस खाते की शर्तों और गोपनीयता सेटिंग के अनुसार उसे संभालता है। रिले संदेशों को केवल आगे भेजता है और उन्हें संग्रहीत नहीं करता। आपका फ़ोन नंबर संग्रहीत किया जाता है ताकि रिले इस फ़ोन को पहचान सके। यह पुष्टि करने के लिए कि नंबर आपका है, रिले उस पर एक स्वचालित वॉइस कॉल करता है जो 6 अंकों का कोड बोलकर सुनाती है, जिसे आप InboxIQ में टाइप करते हैं।\n- Claude केवल टेक्स्ट के ड्राफ़्ट बना सकता है। जब तक आप InboxIQ खोलकर हर ड्राफ़्ट पर भेजें नहीं दबाते, कुछ भी नहीं भेजा जाता।\n- इसे बंद करने पर कनेक्शन तुरंत टूट जाता है, इस फ़ोन की रिले कुंजी हटा दी जाती है और रिले से उसे और आपके Claude कनेक्टर के एक्सेस को रद्द करने का अनुरोध किया जाता है। कनेक्टर भी हटाने के लिए Claude में सेटिंग, कनेक्टर में जाकर InboxIQ हटाएँ।\n\nInboxIQ में आपके इनबॉक्स की सॉर्टिंग दोनों स्थितियों में इसी फ़ोन पर रहती है।</string>
+    <string name="relay_consent_accept">मेरे संदेश साझा करें</string>
+    <string name="relay_consent_decline">अभी नहीं</string>
+    <string name="relay_status_off">स्थिति: बंद</string>
+    <string name="relay_status_connecting">स्थिति: कनेक्ट हो रहा है</string>
+    <string name="relay_status_connected">स्थिति: कनेक्टेड। यह स्क्रीन खुली रहने पर Claude आपके संदेशों तक पहुँच सकता है।</string>
+    <string name="relay_status_offline">स्थिति: ऑफ़लाइन। रिले तक नहीं पहुँच सका, InboxIQ खुला रहने तक दोबारा कोशिश जारी है।</string>
+    <string name="relay_status_paused">स्थिति: रुका हुआ (ऐप बंद है)। दोबारा कनेक्ट करने के लिए InboxIQ फिर से खोलें।</string>
+    <string name="relay_status_reconnect_needed">दोबारा कनेक्ट करना ज़रूरी है। रिले अब इस फ़ोन की कुंजी स्वीकार नहीं करता, इसलिए इस फ़ोन को फिर से सत्यापित करें।</string>
+    <string name="relay_reconnect_action">फिर से कनेक्ट करें</string>
+    <string name="relay_status_replaced">दोबारा कनेक्ट करना ज़रूरी है। InboxIQ के किसी दूसरे इंस्टॉल ने यह नंबर ले लिया है, या इसे कहीं और से डिस्कनेक्ट कर दिया गया था। इसे इस फ़ोन पर फिर से इस्तेमाल करने के लिए कोड से सत्यापित करें।</string>
+    <string name="relay_verify_action">कोड से सत्यापित करें</string>
+    <string name="relay_code_label">कॉल में सुना 6 अंकों का कोड</string>
+    <string name="relay_code_confirm">पुष्टि करें</string>
+    <string name="relay_code_resend">फिर से कॉल करें</string>
+    <string name="relay_code_resend_wait">%1$d सेकंड में फिर से कॉल करें</string>
+    <string name="relay_code_cancel">रद्द करें</string>
+    <string name="relay_try_again_in">आप %1$s में फिर से कोशिश कर सकते हैं।</string>
+    <string name="relay_notice_enter_phone">पहले अपना फ़ोन नंबर दर्ज करें।</string>
+    <string name="relay_notice_code_sent">हम अभी इस नंबर पर कॉल कर रहे हैं। जो 6 अंकों का कोड सुनाई दे, उसे दर्ज करें।</string>
+    <string name="relay_notice_wrong_code">यह कोड सही नहीं है। अंकों की जाँच करें और फिर से कोशिश करें।</string>
+    <string name="relay_notice_code_expired">इस कोड की समय-सीमा खत्म हो गई। नई कॉल का अनुरोध करें।</string>
+    <string name="relay_notice_six_digits">सभी 6 अंक दर्ज करें।</string>
+    <string name="relay_notice_locked">इस नंबर के लिए बहुत ज़्यादा गलत कोड दर्ज किए गए। यह एक घंटे तक के लिए लॉक है। बाद में फिर से कोशिश करें।</string>
+    <string name="relay_notice_locked_after">इस नंबर के लिए बहुत ज़्यादा गलत कोड दर्ज किए गए। %1$s में फिर से कोशिश करें।</string>
+    <string name="relay_notice_rate_limited">इस नंबर के लिए बहुत ज़्यादा सत्यापन कॉल की गईं। बाद में फिर से कोशिश करें।</string>
+    <string name="relay_notice_rate_limited_after">इस नंबर के लिए बहुत ज़्यादा सत्यापन कॉल की गईं। %1$s में फिर से कोशिश करें।</string>
+    <string name="relay_notice_invalid_phone">यह वैध फ़ोन नंबर जैसा नहीं लगता। अंतरराष्ट्रीय फ़ॉर्मैट का उपयोग करें, उदाहरण के लिए +14155551234।</string>
+    <string name="relay_notice_destination">इस नंबर पर सत्यापन कॉल समर्थित नहीं हैं।</string>
+    <string name="relay_notice_delivery_failed">सत्यापन कॉल नहीं की जा सकी। कुछ मिनट बाद फिर से कोशिश करें।</string>
+    <string name="relay_notice_network">कनेक्ट नहीं हो सका। अपना कनेक्शन जाँचें और फिर से कोशिश करें।</string>
+    <string name="relay_notice_conflict">यह नंबर InboxIQ के किसी दूसरे इंस्टॉल से जुड़ा है। इसे अपने नाम करने के लिए कोड से सत्यापित करें।</string>
+    <string name="relay_notice_disconnected_unreachable">इस फ़ोन पर डिस्कनेक्ट हो गया; सर्वर तक नहीं पहुँचा जा सका, टोकन की समय-सीमा खत्म होने पर एक्सेस बंद हो जाएगा।</string>
+    <string name="relay_notice_disconnected_no_revoke">इस फ़ोन पर डिस्कनेक्ट हो गया। रिले का यह संस्करण एक्सेस को दूर से रद्द नहीं कर सकता, इसलिए पुरानी कुंजी सर्वर पर वैध रहती है, लेकिन इस फ़ोन ने उसे हटा दिया है।</string>
+    <string name="relay_foreground_only_note">यह केवल तब काम करता है जब InboxIQ आपकी स्क्रीन पर खुला हो। ऐप बंद करने, दूसरे ऐप पर जाने या स्क्रीन बंद करने पर एक्सेस कुछ ही सेकंड में खत्म हो जाता है।</string>
+</resources>

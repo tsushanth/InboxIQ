@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">분류는 이 휴대전화에서 이루어져요. InboxIQ에는 계정, 광고, 분석이 없어요. 아래의 Claude에 연결을 켜지 않는 한 휴대전화 밖으로 나가는 것은 없으며, 켜더라도 InboxIQ가 열려 있는 동안에만 해당돼요.</string>
+    <string name="intro_relay_exception">설정의 Claude에 연결은 켜기 전까지 꺼져 있어요. 이 기능은 메시지 내용을 휴대전화 밖으로 보내는 유일한 기능이며, 직접 설정한 뒤에만 작동해요. InboxIQ가 화면에 열려 있는 동안에만 작동해요.</string>
+    <string name="relay_section_blurb">선택 사항이에요. InboxIQ가 화면에 열려 있는 동안 Claude(회원님의 계정으로 로그인한 claude.ai 또는 Claude Desktop)가 문자 메시지를 읽고 답장 초안을 작성할 수 있어요. 앱을 닫으면 접근이 끝나요. 켜기 전까지는 꺼져 있어요.</string>
+    <string name="relay_consent_title">InboxIQ가 열려 있는 동안 Claude와 메시지를 공유할까요?</string>
+    <string name="relay_consent_body">이 기능을 켜면:\n\n- Claude는 InboxIQ가 화면에 열려 있는 동안에만 메시지에 접근할 수 있어요. 앱을 닫거나 다른 앱으로 전환하거나 화면을 끄면 몇 초 안에 연결이 끊기고 백그라운드에서는 아무것도 실행되지 않아요. InboxIQ를 다시 열기 전까지는 다시 연결되지 않아요.\n- 연결된 동안 회원님이 Claude에게 요청할 때에만 대화 목록 보기, 문자 검색, 전체 스레드 읽기를 할 수 있어요. Claude가 요청한 메시지에 대해 메시지 내용, 발신자 전화번호, 연락처 이름, 시간 정보를 볼 수 있으며, 은행 및 기타 서비스에서 온 메시지도 포함돼요. 일회용 비밀번호는 숨겨져요.\n- 이 데이터는 이 휴대전화에서 InboxIQ 릴레이 서비스(mcp.kreativekoala.llc, InboxIQ 게시자가 Fly.io에서 운영)로 전송된 뒤, 회원님의 Claude 계정에 있는 커넥터를 통해 Claude로 전달되며, Claude에서는 해당 계정의 약관과 개인정보 설정에 따라 처리돼요. 릴레이는 메시지를 전달만 할 뿐 저장하지 않아요. 릴레이가 이 휴대전화를 찾을 수 있도록 회원님의 전화번호는 저장돼요. 번호가 본인 것인지 확인하기 위해 릴레이가 해당 번호로 6자리 코드를 읽어 주는 자동 음성 통화를 걸며, 이 코드를 InboxIQ에 입력하면 돼요.\n- Claude는 문자 초안만 작성할 수 있어요. InboxIQ를 열고 각 초안에서 보내기를 누르기 전에는 아무것도 발송되지 않아요.\n- 이 기능을 끄면 즉시 연결이 끊기고, 이 휴대전화의 릴레이 키가 폐기되며, 릴레이에 해당 키와 Claude 커넥터 접근 권한을 취소하도록 요청해요. 커넥터까지 삭제하려면 Claude의 설정, 커넥터에서 InboxIQ를 삭제하세요.\n\nInboxIQ의 받은 메시지함 분류는 어느 쪽이든 이 휴대전화에서 이루어져요.</string>
+    <string name="relay_consent_accept">메시지 공유</string>
+    <string name="relay_consent_decline">나중에</string>
+    <string name="relay_status_off">상태: 꺼짐</string>
+    <string name="relay_status_connecting">상태: 연결 중</string>
+    <string name="relay_status_connected">상태: 연결됨. 이 화면이 열려 있는 동안 Claude가 메시지에 접근할 수 있어요.</string>
+    <string name="relay_status_offline">상태: 오프라인. 릴레이에 연결할 수 없어 InboxIQ가 열려 있는 동안 다시 시도하고 있어요.</string>
+    <string name="relay_status_paused">상태: 일시 중지됨(앱 닫힘). 다시 연결하려면 InboxIQ를 다시 여세요.</string>
+    <string name="relay_status_reconnect_needed">다시 연결해야 해요. 릴레이가 더 이상 이 휴대전화의 키를 받아들이지 않으므로 이 휴대전화를 다시 인증하세요.</string>
+    <string name="relay_reconnect_action">다시 연결</string>
+    <string name="relay_status_replaced">다시 연결해야 해요. 다른 InboxIQ가 이 번호를 넘겨받았거나 다른 곳에서 연결이 해제되었어요. 이 휴대전화에서 다시 사용하려면 코드로 인증하세요.</string>
+    <string name="relay_verify_action">코드로 인증</string>
+    <string name="relay_code_label">통화로 들은 6자리 코드</string>
+    <string name="relay_code_confirm">확인</string>
+    <string name="relay_code_resend">다시 전화받기</string>
+    <string name="relay_code_resend_wait">%1$d초 후 다시 전화받기</string>
+    <string name="relay_code_cancel">취소</string>
+    <string name="relay_try_again_in">%1$s 후에 다시 시도할 수 있어요.</string>
+    <string name="relay_notice_enter_phone">먼저 전화번호를 입력하세요.</string>
+    <string name="relay_notice_code_sent">지금 이 번호로 전화를 걸고 있어요. 들리는 6자리 코드를 입력하세요.</string>
+    <string name="relay_notice_wrong_code">코드가 올바르지 않아요. 숫자를 확인하고 다시 시도하세요.</string>
+    <string name="relay_notice_code_expired">코드가 만료되었어요. 새로 전화를 요청하세요.</string>
+    <string name="relay_notice_six_digits">6자리를 모두 입력하세요.</string>
+    <string name="relay_notice_locked">이 번호에 잘못된 코드가 너무 많이 입력되었어요. 최대 1시간 동안 잠겨요. 나중에 다시 시도하세요.</string>
+    <string name="relay_notice_locked_after">이 번호에 잘못된 코드가 너무 많이 입력되었어요. %1$s 후에 다시 시도하세요.</string>
+    <string name="relay_notice_rate_limited">이 번호로 인증 전화를 너무 많이 걸었어요. 나중에 다시 시도하세요.</string>
+    <string name="relay_notice_rate_limited_after">이 번호로 인증 전화를 너무 많이 걸었어요. %1$s 후에 다시 시도하세요.</string>
+    <string name="relay_notice_invalid_phone">올바른 전화번호 형식이 아니에요. 국제 형식으로 입력하세요(예: +14155551234).</string>
+    <string name="relay_notice_destination">이 번호로는 인증 전화를 지원하지 않아요.</string>
+    <string name="relay_notice_delivery_failed">인증 전화를 걸 수 없었어요. 몇 분 후에 다시 시도하세요.</string>
+    <string name="relay_notice_network">연결할 수 없었어요. 연결 상태를 확인하고 다시 시도하세요.</string>
+    <string name="relay_notice_conflict">이 번호는 다른 InboxIQ와 연결되어 있어요. 코드로 인증하면 이 번호를 넘겨받을 수 있어요.</string>
+    <string name="relay_notice_disconnected_unreachable">이 휴대전화에서 연결이 해제되었어요. 서버에 연결할 수 없었으므로 토큰이 만료되면 접근이 중단돼요.</string>
+    <string name="relay_notice_disconnected_no_revoke">이 휴대전화에서 연결이 해제되었어요. 이 릴레이 버전은 원격으로 접근을 취소할 수 없으므로 서버에서는 이전 키가 유효한 상태로 남지만, 이 휴대전화에서는 삭제되었어요.</string>
+    <string name="relay_foreground_only_note">InboxIQ가 화면에 열려 있는 동안에만 작동해요. 앱을 닫거나 다른 앱으로 전환하거나 화면을 끄면 몇 초 안에 접근이 끝나요.</string>
+</resources>

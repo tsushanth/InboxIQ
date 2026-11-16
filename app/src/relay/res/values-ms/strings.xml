@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Pengisihan berlaku pada telefon ini. InboxIQ tidak mempunyai akaun, iklan atau analitik. Tiada apa yang keluar dari telefon melainkan anda menghidupkan Sambung ke Claude di bawah, dan ketika itu hanya semasa InboxIQ dibuka.</string>
+    <string name="intro_relay_exception">Sambung ke Claude, dalam Tetapan, dimatikan sehingga anda menghidupkannya. Ia satu-satunya ciri yang menghantar kandungan mesej keluar dari telefon, dan hanya selepas anda menyediakannya. Ia hanya berfungsi semasa InboxIQ dibuka pada skrin anda.</string>
+    <string name="relay_section_blurb">Pilihan. Semasa InboxIQ dibuka pada skrin anda, Claude (claude.ai atau Claude Desktop, dilog masuk ke akaun anda) boleh membaca SMS anda dan menyediakan draf balasan. Menutup aplikasi menamatkan akses. Dimatikan sehingga anda menghidupkannya.</string>
+    <string name="relay_consent_title">Kongsi mesej anda dengan Claude semasa InboxIQ dibuka?</string>
+    <string name="relay_consent_body">Jika anda menghidupkan ini:\n\n- Claude hanya boleh mencapai mesej anda semasa InboxIQ dibuka pada skrin anda. Apabila anda menutup aplikasi, beralih ke aplikasi lain atau mematikan skrin, sambungan tamat dalam beberapa saat dan tiada apa yang berjalan di latar belakang. Ia tidak menyambung semula sehingga anda membuka InboxIQ sekali lagi.\n- Semasa disambungkan, dan hanya apabila anda meminta Claude, ia boleh menyenaraikan perbualan anda, mencari SMS anda dan membaca keseluruhan utas. Ia melihat teks mesej, nombor telefon penghantar, nama kenalan dan cap masa bagi mesej yang diminta, termasuk mesej daripada bank dan perkhidmatan lain. Kata laluan sekali guna disembunyikan.\n- Data itu pergi dari telefon ini ke perkhidmatan geganti InboxIQ (mcp.kreativekoala.llc, dikendalikan oleh penerbit InboxIQ di Fly.io), dan dari situ ke Claude melalui penyambung pada akaun Claude anda sendiri, yang mengendalikannya mengikut terma dan tetapan privasi akaun itu. Geganti menyalurkan mesej dan tidak menyimpannya. Nombor telefon anda disimpan supaya geganti dapat mencari telefon ini. Untuk mengesahkan nombor itu milik anda, geganti membuat panggilan suara automatik kepadanya yang membacakan kod 6 digit, yang anda taip ke dalam InboxIQ.\n- Claude hanya boleh menyediakan draf SMS. Tiada apa yang dihantar sehingga anda membuka InboxIQ dan mengetik Hantar pada setiap draf.\n- Mematikan ini memutuskan sambungan serta-merta, membuang kunci geganti telefon ini dan meminta geganti membatalkannya beserta akses penyambung Claude anda. Untuk mengalih keluar penyambung juga, padam InboxIQ di bawah Tetapan, Penyambung dalam Claude.\n\nPengisihan peti masuk InboxIQ kekal pada telefon ini sama ada ciri ini dihidupkan atau tidak.</string>
+    <string name="relay_consent_accept">Kongsi mesej saya</string>
+    <string name="relay_consent_decline">Bukan sekarang</string>
+    <string name="relay_status_off">Status: Mati</string>
+    <string name="relay_status_connecting">Status: Menyambung</string>
+    <string name="relay_status_connected">Status: Disambungkan. Claude boleh mencapai mesej anda semasa skrin ini dibuka.</string>
+    <string name="relay_status_offline">Status: Luar talian. Tidak dapat mencapai geganti, mencuba semula semasa InboxIQ dibuka.</string>
+    <string name="relay_status_paused">Status: Dijeda (aplikasi ditutup). Buka semula InboxIQ untuk menyambung semula.</string>
+    <string name="relay_status_reconnect_needed">Perlu sambung semula. Geganti tidak lagi menerima kunci telefon ini, jadi sahkan telefon ini sekali lagi.</string>
+    <string name="relay_reconnect_action">Sambung semula</string>
+    <string name="relay_status_replaced">Perlu sambung semula. Pemasangan InboxIQ lain mengambil alih nombor ini, atau ia diputuskan di tempat lain. Sahkan dengan kod untuk menggunakannya pada telefon ini semula.</string>
+    <string name="relay_verify_action">Sahkan dengan kod</string>
+    <string name="relay_code_label">Kod 6 digit daripada panggilan</string>
+    <string name="relay_code_confirm">Sahkan</string>
+    <string name="relay_code_resend">Telefon lagi</string>
+    <string name="relay_code_resend_wait">Telefon lagi dalam %1$d s</string>
+    <string name="relay_code_cancel">Batal</string>
+    <string name="relay_try_again_in">Anda boleh mencuba lagi dalam %1$s.</string>
+    <string name="relay_notice_enter_phone">Masukkan nombor telefon anda dahulu.</string>
+    <string name="relay_notice_code_sent">Kami sedang menelefon nombor ini. Masukkan kod 6 digit yang anda dengar.</string>
+    <string name="relay_notice_wrong_code">Kod itu tidak betul. Semak digitnya dan cuba lagi.</string>
+    <string name="relay_notice_code_expired">Kod itu telah tamat tempoh. Minta panggilan baharu.</string>
+    <string name="relay_notice_six_digits">Masukkan kesemua 6 digit.</string>
+    <string name="relay_notice_locked">Terlalu banyak kod salah untuk nombor ini. Ia dikunci sehingga sejam. Cuba lagi kemudian.</string>
+    <string name="relay_notice_locked_after">Terlalu banyak kod salah untuk nombor ini. Cuba lagi dalam %1$s.</string>
+    <string name="relay_notice_rate_limited">Terlalu banyak panggilan pengesahan untuk nombor ini. Cuba lagi kemudian.</string>
+    <string name="relay_notice_rate_limited_after">Terlalu banyak panggilan pengesahan untuk nombor ini. Cuba lagi dalam %1$s.</string>
+    <string name="relay_notice_invalid_phone">Itu tidak kelihatan seperti nombor telefon yang sah. Gunakan format antarabangsa, contohnya +14155551234.</string>
+    <string name="relay_notice_destination">Panggilan pengesahan ke nombor ini tidak disokong.</string>
+    <string name="relay_notice_delivery_failed">Panggilan pengesahan tidak dapat dibuat. Cuba lagi dalam beberapa minit.</string>
+    <string name="relay_notice_network">Tidak dapat menyambung. Semak sambungan anda dan cuba lagi.</string>
+    <string name="relay_notice_conflict">Nombor ini dipautkan kepada pemasangan InboxIQ yang lain. Sahkan dengan kod untuk mengambil alihnya.</string>
+    <string name="relay_notice_disconnected_unreachable">Diputuskan pada telefon ini; pelayan tidak dapat dicapai, akses berhenti apabila token tamat tempoh.</string>
+    <string name="relay_notice_disconnected_no_revoke">Diputuskan pada telefon ini. Versi geganti ini tidak dapat membatalkan akses dari jauh, jadi kunci lama kekal sah pada pelayan tetapi telefon ini telah memadamnya.</string>
+    <string name="relay_foreground_only_note">Hanya berfungsi semasa InboxIQ dibuka pada skrin anda. Menutup aplikasi, bertukar aplikasi atau mematikan skrin menamatkan akses dalam beberapa saat.</string>
+</resources>

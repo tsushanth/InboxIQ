@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Das Sortieren geschieht auf diesem Handy. InboxIQ hat keine Konten, keine Werbung und keine Analysen. Nichts verlässt das Handy, es sei denn, du schaltest unten „Mit Claude verbinden“ ein, und dann nur, solange InboxIQ geöffnet ist.</string>
+    <string name="intro_relay_exception">„Mit Claude verbinden“ in den Einstellungen ist aus, bis du es einschaltest. Es ist die einzige Funktion, die Nachrichteninhalte vom Handy sendet, und zwar erst, nachdem du sie eingerichtet hast. Sie funktioniert nur, solange InboxIQ auf deinem Bildschirm geöffnet ist.</string>
+    <string name="relay_section_blurb">Optional. Solange InboxIQ auf deinem Bildschirm geöffnet ist, kann Claude (claude.ai oder Claude Desktop, angemeldet in deinem Konto) deine Textnachrichten lesen und Antworten entwerfen. Wenn du die App schließt, endet der Zugriff. Aus, bis du es einschaltest.</string>
+    <string name="relay_consent_title">Deine Nachrichten mit Claude teilen, solange InboxIQ geöffnet ist?</string>
+    <string name="relay_consent_body">Wenn du dies einschaltest:\n\n- Claude kann nur auf deine Nachrichten zugreifen, solange InboxIQ auf deinem Bildschirm geöffnet ist. Wenn du die App schließt, zu einer anderen App wechselst oder den Bildschirm ausschaltest, endet die Verbindung innerhalb weniger Sekunden, und im Hintergrund läuft nichts. Sie wird erst wieder aufgebaut, wenn du InboxIQ erneut öffnest.\n- Solange die Verbindung besteht, und nur wenn du Claude darum bittest, kann Claude deine Unterhaltungen auflisten, deine Nachrichten durchsuchen und ganze Threads lesen. Claude sieht Nachrichtentext, Telefonnummern der Absender, Kontaktnamen und Zeitstempel der Nachrichten, die angefordert werden, auch Nachrichten von Banken und anderen Diensten. Einmalpasswörter werden ausgeblendet.\n- Diese Daten gehen von diesem Handy an den InboxIQ-Relay-Dienst (mcp.kreativekoala.llc, betrieben vom Herausgeber von InboxIQ auf Fly.io) und von dort über den Connector in deinem eigenen Claude-Konto an Claude, das sie gemäß den Bedingungen und Datenschutzeinstellungen dieses Kontos verarbeitet. Der Relay leitet Nachrichten nur weiter und speichert sie nicht. Deine Telefonnummer wird gespeichert, damit der Relay dieses Handy finden kann. Um zu bestätigen, dass die Nummer dir gehört, ruft der Relay sie automatisch an und liest einen 6-stelligen Code vor, den du in InboxIQ eingibst.\n- Claude kann nur Nachrichten entwerfen. Nichts wird gesendet, bis du InboxIQ öffnest und bei jedem Entwurf auf „Senden“ tippst.\n- Wenn du dies ausschaltest, wird die Verbindung sofort getrennt, der Relay-Schlüssel dieses Handys verworfen und der Relay gebeten, ihn und den Zugriff deines Claude-Connectors zu widerrufen. Um auch den Connector zu entfernen, lösche InboxIQ in Claude unter „Einstellungen“, „Connectors“.\n\nDas Sortieren deines Posteingangs durch InboxIQ bleibt in jedem Fall auf diesem Handy.</string>
+    <string name="relay_consent_accept">Meine Nachrichten teilen</string>
+    <string name="relay_consent_decline">Jetzt nicht</string>
+    <string name="relay_status_off">Status: Aus</string>
+    <string name="relay_status_connecting">Status: Verbindung wird aufgebaut</string>
+    <string name="relay_status_connected">Status: Verbunden. Claude kann auf deine Nachrichten zugreifen, solange dieser Bildschirm geöffnet ist.</string>
+    <string name="relay_status_offline">Status: Offline. Der Relay ist nicht erreichbar, es wird erneut versucht, solange InboxIQ geöffnet ist.</string>
+    <string name="relay_status_paused">Status: Pausiert (App geschlossen). Öffne InboxIQ erneut, um die Verbindung wiederherzustellen.</string>
+    <string name="relay_status_reconnect_needed">Neu verbinden erforderlich. Der Relay akzeptiert den Schlüssel dieses Handys nicht mehr, bestätige dieses Handy daher erneut.</string>
+    <string name="relay_reconnect_action">Neu verbinden</string>
+    <string name="relay_status_replaced">Neu verbinden erforderlich. Eine andere InboxIQ-Installation hat diese Nummer übernommen, oder sie wurde anderswo getrennt. Bestätige mit einem Code, um sie wieder auf diesem Handy zu verwenden.</string>
+    <string name="relay_verify_action">Mit Code bestätigen</string>
+    <string name="relay_code_label">6-stelliger Code aus dem Anruf</string>
+    <string name="relay_code_confirm">Bestätigen</string>
+    <string name="relay_code_resend">Erneut anrufen</string>
+    <string name="relay_code_resend_wait">Erneut anrufen in %1$d s</string>
+    <string name="relay_code_cancel">Abbrechen</string>
+    <string name="relay_try_again_in">Du kannst es in %1$s erneut versuchen.</string>
+    <string name="relay_notice_enter_phone">Gib zuerst deine Telefonnummer ein.</string>
+    <string name="relay_notice_code_sent">Wir rufen diese Nummer jetzt an. Gib den 6-stelligen Code ein, den du hörst.</string>
+    <string name="relay_notice_wrong_code">Dieser Code ist nicht richtig. Prüfe die Ziffern und versuche es erneut.</string>
+    <string name="relay_notice_code_expired">Dieser Code ist abgelaufen. Fordere einen neuen Anruf an.</string>
+    <string name="relay_notice_six_digits">Gib alle 6 Ziffern ein.</string>
+    <string name="relay_notice_locked">Zu viele falsche Codes für diese Nummer. Sie ist für bis zu eine Stunde gesperrt. Versuche es später erneut.</string>
+    <string name="relay_notice_locked_after">Zu viele falsche Codes für diese Nummer. Versuche es in %1$s erneut.</string>
+    <string name="relay_notice_rate_limited">Zu viele Bestätigungsanrufe für diese Nummer. Versuche es später erneut.</string>
+    <string name="relay_notice_rate_limited_after">Zu viele Bestätigungsanrufe für diese Nummer. Versuche es in %1$s erneut.</string>
+    <string name="relay_notice_invalid_phone">Das sieht nicht nach einer gültigen Telefonnummer aus. Verwende das internationale Format, zum Beispiel +14155551234.</string>
+    <string name="relay_notice_destination">Bestätigungsanrufe an diese Nummer werden nicht unterstützt.</string>
+    <string name="relay_notice_delivery_failed">Der Bestätigungsanruf konnte nicht getätigt werden. Versuche es in ein paar Minuten erneut.</string>
+    <string name="relay_notice_network">Verbindung nicht möglich. Prüfe deine Verbindung und versuche es erneut.</string>
+    <string name="relay_notice_conflict">Diese Nummer ist mit einer anderen InboxIQ-Installation verknüpft. Bestätige mit einem Code, um sie zu übernehmen.</string>
+    <string name="relay_notice_disconnected_unreachable">Auf diesem Handy getrennt; der Server war nicht erreichbar, der Zugriff endet, wenn das Token abläuft.</string>
+    <string name="relay_notice_disconnected_no_revoke">Auf diesem Handy getrennt. Diese Relay-Version kann den Zugriff nicht aus der Ferne widerrufen, daher bleibt der alte Schlüssel auf dem Server gültig, aber dieses Handy hat ihn gelöscht.</string>
+    <string name="relay_foreground_only_note">Funktioniert nur, solange InboxIQ auf deinem Bildschirm geöffnet ist. Wenn du die App schließt, zu einer anderen App wechselst oder den Bildschirm ausschaltest, endet der Zugriff innerhalb weniger Sekunden.</string>
+</resources>

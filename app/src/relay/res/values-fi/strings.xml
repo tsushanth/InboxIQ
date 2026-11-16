@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- wave2: machine-translated, needs native review -->
+    <string name="settings_privacy_note">Lajittelu tapahtuu tässä puhelimessa. InboxIQillä ei ole tilejä, mainoksia tai analytiikkaa. Mikään ei poistu puhelimesta, ellet ota alla käyttöön Yhdistä Claudeen -toimintoa, ja silloinkin vain InboxIQin ollessa auki.</string>
+    <string name="intro_relay_exception">Yhdistä Claudeen -toiminto Asetuksissa on pois päältä, kunnes otat sen käyttöön. Se on ainoa ominaisuus, joka lähettää viestien sisältöä pois puhelimesta, ja vasta kun olet määrittänyt sen. Se toimii vain InboxIQin ollessa auki näytölläsi.</string>
+    <string name="relay_section_blurb">Valinnainen. InboxIQin ollessa auki näytölläsi Claude (claude.ai tai Claude Desktop, kirjautuneena tilillesi) voi lukea tekstiviestisi ja laatia vastausluonnoksia. Sovelluksen sulkeminen päättää pääsyn. Pois päältä, kunnes otat sen käyttöön.</string>
+    <string name="relay_consent_title">Jaetaanko viestisi Claudelle InboxIQin ollessa auki?</string>
+    <string name="relay_consent_body">Jos otat tämän käyttöön:\n\n- Claude pääsee viesteihisi vain InboxIQin ollessa auki näytölläsi. Kun suljet sovelluksen, vaihdat toiseen sovellukseen tai sammutat näytön, yhteys päättyy muutamassa sekunnissa eikä mitään suoriteta taustalla. Yhteys ei muodostu uudelleen, ennen kuin avaat InboxIQin uudelleen.\n- Yhteyden ollessa päällä ja vain kun pyydät Claudea, se voi luetella keskustelusi, hakea viesteistäsi ja lukea kokonaisia viestiketjuja. Se näkee viestien tekstin, lähettäjien puhelinnumerot, yhteystietojen nimet ja aikaleimat niistä viesteistä, joita se pyytää, myös pankkien ja muiden palveluiden viestit. Kertakäyttökoodit piilotetaan.\n- Nämä tiedot siirtyvät tästä puhelimesta InboxIQin välityspalveluun (mcp.kreativekoala.llc, jota InboxIQin julkaisija ylläpitää Fly.io:ssa) ja sieltä Claudelle oman Claude-tilisi liittimen kautta, joka käsittelee ne kyseisen tilin ehtojen ja tietosuoja-asetusten mukaisesti. Välityspalvelu vain välittää viestit eikä tallenna niitä. Puhelinnumerosi tallennetaan, jotta välityspalvelu löytää tämän puhelimen. Vahvistaakseen, että numero on sinun, välityspalvelu soittaa siihen automaattisen äänipuhelun, jossa luetaan 6-numeroinen koodi, jonka kirjoitat InboxIQiin.\n- Claude voi vain laatia viestiluonnoksia. Mitään ei lähetetä, ennen kuin avaat InboxIQin ja napautat Lähetä jokaisen luonnoksen kohdalla.\n- Kun poistat tämän käytöstä, yhteys katkeaa heti, tämän puhelimen välitysavain poistetaan ja välityspalvelua pyydetään kumoamaan se sekä Claude-liittimesi pääsy. Jos haluat poistaa myös liittimen, poista InboxIQ Clauden Asetukset-kohdan Liittimet-osiosta.\n\nInboxIQin tekemä saapuneiden lajittelu pysyy tässä puhelimessa kummassakin tapauksessa.</string>
+    <string name="relay_consent_accept">Jaa viestini</string>
+    <string name="relay_consent_decline">Ei nyt</string>
+    <string name="relay_status_off">Tila: Pois päältä</string>
+    <string name="relay_status_connecting">Tila: Yhdistetään</string>
+    <string name="relay_status_connected">Tila: Yhdistetty. Claude pääsee viesteihisi, kun tämä näkymä on auki.</string>
+    <string name="relay_status_offline">Tila: Offline. Välityspalveluun ei saada yhteyttä, yritetään uudelleen InboxIQin ollessa auki.</string>
+    <string name="relay_status_paused">Tila: Tauolla (sovellus suljettu). Avaa InboxIQ uudelleen yhdistääksesi.</string>
+    <string name="relay_status_reconnect_needed">Yhdistäminen uudelleen vaaditaan. Välityspalvelu ei enää hyväksy tämän puhelimen avainta, joten vahvista tämä puhelin uudelleen.</string>
+    <string name="relay_reconnect_action">Yhdistä uudelleen</string>
+    <string name="relay_status_replaced">Yhdistäminen uudelleen vaaditaan. Toinen InboxIQ-asennus otti tämän numeron haltuunsa tai yhteys katkaistiin muualla. Vahvista koodilla, jotta voit käyttää sitä taas tässä puhelimessa.</string>
+    <string name="relay_verify_action">Vahvista koodilla</string>
+    <string name="relay_code_label">6-numeroinen koodi puhelusta</string>
+    <string name="relay_code_confirm">Vahvista</string>
+    <string name="relay_code_resend">Soita uudelleen</string>
+    <string name="relay_code_resend_wait">Soita uudelleen %1$d s kuluttua</string>
+    <string name="relay_code_cancel">Peruuta</string>
+    <string name="relay_try_again_in">Voit yrittää uudelleen %1$s kuluttua.</string>
+    <string name="relay_notice_enter_phone">Kirjoita ensin puhelinnumerosi.</string>
+    <string name="relay_notice_code_sent">Soitamme nyt tähän numeroon. Kirjoita kuulemasi 6-numeroinen koodi.</string>
+    <string name="relay_notice_wrong_code">Koodi ei ole oikein. Tarkista numerot ja yritä uudelleen.</string>
+    <string name="relay_notice_code_expired">Koodi vanheni. Pyydä uusi puhelu.</string>
+    <string name="relay_notice_six_digits">Kirjoita kaikki 6 numeroa.</string>
+    <string name="relay_notice_locked">Liian monta väärää koodia tälle numerolle. Se on lukittu enintään tunniksi. Yritä myöhemmin uudelleen.</string>
+    <string name="relay_notice_locked_after">Liian monta väärää koodia tälle numerolle. Yritä uudelleen %1$s kuluttua.</string>
+    <string name="relay_notice_rate_limited">Liian monta vahvistuspuhelua tähän numeroon. Yritä myöhemmin uudelleen.</string>
+    <string name="relay_notice_rate_limited_after">Liian monta vahvistuspuhelua tähän numeroon. Yritä uudelleen %1$s kuluttua.</string>
+    <string name="relay_notice_invalid_phone">Tämä ei näytä kelvolliselta puhelinnumerolta. Käytä kansainvälistä muotoa, esimerkiksi +14155551234.</string>
+    <string name="relay_notice_destination">Vahvistuspuheluja tähän numeroon ei tueta.</string>
+    <string name="relay_notice_delivery_failed">Vahvistuspuhelua ei voitu soittaa. Yritä uudelleen muutaman minuutin kuluttua.</string>
+    <string name="relay_notice_network">Yhteyden muodostaminen ei onnistunut. Tarkista yhteytesi ja yritä uudelleen.</string>
+    <string name="relay_notice_conflict">Tämä numero on yhdistetty toiseen InboxIQ-asennukseen. Vahvista koodilla ottaaksesi sen haltuun.</string>
+    <string name="relay_notice_disconnected_unreachable">Yhteys katkaistu tässä puhelimessa; palvelimeen ei saatu yhteyttä, pääsy päättyy, kun tunnus vanhenee.</string>
+    <string name="relay_notice_disconnected_no_revoke">Yhteys katkaistu tässä puhelimessa. Tämä välityspalvelun versio ei voi kumota pääsyä etänä, joten vanha avain pysyy voimassa palvelimella, mutta tämä puhelin on poistanut sen.</string>
+    <string name="relay_foreground_only_note">Toimii vain InboxIQin ollessa auki näytölläsi. Sovelluksen sulkeminen, sovelluksen vaihtaminen tai näytön sammuttaminen päättää pääsyn muutamassa sekunnissa.</string>
+</resources>

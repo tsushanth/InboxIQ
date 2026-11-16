@@ -99,7 +99,7 @@ fun SettingsScreen(
     Column(modifier.fillMaxSize().statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
-            Text("Settings", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+            Text(stringResource(R.string.ui_settings), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(
@@ -146,7 +146,7 @@ fun SettingsScreen(
             ThemeSettings.FONT_SCALES.forEach { s ->
                 ChoiceRow(ThemeSettings.fontScaleLabel(s), theme.fontScale == s) { callbacks.onTheme(theme.copy(fontScale = s)) }
             }
-            Text("On top of your phone's own font size setting.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.ui_on_top_of_your_phone), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Sub("List density")
             Density.entries.forEach { d ->
                 ChoiceRow(d.label, theme.density == d) { callbacks.onTheme(theme.copy(density = d)) }
@@ -159,7 +159,7 @@ fun SettingsScreen(
                 ChoiceRow(label, undoSeconds == secs) { callbacks.onUndoSeconds(secs) }
             }
             Text(
-                "Applies to text messages. Picture messages always send immediately.",
+                stringResource(R.string.ui_applies_to_text_messages_picture),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
@@ -205,7 +205,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(Modifier.weight(1f)) {
-                        Text("Auto-reply when away", style = MaterialTheme.typography.bodyLarge)
+                        Text(stringResource(R.string.ui_auto_reply_when_away), style = MaterialTheme.typography.bodyLarge)
                         Text("$autoReplySummary. Sends one short text for you to people you know.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
@@ -219,7 +219,7 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
-                    Text("Manage blocked numbers", style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.ui_manage_blocked_numbers), style = MaterialTheme.typography.bodyLarge)
                     Text(
                         if (blockedCount == 0) "None blocked" else "$blockedCount blocked. Texts from them are not saved.",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -231,20 +231,20 @@ fun SettingsScreen(
             // ---------- backup ----------
             Section("Backup")
             Text(
-                "Save your conversations to a file you choose, or restore from one. Nothing is uploaded. Photos are not included; only text, labels, pins, archive and mute settings, and blocked numbers.",
+                stringResource(R.string.ui_save_your_conversations_to_a),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(onClick = callbacks.onExport) { Text("Save backup") }
-                OutlinedButton(onClick = callbacks.onImport) { Text("Restore from file") }
+                Button(onClick = callbacks.onExport) { Text(stringResource(R.string.ui_save_backup)) }
+                OutlinedButton(onClick = callbacks.onImport) { Text(stringResource(R.string.ui_restore_from_file)) }
             }
             backupStatus?.let {
                 Spacer(Modifier.height(8.dp))
                 Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
             }
             Text(
-                "Restored messages are added to InboxIQ only. They are not written to Android's own message storage.",
+                stringResource(R.string.ui_restored_messages_are_added_to),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 8.dp),
             )
@@ -255,7 +255,7 @@ fun SettingsScreen(
                 stringResource(R.string.settings_privacy_note),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text("Read what InboxIQ does and does not access") }
+            OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_read_what_inboxiq_does_and)) }
             if (showSetupLog) {
                 OutlinedButton(onClick = callbacks.onOpenSetupLog, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.funnel_title) + " (debug build)") }
             }
