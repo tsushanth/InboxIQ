@@ -1,23 +1,21 @@
-InboxIQ is your SMS app, rebuilt to sort itself.
+InboxIQ is a text-messaging (SMS and MMS) app that sorts your inbox for you, on your phone.
 
-Every text you get — from banks, delivery services, two-factor codes, spam, scam attempts, and actual people you know — lands in the same inbox looking identical. InboxIQ automatically sorts them into Personal, Work, Promo, Verification Codes, Spam, and Suspected Scam, so you can see what actually needs your attention at a glance.
+Every text you get, from banks, delivery services, verification codes, spam, scam attempts and people you know, lands in one inbox looking the same. InboxIQ files each conversation as Personal, Work, Transaction, Promo, Code, Spam or Scam, so you can see what needs your attention at a glance.
 
-WHAT MAKES IT DIFFERENT
+WHAT IT DOES
 
-• 100% on-device classification. Your messages are never sent to a server — ours or anyone else's — for sorting. The machine learning model that categorizes your texts runs entirely on your phone.
-
-• SMS and MMS in one app. InboxIQ works as your default messaging app for texts and picture messages: send, receive, and view photos right in the app. It does not support RCS chat features (typing indicators, read receipts, Wi-Fi chats) or group picture-message conversations.
-
-• Know what needs a reply. InboxIQ flags conversations that are waiting on you, and offers quick-reply suggestions so you can respond in one tap.
-
-• See through spam and scams. Verification codes, promotional texts, and suspected scam messages are labeled clearly so you're not left guessing whether that "your account is locked" text is real.
-
-• Dark mode, contact names, and a clean, modern inbox — the basics done right.
+• Replaces your default messaging app: send, receive and view text and picture messages. It does not support RCS chat features (typing indicators, read receipts, Wi-Fi chats) or group picture-message conversations.
+• Sorts messages on your phone with a small model that runs entirely on the device. Message text is never sent anywhere to be sorted.
+• Shows what needs a reply: it flags conversations that are waiting on you and offers quick-reply suggestions.
+• Makes spam and scams easy to spot: spam and suspected scams go to Junk, and risky-looking links get a warning before you open them.
+• Verification codes get a Copy code button.
+• Block numbers, search messages, dark mode, and contact names instead of raw numbers.
+• Voice memos: hold the button to dictate. The audio is turned into text on your phone (English only) and is not saved or sent.
 
 YOUR PRIVACY
 
 InboxIQ was built around a simple rule: your text messages are yours. There is no cloud AI service involved in reading or categorizing your messages. Your message content, contacts, and phone numbers stay on your device. Full privacy policy: https://kreativekoala.llc/privacy
 
-Permissions, and why: SMS and MMS let InboxIQ receive, send and read your texts and picture messages, which any default SMS app must do. Contacts shows a saved contact's name instead of a raw phone number. Notifications alert you to new messages. The microphone is used only while you hold the voice-memo button; the audio is turned into text on your phone and is not saved or sent. Nothing more.
+Permissions, and why: SMS and MMS let InboxIQ receive, send and read your texts and picture messages, which any default SMS app must do. Contacts shows a saved contact's name instead of a raw phone number. Notifications alert you to new messages. The microphone is used only while you hold the voice-memo button. Nothing more.
 
 Questions or problems: puzzleverseai@gmail.com

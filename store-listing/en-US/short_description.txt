@@ -1,1 +1,1 @@
-On-device SMS spam & scam detection. Sorted inbox. 100% private, no cloud AI.
+SMS app that sorts spam, scams & codes on your phone, with no cloud AI.
