@@ -19,3 +19,6 @@ InboxIQ was built around a simple rule: your text messages are yours. There is n
 Permissions, and why: SMS and MMS let InboxIQ receive, send and read your texts and picture messages, which any default SMS app must do. Contacts shows a saved contact's name instead of a raw phone number. Notifications alert you to new messages. The microphone is used only while you hold the voice-memo button. Nothing more.
 
 Questions or problems: puzzleverseai@gmail.com
+
+LANGUAGES
+The app's interface is available in English and 26 other languages: Arabic, Chinese (Simplified), Czech, Dutch, Filipino, Finnish, French, German, Greek, Hindi, Hungarian, Indonesian, Italian, Japanese, Korean, Malay, Polish, Portuguese, Romanian, Russian, Spanish, Swedish, Thai, Turkish, Ukrainian and Vietnamese.
