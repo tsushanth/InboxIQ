@@ -18,8 +18,8 @@
     <string name="mute_one_week">Durante 1 semana</string>
     <string name="mute_until_turned_on">Até eu reativar</string>
     <string name="tier_default">Predefinido (bert-tiny, no dispositivo)</string>
-    <string name="tier_balanced">Equilibrado (Gemma 3 270M, no dispositivo; requer uma transferência única de ~290MB)</string>
-    <string name="tier_best">Melhor (Gemma/Qwen 1-3B), em breve</string>
+    <string name="tier_balanced">Equilibrado (no dispositivo; requer uma transferência única de ~290MB)</string>
+    <string name="tier_best">Melhor (modelo maior, no dispositivo), em breve</string>
     <string name="channel_general_title">Mensagens</string>
     <string name="channel_general_desc">Mensagens que ainda não foram organizadas</string>
     <string name="channel_personal_desc">Mensagens de pessoas que conhece</string>
@@ -171,7 +171,7 @@
     <string name="settings_model_waiting_wifi">A aguardar Wi-Fi para transferir o modelo</string>
     <string name="settings_model_confirm">Toque para confirmar a transferência do modelo</string>
     <string name="settings_model_failed">A transferência falhou. Escolha esta opção novamente para tentar outra vez.</string>
-    <string name="settings_model_ready">Modelo pronto. A classificação usa o Gemma 3 270M.</string>
+    <string name="settings_model_ready">Modelo pronto. A classificação usa o modelo do dispositivo.</string>
     <string name="settings_model_starting">A iniciar a transferência</string>
     <string name="settings_auto_reply">Resposta automática</string>
     <string name="settings_auto_reply_summary_on">Ativada. Envia em seu nome uma mensagem curta a pessoas que conhece.</string>

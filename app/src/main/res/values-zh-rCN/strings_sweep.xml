@@ -18,8 +18,8 @@
     <string name="mute_one_week">1 周</string>
     <string name="mute_until_turned_on">直到我重新开启</string>
     <string name="tier_default">默认（bert-tiny，在本机运行）</string>
-    <string name="tier_balanced">均衡（Gemma 3 270M，在本机运行；需要一次性下载约 290MB）</string>
-    <string name="tier_best">最佳（Gemma/Qwen 1-3B），即将推出</string>
+    <string name="tier_balanced">均衡（在本机运行；需要一次性下载约 290MB）</string>
+    <string name="tier_best">最佳（更大的本机模型），即将推出</string>
     <string name="channel_general_title">短信</string>
     <string name="channel_general_desc">尚未分类的短信</string>
     <string name="channel_personal_desc">来自您认识的人的短信</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">正在等待 Wi-Fi 以下载模型</string>
     <string name="settings_model_confirm">点按以确认下载模型</string>
     <string name="settings_model_failed">下载失败。请再次选择此选项以重试。</string>
-    <string name="settings_model_ready">模型已就绪。分类使用 Gemma 3 270M。</string>
+    <string name="settings_model_ready">模型已就绪。分类使用本机模型。</string>
     <string name="settings_model_starting">正在开始下载</string>
     <string name="settings_auto_reply">自动回复</string>
     <string name="settings_auto_reply_summary_on">已开启。替您向认识的人发送一条简短的短信。</string>

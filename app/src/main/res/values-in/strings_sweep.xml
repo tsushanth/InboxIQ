@@ -18,8 +18,8 @@
     <string name="mute_one_week">Selama 1 minggu</string>
     <string name="mute_until_turned_on">Sampai saya aktifkan kembali</string>
     <string name="tier_default">Default (bert-tiny, di ponsel)</string>
-    <string name="tier_balanced">Seimbang (Gemma 3 270M, di ponsel; perlu unduhan sekali saja ~290MB)</string>
-    <string name="tier_best">Terbaik (Gemma/Qwen 1-3B), segera hadir</string>
+    <string name="tier_balanced">Seimbang (di ponsel; perlu unduhan sekali saja ~290MB)</string>
+    <string name="tier_best">Terbaik (model yang lebih besar di ponsel), segera hadir</string>
     <string name="channel_general_title">Pesan</string>
     <string name="channel_general_desc">SMS yang belum dipilah</string>
     <string name="channel_personal_desc">SMS dari orang yang Anda kenal</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">Menunggu Wi-Fi untuk mengunduh model</string>
     <string name="settings_model_confirm">Ketuk untuk mengonfirmasi unduhan model</string>
     <string name="settings_model_failed">Unduhan gagal. Pilih opsi ini lagi untuk mencoba kembali.</string>
-    <string name="settings_model_ready">Model siap. Pemilahan menggunakan Gemma 3 270M.</string>
+    <string name="settings_model_ready">Model siap. Pemilahan menggunakan model di ponsel.</string>
     <string name="settings_model_starting">Memulai unduhan</string>
     <string name="settings_auto_reply">Balasan otomatis</string>
     <string name="settings_auto_reply_summary_on">Aktif. Mengirim satu SMS singkat untuk Anda ke orang yang Anda kenal.</string>

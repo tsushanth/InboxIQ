@@ -18,8 +18,8 @@
     <string name="mute_one_week">Selama 1 minggu</string>
     <string name="mute_until_turned_on">Sehingga saya hidupkan semula</string>
     <string name="tier_default">Lalai (bert-tiny, pada peranti)</string>
-    <string name="tier_balanced">Seimbang (Gemma 3 270M, pada peranti; perlu muat turun sekali sahaja ~290MB)</string>
-    <string name="tier_best">Terbaik (Gemma/Qwen 1-3B), akan datang</string>
+    <string name="tier_balanced">Seimbang (pada peranti; perlu muat turun sekali sahaja ~290MB)</string>
+    <string name="tier_best">Terbaik (model lebih besar pada peranti), akan datang</string>
     <string name="channel_general_title">Mesej</string>
     <string name="channel_general_desc">SMS yang belum diisih</string>
     <string name="channel_personal_desc">SMS daripada orang yang anda kenali</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">Menunggu Wi-Fi untuk memuat turun model</string>
     <string name="settings_model_confirm">Ketik untuk mengesahkan muat turun model</string>
     <string name="settings_model_failed">Muat turun gagal. Pilih pilihan ini sekali lagi untuk mencuba semula.</string>
-    <string name="settings_model_ready">Model sedia. Pengisihan menggunakan Gemma 3 270M.</string>
+    <string name="settings_model_ready">Model sedia. Pengisihan menggunakan model pada peranti.</string>
     <string name="settings_model_starting">Memulakan muat turun</string>
     <string name="settings_auto_reply">Balas automatik</string>
     <string name="settings_auto_reply_summary_on">Hidup. Menghantar satu SMS pendek untuk anda kepada orang yang anda kenali.</string>

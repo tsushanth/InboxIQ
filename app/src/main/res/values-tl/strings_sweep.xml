@@ -18,8 +18,8 @@
     <string name="mute_one_week">Sa loob ng 1 linggo</string>
     <string name="mute_until_turned_on">Hanggang i-on ko ulit</string>
     <string name="tier_default">Default (bert-tiny, on-device)</string>
-    <string name="tier_balanced">Balanse (Gemma 3 270M, on-device; kailangan ng isang beses na download na ~290MB)</string>
-    <string name="tier_best">Pinakamahusay (Gemma/Qwen 1-3B), malapit na</string>
+    <string name="tier_balanced">Balanse (on-device; kailangan ng isang beses na download na ~290MB)</string>
+    <string name="tier_best">Pinakamahusay (mas malaking on-device na model), malapit na</string>
     <string name="channel_general_title">Mga mensahe</string>
     <string name="channel_general_desc">Mga text na hindi pa naaayos</string>
     <string name="channel_personal_desc">Mga text mula sa mga kakilala mo</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Naghihintay ng Wi-Fi para i-download ang model</string>
     <string name="settings_model_confirm">I-tap para kumpirmahin ang pag-download ng model</string>
     <string name="settings_model_failed">Nabigo ang pag-download. Piliin ulit ang opsyong ito para subukan ulit.</string>
-    <string name="settings_model_ready">Handa na ang model. Gumagamit ng Gemma 3 270M ang pag-aayos.</string>
+    <string name="settings_model_ready">Handa na ang model. Gumagamit ng on-device na model ang pag-aayos.</string>
     <string name="settings_model_starting">Sinisimulan ang pag-download</string>
     <string name="settings_auto_reply">Auto-reply</string>
     <string name="settings_auto_reply_summary_on">On. Nagpapadala ng isang maikling text para sa iyo sa mga kakilala mo.</string>

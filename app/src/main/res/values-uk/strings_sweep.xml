@@ -18,8 +18,8 @@
     <string name="mute_one_week">На 1 тиждень</string>
     <string name="mute_until_turned_on">Доки я не ввімкну знову</string>
     <string name="tier_default">Типовий (bert-tiny, на пристрої)</string>
-    <string name="tier_balanced">Збалансований (Gemma 3 270M, на пристрої; потрібне одноразове завантаження ~290MB)</string>
-    <string name="tier_best">Найкращий (Gemma/Qwen 1-3B), незабаром</string>
+    <string name="tier_balanced">Збалансований (на пристрої; потрібне одноразове завантаження ~290MB)</string>
+    <string name="tier_best">Найкращий (більша модель на пристрої), незабаром</string>
     <string name="channel_general_title">Повідомлення</string>
     <string name="channel_general_desc">Повідомлення, які ще не розсортовано</string>
     <string name="channel_personal_desc">Повідомлення від людей, яких ви знаєте</string>
@@ -181,7 +181,7 @@
     <string name="settings_model_waiting_wifi">Очікування Wi-Fi для завантаження моделі</string>
     <string name="settings_model_confirm">Торкніться, щоб підтвердити завантаження моделі</string>
     <string name="settings_model_failed">Не вдалося завантажити. Виберіть цей варіант ще раз, щоб повторити.</string>
-    <string name="settings_model_ready">Модель готова. Для сортування використовується Gemma 3 270M.</string>
+    <string name="settings_model_ready">Модель готова. Для сортування використовується модель на пристрої.</string>
     <string name="settings_model_starting">Початок завантаження</string>
     <string name="settings_auto_reply">Автовідповідь</string>
     <string name="settings_auto_reply_summary_on">Увімкнено. Надсилає за вас одне коротке повідомлення людям, яких ви знаєте.</string>

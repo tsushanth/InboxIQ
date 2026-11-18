@@ -18,8 +18,8 @@
     <string name="mute_one_week">Na 1 tydzień</string>
     <string name="mute_until_turned_on">Do czasu ponownego włączenia</string>
     <string name="tier_default">Domyślny (bert-tiny, na urządzeniu)</string>
-    <string name="tier_balanced">Zrównoważony (Gemma 3 270M, na urządzeniu; wymaga jednorazowego pobrania ~290MB)</string>
-    <string name="tier_best">Najlepszy (Gemma/Qwen 1-3B), wkrótce</string>
+    <string name="tier_balanced">Zrównoważony (na urządzeniu; wymaga jednorazowego pobrania ~290MB)</string>
+    <string name="tier_best">Najlepszy (większy model na urządzeniu), wkrótce</string>
     <string name="channel_general_title">Wiadomości</string>
     <string name="channel_general_desc">SMS-y, które nie zostały jeszcze posortowane</string>
     <string name="channel_personal_desc">SMS-y od osób, które znasz</string>
@@ -181,7 +181,7 @@
     <string name="settings_model_waiting_wifi">Oczekiwanie na Wi-Fi, aby pobrać model</string>
     <string name="settings_model_confirm">Dotknij, aby potwierdzić pobranie modelu</string>
     <string name="settings_model_failed">Pobieranie nie powiodło się. Wybierz tę opcję ponownie, aby spróbować jeszcze raz.</string>
-    <string name="settings_model_ready">Model gotowy. Sortowanie używa Gemma 3 270M.</string>
+    <string name="settings_model_ready">Model gotowy. Sortowanie używa modelu na urządzeniu.</string>
     <string name="settings_model_starting">Rozpoczynanie pobierania</string>
     <string name="settings_auto_reply">Automatyczna odpowiedź</string>
     <string name="settings_auto_reply_summary_on">Włączona. Wysyła za Ciebie jeden krótki SMS osobom, które znasz.</string>

@@ -18,8 +18,8 @@
     <string name="mute_one_week">For 1 week</string>
     <string name="mute_until_turned_on">Until I turn it back on</string>
     <string name="tier_default">Default (bert-tiny, on-device)</string>
-    <string name="tier_balanced">Balanced (Gemma 3 270M, on-device; needs a one-time ~290MB download)</string>
-    <string name="tier_best">Best (Gemma/Qwen 1-3B), coming soon</string>
+    <string name="tier_balanced">Balanced (on-device; needs a one-time ~290MB download)</string>
+    <string name="tier_best">Best (larger on-device model), coming soon</string>
     <string name="channel_general_title">Messages</string>
     <string name="channel_general_desc">Texts that have not been sorted yet</string>
     <string name="channel_personal_desc">Texts from people you know</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Waiting for Wi-Fi to download the model</string>
     <string name="settings_model_confirm">Tap to confirm the model download</string>
     <string name="settings_model_failed">The download failed. Choose this option again to retry.</string>
-    <string name="settings_model_ready">Model ready. Sorting uses Gemma 3 270M.</string>
+    <string name="settings_model_ready">Model ready. Sorting uses the on-device model.</string>
     <string name="settings_model_starting">Starting download</string>
     <string name="settings_auto_reply">Auto-reply</string>
     <string name="settings_auto_reply_summary_on">On. Sends one short text for you to people you know.</string>

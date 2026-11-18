@@ -18,8 +18,8 @@
     <string name="mute_one_week">Για 1 εβδομάδα</string>
     <string name="mute_until_turned_on">Μέχρι να το ενεργοποιήσω ξανά</string>
     <string name="tier_default">Προεπιλογή (bert-tiny, στη συσκευή)</string>
-    <string name="tier_balanced">Ισορροπημένο (Gemma 3 270M, στη συσκευή· απαιτεί εφάπαξ λήψη ~290MB)</string>
-    <string name="tier_best">Βέλτιστο (Gemma/Qwen 1-3B), σύντομα διαθέσιμο</string>
+    <string name="tier_balanced">Ισορροπημένο (στη συσκευή· απαιτεί εφάπαξ λήψη ~290MB)</string>
+    <string name="tier_best">Βέλτιστο (μεγαλύτερο μοντέλο στη συσκευή), σύντομα διαθέσιμο</string>
     <string name="channel_general_title">Μηνύματα</string>
     <string name="channel_general_desc">Μηνύματα που δεν έχουν ταξινομηθεί ακόμα</string>
     <string name="channel_personal_desc">Μηνύματα από άτομα που γνωρίζεις</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Αναμονή για Wi-Fi για λήψη του μοντέλου</string>
     <string name="settings_model_confirm">Πάτησε για να επιβεβαιώσεις τη λήψη του μοντέλου</string>
     <string name="settings_model_failed">Η λήψη απέτυχε. Επίλεξε ξανά αυτή την επιλογή για να δοκιμάσεις ξανά.</string>
-    <string name="settings_model_ready">Το μοντέλο είναι έτοιμο. Η ταξινόμηση χρησιμοποιεί το Gemma 3 270M.</string>
+    <string name="settings_model_ready">Το μοντέλο είναι έτοιμο. Η ταξινόμηση χρησιμοποιεί το μοντέλο της συσκευής.</string>
     <string name="settings_model_starting">Έναρξη λήψης</string>
     <string name="settings_auto_reply">Αυτόματη απάντηση</string>
     <string name="settings_auto_reply_summary_on">Ενεργή. Στέλνει ένα σύντομο μήνυμα για λογαριασμό σου σε άτομα που γνωρίζεις.</string>

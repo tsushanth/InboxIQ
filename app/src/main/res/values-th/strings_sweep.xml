@@ -18,8 +18,8 @@
     <string name="mute_one_week">เป็นเวลา 1 สัปดาห์</string>
     <string name="mute_until_turned_on">จนกว่าฉันจะเปิดกลับ</string>
     <string name="tier_default">ค่าเริ่มต้น (bert-tiny ในเครื่อง)</string>
-    <string name="tier_balanced">สมดุล (Gemma 3 270M ในเครื่อง ต้องดาวน์โหลดครั้งเดียวประมาณ 290MB)</string>
-    <string name="tier_best">ดีที่สุด (Gemma/Qwen 1-3B) เร็ว ๆ นี้</string>
+    <string name="tier_balanced">สมดุล (ในเครื่อง ต้องดาวน์โหลดครั้งเดียวประมาณ 290MB)</string>
+    <string name="tier_best">ดีที่สุด (โมเดลใหญ่ขึ้นในเครื่อง) เร็ว ๆ นี้</string>
     <string name="channel_general_title">ข้อความ</string>
     <string name="channel_general_desc">ข้อความที่ยังไม่ได้จัดเรียง</string>
     <string name="channel_personal_desc">ข้อความจากคนที่คุณรู้จัก</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">กำลังรอ Wi-Fi เพื่อดาวน์โหลดโมเดล</string>
     <string name="settings_model_confirm">แตะเพื่อยืนยันการดาวน์โหลดโมเดล</string>
     <string name="settings_model_failed">ดาวน์โหลดไม่สำเร็จ เลือกตัวเลือกนี้อีกครั้งเพื่อลองใหม่</string>
-    <string name="settings_model_ready">โมเดลพร้อมแล้ว การจัดเรียงใช้ Gemma 3 270M</string>
+    <string name="settings_model_ready">โมเดลพร้อมแล้ว การจัดเรียงใช้โมเดลในเครื่อง</string>
     <string name="settings_model_starting">กำลังเริ่มดาวน์โหลด</string>
     <string name="settings_auto_reply">ตอบกลับอัตโนมัติ</string>
     <string name="settings_auto_reply_summary_on">เปิด ส่งข้อความสั้นหนึ่งข้อความให้คนที่คุณรู้จักแทนคุณ</string>

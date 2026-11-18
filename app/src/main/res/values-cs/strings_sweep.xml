@@ -18,8 +18,8 @@
     <string name="mute_one_week">Na 1 týden</string>
     <string name="mute_until_turned_on">Dokud to znovu nezapnu</string>
     <string name="tier_default">Výchozí (bert-tiny, v zařízení)</string>
-    <string name="tier_balanced">Vyvážený (Gemma 3 270M, v zařízení; vyžaduje jednorázové stažení ~290MB)</string>
-    <string name="tier_best">Nejlepší (Gemma/Qwen 1-3B), již brzy</string>
+    <string name="tier_balanced">Vyvážený (v zařízení; vyžaduje jednorázové stažení ~290MB)</string>
+    <string name="tier_best">Nejlepší (větší model v zařízení), již brzy</string>
     <string name="channel_general_title">Zprávy</string>
     <string name="channel_general_desc">Zprávy, které ještě nebyly roztříděny</string>
     <string name="channel_personal_desc">Zprávy od lidí, které znáš</string>
@@ -181,7 +181,7 @@
     <string name="settings_model_waiting_wifi">Čekám na Wi-Fi pro stažení modelu</string>
     <string name="settings_model_confirm">Klepnutím potvrď stažení modelu</string>
     <string name="settings_model_failed">Stahování selhalo. Zvol tuto možnost znovu a zkus to znovu.</string>
-    <string name="settings_model_ready">Model je připraven. Třídění používá Gemma 3 270M.</string>
+    <string name="settings_model_ready">Model je připraven. Třídění používá model v zařízení.</string>
     <string name="settings_model_starting">Zahajuji stahování</string>
     <string name="settings_auto_reply">Automatická odpověď</string>
     <string name="settings_auto_reply_summary_on">Zapnuto. Posílá za tebe jednu krátkou zprávu lidem, které znáš.</string>

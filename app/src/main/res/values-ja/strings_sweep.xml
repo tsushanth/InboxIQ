@@ -18,8 +18,8 @@
     <string name="mute_one_week">1週間</string>
     <string name="mute_until_turned_on">オンに戻すまで</string>
     <string name="tier_default">デフォルト（bert-tiny、スマートフォン内）</string>
-    <string name="tier_balanced">バランス（Gemma 3 270M、スマートフォン内。初回のみ約290MBのダウンロードが必要）</string>
-    <string name="tier_best">最高（Gemma/Qwen 1〜3B）、近日対応</string>
+    <string name="tier_balanced">バランス（スマートフォン内。初回のみ約290MBのダウンロードが必要）</string>
+    <string name="tier_best">最高（より大きなオンデバイスモデル）、近日対応</string>
     <string name="channel_general_title">メッセージ</string>
     <string name="channel_general_desc">未仕分けのメッセージ</string>
     <string name="channel_personal_desc">知り合いからのメッセージ</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">Wi-Fiに接続してモデルをダウンロードするのを待っています</string>
     <string name="settings_model_confirm">タップしてモデルのダウンロードを確定</string>
     <string name="settings_model_failed">ダウンロードに失敗しました。もう一度このオプションを選ぶと再試行します。</string>
-    <string name="settings_model_ready">モデルの準備ができました。仕分けにはGemma 3 270Mを使用します。</string>
+    <string name="settings_model_ready">モデルの準備ができました。仕分けにはオンデバイスモデルを使用します。</string>
     <string name="settings_model_starting">ダウンロードを開始しています</string>
     <string name="settings_auto_reply">自動返信</string>
     <string name="settings_auto_reply_summary_on">オン。知り合いに短いメッセージを1通代わりに送信します。</string>
