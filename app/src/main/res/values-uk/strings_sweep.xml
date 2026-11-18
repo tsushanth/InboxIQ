@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">На 8 годин</string>
     <string name="mute_one_week">На 1 тиждень</string>
     <string name="mute_until_turned_on">Доки я не ввімкну знову</string>
-    <string name="tier_default">Типовий (bert-tiny, на пристрої)</string>
+    <string name="tier_default">Типовий (на пристрої)</string>
     <string name="tier_balanced">Збалансований (на пристрої; потрібне одноразове завантаження ~290MB)</string>
     <string name="tier_best">Найкращий (більша модель на пристрої), незабаром</string>
     <string name="channel_general_title">Повідомлення</string>

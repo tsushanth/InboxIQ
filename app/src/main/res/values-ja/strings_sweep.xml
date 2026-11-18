@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8時間</string>
     <string name="mute_one_week">1週間</string>
     <string name="mute_until_turned_on">オンに戻すまで</string>
-    <string name="tier_default">デフォルト（bert-tiny、スマートフォン内）</string>
+    <string name="tier_default">デフォルト（スマートフォン内）</string>
     <string name="tier_balanced">バランス（スマートフォン内。初回のみ約290MBのダウンロードが必要）</string>
     <string name="tier_best">最高（より大きなオンデバイスモデル）、近日対応</string>
     <string name="channel_general_title">メッセージ</string>

@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 órára</string>
     <string name="mute_one_week">1 hétre</string>
     <string name="mute_until_turned_on">Amíg vissza nem kapcsolom</string>
-    <string name="tier_default">Alapértelmezett (bert-tiny, az eszközön)</string>
+    <string name="tier_default">Alapértelmezett (az eszközön)</string>
     <string name="tier_balanced">Kiegyensúlyozott (az eszközön; egyszeri ~290MB letöltés szükséges)</string>
     <string name="tier_best">Legjobb (nagyobb, eszközön futó modell), hamarosan</string>
     <string name="channel_general_title">Üzenetek</string>

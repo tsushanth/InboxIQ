@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Trong 8 giờ</string>
     <string name="mute_one_week">Trong 1 tuần</string>
     <string name="mute_until_turned_on">Cho đến khi tôi bật lại</string>
-    <string name="tier_default">Mặc định (bert-tiny, chạy trên thiết bị)</string>
+    <string name="tier_default">Mặc định (chạy trên thiết bị)</string>
     <string name="tier_balanced">Cân bằng (chạy trên thiết bị; cần tải xuống một lần ~290MB)</string>
     <string name="tier_best">Tốt nhất (mô hình lớn hơn chạy trên thiết bị), sắp ra mắt</string>
     <string name="channel_general_title">Tin nhắn</string>

@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Für 8 Stunden</string>
     <string name="mute_one_week">Für 1 Woche</string>
     <string name="mute_until_turned_on">Bis ich es wieder einschalte</string>
-    <string name="tier_default">Standard (bert-tiny, auf dem Gerät)</string>
+    <string name="tier_default">Standard (auf dem Gerät)</string>
     <string name="tier_balanced">Ausgewogen (auf dem Gerät; einmaliger Download von ca. 290MB nötig)</string>
     <string name="tier_best">Beste (größeres Modell auf dem Gerät), demnächst verfügbar</string>
     <string name="channel_general_title">Nachrichten</string>

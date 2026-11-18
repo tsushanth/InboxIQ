@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 uur</string>
     <string name="mute_one_week">1 week</string>
     <string name="mute_until_turned_on">Totdat ik het weer aanzet</string>
-    <string name="tier_default">Standaard (bert-tiny, op het apparaat)</string>
+    <string name="tier_default">Standaard (op het apparaat)</string>
     <string name="tier_balanced">Gebalanceerd (op het apparaat; eenmalige download van ~290MB nodig)</string>
     <string name="tier_best">Best (groter model op het apparaat), binnenkort beschikbaar</string>
     <string name="channel_general_title">Berichten</string>

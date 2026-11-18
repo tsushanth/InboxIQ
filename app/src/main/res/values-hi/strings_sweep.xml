@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 घंटे के लिए</string>
     <string name="mute_one_week">1 सप्ताह के लिए</string>
     <string name="mute_until_turned_on">जब तक मैं वापस चालू न करूँ</string>
-    <string name="tier_default">डिफ़ॉल्ट (bert-tiny, डिवाइस पर)</string>
+    <string name="tier_default">डिफ़ॉल्ट (डिवाइस पर)</string>
     <string name="tier_balanced">संतुलित (डिवाइस पर; एक बार ~290MB डाउनलोड करना होगा)</string>
     <string name="tier_best">सर्वश्रेष्ठ (डिवाइस पर चलने वाला बड़ा मॉडल), जल्द आ रहा है</string>
     <string name="channel_general_title">संदेश</string>

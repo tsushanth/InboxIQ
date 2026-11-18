@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Για 8 ώρες</string>
     <string name="mute_one_week">Για 1 εβδομάδα</string>
     <string name="mute_until_turned_on">Μέχρι να το ενεργοποιήσω ξανά</string>
-    <string name="tier_default">Προεπιλογή (bert-tiny, στη συσκευή)</string>
+    <string name="tier_default">Προεπιλογή (στη συσκευή)</string>
     <string name="tier_balanced">Ισορροπημένο (στη συσκευή· απαιτεί εφάπαξ λήψη ~290MB)</string>
     <string name="tier_best">Βέλτιστο (μεγαλύτερο μοντέλο στη συσκευή), σύντομα διαθέσιμο</string>
     <string name="channel_general_title">Μηνύματα</string>

@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Na 8 godzin</string>
     <string name="mute_one_week">Na 1 tydzień</string>
     <string name="mute_until_turned_on">Do czasu ponownego włączenia</string>
-    <string name="tier_default">Domyślny (bert-tiny, na urządzeniu)</string>
+    <string name="tier_default">Domyślny (na urządzeniu)</string>
     <string name="tier_balanced">Zrównoważony (na urządzeniu; wymaga jednorazowego pobrania ~290MB)</string>
     <string name="tier_best">Najlepszy (większy model na urządzeniu), wkrótce</string>
     <string name="channel_general_title">Wiadomości</string>

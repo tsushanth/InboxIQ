@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 小时</string>
     <string name="mute_one_week">1 周</string>
     <string name="mute_until_turned_on">直到我重新开启</string>
-    <string name="tier_default">默认（bert-tiny，在本机运行）</string>
+    <string name="tier_default">默认（在本机运行）</string>
     <string name="tier_balanced">均衡（在本机运行；需要一次性下载约 290MB）</string>
     <string name="tier_best">最佳（更大的本机模型），即将推出</string>
     <string name="channel_general_title">短信</string>

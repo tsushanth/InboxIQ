@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">لمدة 8 ساعات</string>
     <string name="mute_one_week">لمدة أسبوع واحد</string>
     <string name="mute_until_turned_on">حتى أعيد تفعيلها</string>
-    <string name="tier_default">افتراضي (bert-tiny، على الجهاز)</string>
+    <string name="tier_default">افتراضي (على الجهاز)</string>
     <string name="tier_balanced">متوازن (على الجهاز؛ يتطلب تنزيلًا لمرة واحدة بحجم نحو 290MB)</string>
     <string name="tier_best">الأفضل (نموذج أكبر على الجهاز)، قريبًا</string>
     <string name="channel_general_title">الرسائل</string>

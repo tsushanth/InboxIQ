@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 saatliğine</string>
     <string name="mute_one_week">1 haftalığına</string>
     <string name="mute_until_turned_on">Ben tekrar açana kadar</string>
-    <string name="tier_default">Varsayılan (bert-tiny, cihaz üzerinde)</string>
+    <string name="tier_default">Varsayılan (cihaz üzerinde)</string>
     <string name="tier_balanced">Dengeli (cihaz üzerinde; bir defaya mahsus ~290MB indirme gerekir)</string>
     <string name="tier_best">En iyi (cihaz üzerinde daha büyük model), yakında</string>
     <string name="channel_general_title">Mesajlar</string>

@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Selama 8 jam</string>
     <string name="mute_one_week">Selama 1 minggu</string>
     <string name="mute_until_turned_on">Sehingga saya hidupkan semula</string>
-    <string name="tier_default">Lalai (bert-tiny, pada peranti)</string>
+    <string name="tier_default">Lalai (pada peranti)</string>
     <string name="tier_balanced">Seimbang (pada peranti; perlu muat turun sekali sahaja ~290MB)</string>
     <string name="tier_best">Terbaik (model lebih besar pada peranti), akan datang</string>
     <string name="channel_general_title">Mesej</string>

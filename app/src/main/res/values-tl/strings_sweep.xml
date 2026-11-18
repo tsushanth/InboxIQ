@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Sa loob ng 8 oras</string>
     <string name="mute_one_week">Sa loob ng 1 linggo</string>
     <string name="mute_until_turned_on">Hanggang i-on ko ulit</string>
-    <string name="tier_default">Default (bert-tiny, on-device)</string>
+    <string name="tier_default">Default (on-device)</string>
     <string name="tier_balanced">Balanse (on-device; kailangan ng isang beses na download na ~290MB)</string>
     <string name="tier_best">Pinakamahusay (mas malaking on-device na model), malapit na</string>
     <string name="channel_general_title">Mga mensahe</string>
