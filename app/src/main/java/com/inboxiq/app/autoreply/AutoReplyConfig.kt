@@ -2,10 +2,20 @@ package com.inboxiq.app.autoreply
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 import java.time.DayOfWeek
 import java.time.Instant
 import com.inboxiq.app.sms.SmsLength
 import java.time.ZoneId
+
+/** Why a message cannot be sent automatically. [res] is the explanation shown under the text field (TOO_LONG also takes the character limit). */
+enum class MessageProblem(@StringRes val res: Int) {
+    EMPTY(R.string.autoreply_problem_empty),
+    HAS_LINK(R.string.autoreply_problem_link),
+    NOT_PLAIN(R.string.autoreply_problem_plain),
+    TOO_LONG(R.string.autoreply_problem_too_long),
+}
 
 /** The user's settings for "Auto-reply when away". Everything defaults to OFF / the most conservative value. */
 data class AutoReplyConfig(
@@ -45,7 +55,7 @@ data class AutoReplyConfig(
         enabled && (untilMillis == 0L || nowMillis < untilMillis) && withinSchedule(nowMillis, zone)
 
     /** Why [validate] refused a message, or null when it is fine to send automatically. */
-    fun validate(): String? = validateMessage(message)
+    fun validate(): MessageProblem? = validateMessage(message)
 
     companion object {
         const val MAX_DAILY = 20
@@ -60,15 +70,15 @@ data class AutoReplyConfig(
 
         private val url = Regex("https?://|www\\.|\\b[a-z0-9-]+\\.(com|org|net|io|co|app|me|ly|link)\\b", RegexOption.IGNORE_CASE)
 
-        fun validateMessage(m: String): String? = when {
-            m.isBlank() -> "Write the message to send."
-            url.containsMatchIn(m) -> "Leave out links."
+        fun validateMessage(m: String): MessageProblem? = when {
+            m.isBlank() -> MessageProblem.EMPTY
+            url.containsMatchIn(m) -> MessageProblem.HAS_LINK
             // Printable ASCII is not the same as the 7-bit SMS alphabet: a backtick, for one, is outside it and would
             // turn the whole text into the 70-character UCS-2 kind, so count what the radio will really send.
             m.any { it.code > 0x7E || it.isISOControl() } || SmsLength.of(m).encoding != SmsLength.Encoding.GSM_7BIT ->
-                "Use plain letters and punctuation so it stays one text (no emoji, accents or backticks)."
+                MessageProblem.NOT_PLAIN
             // ^ { } [ ] \ ~ | cost two septets each, so 160 characters is not always one segment.
-            SmsLength.of(m).segments > 1 -> "Keep it under $MAX_MESSAGE_CHARS characters so it is a single text."
+            SmsLength.of(m).segments > 1 -> MessageProblem.TOO_LONG
             else -> null
         }
     }
@@ -82,8 +92,15 @@ data class AutoReplyLogEntry(val at: Long, val address: String, val messageId: L
  * daily counter, the ids of automatic messages (for the "Sent automatically" marker) and a capped log.
  * No message text from other people is stored here.
  */
-class AutoReplyStore(private val prefs: SharedPreferences) {
-    constructor(context: Context) : this(context.applicationContext.getSharedPreferences(FILE, Context.MODE_PRIVATE))
+/**
+ * [confirmationFor] renders the confirmation dialog text for a configuration (in the user's language); [enable] only
+ * accepts the exact text that was shown.
+ */
+class AutoReplyStore(private val prefs: SharedPreferences, private val confirmationFor: (AutoReplyConfig) -> String) {
+    constructor(context: Context) : this(
+        context.applicationContext.getSharedPreferences(FILE, Context.MODE_PRIVATE),
+        { c -> AutoReplyConfirmation.text(context.applicationContext, c) },
+    )
 
     fun config(): AutoReplyConfig {
         val d = AutoReplyConfig()
@@ -123,7 +140,7 @@ class AutoReplyStore(private val prefs: SharedPreferences) {
     fun enable(confirmedText: String): Boolean {
         val c = config()
         if (c.validate() != null) return false
-        if (confirmedText != AutoReplyConfirmation.text(c)) return false
+        if (confirmedText != confirmationFor(c)) return false
         prefs.edit().putBoolean("enabled", true).commit()
         return true
     }
@@ -167,19 +184,17 @@ class AutoReplyStore(private val prefs: SharedPreferences) {
     }
 }
 
-/** What the confirmation dialog says. Kept here (pure) so tests can pin it to the exact message that will be sent. */
+/** What the confirmation dialog says. Kept here so tests can pin it to the exact message that will be sent. */
 object AutoReplyConfirmation {
-    fun text(c: AutoReplyConfig): String = buildString {
-        appendLine("InboxIQ will send this text automatically:")
-        appendLine()
-        appendLine("\"${c.message}\"")
-        appendLine()
-        appendLine("It is sent only to people you have texted before or saved as contacts, in one-to-one Personal or Work conversations. Never to businesses, short codes, groups, spam, or numbers you blocked.")
-        appendLine()
-        append("Limits: one automatic text per person every ${c.perSenderHours.coerceIn(1, AutoReplyConfig.MAX_PER_SENDER_HOURS)} hours, at most ${c.dailyCap.coerceIn(1, AutoReplyConfig.MAX_DAILY)} a day in total. ")
-        append("It only answers new texts, and only while InboxIQ is your default SMS app. ")
-        appendLine("You can turn it off any time and see everything it sent.")
-        appendLine()
-        append("Your carrier may charge for these texts, as for any text you send.")
-    }.trim()
+    fun text(context: Context, c: AutoReplyConfig): String {
+        val hours = c.perSenderHours.coerceIn(1, AutoReplyConfig.MAX_PER_SENDER_HOURS)
+        val daily = c.dailyCap.coerceIn(1, AutoReplyConfig.MAX_DAILY)
+        return listOf(
+            context.getString(R.string.autoreply_confirm_intro),
+            context.getString(R.string.autoreply_confirm_quoted, c.message),
+            context.getString(R.string.autoreply_confirm_who),
+            context.resources.getQuantityString(R.plurals.autoreply_confirm_limits, hours, hours, daily),
+            context.getString(R.string.ui_your_carrier_may_charge_for),
+        ).joinToString("\n\n").trim()
+    }
 }

@@ -1,5 +1,6 @@
 package com.inboxiq.app.inbox
 
+import com.inboxiq.app.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,18 +17,18 @@ class ScheduleOptionsTest {
         val opts = ScheduleOptions.quick(now, utc)
         assertTrue(opts.all { it.second > now })
         assertEquals(opts.map { it.second }, opts.map { it.second }.sorted())
-        assertEquals(listOf("In 1 hour", "This evening", "Tomorrow morning", "Monday morning"), opts.map { it.first })
+        assertEquals(listOf(R.string.schedule_in_one_hour, R.string.schedule_this_evening, R.string.schedule_tomorrow_morning, R.string.schedule_monday_morning), opts.map { it.first })
         assertEquals(ms(2026, Calendar.OCTOBER, 14, 18), opts[1].second)
         assertEquals(ms(2026, Calendar.OCTOBER, 19, 8), opts[3].second)
     }
 
     @Test fun `late evening drops the evening option`() {
         val now = ms(2026, Calendar.OCTOBER, 14, 17, 45)
-        assertTrue(ScheduleOptions.quick(now, utc).none { it.first == "This evening" })
+        assertTrue(ScheduleOptions.quick(now, utc).none { it.first == R.string.schedule_this_evening })
     }
 
     @Test fun `on Sunday tomorrow is Monday so no duplicate Monday option`() {
         val now = ms(2026, Calendar.OCTOBER, 18, 10) // Sunday
-        assertTrue(ScheduleOptions.quick(now, utc).none { it.first == "Monday morning" })
+        assertTrue(ScheduleOptions.quick(now, utc).none { it.first == R.string.schedule_monday_morning })
     }
 }

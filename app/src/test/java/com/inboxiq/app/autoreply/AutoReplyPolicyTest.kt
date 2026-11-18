@@ -1,5 +1,7 @@
 package com.inboxiq.app.autoreply
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.inboxiq.app.data.MessageLabel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -7,11 +9,17 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneId
 
+@RunWith(RobolectricTestRunner::class)
+@Config(application = android.app.Application::class)
 class AutoReplyPolicyTest {
+    private val context: Context get() = ApplicationProvider.getApplicationContext()
     private val utc = ZoneId.of("UTC")
     private val now = LocalDateTime.of(2026, 10, 14, 12, 0).atZone(utc).toInstant().toEpochMilli() // a Wednesday
     private val on = AutoReplyConfig(enabled = true)
@@ -174,7 +182,7 @@ class AutoReplyPolicyTest {
 
     @Test fun `confirmation shows the exact message, recipients, limits and the carrier warning`() {
         val c = AutoReplyConfig(message = "I am driving, I will reply when I can.", perSenderHours = 12, dailyCap = 10)
-        val t = AutoReplyConfirmation.text(c)
+        val t = AutoReplyConfirmation.text(context, c)
         assertTrue(t.contains("\"I am driving, I will reply when I can.\""))
         assertTrue(t.contains("people you have texted before or saved as contacts"))
         assertTrue(t.contains("Never to businesses, short codes, groups"))

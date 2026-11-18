@@ -21,7 +21,7 @@ class LabelStyleContrastTest {
     }
 
     @Test fun `every label has a distinct name and a distinct icon`() {
-        val names = MessageLabel.entries.map { LabelPalette.displayName(it) }
+        val names = MessageLabel.entries.map { LabelPalette.nameRes(it) }
         assertTrue(names.toSet().size == names.size)
         val icons = MessageLabel.entries.map { LabelPalette.icon(it).name }
         assertTrue(icons.toSet().size == icons.size)

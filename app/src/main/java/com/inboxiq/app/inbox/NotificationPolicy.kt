@@ -1,19 +1,21 @@
 package com.inboxiq.app.inbox
 
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 import com.inboxiq.app.classify.QuickReplySuggester
 import com.inboxiq.app.data.MessageLabel
 
 /** One Android notification channel per kind of message, so the user can tune each in system settings. */
-enum class MessageChannel(val id: String, val title: String, val description: String, val importance: Int) {
+enum class MessageChannel(val id: String, @StringRes val titleRes: Int, @StringRes val descriptionRes: Int, val importance: Int) {
     // importance values mirror NotificationManager.IMPORTANCE_* (4 high, 3 default, 2 low)
-    GENERAL("incoming_messages", "Messages", "Texts that have not been sorted yet", 4),
-    PERSONAL("msg_personal", "Personal", "Texts from people you know", 4),
-    WORK("msg_work", "Work", "Texts about work", 4),
+    GENERAL("incoming_messages", R.string.channel_general_title, R.string.channel_general_desc, 4),
+    PERSONAL("msg_personal", R.string.label_personal, R.string.channel_personal_desc, 4),
+    WORK("msg_work", R.string.label_work, R.string.channel_work_desc, 4),
     // Default importance (sound, no heads-up pop-up): bank and delivery alerts can be dozens a day, but must not be silent.
-    TRANSACTIONS("msg_transactions", "Transactions", "Bank, payment, delivery and booking alerts", 3),
-    CODES("msg_codes", "Verification codes", "One-time codes, with a Copy code button", 4),
-    PROMO("msg_promo", "Promos", "Marketing and sales texts, kept quiet", 2),
-    JUNK("msg_junk", "Spam and scams", "Texts filed as spam or scam, silent", 2),
+    TRANSACTIONS("msg_transactions", R.string.tab_transactions, R.string.channel_transactions_desc, 3),
+    CODES("msg_codes", R.string.channel_codes_title, R.string.channel_codes_desc, 4),
+    PROMO("msg_promo", R.string.tab_promos, R.string.channel_promo_desc, 2),
+    JUNK("msg_junk", R.string.channel_junk_title, R.string.channel_junk_desc, 2),
 }
 
 data class NotificationPlan(

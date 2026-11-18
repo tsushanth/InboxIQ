@@ -3,7 +3,9 @@ package com.inboxiq.app.voice
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import com.inboxiq.app.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -22,7 +24,7 @@ class VoiceTranscriber private constructor(private val context: Context) {
 
     sealed interface Result {
         data class Success(val text: String) : Result
-        data class Failure(val reason: String) : Result
+        data class Failure(@StringRes val reasonRes: Int) : Result
     }
 
     fun hasRecordPermission(): Boolean =
@@ -37,21 +39,21 @@ class VoiceTranscriber private constructor(private val context: Context) {
 
     suspend fun stopAndTranscribe(): Result = withContext(Dispatchers.Default) {
         val samples = recorder.stopAndGetSamples()
-        if (samples.isEmpty()) return@withContext Result.Failure("No audio recorded")
+        if (samples.isEmpty()) return@withContext Result.Failure(R.string.voice_error_no_audio)
 
         if (!initialized) {
             val ready = ensureModelLoaded()
-            if (!ready) return@withContext Result.Failure("Couldn't load the voice model")
+            if (!ready) return@withContext Result.Failure(R.string.voice_error_model)
         }
 
         val segments = try {
             whisper.transcribe(samples, language = "en")
         } catch (e: Exception) {
-            return@withContext Result.Failure("Transcription failed")
+            return@withContext Result.Failure(R.string.voice_error_failed)
         }
 
         val text = segments.joinToString(" ") { it.text }.trim()
-        if (text.isEmpty()) Result.Failure("Couldn't make out any speech") else Result.Success(text)
+        if (text.isEmpty()) Result.Failure(R.string.voice_error_no_speech) else Result.Success(text)
     }
 
     private suspend fun ensureModelLoaded(): Boolean = withContext(Dispatchers.IO) {

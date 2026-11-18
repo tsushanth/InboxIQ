@@ -108,6 +108,7 @@ import com.inboxiq.app.inbox.SearchLogic
 import com.inboxiq.app.inbox.ThreadRow
 import com.inboxiq.app.sms.ImportError
 import com.inboxiq.app.sms.ImportStatus
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.inboxiq.app.R
 import com.inboxiq.app.ui.theme.Density
@@ -206,16 +207,16 @@ fun InboxScreen(
                 )
                 searching -> SearchBar(query, { query = it }, onClose = { searching = false; query = "" })
                 else -> InboxHeader(
-                    title = if (showArchived) "Archived" else "Inbox",
+                    title = stringResource(if (showArchived) R.string.action_archived_title else R.string.inbox_title),
                     subtitle = when {
-                        showArchived -> "Hidden from your inbox. New texts bring a thread back."
-                        unreadTotal > 0 -> "$unreadTotal unread, sorted on this phone"
-                        else -> "All caught up, sorted on this phone"
+                        showArchived -> stringResource(R.string.inbox_subtitle_archived)
+                        unreadTotal > 0 -> pluralStringResource(R.plurals.inbox_subtitle_unread, unreadTotal, unreadTotal)
+                        else -> stringResource(R.string.inbox_subtitle_all_read)
                     },
                     onBack = if (showArchived) ({ showArchived = false }) else null,
                     onSearch = { searching = true },
                     menu = {
-                        IconButton(onClick = { menuOpen = true }) { Icon(Icons.Filled.MoreVert, contentDescription = "More options") }
+                        IconButton(onClick = { menuOpen = true }) { Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.common_more_options)) }
                         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.ui_mark_all_as_read)) },
@@ -224,7 +225,7 @@ fun InboxScreen(
                                 onClick = { menuOpen = false; callbacks.onMarkAllRead() },
                             )
                             DropdownMenuItem(
-                                text = { Text(if (showArchived) "Back to inbox" else "Archived") },
+                                text = { Text(stringResource(if (showArchived) R.string.nav_back_to_inbox else R.string.action_archived_title)) },
                                 leadingIcon = { Icon(if (showArchived) Icons.Filled.Inbox else Icons.Filled.Archive, null) },
                                 onClick = { menuOpen = false; showArchived = !showArchived },
                             )
@@ -263,8 +264,8 @@ fun InboxScreen(
                             rows == null -> LoadingState()
                             shown.isEmpty() && importStatus.running && tab == InboxTab.ALL && !showArchived -> StateMessage(
                                 icon = Icons.Filled.Inbox,
-                                title = "Copying your texts",
-                                body = "Your newest conversations show up here as soon as they are copied, then InboxIQ sorts them on this phone. You can keep using the app.",
+                                title = stringResource(R.string.import_copying_title),
+                                body = stringResource(R.string.import_copying_body),
                                 modifier = Modifier.fillMaxSize(),
                             )
                             shown.isEmpty() -> EmptyInbox(tab, showArchived, isDefaultHandler, callbacks.onRequestDefault)
@@ -352,13 +353,13 @@ private fun InboxHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (onBack != null) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to inbox") }
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back_to_inbox)) }
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
             Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        IconButton(onClick = onSearch) { Icon(Icons.Filled.Search, contentDescription = "Search messages and contacts") }
+        IconButton(onClick = onSearch) { Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.inbox_search_messages_contacts)) }
         Box { menu() }
     }
 }
@@ -379,7 +380,7 @@ private fun SearchBar(query: String, onChange: (String) -> Unit, onClose: () -> 
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
         )
-        IconButton(onClick = onClose) { Icon(Icons.Filled.Close, contentDescription = "Close search") }
+        IconButton(onClick = onClose) { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.inbox_close_search)) }
     }
 }
 
@@ -436,6 +437,8 @@ fun LabelTray(selected: InboxTab, counts: Map<InboxTab, Int>, onSelect: (InboxTa
     ) {
         InboxTab.entries.forEach { t ->
             val style = tabStyle(t)
+            val tabTitle = stringResource(t.titleRes)
+            val tabUnreadDescription = pluralStringResource(R.plurals.inbox_tab_unread_conversations, counts[t] ?: 0, tabTitle, counts[t] ?: 0)
             val isSel = t == selected
             val unread = counts[t] ?: 0
             Box(
@@ -445,10 +448,7 @@ fun LabelTray(selected: InboxTab, counts: Map<InboxTab, Int>, onSelect: (InboxTa
                     .semantics(mergeDescendants = true) {
                         role = Role.Tab
                         this.selected = isSel
-                        contentDescription = buildString {
-                            append(t.title)
-                            if (unread > 0) append(", $unread unread conversation${if (unread == 1) "" else "s"}")
-                        }
+                        contentDescription = if (unread > 0) tabUnreadDescription else tabTitle
                     }
                     .clickable(onClick = { onSelect(t) }, role = Role.Tab),
                 contentAlignment = Alignment.BottomCenter,
@@ -472,7 +472,7 @@ fun LabelTray(selected: InboxTab, counts: Map<InboxTab, Int>, onSelect: (InboxTa
                             )
                             Spacer(Modifier.width(6.dp))
                             Text(
-                                t.title,
+                                tabTitle,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = if (isSel) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -523,7 +523,12 @@ private fun SwipeableThreadRow(
             }
         },
     )
-    val pinLabel = if (row.pinned) "Unpin" else "Pin"
+    val pinLabel = stringResource(if (row.pinned) R.string.action_unpin else R.string.action_pin)
+    val archiveLabel = stringResource(if (inArchive) R.string.action_unarchive else R.string.action_archive)
+    val deleteConversationLabel = stringResource(R.string.ui_delete_conversation)
+    val muteLabel = stringResource(if (row.muted(now)) R.string.action_unmute else R.string.ui_mute_notifications)
+    val selectLabel = stringResource(R.string.action_select)
+    val deleteLabel = stringResource(R.string.action_delete)
     val muted = row.muted(now)
     SwipeToDismissBox(
         state = swipeState,
@@ -539,9 +544,9 @@ private fun SwipeableThreadRow(
                 horizontalArrangement = if (toEnd) Arrangement.Start else Arrangement.End,
             ) {
                 val (icon, text) = when {
-                    toEnd && inArchive -> Icons.Filled.Unarchive to "Unarchive"
-                    toEnd -> Icons.Filled.Archive to "Archive"
-                    else -> Icons.Filled.Delete to "Delete"
+                    toEnd && inArchive -> Icons.Filled.Unarchive to archiveLabel
+                    toEnd -> Icons.Filled.Archive to archiveLabel
+                    else -> Icons.Filled.Delete to deleteLabel
                 }
                 Icon(icon, contentDescription = null, tint = fg)
                 Spacer(Modifier.width(8.dp))
@@ -556,11 +561,11 @@ private fun SwipeableThreadRow(
                 .semantics {
                     // Swipes are invisible to a screen reader, so every swipe action is also listed here.
                     customActions = listOf(
-                        CustomAccessibilityAction(if (inArchive) "Unarchive" else "Archive") { callbacks.onArchive(setOf(address), !inArchive); true },
-                        CustomAccessibilityAction("Delete conversation") { callbacks.onDelete(setOf(address)); true },
+                        CustomAccessibilityAction(archiveLabel) { callbacks.onArchive(setOf(address), !inArchive); true },
+                        CustomAccessibilityAction(deleteConversationLabel) { callbacks.onDelete(setOf(address)); true },
                         CustomAccessibilityAction(pinLabel) { callbacks.onPin(setOf(address), !row.pinned); true },
-                        CustomAccessibilityAction(if (muted) "Unmute" else "Mute") { onMuteRequest(); true },
-                        CustomAccessibilityAction("Select") { onLongClick(); true },
+                        CustomAccessibilityAction(muteLabel) { onMuteRequest(); true },
+                        CustomAccessibilityAction(selectLabel) { onLongClick(); true },
                     )
                 }
                 .combinedClickable(onClick = onClick, onLongClick = onLongClick),
@@ -592,24 +597,24 @@ fun ThreadRowContent(
         else -> MaterialTheme.colorScheme.surface
     }
     val title = name ?: latest.address
-    val preview = row.draft?.let { "Draft: $it" } ?: when {
-        latest.body.isBlank() && latest.imagePartUri != null -> "Photo"
-        !latest.isIncoming -> "You: ${latest.body}"
+    val preview = row.draft?.let { stringResource(R.string.inbox_preview_draft, it) } ?: when {
+        latest.body.isBlank() && latest.imagePartUri != null -> stringResource(R.string.inbox_preview_photo)
+        !latest.isIncoming -> stringResource(R.string.inbox_preview_you, latest.body)
         else -> latest.body
     }
-    val description = buildString {
-        append(title)
-        append(". ")
-        append(LabelPalette.displayName(latest.label))
-        if (unread) append(". ${row.unread} unread")
-        if (row.pinned) append(". Pinned")
-        if (muted) append(". Muted")
-        if (needsReply) append(". Needs a reply")
-        append(". ")
-        append(preview)
-        append(". ")
-        append(formatTimestamp(latest.timestamp, now))
-    }
+    val labelName = stringResource(LabelPalette.nameRes(latest.label))
+    val unreadText = pluralStringResource(R.plurals.inbox_row_unread, row.unread, row.unread)
+    val pinnedText = stringResource(R.string.inbox_row_pinned)
+    val mutedText = stringResource(R.string.ui_muted)
+    val needsReplyText = stringResource(R.string.ui_needs_a_reply)
+    val description = listOfNotNull(
+        title, labelName,
+        unreadText.takeIf { unread },
+        pinnedText.takeIf { row.pinned },
+        mutedText.takeIf { muted },
+        needsReplyText.takeIf { needsReply },
+        preview, formatTimestamp(latest.timestamp, now),
+    ).joinToString(". ")
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -720,24 +725,24 @@ private fun SelectionBar(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = onClear) { Icon(Icons.Filled.Close, contentDescription = "Clear selection") }
+            IconButton(onClick = onClear) { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.inbox_clear_selection)) }
             Text(
-                "${selectedRows.size} selected",
+                pluralStringResource(R.plurals.inbox_selected_count, selectedRows.size, selectedRows.size),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f),
             )
             IconButton(onClick = { onPin(!allPinned) }) {
-                Icon(Icons.Filled.PushPin, contentDescription = if (allPinned) "Unpin" else "Pin")
+                Icon(Icons.Filled.PushPin, contentDescription = stringResource(if (allPinned) R.string.action_unpin else R.string.action_pin))
             }
             IconButton(onClick = onArchive) {
-                Icon(if (inArchive) Icons.Filled.Unarchive else Icons.Filled.Archive, contentDescription = if (inArchive) "Unarchive" else "Archive")
+                Icon(if (inArchive) Icons.Filled.Unarchive else Icons.Filled.Archive, contentDescription = stringResource(if (inArchive) R.string.action_unarchive else R.string.action_archive))
             }
-            IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, contentDescription = "Delete") }
+            IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.action_delete)) }
             Box {
-                IconButton(onClick = { more = true }) { Icon(Icons.Filled.MoreVert, contentDescription = "More actions") }
+                IconButton(onClick = { more = true }) { Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.inbox_more_actions)) }
                 DropdownMenu(expanded = more, onDismissRequest = { more = false }) {
                     DropdownMenuItem(
-                        text = { Text(if (allMuted) "Unmute" else "Mute notifications") },
+                        text = { Text(stringResource(if (allMuted) R.string.action_unmute else R.string.ui_mute_notifications)) },
                         leadingIcon = { Icon(Icons.Filled.NotificationsOff, null) },
                         onClick = { more = false; onMute() },
                     )
@@ -786,7 +791,7 @@ fun MuteDialog(anyMuted: Boolean, onPick: (MuteDuration?) -> Unit, onDismiss: ()
                 Spacer(Modifier.height(8.dp))
                 MuteDuration.entries.forEach { d ->
                     TextButton(onClick = { onPick(d) }, modifier = Modifier.fillMaxWidth()) {
-                        Text(d.label, modifier = Modifier.fillMaxWidth())
+                        Text(stringResource(d.labelRes), modifier = Modifier.fillMaxWidth())
                     }
                 }
                 if (anyMuted) {
@@ -845,7 +850,7 @@ fun ReportSpamDialog(name: String, onConfirm: (alsoBlock: Boolean) -> Unit, onDi
     var block by remember { mutableStateOf(true) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Report $name as spam?") },
+        title = { Text(stringResource(R.string.inbox_report_spam_title, name)) },
         text = {
             Column {
                 Text(
@@ -882,19 +887,21 @@ private fun ImportStrip(status: ImportStatus, onRetry: () -> Unit) {
             val error = status.error
             if (error != null) {
                 Text(
-                    when (error) {
-                        ImportError.PERMISSION_DENIED -> "Android did not let InboxIQ read your texts."
-                        ImportError.LOW_STORAGE -> "There is not enough free storage to copy your texts. Free some space, then try again."
-                        ImportError.PROVIDER_UNAVAILABLE -> "Android's message storage did not answer."
-                        ImportError.UNKNOWN -> "Copying your texts stopped unexpectedly."
-                    },
+                    stringResource(
+                        when (error) {
+                            ImportError.PERMISSION_DENIED -> R.string.import_error_permission
+                            ImportError.LOW_STORAGE -> R.string.import_error_storage
+                            ImportError.PROVIDER_UNAVAILABLE -> R.string.import_error_provider
+                            ImportError.UNKNOWN -> R.string.import_error_unknown
+                        },
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
                 TextButton(onClick = onRetry) { Text(stringResource(R.string.ui_try_again)) }
             } else {
                 Text(
-                    "Copying your texts: ${nf.format(status.processed)} of ${nf.format(maxOf(status.total, status.processed))}. You can keep using the app.",
+                    stringResource(R.string.import_progress, nf.format(status.processed), nf.format(maxOf(status.total, status.processed))),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
@@ -924,23 +931,23 @@ private fun LoadingState() {
 @Composable
 private fun EmptyInbox(tab: InboxTab, archived: Boolean, isDefault: Boolean, onRequestDefault: () -> Unit) {
     val (title, body) = when {
-        archived -> "Nothing archived" to "Swipe a conversation right, or select it and tap Archive, to tidy it away without deleting it."
+        archived -> stringResource(R.string.empty_archived_title) to stringResource(R.string.empty_archived_body)
         tab == InboxTab.ALL && !isDefault ->
-            "No messages yet" to "Once InboxIQ is your default SMS app, your existing texts are copied in and sorted on this phone."
-        tab == InboxTab.ALL -> "No conversations" to "New texts land here, already sorted. Tap New message to start one."
-        tab == InboxTab.PERSONAL -> "No personal messages" to "Texts from people you know show up here."
-        tab == InboxTab.WORK -> "No work messages" to "Texts about meetings, shifts and deadlines show up here."
+            stringResource(R.string.empty_no_messages_title) to stringResource(R.string.empty_no_messages_body)
+        tab == InboxTab.ALL -> stringResource(R.string.empty_all_title) to stringResource(R.string.empty_all_body)
+        tab == InboxTab.PERSONAL -> stringResource(R.string.empty_personal_title) to stringResource(R.string.empty_personal_body)
+        tab == InboxTab.WORK -> stringResource(R.string.empty_work_title) to stringResource(R.string.empty_work_body)
         tab == InboxTab.TRANSACTIONS -> stringResource(R.string.transactions_empty_title) to stringResource(R.string.transactions_empty_body)
-        tab == InboxTab.PROMO -> "No promos" to "Sales and marketing texts are kept here, out of your main inbox."
-        tab == InboxTab.CODES -> "No codes" to "Verification codes show up here with a Copy button, and expire after a few minutes."
-        else -> "Nothing in Junk" to "Texts the model files as spam or scam go here. If it gets one wrong, open the conversation and change its label."
+        tab == InboxTab.PROMO -> stringResource(R.string.empty_promo_title) to stringResource(R.string.empty_promo_body)
+        tab == InboxTab.CODES -> stringResource(R.string.empty_codes_title) to stringResource(R.string.empty_codes_body)
+        else -> stringResource(R.string.empty_junk_title) to stringResource(R.string.empty_junk_body)
     }
     StateMessage(
         icon = if (archived) Icons.Filled.Archive else Icons.Filled.SearchOff,
         title = title,
         body = body,
         modifier = Modifier.fillMaxSize(),
-        actionLabel = if (tab == InboxTab.ALL && !isDefault && !archived) "Choose InboxIQ as default" else null,
+        actionLabel = if (tab == InboxTab.ALL && !isDefault && !archived) stringResource(R.string.ui_choose_inboxiq_as_default) else null,
         onAction = if (tab == InboxTab.ALL && !isDefault && !archived) onRequestDefault else null,
     )
 }
@@ -963,18 +970,18 @@ private fun SearchResults(
     Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
         when {
             query.isBlank() -> StateMessage(
-                Icons.Filled.Search, "Search this phone",
-                "Find a person, a number, or any word in your texts. Searching never leaves the device.",
+                Icons.Filled.Search, stringResource(R.string.search_empty_title),
+                stringResource(R.string.search_empty_body),
                 modifier = Modifier.fillMaxSize(),
             )
             people.isEmpty() && messages.isEmpty() -> StateMessage(
-                Icons.Filled.SearchOff, "No matches for \"${query.trim()}\"",
-                "Check the spelling, or try part of a phone number. Archived conversations are included.",
+                Icons.Filled.SearchOff, stringResource(R.string.search_no_matches_title, query.trim()),
+                stringResource(R.string.search_no_matches_body),
                 modifier = Modifier.fillMaxSize(),
             )
             else -> LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
                 if (people.isNotEmpty()) {
-                    item { SectionTitle("People and numbers") }
+                    item { SectionTitle(stringResource(R.string.search_section_people)) }
                     items(people, key = { "p" + it.address }) { hit ->
                         Row(
                             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable { onOpenThread(hit.address) }.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -991,7 +998,7 @@ private fun SearchResults(
                     }
                 }
                 if (messages.isNotEmpty()) {
-                    item { SectionTitle("Messages") }
+                    item { SectionTitle(stringResource(R.string.search_section_messages)) }
                     items(messages, key = { "m" + it.id }) { m ->
                         val snippet = remember(m.id, query) { SearchLogic.snippet(m.body, query) }
                         Column(

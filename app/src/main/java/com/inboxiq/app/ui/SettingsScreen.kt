@@ -30,6 +30,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.inboxiq.app.R
 import androidx.compose.runtime.LaunchedEffect
@@ -77,8 +78,8 @@ fun SettingsScreen(
     callbacks: SettingsCallbacks,
     modifier: Modifier = Modifier,
     showCloudSections: Boolean = true,
-    /** null hides the entry (build flag off); otherwise "On" / "Off". */
-    autoReplySummary: String? = null,
+    /** null hides the entry (build flag off); otherwise whether auto-reply is on. */
+    autoReplyEnabled: Boolean? = null,
     isDefault: Boolean = true,
     /** Name of the SMS app InboxIQ replaced, when known. */
     previousAppName: String? = null,
@@ -98,7 +99,7 @@ fun SettingsScreen(
 
     Column(modifier.fillMaxSize().statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
+            IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back)) }
             Text(stringResource(R.string.ui_settings), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -133,30 +134,30 @@ fun SettingsScreen(
             }
 
             // ---------- appearance ----------
-            Section("Appearance")
+            Section(stringResource(R.string.settings_appearance))
             ThemeMode.entries.forEach { m ->
-                ChoiceRow(m.label, theme.mode == m) { callbacks.onTheme(theme.copy(mode = m)) }
+                ChoiceRow(stringResource(m.labelRes), theme.mode == m) { callbacks.onTheme(theme.copy(mode = m)) }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                SwitchRow("Use wallpaper colours", "Material You. Label colours stay fixed so they keep their meaning.", theme.dynamicColor) {
+                SwitchRow(stringResource(R.string.settings_wallpaper_colours), stringResource(R.string.settings_wallpaper_colours_body), theme.dynamicColor) {
                     callbacks.onTheme(theme.copy(dynamicColor = it))
                 }
             }
-            Sub("Text size")
+            Sub(stringResource(R.string.settings_text_size))
             ThemeSettings.FONT_SCALES.forEach { s ->
-                ChoiceRow(ThemeSettings.fontScaleLabel(s), theme.fontScale == s) { callbacks.onTheme(theme.copy(fontScale = s)) }
+                ChoiceRow(stringResource(ThemeSettings.fontScaleLabelRes(s)), theme.fontScale == s) { callbacks.onTheme(theme.copy(fontScale = s)) }
             }
             Text(stringResource(R.string.ui_on_top_of_your_phone), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Sub("List density")
+            Sub(stringResource(R.string.settings_list_density))
             Density.entries.forEach { d ->
-                ChoiceRow(d.label, theme.density == d) { callbacks.onTheme(theme.copy(density = d)) }
+                ChoiceRow(stringResource(d.labelRes), theme.density == d) { callbacks.onTheme(theme.copy(density = d)) }
             }
 
             // ---------- sending ----------
-            Section("Sending")
-            Sub("Undo send")
-            listOf(0 to "Off, send immediately", 5 to "5 seconds", 10 to "10 seconds").forEach { (secs, label) ->
-                ChoiceRow(label, undoSeconds == secs) { callbacks.onUndoSeconds(secs) }
+            Section(stringResource(R.string.settings_sending))
+            Sub(stringResource(R.string.settings_undo_send))
+            listOf(0 to R.string.settings_undo_off, 5 to R.string.settings_undo_5s, 10 to R.string.settings_undo_10s).forEach { (secs, labelRes) ->
+                ChoiceRow(stringResource(labelRes), undoSeconds == secs) { callbacks.onUndoSeconds(secs) }
             }
             Text(
                 stringResource(R.string.ui_applies_to_text_messages_picture),
@@ -164,7 +165,7 @@ fun SettingsScreen(
             )
 
             // ---------- sorting ----------
-            Section("Sorting")
+            Section(stringResource(R.string.settings_sorting))
             Text(
                 stringResource(R.string.sorting_transactions_note),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -182,38 +183,38 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(selected = current == tier, onClick = null, enabled = tier.available)
-                    Text(tier.label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 12.dp))
+                    Text(stringResource(tier.labelRes), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 12.dp))
                 }
                 if (tier == ClassifierTier.MID && current == ClassifierTier.MID) {
                     val hint = when (val s = modelState) {
-                        is ModelDownloadState.Downloading -> "Downloading model, ${if (s.totalBytes > 0) (100 * s.bytesDownloaded / s.totalBytes) else 0}%"
-                        is ModelDownloadState.WaitingForWifi -> "Waiting for Wi-Fi to download the model"
-                        is ModelDownloadState.RequiresConfirmation -> "Tap to confirm the model download"
-                        is ModelDownloadState.Failed -> "The download failed. Choose this option again to retry."
-                        is ModelDownloadState.Ready -> "Model ready. Sorting uses Gemma 3 270M."
-                        is ModelDownloadState.NotDownloaded -> "Starting download"
+                        is ModelDownloadState.Downloading -> stringResource(R.string.settings_model_downloading, if (s.totalBytes > 0) (100 * s.bytesDownloaded / s.totalBytes).toInt() else 0)
+                        is ModelDownloadState.WaitingForWifi -> stringResource(R.string.settings_model_waiting_wifi)
+                        is ModelDownloadState.RequiresConfirmation -> stringResource(R.string.settings_model_confirm)
+                        is ModelDownloadState.Failed -> stringResource(R.string.settings_model_failed)
+                        is ModelDownloadState.Ready -> stringResource(R.string.settings_model_ready)
+                        is ModelDownloadState.NotDownloaded -> stringResource(R.string.settings_model_starting)
                     }
                     Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 40.dp, bottom = 8.dp))
                 }
             }
 
             // ---------- auto reply (only when compiled in) ----------
-            if (autoReplySummary != null) {
-                Section("Auto-reply")
+            if (autoReplyEnabled != null) {
+                Section(stringResource(R.string.settings_auto_reply))
                 Row(
                     Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = callbacks.onOpenAutoReply),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.ui_auto_reply_when_away), style = MaterialTheme.typography.bodyLarge)
-                        Text("$autoReplySummary. Sends one short text for you to people you know.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(if (autoReplyEnabled) R.string.settings_auto_reply_summary_on else R.string.settings_auto_reply_summary_off), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
                 }
             }
 
             // ---------- blocked ----------
-            Section("Blocked numbers")
+            Section(stringResource(R.string.settings_blocked_numbers))
             Row(
                 Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = callbacks.onOpenBlocked),
                 verticalAlignment = Alignment.CenterVertically,
@@ -221,7 +222,7 @@ fun SettingsScreen(
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(R.string.ui_manage_blocked_numbers), style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        if (blockedCount == 0) "None blocked" else "$blockedCount blocked. Texts from them are not saved.",
+                        if (blockedCount == 0) stringResource(R.string.settings_none_blocked) else pluralStringResource(R.plurals.settings_blocked_count, blockedCount, blockedCount),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -229,7 +230,7 @@ fun SettingsScreen(
             }
 
             // ---------- backup ----------
-            Section("Backup")
+            Section(stringResource(R.string.settings_backup))
             Text(
                 stringResource(R.string.ui_save_your_conversations_to_a),
                 style = MaterialTheme.typography.bodyMedium,
@@ -250,14 +251,14 @@ fun SettingsScreen(
             )
 
             // ---------- privacy ----------
-            Section("Privacy")
+            Section(stringResource(R.string.settings_privacy))
             Text(
                 stringResource(R.string.settings_privacy_note),
                 style = MaterialTheme.typography.bodyMedium,
             )
             OutlinedButton(onClick = callbacks.onShowIntro, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.ui_read_what_inboxiq_does_and)) }
             if (showSetupLog) {
-                OutlinedButton(onClick = callbacks.onOpenSetupLog, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.funnel_title) + " (debug build)") }
+                OutlinedButton(onClick = callbacks.onOpenSetupLog, modifier = Modifier.padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.settings_setup_log_debug, stringResource(R.string.funnel_title))) }
             }
 
             if (showCloudSections) {

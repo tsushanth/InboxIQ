@@ -1,18 +1,33 @@
 package com.inboxiq.app.firstrun
 
+import android.content.Context
+import androidx.annotation.PluralsRes
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.inbox.ThreadRow
 
 /** Conversation counts per label, for the "your inbox, sorted" card. */
 data class FirstLookSummary(val sorted: Int, val parts: List<Pair<String, Int>>) {
     /** "12 personal, 4 promos and 2 codes". Empty groups are left out. */
-    fun sentence(): String {
-        val items = parts.filter { it.second > 0 }.map { (name, n) -> "$n " + if (n == 1) name.removeSuffix("s").takeIf { name == "promos" || name == "codes" || name == "transactions" } ?: name else name }
-        return when (items.size) {
-            0 -> ""
-            1 -> items[0]
-            else -> items.dropLast(1).joinToString(", ") + " and " + items.last()
-        }
+    fun sentence(context: Context): String {
+        val res = context.resources
+        val items = parts.filter { it.second > 0 }.map { (name, n) -> res.getQuantityString(countPlural(name), n, n) }
+        if (items.isEmpty()) return ""
+        // The joiners are strings so each language can choose its own separator and conjunction.
+        var text = items[0]
+        for (i in 1 until items.size - 1) text = context.getString(R.string.firstlook_join_more, text, items[i])
+        if (items.size > 1) text = context.getString(R.string.firstlook_join_last, text, items.last())
+        return text
+    }
+
+    @PluralsRes
+    private fun countPlural(group: String): Int = when (group) {
+        "personal" -> R.plurals.firstlook_count_personal
+        "work" -> R.plurals.firstlook_count_work
+        "transactions" -> R.plurals.firstlook_count_transactions
+        "promos" -> R.plurals.firstlook_count_promos
+        "codes" -> R.plurals.firstlook_count_codes
+        else -> R.plurals.firstlook_count_junk
     }
 }
 

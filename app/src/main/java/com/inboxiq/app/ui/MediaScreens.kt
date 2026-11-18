@@ -72,14 +72,15 @@ fun decodeScaled(context: Context, partUri: String, maxDim: Int): Bitmap? = runC
 }.getOrNull()
 
 @Composable
-fun MmsImage(partUri: String, modifier: Modifier = Modifier, maxDim: Int = 800, contentScale: ContentScale = ContentScale.Crop, description: String = "Photo in message") {
+fun MmsImage(partUri: String, modifier: Modifier = Modifier, maxDim: Int = 800, contentScale: ContentScale = ContentScale.Crop, description: String? = null) {
     val context = LocalContext.current
+    val photoDescription = description ?: stringResource(R.string.media_photo_in_message)
     val bitmap by produceState<Bitmap?>(initialValue = null, partUri) {
         value = withContext(Dispatchers.IO) { decodeScaled(context, partUri, maxDim) }
     }
     val b = bitmap
     if (b != null) {
-        Image(b.asImageBitmap(), contentDescription = description, contentScale = contentScale, modifier = modifier)
+        Image(b.asImageBitmap(), contentDescription = photoDescription, contentScale = contentScale, modifier = modifier)
     } else {
         Box(modifier.background(MaterialTheme.colorScheme.surfaceVariant), contentAlignment = Alignment.Center) {
             Icon(Icons.Filled.BrokenImage, contentDescription = stringResource(R.string.ui_photo_could_not_be_loaded), tint = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -91,7 +92,7 @@ fun MmsImage(partUri: String, modifier: Modifier = Modifier, maxDim: Int = 800, 
 fun MediaGalleryScreen(title: String, images: List<MessageEntity>, onBack: () -> Unit, onOpen: (Int) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Row(Modifier.fillMaxWidth().statusBarsPadding().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to conversation") }
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.media_back_to_conversation)) }
             Column(Modifier.weight(1f)) {
                 Text(stringResource(R.string.ui_photos), style = MaterialTheme.typography.titleLarge)
                 Text(title, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -99,8 +100,8 @@ fun MediaGalleryScreen(title: String, images: List<MessageEntity>, onBack: () ->
         }
         if (images.isEmpty()) {
             StateMessage(
-                Icons.Filled.PhotoLibrary, "No photos here yet",
-                "Pictures sent or received in this conversation are collected here.",
+                Icons.Filled.PhotoLibrary, stringResource(R.string.media_empty_title),
+                stringResource(R.string.media_empty_body),
                 modifier = Modifier.fillMaxSize(),
             )
         } else {
@@ -112,8 +113,8 @@ fun MediaGalleryScreen(title: String, images: List<MessageEntity>, onBack: () ->
                 items(images.size, key = { images[it].id }) { i ->
                     MmsImage(
                         images[i].imagePartUri!!, maxDim = 300,
-                        description = "Photo from " + formatFullTimestamp(images[i].timestamp),
-                        modifier = Modifier.aspectRatio(1f).clip(androidx.compose.foundation.shape.RoundedCornerShape(6.dp)).clickable(onClickLabel = "Open photo") { onOpen(i) },
+                        description = stringResource(R.string.media_photo_from, formatFullTimestamp(images[i].timestamp)),
+                        modifier = Modifier.aspectRatio(1f).clip(androidx.compose.foundation.shape.RoundedCornerShape(6.dp)).clickable(onClickLabel = stringResource(R.string.media_open_photo)) { onOpen(i) },
                     )
                 }
             }
@@ -130,12 +131,12 @@ fun ImageViewerScreen(images: List<MessageEntity>, startIndex: Int, onClose: () 
     var zoomed by remember { mutableStateOf(false) }
     Box(modifier.fillMaxSize().background(Color.Black)) {
         HorizontalPager(pager, userScrollEnabled = !zoomed, modifier = Modifier.fillMaxSize()) { page ->
-            ZoomableImage(images[page].imagePartUri!!, "Photo ${page + 1} of ${images.size}", onZoomChanged = { zoomed = it })
+            ZoomableImage(images[page].imagePartUri!!, stringResource(R.string.media_photo_n_of_total, page + 1, images.size), onZoomChanged = { zoomed = it })
         }
         Row(Modifier.fillMaxWidth().statusBarsPadding().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onClose) { Icon(Icons.Filled.Close, contentDescription = "Close photo", tint = Color.White) }
+            IconButton(onClick = onClose) { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.media_close_photo), tint = Color.White) }
             Text(
-                "${pager.currentPage + 1} of ${images.size}",
+                stringResource(R.string.media_position, pager.currentPage + 1, images.size),
                 color = Color.White, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f),
             )
             IconButton(onClick = { shareImage(context, images[pager.currentPage].imagePartUri!!) }) {

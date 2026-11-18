@@ -1,5 +1,6 @@
 package com.inboxiq.app.inbox
 
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.data.ThreadStateEntity
@@ -120,7 +121,10 @@ class InboxLogicTest {
     }
 
     @Test fun `transactions tab sits after work, holds only transactions, and all still shows them`() {
-        assertEquals(listOf("All", "Personal", "Work", "Transactions", "Promos", "Codes", "Junk"), InboxTab.entries.map { it.title })
+        assertEquals(
+            listOf(R.string.tab_all, R.string.label_personal, R.string.label_work, R.string.tab_transactions, R.string.tab_promos, R.string.tab_codes, R.string.tab_junk),
+            InboxTab.entries.map { it.titleRes },
+        )
         val txn = listOf(row("VM-TESTBK-T", MessageLabel.TRANSACTION, 500, unread = 3), row("+15550101", MessageLabel.PERSONAL, 100))
         assertEquals(listOf("VM-TESTBK-T"), InboxLogic.visible(txn, InboxTab.TRANSACTIONS).map { it.address })
         assertEquals(listOf("+15550101"), InboxLogic.visible(txn, InboxTab.PERSONAL).map { it.address })

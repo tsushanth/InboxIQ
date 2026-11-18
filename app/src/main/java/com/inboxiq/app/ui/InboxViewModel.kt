@@ -10,6 +10,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.inboxiq.app.R
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.data.BackupFormatException
 import com.inboxiq.app.data.BackupManager
@@ -103,6 +104,10 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     val snackbar = SnackbarHostState()
     var backupStatus: String? by mutableStateOf(null)
 
+    /** Application context for text shown from here (snackbars, backup status); the screens hold no Activity reference. */
+    private val app: Application get() = getApplication()
+    private val undo: String get() = app.getString(R.string.common_undo)
+
     /** Recent texts the user sent, to learn their phrasing for reply chips. Read-only, derived on the fly, never stored. */
     suspend fun recentSent(): List<String> = db.replyHistoryDao().recentSentBodies(300)
     suspend fun bodyOf(id: Long): String? = db.messageDao().getById(id)?.body
@@ -116,9 +121,9 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     fun deleteThreads(addresses: Set<String>) {
         viewModelScope.launch {
             val snapshots = addresses.map { actions.delete(it) }
-            val text = if (snapshots.size == 1) "Conversation deleted" else "${snapshots.size} conversations deleted"
+            val text = app.resources.getQuantityString(R.plurals.snack_conversations_deleted, snapshots.size, snapshots.size)
             snackbar.currentSnackbarData?.dismiss()
-            val result = snackbar.showSnackbar(text, actionLabel = "Undo", duration = SnackbarDuration.Long)
+            val result = snackbar.showSnackbar(text, actionLabel = undo, duration = SnackbarDuration.Long)
             if (result == SnackbarResult.ActionPerformed) snapshots.forEach { actions.restore(it) }
             else snapshots.forEach { actions.commitDelete(it) }
         }
@@ -128,7 +133,7 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             val removed = actions.deleteMessage(id) ?: return@launch
             snackbar.currentSnackbarData?.dismiss()
-            val result = snackbar.showSnackbar("Message deleted", actionLabel = "Undo", duration = SnackbarDuration.Long)
+            val result = snackbar.showSnackbar(app.getString(R.string.snack_message_deleted), actionLabel = undo, duration = SnackbarDuration.Long)
             if (result == SnackbarResult.ActionPerformed) actions.restoreMessage(removed) else actions.commitMessageDelete(removed)
         }
     }
@@ -137,8 +142,8 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             addresses.forEach { actions.setArchived(it, archived) }
             snackbar.currentSnackbarData?.dismiss()
-            val text = (if (addresses.size == 1) "Conversation" else "${addresses.size} conversations") + if (archived) " archived" else " moved to inbox"
-            val result = snackbar.showSnackbar(text, actionLabel = "Undo", duration = SnackbarDuration.Short)
+            val text = app.resources.getQuantityString(if (archived) R.plurals.snack_conversations_archived else R.plurals.snack_conversations_unarchived, addresses.size, addresses.size)
+            val result = snackbar.showSnackbar(text, actionLabel = undo, duration = SnackbarDuration.Short)
             if (result == SnackbarResult.ActionPerformed) addresses.forEach { actions.setArchived(it, !archived) }
         }
     }
@@ -148,8 +153,8 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             addresses.forEach { actions.setPinned(it, pinned) }
             snackbar.currentSnackbarData?.dismiss()
-            val text = (if (addresses.size == 1) "Conversation" else "${addresses.size} conversations") + if (pinned) " pinned" else " unpinned"
-            val result = snackbar.showSnackbar(text, actionLabel = "Undo", duration = SnackbarDuration.Short)
+            val text = app.resources.getQuantityString(if (pinned) R.plurals.snack_conversations_pinned else R.plurals.snack_conversations_unpinned, addresses.size, addresses.size)
+            val result = snackbar.showSnackbar(text, actionLabel = undo, duration = SnackbarDuration.Short)
             if (result == SnackbarResult.ActionPerformed) addresses.forEach { actions.setPinned(it, !pinned) }
         }
     }
@@ -189,14 +194,14 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     fun exportTo(uri: Uri) {
         val app = getApplication<Application>()
         viewModelScope.launch {
-            backupStatus = "Saving backup"
+            backupStatus = app.getString(R.string.backup_saving)
             backupStatus = try {
                 val n = withContext(Dispatchers.IO) {
                     app.contentResolver.openOutputStream(uri, "wt")!!.use { BackupManager(db).export(it) }
                 }
-                "Saved $n messages."
+                app.resources.getQuantityString(R.plurals.backup_saved, n, n)
             } catch (e: Exception) {
-                "Couldn't save the backup. Check there is free space and try a different location."
+                app.getString(R.string.backup_save_failed)
             }
         }
     }
@@ -204,16 +209,17 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     fun importFrom(uri: Uri) {
         val app = getApplication<Application>()
         viewModelScope.launch {
-            backupStatus = "Restoring"
+            backupStatus = app.getString(R.string.backup_restoring)
             backupStatus = try {
                 val r = withContext(Dispatchers.IO) {
                     app.contentResolver.openInputStream(uri)!!.use { BackupManager(db).import(it) }
                 }
-                "Restored ${r.added} messages" + if (r.alreadyPresent > 0) " (${r.alreadyPresent} were already here)." else "."
+                if (r.alreadyPresent > 0) app.resources.getQuantityString(R.plurals.backup_restored_with_existing, r.added, r.added, r.alreadyPresent)
+                else app.resources.getQuantityString(R.plurals.backup_restored, r.added, r.added)
             } catch (e: BackupFormatException) {
-                e.message
+                app.getString(e.messageRes)
             } catch (e: Exception) {
-                "Couldn't read that file. Choose an InboxIQ backup file."
+                app.getString(R.string.backup_read_failed)
             }
             // The text under the Restore button can be off-screen: also say it where every screen shows it.
             backupStatus?.let {

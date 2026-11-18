@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.app.RemoteInput
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.inbox.MessageChannel
 import com.inboxiq.app.inbox.NotificationPolicy
@@ -28,14 +29,14 @@ object MessageNotifier {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Incoming messages",
+            context.getString(R.string.channel_incoming_messages),
             NotificationManager.IMPORTANCE_HIGH,
         )
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
 
         val autoHealChannel = NotificationChannel(
             AUTO_HEAL_CHANNEL_ID,
-            "Message delivery fixes",
+            context.getString(R.string.channel_delivery_fixes),
             NotificationManager.IMPORTANCE_DEFAULT,
         )
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(autoHealChannel)
@@ -58,8 +59,8 @@ object MessageNotifier {
 
         val notification = NotificationCompat.Builder(context, AUTO_HEAL_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.sym_action_chat)
-            .setContentTitle("Fixed!")
-            .setContentText("Your message to ${displayName ?: address} just sent.")
+            .setContentTitle(context.getString(R.string.msgnotif_fixed_title))
+            .setContentText(context.getString(R.string.msgnotif_fixed_body, displayName ?: address))
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -96,7 +97,7 @@ object MessageNotifier {
         val nm = context.getSystemService(NotificationManager::class.java)
         MessageChannel.entries.forEach { c ->
             // GENERAL keeps its original id so anyone who tuned "Incoming messages" keeps that choice.
-            val ch = NotificationChannel(c.id, c.title, c.importance).apply { description = c.description }
+            val ch = NotificationChannel(c.id, context.getString(c.titleRes), c.importance).apply { description = context.getString(c.descriptionRes) }
             nm.createNotificationChannel(ch)
         }
     }
@@ -134,7 +135,7 @@ object MessageNotifier {
 
         val title = displayName ?: address
         val sender = androidx.core.app.Person.Builder().setName(title).build()
-        val style = NotificationCompat.MessagingStyle(androidx.core.app.Person.Builder().setName("You").build())
+        val style = NotificationCompat.MessagingStyle(androidx.core.app.Person.Builder().setName(context.getString(R.string.msgnotif_you)).build())
             .addMessage(body, receivedAt, sender)
 
         val builder = NotificationCompat.Builder(context, plan.channel.id)
@@ -142,7 +143,7 @@ object MessageNotifier {
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(style)
-            .setSubText(LabelPalette.displayName(label).takeIf { label != MessageLabel.UNLABELED })
+            .setSubText(LabelPalette.displayName(context, label).takeIf { label != MessageLabel.UNLABELED })
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setAutoCancel(true)
             .setContentIntent(openPending)
@@ -151,12 +152,12 @@ object MessageNotifier {
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
 
         plan.code?.let { code ->
-            builder.addAction(NotificationCompat.Action.Builder(0, "Copy code", action(context, ACTION_COPY_CODE, address, EXTRA_CODE to code)).build())
+            builder.addAction(NotificationCompat.Action.Builder(0, context.getString(R.string.msgnotif_copy_code), action(context, ACTION_COPY_CODE, address, EXTRA_CODE to code)).build())
         }
         if (plan.canReply) {
-            val remote = RemoteInput.Builder(KEY_REPLY).setLabel("Reply").build()
+            val remote = RemoteInput.Builder(KEY_REPLY).setLabel(context.getString(R.string.msgnotif_reply)).build()
             builder.addAction(
-                NotificationCompat.Action.Builder(0, "Reply", action(context, ACTION_REPLY, address, mutable = true))
+                NotificationCompat.Action.Builder(0, context.getString(R.string.msgnotif_reply), action(context, ACTION_REPLY, address, mutable = true))
                     .addRemoteInput(remote)
                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
                     .setAllowGeneratedReplies(false)
@@ -164,7 +165,7 @@ object MessageNotifier {
             )
         }
         builder.addAction(
-            NotificationCompat.Action.Builder(0, "Mark as read", action(context, ACTION_MARK_READ, address))
+            NotificationCompat.Action.Builder(0, context.getString(R.string.msgnotif_mark_read), action(context, ACTION_MARK_READ, address))
                 .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
                 .build(),
         )

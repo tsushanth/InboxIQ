@@ -1,12 +1,15 @@
 package com.inboxiq.app.data
 
 import android.util.JsonReader
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 import android.util.JsonToken
 import android.util.JsonWriter
 import java.io.InputStream
 import java.io.OutputStream
 
-class BackupFormatException(message: String, cause: Throwable? = null) : Exception(message, cause)
+/** [messageRes] is the user-facing explanation (a string resource), shown as the status under the Restore button. */
+class BackupFormatException(@StringRes val messageRes: Int, cause: Throwable? = null) : Exception("Backup format error (string resource $messageRes)", cause)
 
 data class ImportResult(val added: Int, val alreadyPresent: Int, val blocked: Int)
 
@@ -56,7 +59,7 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
         var added = 0; var dup = 0; var blockedCount = 0
         JsonReader(input.bufferedReader(Charsets.UTF_8)).use { r ->
             try {
-                if (r.peek() != JsonToken.BEGIN_OBJECT) throw BackupFormatException("This is not an InboxIQ backup file.")
+                if (r.peek() != JsonToken.BEGIN_OBJECT) throw BackupFormatException(R.string.backup_error_not_backup)
                 r.beginObject()
                 var seenFormat = false
                 val batch = ArrayList<MessageEntity>(PAGE)
@@ -67,10 +70,10 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
                 }
                 while (r.hasNext()) {
                     when (r.nextName()) {
-                        "format" -> { if (r.nextString() != FORMAT) throw BackupFormatException("This is not an InboxIQ backup file."); seenFormat = true }
-                        "version" -> { val v = r.nextInt(); if (v > VERSION) throw BackupFormatException("This backup was made by a newer version of InboxIQ. Update the app and try again.") }
+                        "format" -> { if (r.nextString() != FORMAT) throw BackupFormatException(R.string.backup_error_not_backup); seenFormat = true }
+                        "version" -> { val v = r.nextInt(); if (v > VERSION) throw BackupFormatException(R.string.backup_error_newer_version) }
                         "messages" -> {
-                            if (!seenFormat) throw BackupFormatException("This is not an InboxIQ backup file.")
+                            if (!seenFormat) throw BackupFormatException(R.string.backup_error_not_backup)
                             r.beginArray()
                             while (r.hasNext()) { batch += readMessage(r); if (batch.size >= PAGE) flush() }
                             r.endArray(); flush()
@@ -99,11 +102,11 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
                     }
                 }
                 r.endObject()
-                if (!seenFormat) throw BackupFormatException("This is not an InboxIQ backup file.")
+                if (!seenFormat) throw BackupFormatException(R.string.backup_error_not_backup)
             } catch (e: BackupFormatException) {
                 throw e
             } catch (e: Exception) {
-                throw BackupFormatException("The file is damaged or incomplete, so nothing more was imported. Messages read before the problem were kept.", e)
+                throw BackupFormatException(R.string.backup_error_damaged, e)
             }
         }
         return ImportResult(added, dup, blockedCount)
@@ -141,7 +144,7 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
             }
         }
         r.endObject()
-        if (address.isBlank() || ts <= 0) throw BackupFormatException("A message in the file has no sender or time.")
+        if (address.isBlank() || ts <= 0) throw BackupFormatException(R.string.backup_error_no_sender)
         // A message that was still sending when the backup was made must not look like it is still in flight.
         val safeStatus = if (status == SendStatus.PENDING) SendStatus.NONE else status
         return MessageEntity(threadId = 0, address = address, body = body, timestamp = ts, isIncoming = incoming, label = label, labelConfidence = conf, sendStatus = safeStatus, isRead = read)

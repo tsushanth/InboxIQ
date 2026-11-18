@@ -48,6 +48,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
+import androidx.compose.ui.res.stringResource
+import com.inboxiq.app.R
 import com.inboxiq.app.classify.ClassifierTierPreference
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.sms.DefaultSmsRole
@@ -64,6 +66,7 @@ import com.inboxiq.app.firstrun.FunnelLog
 import com.inboxiq.app.firstrun.FunnelStep
 import com.inboxiq.app.firstrun.NotificationNudge
 import com.inboxiq.app.autoreply.AutoReplyConfig
+import com.inboxiq.app.autoreply.AutoReplyConfirmation
 import com.inboxiq.app.autoreply.AutoReplyLogEntry
 import com.inboxiq.app.autoreply.AutoReplyStore
 import com.inboxiq.app.autoreply.AutoResponder
@@ -130,7 +133,10 @@ class MainActivity : ComponentActivity() {
 
     private var autoCfg by mutableStateOf(AutoReplyConfig())
     private var autoLog by mutableStateOf(emptyList<AutoReplyLogEntry>())
-    private fun autoStore() = AutoReplyStore(this)
+    private fun autoStore() = AutoReplyStore(
+        getSharedPreferences(AutoReplyStore.FILE, MODE_PRIVATE),
+        { c -> AutoReplyConfirmation.text(this, c) },
+    )
     private fun refreshAuto() { val s = autoStore(); autoCfg = s.config(); autoLog = s.log() }
 
     private fun refreshDefault() {
@@ -265,7 +271,7 @@ class MainActivity : ComponentActivity() {
             val showFirstLook = FirstLook.shouldShow(firstLookPending, isDefault, importStatus.running, summary)
             val showNotif = NotificationNudge.shouldShow(isDefault, notificationsOn)
             FirstRunUi(
-                firstLookSummary = if (showFirstLook) summary.sentence() else null,
+                firstLookSummary = if (showFirstLook) summary.sentence(this@MainActivity) else null,
                 notificationsOff = showNotif,
                 notificationsOpensSettings = NotificationNudge.action(android.os.Build.VERSION.SDK_INT, firstRun.notificationsAsked) == NotificationNudge.Action.OPEN_SETTINGS,
             )
@@ -328,7 +334,7 @@ class MainActivity : ComponentActivity() {
                         undoSeconds = undoSeconds,
                         blockedCount = blocked.size,
                         backupStatus = vm.backupStatus,
-                        autoReplySummary = if (AutoResponder.buildEnabled()) (if (autoCfg.enabled) "On" else "Off") else null,
+                        autoReplyEnabled = if (AutoResponder.buildEnabled()) autoCfg.enabled else null,
                         callbacks = SettingsCallbacks(
                             onOpenAutoReply = { refreshAuto(); vm.screen = Screen.AutoReply },
                             onBack = { vm.screen = Screen.Inbox },
@@ -427,7 +433,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun EmptyDetailPane() {
         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
-            StateMessage(Icons.Filled.Forum, "Pick a conversation", "Choose one on the left to read it here.")
+            StateMessage(Icons.Filled.Forum, stringResource(R.string.pane_pick_conversation_title), stringResource(R.string.pane_pick_conversation_body))
         }
     }
 

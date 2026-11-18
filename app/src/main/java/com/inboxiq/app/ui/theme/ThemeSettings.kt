@@ -1,9 +1,13 @@
 package com.inboxiq.app.ui.theme
 
 import android.content.Context
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 
-enum class ThemeMode(val label: String) { SYSTEM("Match system"), LIGHT("Light"), DARK("Dark"), TRUE_BLACK("True black") }
-enum class Density(val label: String) { COMFORTABLE("Comfortable"), COMPACT("Compact") }
+enum class ThemeMode(@StringRes val labelRes: Int) {
+    SYSTEM(R.string.theme_match_system), LIGHT(R.string.theme_light), DARK(R.string.theme_dark), TRUE_BLACK(R.string.theme_true_black)
+}
+enum class Density(@StringRes val labelRes: Int) { COMFORTABLE(R.string.density_comfortable), COMPACT(R.string.density_compact) }
 
 /** How the app looks, all stored locally. Font scale multiplies the system font size, it never replaces it. */
 data class ThemeSettings(
@@ -15,11 +19,12 @@ data class ThemeSettings(
 ) {
     companion object {
         val FONT_SCALES = listOf(0.9f, 1f, 1.15f, 1.3f)
-        fun fontScaleLabel(scale: Float) = when (scale) {
-            0.9f -> "Small"
-            1f -> "Default"
-            1.15f -> "Large"
-            else -> "Largest"
+        @StringRes
+        fun fontScaleLabelRes(scale: Float): Int = when (scale) {
+            0.9f -> R.string.text_size_small
+            1f -> R.string.text_size_default
+            1.15f -> R.string.text_size_large
+            else -> R.string.text_size_largest
         }
     }
 }

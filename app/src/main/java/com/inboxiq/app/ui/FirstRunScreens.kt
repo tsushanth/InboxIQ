@@ -95,7 +95,7 @@ fun OnboardingScreen(
                     }
                 }
                 com.inboxiq.app.feature.RelayFeatures.instance.introExceptionText()?.let { text ->
-                    IntroBlock("One optional exception") { Text(text) }
+                    IntroBlock(stringResource(R.string.intro_optional_exception_title)) { Text(text) }
                 }
             }
         }

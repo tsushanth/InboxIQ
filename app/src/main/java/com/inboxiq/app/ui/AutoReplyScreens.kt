@@ -51,6 +51,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import com.inboxiq.app.autoreply.AutoReplyConfig
 import com.inboxiq.app.autoreply.AutoReplyConfirmation
 import com.inboxiq.app.autoreply.AutoReplyLogEntry
+import com.inboxiq.app.autoreply.MessageProblem
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
@@ -73,7 +75,9 @@ class AutoReplyCallbacks(
     val onOpenLog: () -> Unit = {},
 )
 
-private fun fmtMin(m: Int) = "%d:%02d %s".format(if (m / 60 % 12 == 0) 12 else m / 60 % 12, m % 60, if (m / 60 < 12) "AM" else "PM")
+/** A minutes-after-midnight value as a time of day in the phone's language and 12/24-hour style. */
+private fun fmtMin(m: Int): String =
+    java.time.LocalTime.of(m / 60 % 24, m % 60).format(java.time.format.DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT))
 
 /** Next 6 PM local time strictly in the future. */
 private fun nextSixPm(now: Long, zone: ZoneId): Long {
@@ -100,7 +104,7 @@ fun AutoReplyScreen(
 
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to settings") }
+            IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.ui_back_to_settings)) }
             Text(stringResource(R.string.ui_auto_reply_when_away), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -123,28 +127,28 @@ fun AutoReplyScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
-                    Text(if (config.enabled) "On" else "Off", style = MaterialTheme.typography.titleMedium)
-                    Text(if (config.enabled) statusLine(config, now) else "Nothing is sent automatically.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(if (config.enabled) R.string.autoreply_on else R.string.autoreply_off), style = MaterialTheme.typography.titleMedium)
+                    Text(if (config.enabled) statusLine(context, config, now) else stringResource(R.string.autoreply_nothing_sent), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Switch(checked = config.enabled, onCheckedChange = null)
             }
 
-            ASection("Message")
+            ASection(stringResource(R.string.autoreply_section_message))
             OutlinedTextField(
                 value = text, onValueChange = { text = it }, modifier = Modifier.fillMaxWidth(),
-                isError = problem != null, supportingText = { Text(problem ?: "${text.length}/${AutoReplyConfig.MAX_MESSAGE_CHARS}. Changing the text turns auto-reply off until you confirm again.") },
+                isError = problem != null, supportingText = { Text(if (problem != null) problem.text() else stringResource(R.string.autoreply_counter_hint, text.length, AutoReplyConfig.MAX_MESSAGE_CHARS)) },
             )
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AutoReplyConfig.TEMPLATES.forEach { t -> AssistChip(onClick = { text = t; if (AutoReplyConfig.validateMessage(t) == null) callbacks.onSave(config.copy(message = t)) }, label = { Text(t) }) }
             }
             OutlinedButton(onClick = { callbacks.onSave(config.copy(message = text.trim())) }, enabled = problem == null && text.trim() != config.message, modifier = Modifier.padding(top = 8.dp)) { Text(stringResource(R.string.ui_save_message)) }
 
-            ASection("Schedule")
-            ASwitch("Only at certain times", "Otherwise it answers whenever it is on.", config.scheduleOn) { callbacks.onSave(config.copy(scheduleOn = it)) }
+            ASection(stringResource(R.string.autoreply_section_schedule))
+            ASwitch(stringResource(R.string.autoreply_only_certain_times), stringResource(R.string.autoreply_only_certain_times_body), config.scheduleOn) { callbacks.onSave(config.copy(scheduleOn = it)) }
             if (config.scheduleOn) {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(vertical = 8.dp)) {
-                    OutlinedButton(onClick = { TimePickerDialog(context, { _, h, m -> callbacks.onSave(config.copy(startMin = h * 60 + m)) }, config.startMin / 60, config.startMin % 60, false).show() }) { Text("From ${fmtMin(config.startMin)}") }
-                    OutlinedButton(onClick = { TimePickerDialog(context, { _, h, m -> callbacks.onSave(config.copy(endMin = h * 60 + m)) }, config.endMin / 60, config.endMin % 60, false).show() }) { Text("Until ${fmtMin(config.endMin)}") }
+                    OutlinedButton(onClick = { TimePickerDialog(context, { _, h, m -> callbacks.onSave(config.copy(startMin = h * 60 + m)) }, config.startMin / 60, config.startMin % 60, false).show() }) { Text(stringResource(R.string.autoreply_from_time, fmtMin(config.startMin))) }
+                    OutlinedButton(onClick = { TimePickerDialog(context, { _, h, m -> callbacks.onSave(config.copy(endMin = h * 60 + m)) }, config.endMin / 60, config.endMin % 60, false).show() }) { Text(stringResource(R.string.autoreply_until_time, fmtMin(config.endMin))) }
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     DayOfWeek.entries.forEach { d ->
@@ -153,30 +157,30 @@ fun AutoReplyScreen(
                     }
                 }
                 Text(
-                    if (config.startMin > config.endMin) "The window crosses midnight; the days are the days it starts on." else "Uses the phone's current time zone.",
+                    stringResource(if (config.startMin > config.endMin) R.string.autoreply_crosses_midnight else R.string.autoreply_time_zone),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp),
                 )
             }
 
-            ASection("Turn off automatically")
+            ASection(stringResource(R.string.autoreply_section_turn_off))
             val zone = ZoneId.systemDefault()
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("No end time" to 0L, "In 1 hour" to now + 3_600_000L, "In 4 hours" to now + 4 * 3_600_000L, "At 6 PM" to nextSixPm(now, zone)).forEach { (label, until) ->
-                    FilterChip(selected = until == 0L && config.untilMillis == 0L, onClick = { callbacks.onSave(config.copy(untilMillis = until)) }, label = { Text(label) })
+                listOf(R.string.autoreply_no_end_time to 0L, R.string.schedule_in_one_hour to now + 3_600_000L, R.string.autoreply_in_four_hours to now + 4 * 3_600_000L, R.string.autoreply_at_six_pm to nextSixPm(now, zone)).forEach { (labelRes, until) ->
+                    FilterChip(selected = until == 0L && config.untilMillis == 0L, onClick = { callbacks.onSave(config.copy(untilMillis = until)) }, label = { Text(stringResource(labelRes)) })
                 }
             }
-            if (config.untilMillis != 0L) Text("Switches off at " + java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(config.untilMillis)) + ".", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (config.untilMillis != 0L) Text(stringResource(R.string.autoreply_switches_off_at, java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(config.untilMillis))), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-            ASection("Limits")
+            ASection(stringResource(R.string.autoreply_section_limits))
             Text(stringResource(R.string.ui_one_automatic_text_per_person), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            listOf(24, 12, 6, 1).forEach { h -> ChoiceRowA("$h ${if (h == 1) "hour" else "hours"}", config.perSenderHours == h) { callbacks.onSave(config.copy(perSenderHours = h)) } }
+            listOf(24, 12, 6, 1).forEach { h -> ChoiceRowA(pluralStringResource(R.plurals.autoreply_hours, h, h), config.perSenderHours == h) { callbacks.onSave(config.copy(perSenderHours = h)) } }
             Text(stringResource(R.string.ui_at_most_this_many_a), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
-            listOf(20, 10, 5).forEach { n -> ChoiceRowA("$n a day", config.dailyCap == n) { callbacks.onSave(config.copy(dailyCap = n)) } }
+            listOf(20, 10, 5).forEach { n -> ChoiceRowA(stringResource(R.string.autoreply_per_day, n), config.dailyCap == n) { callbacks.onSave(config.copy(dailyCap = n)) } }
             Text(stringResource(R.string.ui_these_can_be_lowered_but), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-            ASection("Sent so far")
+            ASection(stringResource(R.string.autoreply_section_sent))
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = callbacks.onOpenLog), verticalAlignment = Alignment.CenterVertically) {
-                Text("Auto-replies sent ($sentCount)", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                Text(stringResource(R.string.autoreply_sent_count, sentCount), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             }
             Text(stringResource(R.string.ui_your_carrier_may_charge_for), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp, bottom = 32.dp))
@@ -184,7 +188,7 @@ fun AutoReplyScreen(
     }
 
     if (confirm) {
-        val body = AutoReplyConfirmation.text(config)
+        val body = AutoReplyConfirmation.text(context, config)
         AlertDialog(
             onDismissRequest = { confirm = false },
             title = { Text(stringResource(R.string.ui_turn_on_auto_reply)) },
@@ -195,12 +199,20 @@ fun AutoReplyScreen(
     }
 }
 
-private fun statusLine(c: AutoReplyConfig, now: Long): String = buildString {
-    append("Replying to people you know")
-    if (c.scheduleOn) append(", ${fmtMin(c.startMin)} to ${fmtMin(c.endMin)}")
-    if (c.untilMillis > now) append(", until " + java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(c.untilMillis)))
-    append(".")
+private fun statusLine(context: android.content.Context, c: AutoReplyConfig, now: Long): String {
+    val until = if (c.untilMillis > now) java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(c.untilMillis)) else null
+    return when {
+        c.scheduleOn && until != null -> context.getString(R.string.autoreply_status_schedule_until, fmtMin(c.startMin), fmtMin(c.endMin), until)
+        c.scheduleOn -> context.getString(R.string.autoreply_status_schedule, fmtMin(c.startMin), fmtMin(c.endMin))
+        until != null -> context.getString(R.string.autoreply_status_until, until)
+        else -> context.getString(R.string.autoreply_status_always)
+    }
 }
+
+/** The explanation shown under the message field for a message that cannot be sent automatically. */
+@Composable
+private fun MessageProblem.text(): String =
+    if (this == MessageProblem.TOO_LONG) stringResource(res, AutoReplyConfig.MAX_MESSAGE_CHARS) else stringResource(res)
 
 @Composable
 fun AutoReplyLogScreen(
@@ -215,13 +227,13 @@ fun AutoReplyLogScreen(
 ) {
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back)) }
             Text(stringResource(R.string.ui_auto_replies_sent), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).semantics { heading() })
             if (enabled) Button(onClick = onTurnOff, modifier = Modifier.padding(end = 12.dp)) { Text(stringResource(R.string.ui_turn_off)) }
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         if (entries.isEmpty()) {
-            StateMessage(Icons.Filled.Reply, "Nothing sent yet", "Every text InboxIQ sends for you automatically is listed here, and marked \"Sent automatically\" in the conversation.", modifier = Modifier.fillMaxSize())
+            StateMessage(Icons.Filled.Reply, stringResource(R.string.autoreply_log_empty_title), stringResource(R.string.autoreply_log_empty_body), modifier = Modifier.fillMaxSize())
         } else {
             LazyColumn(Modifier.navigationBarsPadding()) {
                 items(entries, key = { it.at.toString() + it.address }) { e ->

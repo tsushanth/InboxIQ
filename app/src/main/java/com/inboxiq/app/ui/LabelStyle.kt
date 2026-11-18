@@ -1,5 +1,7 @@
 package com.inboxiq.app.ui
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.LocalOffer
@@ -11,8 +13,10 @@ import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.inbox.InboxTab
 import com.inboxiq.app.ui.theme.LocalDarkTheme
@@ -48,16 +52,19 @@ object LabelPalette {
         MessageLabel.UNLABELED -> Pair2(Color(0xFF28323A), Color(0xFFB3C0C8))
     }
 
-    fun displayName(label: MessageLabel) = when (label) {
-        MessageLabel.PERSONAL -> "Personal"
-        MessageLabel.WORK -> "Work"
-        MessageLabel.PROMO -> "Promo"
-        MessageLabel.OTP_2FA -> "Code"
-        MessageLabel.TRANSACTION -> "Transaction"
-        MessageLabel.SPAM -> "Spam"
-        MessageLabel.SCAM -> "Scam"
-        MessageLabel.UNLABELED -> "Not sorted yet"
+    @StringRes
+    fun nameRes(label: MessageLabel): Int = when (label) {
+        MessageLabel.PERSONAL -> R.string.label_personal
+        MessageLabel.WORK -> R.string.label_work
+        MessageLabel.PROMO -> R.string.label_promo
+        MessageLabel.OTP_2FA -> R.string.label_code
+        MessageLabel.TRANSACTION -> R.string.label_transaction
+        MessageLabel.SPAM -> R.string.label_spam
+        MessageLabel.SCAM -> R.string.label_scam
+        MessageLabel.UNLABELED -> R.string.label_not_sorted_yet
     }
+
+    fun displayName(context: Context, label: MessageLabel): String = context.getString(nameRes(label))
 
     fun icon(label: MessageLabel): ImageVector = when (label) {
         MessageLabel.PERSONAL -> Icons.Filled.Person
@@ -74,7 +81,7 @@ object LabelPalette {
 @Composable
 fun styleFor(label: MessageLabel): LabelStyle {
     val p = if (LocalDarkTheme.current) LabelPalette.dark(label) else LabelPalette.light(label)
-    return LabelStyle(LabelPalette.displayName(label), LabelPalette.icon(label), p.container, p.content)
+    return LabelStyle(stringResource(LabelPalette.nameRes(label)), LabelPalette.icon(label), p.container, p.content)
 }
 
 /** The label that stands for a tab: tabs that group several labels use their first. */
@@ -87,12 +94,13 @@ fun InboxTab.accentLabel(): MessageLabel = when (this) {
 @Composable
 fun tabStyle(tab: InboxTab): LabelStyle {
     val base = styleFor(tab.accentLabel())
+    val title = stringResource(tab.titleRes)
     return when (tab) {
         InboxTab.ALL -> LabelStyle(
-            tab.title, Icons.Filled.Inbox,
+            title, Icons.Filled.Inbox,
             MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer,
         )
-        InboxTab.JUNK -> base.copy(displayName = tab.title, icon = Icons.Filled.Report)
-        else -> base.copy(displayName = tab.title)
+        InboxTab.JUNK -> base.copy(displayName = title, icon = Icons.Filled.Report)
+        else -> base.copy(displayName = title)
     }
 }

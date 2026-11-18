@@ -59,7 +59,7 @@ class AutoResponderTest {
 
     private fun turnOn(message: String = AutoReplyConfig.TEMPLATES[0], tweak: (AutoReplyConfig) -> AutoReplyConfig = { it }) {
         store.save(tweak(AutoReplyConfig(message = message)))
-        assertTrue(store.enable(AutoReplyConfirmation.text(store.config())))
+        assertTrue(store.enable(AutoReplyConfirmation.text(context, store.config())))
     }
 
     private fun incoming(address: String = friend, body: String = "are you around later?", label: MessageLabel = MessageLabel.PERSONAL, age: Long = 5_000): Long = runBlocking {
@@ -157,12 +157,12 @@ class AutoResponderTest {
         store.save(AutoReplyConfig(message = "I am busy right now and will reply later."))
         assertFalse(store.enable("some other text"))
         assertFalse(store.config().enabled)
-        assertTrue(store.enable(AutoReplyConfirmation.text(store.config())))
+        assertTrue(store.enable(AutoReplyConfirmation.text(context, store.config())))
         store.save(store.config().copy(message = "Be back soon."))
         assertFalse("editing the text requires confirming again", store.config().enabled)
-        assertFalse(store.enable(AutoReplyConfirmation.text(AutoReplyConfig(message = "something else"))))
+        assertFalse(store.enable(AutoReplyConfirmation.text(context, AutoReplyConfig(message = "something else"))))
         store.save(AutoReplyConfig(message = "link http://example.com"))
-        assertFalse("invalid message cannot be enabled", store.enable(AutoReplyConfirmation.text(store.config())))
+        assertFalse("invalid message cannot be enabled", store.enable(AutoReplyConfirmation.text(context, store.config())))
     }
 
     @Test fun `an until time that has passed turns it off`() {
