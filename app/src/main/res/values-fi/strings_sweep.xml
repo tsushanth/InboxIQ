@@ -18,8 +18,8 @@
     <string name="mute_one_week">1 viikoksi</string>
     <string name="mute_until_turned_on">Kunnes otan ilmoitukset takaisin käyttöön</string>
     <string name="tier_default">Oletus (bert-tiny, laitteessa)</string>
-    <string name="tier_balanced">Tasapainoinen (Gemma 3 270M, laitteessa; vaatii kertaluonteisen ~290MB:n latauksen)</string>
-    <string name="tier_best">Paras (Gemma/Qwen 1-3B), tulossa pian</string>
+    <string name="tier_balanced">Tasapainoinen (laitteessa; vaatii kertaluonteisen ~290MB:n latauksen)</string>
+    <string name="tier_best">Paras (suurempi laitteessa toimiva malli), tulossa pian</string>
     <string name="channel_general_title">Viestit</string>
     <string name="channel_general_desc">Viestit, joita ei ole vielä lajiteltu</string>
     <string name="channel_personal_desc">Tuttujen ihmisten viestit</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Odotetaan Wi-Fi-yhteyttä mallin lataamiseksi</string>
     <string name="settings_model_confirm">Vahvista mallin lataus napauttamalla</string>
     <string name="settings_model_failed">Lataus epäonnistui. Yritä uudelleen valitsemalla tämä vaihtoehto uudestaan.</string>
-    <string name="settings_model_ready">Malli on valmis. Lajittelu käyttää Gemma 3 270M -mallia.</string>
+    <string name="settings_model_ready">Malli on valmis. Lajittelu käyttää laitteessa olevaa mallia.</string>
     <string name="settings_model_starting">Aloitetaan latausta</string>
     <string name="settings_auto_reply">Automaattivastaus</string>
     <string name="settings_auto_reply_summary_on">Päällä. Lähettää puolestasi yhden lyhyen viestin tutuille ihmisille.</string>

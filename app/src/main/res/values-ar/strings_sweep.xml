@@ -18,8 +18,8 @@
     <string name="mute_one_week">لمدة أسبوع واحد</string>
     <string name="mute_until_turned_on">حتى أعيد تفعيلها</string>
     <string name="tier_default">افتراضي (bert-tiny، على الجهاز)</string>
-    <string name="tier_balanced">متوازن (Gemma 3 270M، على الجهاز؛ يتطلب تنزيلًا لمرة واحدة بحجم نحو 290MB)</string>
-    <string name="tier_best">الأفضل (Gemma/Qwen 1-3B)، قريبًا</string>
+    <string name="tier_balanced">متوازن (على الجهاز؛ يتطلب تنزيلًا لمرة واحدة بحجم نحو 290MB)</string>
+    <string name="tier_best">الأفضل (نموذج أكبر على الجهاز)، قريبًا</string>
     <string name="channel_general_title">الرسائل</string>
     <string name="channel_general_desc">رسائل لم تُفرز بعد</string>
     <string name="channel_personal_desc">رسائل من أشخاص تعرفهم</string>
@@ -201,7 +201,7 @@
     <string name="settings_model_waiting_wifi">في انتظار Wi-Fi لتنزيل النموذج</string>
     <string name="settings_model_confirm">انقر لتأكيد تنزيل النموذج</string>
     <string name="settings_model_failed">فشل التنزيل. اختر هذا الخيار مرة أخرى لإعادة المحاولة.</string>
-    <string name="settings_model_ready">النموذج جاهز. يستخدم الفرز Gemma 3 270M.</string>
+    <string name="settings_model_ready">النموذج جاهز. يستخدم الفرز النموذج الموجود على الجهاز.</string>
     <string name="settings_model_starting">جارٍ بدء التنزيل</string>
     <string name="settings_auto_reply">الرد التلقائي</string>
     <string name="settings_auto_reply_summary_on">مفعّل. يرسل رسالة قصيرة واحدة نيابةً عنك إلى أشخاص تعرفهم.</string>

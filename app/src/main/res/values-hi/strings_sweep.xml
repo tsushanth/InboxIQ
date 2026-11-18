@@ -18,8 +18,8 @@
     <string name="mute_one_week">1 सप्ताह के लिए</string>
     <string name="mute_until_turned_on">जब तक मैं वापस चालू न करूँ</string>
     <string name="tier_default">डिफ़ॉल्ट (bert-tiny, डिवाइस पर)</string>
-    <string name="tier_balanced">संतुलित (Gemma 3 270M, डिवाइस पर; एक बार ~290MB डाउनलोड करना होगा)</string>
-    <string name="tier_best">सर्वश्रेष्ठ (Gemma/Qwen 1-3B), जल्द आ रहा है</string>
+    <string name="tier_balanced">संतुलित (डिवाइस पर; एक बार ~290MB डाउनलोड करना होगा)</string>
+    <string name="tier_best">सर्वश्रेष्ठ (डिवाइस पर चलने वाला बड़ा मॉडल), जल्द आ रहा है</string>
     <string name="channel_general_title">संदेश</string>
     <string name="channel_general_desc">वे टेक्स्ट जो अभी सॉर्ट नहीं हुए हैं</string>
     <string name="channel_personal_desc">आपके जान-पहचान के लोगों के टेक्स्ट</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">मॉडल डाउनलोड करने के लिए Wi-Fi का इंतज़ार</string>
     <string name="settings_model_confirm">मॉडल डाउनलोड की पुष्टि करने के लिए टैप करें</string>
     <string name="settings_model_failed">डाउनलोड विफल रहा। दोबारा कोशिश करने के लिए यही विकल्प फिर से चुनें।</string>
-    <string name="settings_model_ready">मॉडल तैयार है। सॉर्टिंग Gemma 3 270M इस्तेमाल करती है।</string>
+    <string name="settings_model_ready">मॉडल तैयार है। सॉर्टिंग डिवाइस पर मौजूद मॉडल इस्तेमाल करती है।</string>
     <string name="settings_model_starting">डाउनलोड शुरू हो रहा है</string>
     <string name="settings_auto_reply">ऑटो-रिप्लाई</string>
     <string name="settings_auto_reply_summary_on">चालू। आपकी ओर से जान-पहचान के लोगों को एक छोटा टेक्स्ट भेजता है।</string>

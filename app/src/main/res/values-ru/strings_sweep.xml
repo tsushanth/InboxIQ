@@ -18,8 +18,8 @@
     <string name="mute_one_week">На 1 неделю</string>
     <string name="mute_until_turned_on">Пока я не включу снова</string>
     <string name="tier_default">По умолчанию (bert-tiny, на устройстве)</string>
-    <string name="tier_balanced">Сбалансированный (Gemma 3 270M, на устройстве; нужна однократная загрузка ~290MB)</string>
-    <string name="tier_best">Лучший (Gemma/Qwen 1-3B), скоро</string>
+    <string name="tier_balanced">Сбалансированный (на устройстве; нужна однократная загрузка ~290MB)</string>
+    <string name="tier_best">Лучший (модель побольше, на устройстве), скоро</string>
     <string name="channel_general_title">Сообщения</string>
     <string name="channel_general_desc">СМС, которые ещё не отсортированы</string>
     <string name="channel_personal_desc">СМС от знакомых</string>
@@ -181,7 +181,7 @@
     <string name="settings_model_waiting_wifi">Ожидание Wi-Fi для загрузки модели</string>
     <string name="settings_model_confirm">Нажмите, чтобы подтвердить загрузку модели</string>
     <string name="settings_model_failed">Загрузка не удалась. Выберите этот вариант ещё раз, чтобы повторить.</string>
-    <string name="settings_model_ready">Модель готова. Для сортировки используется Gemma 3 270M.</string>
+    <string name="settings_model_ready">Модель готова. Для сортировки используется модель на устройстве.</string>
     <string name="settings_model_starting">Запуск загрузки</string>
     <string name="settings_auto_reply">Автоответ</string>
     <string name="settings_auto_reply_summary_on">Включён. Отправляет за вас одно короткое СМС знакомым.</string>

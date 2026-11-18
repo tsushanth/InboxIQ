@@ -18,8 +18,8 @@
     <string name="mute_one_week">1 haftalığına</string>
     <string name="mute_until_turned_on">Ben tekrar açana kadar</string>
     <string name="tier_default">Varsayılan (bert-tiny, cihaz üzerinde)</string>
-    <string name="tier_balanced">Dengeli (Gemma 3 270M, cihaz üzerinde; bir defaya mahsus ~290MB indirme gerekir)</string>
-    <string name="tier_best">En iyi (Gemma/Qwen 1-3B), yakında</string>
+    <string name="tier_balanced">Dengeli (cihaz üzerinde; bir defaya mahsus ~290MB indirme gerekir)</string>
+    <string name="tier_best">En iyi (cihaz üzerinde daha büyük model), yakında</string>
     <string name="channel_general_title">Mesajlar</string>
     <string name="channel_general_desc">Henüz sıralanmamış mesajlar</string>
     <string name="channel_personal_desc">Tanıdığın kişilerden gelen mesajlar</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Modeli indirmek için Wi-Fi bekleniyor</string>
     <string name="settings_model_confirm">Model indirmesini onaylamak için dokun</string>
     <string name="settings_model_failed">İndirme başarısız oldu. Tekrar denemek için bu seçeneği yeniden seç.</string>
-    <string name="settings_model_ready">Model hazır. Sıralama Gemma 3 270M kullanıyor.</string>
+    <string name="settings_model_ready">Model hazır. Sıralama cihaz üzerindeki modeli kullanıyor.</string>
     <string name="settings_model_starting">İndirme başlatılıyor</string>
     <string name="settings_auto_reply">Otomatik yanıt</string>
     <string name="settings_auto_reply_summary_on">Açık. Tanıdığın kişilere senin adına tek bir kısa mesaj gönderir.</string>

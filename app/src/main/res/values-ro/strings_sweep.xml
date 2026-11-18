@@ -18,8 +18,8 @@
     <string name="mute_one_week">Pentru 1 săptămână</string>
     <string name="mute_until_turned_on">Până îl reactivez</string>
     <string name="tier_default">Implicit (bert-tiny, pe dispozitiv)</string>
-    <string name="tier_balanced">Echilibrat (Gemma 3 270M, pe dispozitiv; necesită o descărcare unică de ~290MB)</string>
-    <string name="tier_best">Cel mai bun (Gemma/Qwen 1-3B), în curând</string>
+    <string name="tier_balanced">Echilibrat (pe dispozitiv; necesită o descărcare unică de ~290MB)</string>
+    <string name="tier_best">Cel mai bun (model mai mare, pe dispozitiv), în curând</string>
     <string name="channel_general_title">Mesaje</string>
     <string name="channel_general_desc">SMS-uri care nu au fost încă sortate</string>
     <string name="channel_personal_desc">SMS-uri de la persoane pe care le cunoști</string>
@@ -171,7 +171,7 @@
     <string name="settings_model_waiting_wifi">Se așteaptă Wi-Fi pentru descărcarea modelului</string>
     <string name="settings_model_confirm">Atinge pentru a confirma descărcarea modelului</string>
     <string name="settings_model_failed">Descărcarea a eșuat. Alege din nou această opțiune pentru a reîncerca.</string>
-    <string name="settings_model_ready">Modelul este gata. Sortarea folosește Gemma 3 270M.</string>
+    <string name="settings_model_ready">Modelul este gata. Sortarea folosește modelul de pe dispozitiv.</string>
     <string name="settings_model_starting">Se pornește descărcarea</string>
     <string name="settings_auto_reply">Răspuns automat</string>
     <string name="settings_auto_reply_summary_on">Activat. Trimite în locul tău un singur SMS scurt persoanelor pe care le cunoști.</string>

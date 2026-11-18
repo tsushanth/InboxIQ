@@ -18,8 +18,8 @@
     <string name="mute_one_week">Pendant 1 semaine</string>
     <string name="mute_until_turned_on">Jusqu’à ce que je les réactive</string>
     <string name="tier_default">Par défaut (bert-tiny, sur l’appareil)</string>
-    <string name="tier_balanced">Équilibré (Gemma 3 270M, sur l’appareil ; nécessite un téléchargement unique de ~290MB)</string>
-    <string name="tier_best">Le meilleur (Gemma/Qwen 1-3B), bientôt disponible</string>
+    <string name="tier_balanced">Équilibré (sur l’appareil ; nécessite un téléchargement unique de ~290MB)</string>
+    <string name="tier_best">Le meilleur (modèle plus grand, sur l’appareil), bientôt disponible</string>
     <string name="channel_general_title">Messages</string>
     <string name="channel_general_desc">SMS pas encore triés</string>
     <string name="channel_personal_desc">SMS de personnes que tu connais</string>
@@ -171,7 +171,7 @@
     <string name="settings_model_waiting_wifi">En attente du Wi-Fi pour télécharger le modèle</string>
     <string name="settings_model_confirm">Appuie pour confirmer le téléchargement du modèle</string>
     <string name="settings_model_failed">Le téléchargement a échoué. Choisis de nouveau cette option pour réessayer.</string>
-    <string name="settings_model_ready">Modèle prêt. Le tri utilise Gemma 3 270M.</string>
+    <string name="settings_model_ready">Modèle prêt. Le tri utilise le modèle sur l’appareil.</string>
     <string name="settings_model_starting">Démarrage du téléchargement</string>
     <string name="settings_auto_reply">Réponse automatique</string>
     <string name="settings_auto_reply_summary_on">Activée. Envoie un court SMS à ta place aux personnes que tu connais.</string>

@@ -18,8 +18,8 @@
     <string name="mute_one_week">Trong 1 tuần</string>
     <string name="mute_until_turned_on">Cho đến khi tôi bật lại</string>
     <string name="tier_default">Mặc định (bert-tiny, chạy trên thiết bị)</string>
-    <string name="tier_balanced">Cân bằng (Gemma 3 270M, chạy trên thiết bị; cần tải xuống một lần ~290MB)</string>
-    <string name="tier_best">Tốt nhất (Gemma/Qwen 1-3B), sắp ra mắt</string>
+    <string name="tier_balanced">Cân bằng (chạy trên thiết bị; cần tải xuống một lần ~290MB)</string>
+    <string name="tier_best">Tốt nhất (mô hình lớn hơn chạy trên thiết bị), sắp ra mắt</string>
     <string name="channel_general_title">Tin nhắn</string>
     <string name="channel_general_desc">Các tin nhắn chưa được sắp xếp</string>
     <string name="channel_personal_desc">Tin nhắn từ những người bạn quen</string>
@@ -151,7 +151,7 @@
     <string name="settings_model_waiting_wifi">Đang chờ Wi-Fi để tải mô hình</string>
     <string name="settings_model_confirm">Chạm để xác nhận tải mô hình</string>
     <string name="settings_model_failed">Tải xuống không thành công. Hãy chọn lại tùy chọn này để thử lại.</string>
-    <string name="settings_model_ready">Mô hình đã sẵn sàng. Việc sắp xếp dùng Gemma 3 270M.</string>
+    <string name="settings_model_ready">Mô hình đã sẵn sàng. Việc sắp xếp dùng mô hình trên thiết bị.</string>
     <string name="settings_model_starting">Đang bắt đầu tải xuống</string>
     <string name="settings_auto_reply">Tự động trả lời</string>
     <string name="settings_auto_reply_summary_on">Bật. Gửi thay bạn một tin nhắn ngắn cho những người bạn quen.</string>

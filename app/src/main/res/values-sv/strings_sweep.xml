@@ -18,8 +18,8 @@
     <string name="mute_one_week">I 1 vecka</string>
     <string name="mute_until_turned_on">Tills jag slår på det igen</string>
     <string name="tier_default">Standard (bert-tiny, på enheten)</string>
-    <string name="tier_balanced">Balanserad (Gemma 3 270M, på enheten; kräver en engångsnedladdning på ~290MB)</string>
-    <string name="tier_best">Bäst (Gemma/Qwen 1-3B), kommer snart</string>
+    <string name="tier_balanced">Balanserad (på enheten; kräver en engångsnedladdning på ~290MB)</string>
+    <string name="tier_best">Bäst (större modell på enheten), kommer snart</string>
     <string name="channel_general_title">Meddelanden</string>
     <string name="channel_general_desc">Sms som inte har sorterats än</string>
     <string name="channel_personal_desc">Sms från personer du känner</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Väntar på Wi-Fi för att ladda ner modellen</string>
     <string name="settings_model_confirm">Tryck för att bekräfta nedladdningen av modellen</string>
     <string name="settings_model_failed">Nedladdningen misslyckades. Välj det här alternativet igen för att försöka på nytt.</string>
-    <string name="settings_model_ready">Modellen är klar. Sorteringen använder Gemma 3 270M.</string>
+    <string name="settings_model_ready">Modellen är klar. Sorteringen använder modellen på enheten.</string>
     <string name="settings_model_starting">Startar nedladdning</string>
     <string name="settings_auto_reply">Autosvar</string>
     <string name="settings_auto_reply_summary_on">På. Skickar ett kort sms åt dig till personer du känner.</string>

@@ -18,8 +18,8 @@
     <string name="mute_one_week">1 hétre</string>
     <string name="mute_until_turned_on">Amíg vissza nem kapcsolom</string>
     <string name="tier_default">Alapértelmezett (bert-tiny, az eszközön)</string>
-    <string name="tier_balanced">Kiegyensúlyozott (Gemma 3 270M, az eszközön; egyszeri ~290MB letöltés szükséges)</string>
-    <string name="tier_best">Legjobb (Gemma/Qwen 1-3B), hamarosan</string>
+    <string name="tier_balanced">Kiegyensúlyozott (az eszközön; egyszeri ~290MB letöltés szükséges)</string>
+    <string name="tier_best">Legjobb (nagyobb, eszközön futó modell), hamarosan</string>
     <string name="channel_general_title">Üzenetek</string>
     <string name="channel_general_desc">Még nem rendezett SMS-ek</string>
     <string name="channel_personal_desc">Az ismerőseidtől érkező SMS-ek</string>
@@ -161,7 +161,7 @@
     <string name="settings_model_waiting_wifi">Várakozás Wi-Fi-re a modell letöltéséhez</string>
     <string name="settings_model_confirm">Koppints a modell letöltésének megerősítéséhez</string>
     <string name="settings_model_failed">A letöltés nem sikerült. Az újrapróbáláshoz válaszd ki újra ezt a lehetőséget.</string>
-    <string name="settings_model_ready">A modell kész. A rendezés a Gemma 3 270M modellt használja.</string>
+    <string name="settings_model_ready">A modell kész. A rendezés az eszközön lévő modellt használja.</string>
     <string name="settings_model_starting">Letöltés indítása</string>
     <string name="settings_auto_reply">Automatikus válasz</string>
     <string name="settings_auto_reply_summary_on">Be. Egyetlen rövid SMS-t küld helyetted az ismerőseidnek.</string>
