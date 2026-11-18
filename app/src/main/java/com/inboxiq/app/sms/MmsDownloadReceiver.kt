@@ -1,5 +1,6 @@
 package com.inboxiq.app.sms
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,8 @@ import java.util.concurrent.TimeUnit
 /**
  * Fires once SmsManager.downloadMultimediaMessage (see MmsDownloadWorker) actually completes —
  * success or failure. Reads the real outcome: RESULT_OK, or one of SmsManager's MMS_ERROR_* codes.
+ * On RESULT_OK the platform has only written the raw PDU to our scratch file: this receiver parses it and stores
+ * the message in the system MMS store ([MmsIngest]), which a default SMS app must do itself.
  * A transient failure schedules another download after an exponential backoff, up to the cap in
  * [MmsDownloadPolicy]; a permanent one stops and is reported. Either way the sync runs again so InboxIQ
  * picks up whatever is now in content://mms.
@@ -20,17 +23,20 @@ import java.util.concurrent.TimeUnit
 class MmsDownloadReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val id = intent.getLongExtra(EXTRA_MMS_ID, -1L)
+        val fileName = intent.getStringExtra(EXTRA_FILE_NAME)
         val httpStatus = intent.getIntExtra(SmsManager.EXTRA_MMS_HTTP_STATUS, 0)
-        handleResult(
-            context = context, id = id, resultCode = resultCode, httpStatus = httpStatus,
-            store = MmsDownloadStore(context),
-            scheduleRetry = { rowId, delayMs -> MmsDownloadScheduler.enqueueRetry(context, rowId, delayMs) },
-        )
-        WorkManager.getInstance(context).enqueue(
-            OneTimeWorkRequestBuilder<SyncMmsWorker>()
-                .setInitialDelay(2, TimeUnit.SECONDS)
-                .build(),
-        )
+        val code = resultCode
+        // Parsing and storing a picture message can take a moment: do it off the main thread, keeping the broadcast open.
+        val pending = goAsync()
+        Thread {
+            try {
+                process(context.applicationContext, id, fileName, code, httpStatus)
+            } catch (e: Exception) {
+                Log.e(TAG, "processing download result failed: ${e.javaClass.simpleName}")
+            } finally {
+                pending.finish()
+            }
+        }.start()
     }
 
     companion object {
@@ -38,6 +44,57 @@ class MmsDownloadReceiver : BroadcastReceiver() {
 
         /** Intent extra carrying the provider row id the download was for. */
         const val EXTRA_MMS_ID = "com.inboxiq.app.extra.MMS_ID"
+
+        /** Intent extra naming the scratch file ([MmsDownloadFiles]) the platform wrote the raw PDU to. */
+        const val EXTRA_FILE_NAME = "com.inboxiq.app.extra.FILE_NAME"
+
+        /**
+         * One download result, end to end: on RESULT_OK read the downloaded PDU and store it as a real message
+         * ([MmsIngest]); then record the outcome, retry or give up ([handleResult]); always remove the scratch file;
+         * then run the sync so the message (or its updated state) shows up.
+         */
+        internal fun process(
+            context: Context,
+            id: Long,
+            fileName: String?,
+            resultCode: Int,
+            httpStatus: Int,
+            store: MmsDownloadStore = MmsDownloadStore(context),
+            responder: MmsIngest.NotifyResponder = MmsIngest.REAL_RESPONDER,
+            scheduleRetry: (id: Long, delayMs: Long) -> Unit = { rowId, delayMs -> MmsDownloadScheduler.enqueueRetry(context, rowId, delayMs) },
+            enqueueSync: () -> Unit = { enqueueSync(context) },
+            now: Long = System.currentTimeMillis(),
+            report: (MmsDownloadReport.Event) -> Unit = MmsDownloadReport::log,
+        ): MmsDownloadPolicy.Outcome {
+            val file = fileName?.let { runCatching { MmsDownloadFiles.fileFor(context, it) }.getOrNull() }
+            var effective = resultCode
+            try {
+                if (resultCode == Activity.RESULT_OK && id >= 0 && file != null) {
+                    effective = when (val r = MmsIngest.ingest(context, id, file, responder)) {
+                        is MmsIngest.Result.Persisted -> Activity.RESULT_OK
+                        is MmsIngest.Result.EmptyDownload -> MmsDownloadPolicy.CODE_EMPTY_DOWNLOAD
+                        is MmsIngest.Result.ParseFailed -> MmsDownloadPolicy.CODE_PARSE_FAILED
+                        is MmsIngest.Result.PersistFailed -> MmsDownloadPolicy.CODE_PERSIST_FAILED
+                    }
+                } else if (resultCode == Activity.RESULT_OK) {
+                    // An older build's pending intent carries no file: nothing to store, the sync still runs.
+                    Log.w(TAG, "RESULT_OK for id=$id without a download file")
+                }
+            } finally {
+                runCatching { file?.delete() }
+            }
+            val outcome = handleResult(context, id, effective, httpStatus, store, scheduleRetry, now, report)
+            enqueueSync()
+            return outcome
+        }
+
+        private fun enqueueSync(context: Context) {
+            WorkManager.getInstance(context).enqueue(
+                OneTimeWorkRequestBuilder<SyncMmsWorker>()
+                    .setInitialDelay(2, TimeUnit.SECONDS)
+                    .build(),
+            )
+        }
 
         /**
          * What to do with one download result. Logs the id and the result-code name (no addresses, no content),

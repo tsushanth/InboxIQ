@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.inboxiq.app.sms.DefaultSmsRole
+import com.inboxiq.app.sms.MmsDownloadFiles
 import com.inboxiq.app.sms.MmsDownloadPolicy
 import com.inboxiq.app.sms.MmsDownloadReceiver
 import com.inboxiq.app.sms.MmsDownloadReport
@@ -36,16 +37,18 @@ class MmsDownloadWorker @JvmOverloads constructor(
     // always uses the default, which is the actual SmsManager call. Splitting this out is
     // what makes it possible to verify "did we ask to download the right id/location" without
     // a real device, since Robolectric's SmsManager shadow doesn't track calls meaningfully.
-    private val downloadTrigger: (Context, String, Uri, PendingIntent) -> Unit = ::triggerRealDownload,
+    private val downloadTrigger: (Context, Long, String, Uri, PendingIntent) -> Unit = ::triggerRealDownload,
     private val clock: () -> Long = System::currentTimeMillis,
     private val report: (MmsDownloadReport.Event) -> Unit = MmsDownloadReport::log,
     private val isDefaultSmsApp: (Context) -> Boolean = DefaultSmsRole::isDefault,
+    private val targets: MmsDownloadFiles.TargetFactory = MmsDownloadFiles.REAL,
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
         // Only the default SMS app downloads MMS; another default app owns these rows (the periodic pass runs always).
         if (!isDefaultSmsApp(applicationContext)) return Result.success()
         val store = MmsDownloadStore(applicationContext)
+        MmsDownloadFiles.cleanStale(applicationContext, now = clock())
         val only = inputData.getLong(KEY_ID, -1L).takeIf { it >= 0 }
         val now = clock()
 
@@ -92,9 +95,17 @@ class MmsDownloadWorker @JvmOverloads constructor(
                 continue
             }
 
-            val msgUri = ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, id)
+            // The platform writes the raw downloaded PDU to this file; MmsDownloadReceiver parses and stores it.
+            val target = try {
+                targets.create(applicationContext, id, attempts + 1)
+            } catch (e: Exception) {
+                Log.e(TAG, "no download file for id=$id: ${e.javaClass.simpleName}")
+                retry = true
+                continue
+            }
             val downloadedIntent = Intent(applicationContext, MmsDownloadReceiver::class.java)
                 .putExtra(MmsDownloadReceiver.EXTRA_MMS_ID, id)
+                .putExtra(MmsDownloadReceiver.EXTRA_FILE_NAME, target.name)
             val pendingIntent = PendingIntent.getBroadcast(
                 applicationContext, id.toInt(), downloadedIntent,
                 // Mutable (explicit intent, so safe) so the platform can add the carrier's HTTP status to the broadcast.
@@ -103,10 +114,11 @@ class MmsDownloadWorker @JvmOverloads constructor(
             val n = store.recordAttempt(id, now, origin)
             try {
                 Log.i(TAG, "downloading mms id=$id attempt=$n")
-                downloadTrigger(applicationContext, location, msgUri, pendingIntent)
+                downloadTrigger(applicationContext, id, location, target.uri, pendingIntent)
             } catch (e: Exception) {
                 Log.e(TAG, "downloadMultimediaMessage failed for id=$id attempt=$n: ${e.javaClass.simpleName}")
                 store.recordResult(id, MmsDownloadPolicy.CODE_TRIGGER_FAILED)
+                target.file.delete()
                 // Ask WorkManager for another go with its exponential backoff (the request sets it); the
                 // attempt cap above ends it, so a permanently failing trigger cannot loop forever.
                 if (MmsDownloadPolicy.mayRetry(n, store.firstSeenAt(id, origin), clock())) retry = true
@@ -121,7 +133,8 @@ class MmsDownloadWorker @JvmOverloads constructor(
         /** Optional input: download only this provider row (a retry scheduled for one id). */
         const val KEY_ID = "mms_id"
 
-        private fun triggerRealDownload(context: Context, location: String, msgUri: Uri, pendingIntent: PendingIntent) {
+        private fun triggerRealDownload(context: Context, id: Long, location: String, destination: Uri, pendingIntent: PendingIntent) {
+            val msgUri = ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, id)
             // getSystemService(SmsManager::class.java) only reliably resolves on API 31+ (can
             // return null below that, silently no-op-ing every download); getDefault() works
             // on every version this app supports (minSdk 26).
@@ -142,7 +155,8 @@ class MmsDownloadWorker @JvmOverloads constructor(
             if (smsManager == null) {
                 throw IllegalStateException("SmsManager unavailable, cannot download")
             }
-            smsManager.downloadMultimediaMessage(context, location, msgUri, null, pendingIntent)
+            MmsDownloadFiles.grantToMmsService(context, destination)
+            smsManager.downloadMultimediaMessage(context, location, destination, null, pendingIntent)
         }
 
         /** The subscription id recorded on the provider row (`sub_id`), or null when it is missing or invalid. */

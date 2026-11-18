@@ -10,6 +10,7 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.provider.Telephony
 import androidx.test.core.app.ApplicationProvider
+import com.inboxiq.app.sms.MmsDownloadFiles
 import com.inboxiq.app.sms.MmsDownloadPolicy
 import com.inboxiq.app.sms.MmsDownloadReport
 import com.inboxiq.app.sms.MmsDownloadStore
@@ -75,17 +76,24 @@ class MmsDownloadWorkerTest {
         ShadowContentResolver.registerProviderInternal("mms", provider)
     }
 
+    /** A scratch file per attempt in the test cache, with a plain file uri (no FileProvider in unit tests). */
+    private val targets = MmsDownloadFiles.TargetFactory { ctx, id, attempt ->
+        val name = "dl_${id}_$attempt.pdu"
+        val file = MmsDownloadFiles.fileFor(ctx, name).also { it.createNewFile() }
+        MmsDownloadFiles.Target(name, file, Uri.fromFile(file))
+    }
+
     private var now = 1_000_000_000_000L
     private val events = mutableListOf<MmsDownloadReport.Event>()
     private var isDefault = true
 
     private fun buildWorker(
         inputId: Long? = null,
-        trigger: (Context, String, Uri, PendingIntent) -> Unit,
+        trigger: (Context, Long, String, Uri, PendingIntent) -> Unit,
     ): MmsDownloadWorker {
         val factory = object : WorkerFactory() {
             override fun createWorker(appContext: Context, workerClassName: String, workerParameters: WorkerParameters): ListenableWorker {
-                return MmsDownloadWorker(appContext, workerParameters, trigger, { now }, { events += it }, { isDefault })
+                return MmsDownloadWorker(appContext, workerParameters, trigger, { now }, { events += it }, { isDefault }, targets)
             }
         }
         return TestListenableWorkerBuilder<MmsDownloadWorker>(context)
@@ -100,8 +108,8 @@ class MmsDownloadWorkerTest {
         rows[42L] = 0x82 to "http://mmsc.example.com/msg?id=42" // MESSAGE_TYPE_NOTIFICATION_IND
 
         val triggered = mutableListOf<Pair<Long, String>>()
-        val worker = buildWorker { _, location, msgUri, _ ->
-            triggered.add(ContentUris.parseId(msgUri) to location)
+        val worker = buildWorker { _, id, location, _, _ ->
+            triggered.add(id to location)
         }
 
         val result = worker.doWork()
@@ -118,7 +126,7 @@ class MmsDownloadWorkerTest {
         // fixed to actually parse and persist the WAP push itself.
 
         var triggerCount = 0
-        val worker = buildWorker { _, _, _, _ -> triggerCount++ }
+        val worker = buildWorker { _, _, _, _, _ -> triggerCount++ }
 
         val result = worker.doWork()
 
@@ -133,7 +141,7 @@ class MmsDownloadWorkerTest {
         rows[2L] = 0x84 to "http://should-not-download.example.com" // MESSAGE_TYPE_RETRIEVE_CONF — already downloaded
 
         var triggerCount = 0
-        val worker = buildWorker { _, _, _, _ -> triggerCount++ }
+        val worker = buildWorker { _, _, _, _, _ -> triggerCount++ }
 
         worker.doWork()
 
@@ -147,8 +155,7 @@ class MmsDownloadWorkerTest {
         rows[2L] = 0x82 to "http://mmsc.example.com/msg?id=2"
 
         val attempted = mutableListOf<Long>()
-        val worker = buildWorker { _, _, msgUri, _ ->
-            val id = ContentUris.parseId(msgUri)
+        val worker = buildWorker { _, id, _, _, _ ->
             attempted.add(id)
             if (id == 1L) throw IllegalStateException("simulated downloadMultimediaMessage failure")
         }
@@ -166,17 +173,17 @@ class MmsDownloadWorkerTest {
         rows[7L] = 0x82 to "http://mmsc.example.com/msg?id=7"
         var triggerCount = 0
 
-        assertTrue(buildWorker { _, _, _, _ -> triggerCount++ }.doWork() is ListenableWorker.Result.Success)
+        assertTrue(buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork() is ListenableWorker.Result.Success)
         assertEquals(1, triggerCount)
 
         // A second pass moments later (the periodic one, a sync heal) must not fetch the same message again.
         now += 10_000
-        buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+        buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
         assertEquals(1, triggerCount)
 
         // Once the in-flight window has passed and the receiver reported nothing, it may be tried again.
         now += MmsDownloadPolicy.IN_FLIGHT_MS + 1
-        buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+        buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
         assertEquals(2, triggerCount)
     }
 
@@ -189,7 +196,7 @@ class MmsDownloadWorkerTest {
 
         repeat(MmsDownloadPolicy.MAX_ATTEMPTS + 3) {
             now += MmsDownloadPolicy.IN_FLIGHT_MS + 1
-            buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+            buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
         }
 
         assertEquals(MmsDownloadPolicy.MAX_ATTEMPTS, triggerCount)
@@ -208,7 +215,7 @@ class MmsDownloadWorkerTest {
         var last: ListenableWorker.Result? = null
         repeat(MmsDownloadPolicy.MAX_ATTEMPTS + 1) {
             now += 1_000
-            last = buildWorker { _, _, _, _ -> throw IllegalStateException("simulated") }.doWork()
+            last = buildWorker { _, _, _, _, _ -> throw IllegalStateException("simulated") }.doWork()
         }
         // The last of the attempts-with-trigger already hit the cap: no more Retry, so WorkManager stops.
         assertTrue(last is ListenableWorker.Result.Success)
@@ -224,7 +231,7 @@ class MmsDownloadWorkerTest {
         now += MmsDownloadPolicy.MAX_AGE_MS + 1
         var triggerCount = 0
 
-        buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+        buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
 
         assertEquals(0, triggerCount)
         assertEquals(MmsDownloadReport.Kind.GAVE_UP_EXHAUSTED, events.single().kind)
@@ -239,11 +246,11 @@ class MmsDownloadWorkerTest {
         store.recordResult(11L, android.telephony.SmsManager.MMS_ERROR_NO_DATA_NETWORK, notBefore = now + 60_000)
         var triggerCount = 0
 
-        buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+        buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
         assertEquals(0, triggerCount)
 
         now += 61_000
-        buildWorker(inputId = 11L) { _, _, _, _ -> triggerCount++ }.doWork()
+        buildWorker(inputId = 11L) { _, _, _, _, _ -> triggerCount++ }.doWork()
         assertEquals(1, triggerCount)
     }
 
@@ -254,7 +261,7 @@ class MmsDownloadWorkerTest {
         rows[2L] = 0x82 to "http://mmsc.example.com/msg?id=2"
         val attempted = mutableListOf<Long>()
 
-        buildWorker(inputId = 2L) { _, _, msgUri, _ -> attempted += ContentUris.parseId(msgUri) }.doWork()
+        buildWorker(inputId = 2L) { _, id, _, _, _ -> attempted += id }.doWork()
 
         assertEquals(listOf(2L), attempted)
     }
@@ -266,7 +273,7 @@ class MmsDownloadWorkerTest {
         isDefault = false
         var triggerCount = 0
 
-        val result = buildWorker { _, _, _, _ -> triggerCount++ }.doWork()
+        val result = buildWorker { _, _, _, _, _ -> triggerCount++ }.doWork()
 
         assertTrue(result is ListenableWorker.Result.Success)
         assertEquals(0, triggerCount)
@@ -279,11 +286,40 @@ class MmsDownloadWorkerTest {
         store.recordAttempt(21L, now)
         store.recordAttempt(21L, now + 1)
 
-        buildWorker { _, _, _, _ -> }.doWork()
+        buildWorker { _, _, _, _, _ -> }.doWork()
 
         val e = events.single()
         assertEquals(MmsDownloadReport.Kind.RESOLVED_AFTER_RETRY, e.kind)
         assertEquals(2, e.attempts)
         assertEquals(null, store.entry(21L))
+    }
+
+    @Test
+    fun `the download destination is a per-attempt scratch file, not the provider row, and the receiver is told which`() = runTest {
+        registerFakeMmsProvider()
+        rows[30L] = 0x82 to "http://mmsc.example.com/msg?id=30"
+        val seen = mutableListOf<Pair<Uri, PendingIntent>>()
+
+        buildWorker { _, _, _, dest, pi -> seen += dest to pi }.doWork()
+        now += MmsDownloadPolicy.IN_FLIGHT_MS + 1
+        buildWorker { _, _, _, dest, pi -> seen += dest to pi }.doWork()
+
+        assertEquals(2, seen.size)
+        assertEquals("file", seen[0].first.scheme)
+        assertTrue(seen[0].first.path!!.endsWith("dl_30_1.pdu"))
+        assertTrue(seen[1].first.path!!.endsWith("dl_30_2.pdu"))
+        val intent = org.robolectric.Shadows.shadowOf(seen[1].second).savedIntent
+        assertEquals(30L, intent.getLongExtra(com.inboxiq.app.sms.MmsDownloadReceiver.EXTRA_MMS_ID, -1))
+        assertEquals("dl_30_2.pdu", intent.getStringExtra(com.inboxiq.app.sms.MmsDownloadReceiver.EXTRA_FILE_NAME))
+    }
+
+    @Test
+    fun `a trigger that throws removes its scratch file`() = runTest {
+        registerFakeMmsProvider()
+        rows[31L] = 0x82 to "http://mmsc.example.com/msg?id=31"
+
+        buildWorker { _, _, _, _, _ -> throw IllegalStateException("simulated") }.doWork()
+
+        assertTrue(!MmsDownloadFiles.fileFor(context, "dl_31_1.pdu").exists())
     }
 }

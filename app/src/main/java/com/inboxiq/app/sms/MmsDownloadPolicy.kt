@@ -44,6 +44,8 @@ object MmsDownloadPolicy {
      */
     fun classify(resultCode: Int, httpStatus: Int = 0): Outcome = when (resultCode) {
         Activity.RESULT_OK -> Outcome.SUCCESS
+        // The carrier sent bytes that are not an MMS retrieve confirmation: fetching again returns the same bytes.
+        CODE_PARSE_FAILED -> Outcome.PERMANENT
         SmsManager.MMS_ERROR_HTTP_FAILURE ->
             if (httpStatus == 404 || httpStatus == 410) Outcome.PERMANENT else Outcome.TRANSIENT
         // Nothing about the phone's setup will change on its own: the subscription is gone or inactive,
@@ -72,9 +74,22 @@ object MmsDownloadPolicy {
         SmsManager.MMS_ERROR_INACTIVE_SUBSCRIPTION -> "MMS_ERROR_INACTIVE_SUBSCRIPTION"
         SmsManager.MMS_ERROR_DATA_DISABLED -> "MMS_ERROR_DATA_DISABLED"
         SmsManager.MMS_ERROR_MMS_DISABLED_BY_CARRIER -> "MMS_ERROR_MMS_DISABLED_BY_CARRIER"
+        CODE_TRIGGER_FAILED -> "TRIGGER_FAILED"
+        CODE_PARSE_FAILED -> "PDU_PARSE_FAILED"
+        CODE_PERSIST_FAILED -> "PDU_PERSIST_FAILED"
+        CODE_EMPTY_DOWNLOAD -> "EMPTY_DOWNLOAD"
         else -> "UNKNOWN_$resultCode"
     }
 
     /** Result code recorded when the download could not even be handed to the platform (an exception). */
     const val CODE_TRIGGER_FAILED = -1000
+
+    /** The platform reported RESULT_OK but the downloaded bytes are not a parseable m-retrieve-conf (permanent). */
+    const val CODE_PARSE_FAILED = -1001
+
+    /** The PDU parsed but writing it into the system MMS store failed (transient). */
+    const val CODE_PERSIST_FAILED = -1002
+
+    /** RESULT_OK but the download file is missing or empty (transient). */
+    const val CODE_EMPTY_DOWNLOAD = -1003
 }
