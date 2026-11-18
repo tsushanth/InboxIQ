@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Kuvaa ei ole vielä ladattu. Yritä uudelleen napauttamalla.</string>
+    <string name="mms_picture_unavailable">Kuvaa ei voitu ladata. Pyydä lähettäjää lähettämään se uudelleen.</string>
+    <string name="mms_retry_action">Yritä latausta uudelleen</string>
+    <string name="mms_retry_started">Yritetään ladata kuva uudelleen</string>
+</resources>

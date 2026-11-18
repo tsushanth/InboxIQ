@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Hindi pa na-download ang larawan. I-tap para subukan muli.</string>
+    <string name="mms_picture_unavailable">Hindi ma-load ang larawang ito. Hilingin sa nagpadala na ipadala ito ulit.</string>
+    <string name="mms_retry_action">Subukang i-download muli</string>
+    <string name="mms_retry_started">Sinusubukang i-download muli ang larawan</string>
+</resources>

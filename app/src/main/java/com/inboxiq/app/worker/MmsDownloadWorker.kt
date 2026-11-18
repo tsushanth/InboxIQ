@@ -11,7 +11,14 @@ import android.telephony.SmsManager
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.inboxiq.app.sms.DefaultSmsRole
+import com.inboxiq.app.sms.MmsDownloadPolicy
 import com.inboxiq.app.sms.MmsDownloadReceiver
+import com.inboxiq.app.sms.MmsDownloadReport
+import com.inboxiq.app.sms.MmsDownloadScheduler
+import com.inboxiq.app.sms.MmsDownloadStore
+import com.inboxiq.app.sms.MmsPending
+import com.inboxiq.app.sms.ProviderUnavailableException
 
 /**
  * Explicitly triggers the actual MMS content download. Confirmed live that the OS does not
@@ -30,47 +37,89 @@ class MmsDownloadWorker @JvmOverloads constructor(
     // what makes it possible to verify "did we ask to download the right id/location" without
     // a real device, since Robolectric's SmsManager shadow doesn't track calls meaningfully.
     private val downloadTrigger: (Context, String, Uri, PendingIntent) -> Unit = ::triggerRealDownload,
+    private val clock: () -> Long = System::currentTimeMillis,
+    private val report: (MmsDownloadReport.Event) -> Unit = MmsDownloadReport::log,
+    private val isDefaultSmsApp: (Context) -> Boolean = DefaultSmsRole::isDefault,
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
-        val resolver = applicationContext.contentResolver
-        val projection = arrayOf(Telephony.Mms._ID, Telephony.Mms.CONTENT_LOCATION, Telephony.Mms.MESSAGE_TYPE)
-        val selection = "${Telephony.Mms.MESSAGE_TYPE} = ?"
-        val args = arrayOf(NOTIFICATION_IND.toString())
+        // Only the default SMS app downloads MMS; another default app owns these rows (the periodic pass runs always).
+        if (!isDefaultSmsApp(applicationContext)) return Result.success()
+        val store = MmsDownloadStore(applicationContext)
+        val only = inputData.getLong(KEY_ID, -1L).takeIf { it >= 0 }
+        val now = clock()
 
-        val pending = mutableListOf<Pair<Long, String>>()
-        resolver.query(Telephony.Mms.CONTENT_URI, projection, selection, args, null)?.use { cursor ->
-            val idIdx = cursor.getColumnIndexOrThrow(Telephony.Mms._ID)
-            val locIdx = cursor.getColumnIndexOrThrow(Telephony.Mms.CONTENT_LOCATION)
-            while (cursor.moveToNext()) {
-                val location = cursor.getString(locIdx) ?: continue
-                pending.add(cursor.getLong(idIdx) to location)
-            }
+        val allPending = try {
+            MmsPending.query(applicationContext.contentResolver)
+        } catch (e: SecurityException) {
+            return Result.success() // no SMS permission right now: nothing to do
+        } catch (e: ProviderUnavailableException) {
+            // No cursor is not "nothing pending": try again later rather than forget the attempt counts.
+            return Result.retry()
         }
-        Log.i(TAG, "found ${pending.size} pending notification-indication row(s): ${pending.map { it.first }}")
+        MmsDownloadScheduler.reconcile(applicationContext.contentResolver, store, allPending.map { it.id }.toSet(), report)
+        val pending = allPending.filter { it.location != null && (only == null || it.id == only) }
+        Log.i(TAG, "found ${pending.size} pending notification-indication row(s): ${pending.map { it.id }}")
 
-        for ((id, location) in pending) {
+        var retry = false
+        for (row in pending) {
+            val id = row.id
+            val location = row.location ?: continue
+            val origin = MmsDownloadScheduler.originOf(row, now)
+            val attempts = store.attempts(id)
+            // A download the user asked for by tapping Retry (an id input) is always tried once, whatever the caps say.
+            if (only == null && !MmsDownloadPolicy.mayRetry(attempts, store.firstSeenAt(id, origin), now)) {
+                // Out of attempts or past the carrier's expiry: say so once, then leave the row alone.
+                if (!store.gaveUpReported(id)) {
+                    store.markGaveUpReported(id)
+                    report(
+                        MmsDownloadReport.Event(
+                            MmsDownloadReport.Kind.GAVE_UP_EXHAUSTED, id,
+                            MmsDownloadPolicy.codeName(store.entry(id)?.lastCode ?: MmsDownloadPolicy.CODE_TRIGGER_FAILED),
+                            attempts, MmsPending.hasImage(applicationContext.contentResolver, id),
+                        ),
+                    )
+                }
+                continue
+            }
+            // Idempotent per row: one already being fetched, or still backing off after a failure, is not hit again.
+            if (store.isInFlight(id, now)) {
+                Log.i(TAG, "mms id=$id already downloading, skipping")
+                continue
+            }
+            if (only == null && store.notBefore(id) > now) {
+                Log.i(TAG, "mms id=$id backing off, skipping")
+                continue
+            }
+
             val msgUri = ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, id)
             val downloadedIntent = Intent(applicationContext, MmsDownloadReceiver::class.java)
+                .putExtra(MmsDownloadReceiver.EXTRA_MMS_ID, id)
             val pendingIntent = PendingIntent.getBroadcast(
                 applicationContext, id.toInt(), downloadedIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                // Mutable (explicit intent, so safe) so the platform can add the carrier's HTTP status to the broadcast.
+                PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0,
             )
+            val n = store.recordAttempt(id, now, origin)
             try {
-                Log.i(TAG, "downloading mms id=$id")
+                Log.i(TAG, "downloading mms id=$id attempt=$n")
                 downloadTrigger(applicationContext, location, msgUri, pendingIntent)
             } catch (e: Exception) {
-                Log.e(TAG, "downloadMultimediaMessage failed for id=$id: ${e.javaClass.simpleName}")
-                // Leave it for the next periodic pass — SyncMmsWorker's later read will just
-                // find no content yet, same as if this row hadn't been noticed at all.
+                Log.e(TAG, "downloadMultimediaMessage failed for id=$id attempt=$n: ${e.javaClass.simpleName}")
+                store.recordResult(id, MmsDownloadPolicy.CODE_TRIGGER_FAILED)
+                // Ask WorkManager for another go with its exponential backoff (the request sets it); the
+                // attempt cap above ends it, so a permanently failing trigger cannot loop forever.
+                if (MmsDownloadPolicy.mayRetry(n, store.firstSeenAt(id, origin), clock())) retry = true
             }
         }
-        return Result.success()
+        return if (retry) Result.retry() else Result.success()
     }
 
     companion object {
         private const val TAG = "MmsDownloadWorker"
-        private const val NOTIFICATION_IND = 0x82 // Telephony.Mms.MESSAGE_TYPE_NOTIFICATION_IND
+
+        /** Optional input: download only this provider row (a retry scheduled for one id). */
+        const val KEY_ID = "mms_id"
 
         private fun triggerRealDownload(context: Context, location: String, msgUri: Uri, pendingIntent: PendingIntent) {
             // getSystemService(SmsManager::class.java) only reliably resolves on API 31+ (can
@@ -91,8 +140,7 @@ class MmsDownloadWorker @JvmOverloads constructor(
                 SmsManager.getDefault()
             }
             if (smsManager == null) {
-                Log.e(TAG, "SmsManager unavailable, cannot download")
-                return
+                throw IllegalStateException("SmsManager unavailable, cannot download")
             }
             smsManager.downloadMultimediaMessage(context, location, msgUri, null, pendingIntent)
         }

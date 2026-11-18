@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">A kép még nincs letöltve. Koppints az újrapróbáláshoz.</string>
+    <string name="mms_picture_unavailable">Nem sikerült betölteni ezt a képet. Kérd meg a feladót, hogy küldje el újra.</string>
+    <string name="mms_retry_action">Letöltés újrapróbálása</string>
+    <string name="mms_retry_started">A kép letöltésének újrapróbálása</string>
+</resources>

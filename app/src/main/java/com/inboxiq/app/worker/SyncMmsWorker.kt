@@ -16,6 +16,10 @@ class SyncMmsWorker(
     override suspend fun doWork(): Result {
         val fresh = MmsSync.syncRecent(applicationContext, System.currentTimeMillis() - LOOKBACK_MS)
         notifyNew(applicationContext, fresh)
+        // Self-heal: an announced MMS that is still undownloaded (a failed fetch, no data at the time) gets another go.
+        if (com.inboxiq.app.sms.DefaultSmsRole.isDefault(applicationContext)) {
+            com.inboxiq.app.sms.MmsDownloadScheduler.healPending(applicationContext)
+        }
         WorkManager.getInstance(applicationContext).enqueue(
             OneTimeWorkRequestBuilder<ClassifyMessagesWorker>().build(),
         )

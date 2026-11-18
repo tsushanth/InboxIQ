@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Bilden har inte hämtats än. Tryck för att försöka igen.</string>
+    <string name="mms_picture_unavailable">Det gick inte att läsa in bilden. Be avsändaren skicka den igen.</string>
+    <string name="mms_retry_action">Försök hämta igen</string>
+    <string name="mms_retry_started">Försöker hämta bilden igen</string>
+</resources>

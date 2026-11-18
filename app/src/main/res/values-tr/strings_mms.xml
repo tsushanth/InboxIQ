@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Resim henüz indirilmedi. Yeniden denemek için dokunun.</string>
+    <string name="mms_picture_unavailable">Bu resim yüklenemedi. Gönderenden tekrar göndermesini isteyin.</string>
+    <string name="mms_retry_action">İndirmeyi yeniden dene</string>
+    <string name="mms_retry_started">Resim yeniden indirilmeye çalışılıyor</string>
+</resources>

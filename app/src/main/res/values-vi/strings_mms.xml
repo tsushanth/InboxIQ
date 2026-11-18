@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Ảnh chưa được tải xuống. Nhấn để thử lại.</string>
+    <string name="mms_picture_unavailable">Không thể tải ảnh này. Hãy nhờ người gửi gửi lại.</string>
+    <string name="mms_retry_action">Thử tải xuống lại</string>
+    <string name="mms_retry_started">Đang thử tải ảnh xuống lại</string>
+</resources>

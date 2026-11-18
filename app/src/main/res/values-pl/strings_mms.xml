@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Zdjęcie nie zostało jeszcze pobrane. Kliknij, aby spróbować ponownie.</string>
+    <string name="mms_picture_unavailable">Nie udało się wczytać tego zdjęcia. Poproś nadawcę o ponowne wysłanie.</string>
+    <string name="mms_retry_action">Ponów pobieranie</string>
+    <string name="mms_retry_started">Ponowna próba pobrania zdjęcia</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Зображення ще не завантажено. Торкніться, щоб повторити спробу.</string>
+    <string name="mms_picture_unavailable">Не вдалося завантажити це зображення. Попросіть відправника надіслати його ще раз.</string>
+    <string name="mms_retry_action">Повторити завантаження</string>
+    <string name="mms_retry_started">Повторна спроба завантажити зображення</string>
+</resources>

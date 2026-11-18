@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Missing-picture note and Retry for an incoming MMS whose download failed (MmsDownloadReceiver). Machine-translated into every values-* locale; needs-native-review before release in those languages. -->
+    <string name="mms_picture_pending">Picture not downloaded yet. Tap to retry.</string>
+    <string name="mms_picture_unavailable">Couldn\'t load this picture. Ask the sender to send it again.</string>
+    <string name="mms_retry_action">Retry download</string>
+    <string name="mms_retry_started">Trying to download the picture again</string>
+</resources>

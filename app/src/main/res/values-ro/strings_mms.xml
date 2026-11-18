@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Imaginea nu a fost descărcată încă. Atinge pentru a reîncerca.</string>
+    <string name="mms_picture_unavailable">Imaginea nu a putut fi încărcată. Cere expeditorului să o trimită din nou.</string>
+    <string name="mms_retry_action">Reîncearcă descărcarea</string>
+    <string name="mms_retry_started">Se încearcă din nou descărcarea imaginii</string>
+</resources>

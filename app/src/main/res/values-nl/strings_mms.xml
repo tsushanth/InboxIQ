@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Afbeelding nog niet gedownload. Tik om het opnieuw te proberen.</string>
+    <string name="mms_picture_unavailable">Deze afbeelding kan niet worden geladen. Vraag de afzender om de afbeelding opnieuw te sturen.</string>
+    <string name="mms_retry_action">Download opnieuw proberen</string>
+    <string name="mms_retry_started">Afbeelding wordt opnieuw gedownload</string>
+</resources>

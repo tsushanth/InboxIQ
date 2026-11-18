@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">사진을 아직 다운로드하지 못했습니다. 탭하여 다시 시도하세요.</string>
+    <string name="mms_picture_unavailable">이 사진을 불러올 수 없습니다. 보낸 사람에게 다시 보내 달라고 요청하세요.</string>
+    <string name="mms_retry_action">다운로드 다시 시도</string>
+    <string name="mms_retry_started">사진 다운로드를 다시 시도하는 중</string>
+</resources>
