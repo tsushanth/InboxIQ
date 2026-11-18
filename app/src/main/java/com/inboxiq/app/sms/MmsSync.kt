@@ -114,7 +114,7 @@ object MmsSync {
                 val key = Triple(address, row.timestamp, row.isIncoming)
                 val queued = pendingIndex[key]
                 if (queued != null) {
-                    if (p.imagePartUri != null && pending[queued].imagePartUri == null) {
+                    if (heals(pending[queued], p)) {
                         pending[queued] = pending[queued].copy(body = p.text, imagePartUri = p.imagePartUri)
                     }
                     continue
@@ -126,7 +126,7 @@ object MmsSync {
                     sentMatch(dao.outgoingBetween(address, row.timestamp, row.timestamp + 999), p)
                 }
                 if (existing != null) {
-                    if (p.imagePartUri != null && existing.imagePartUri == null) {
+                    if (heals(existing, p)) {
                         dao.update(existing.copy(body = p.text, imagePartUri = p.imagePartUri))
                         updated++
                     }
@@ -152,6 +152,14 @@ object MmsSync {
         }
         return PageResult(rows.size, ids.min(), ids.max(), inserted)
     }
+
+    /**
+     * True when [p] (the provider's current content of a message) completes the stored [row]: it brings the image the
+     * row lacks, or real text where the row holds only the "[MMS message]" placeholder (a text-only MMS).
+     */
+    internal fun heals(row: MessageEntity, p: Parts): Boolean =
+        (p.imagePartUri != null && row.imagePartUri == null) ||
+            (row.body == PLACEHOLDER_BODY && row.imagePartUri == null && p.text != PLACEHOLDER_BODY)
 
     /**
      * A local row for the same sent MMS: same conversation, a clock-stamped time within the provider's

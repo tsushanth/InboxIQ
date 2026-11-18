@@ -93,4 +93,99 @@ class MmsDownloadReceiverTest {
         assertTrue(retries.isEmpty())
         assertTrue(store.knownIds().isEmpty())
     }
+
+    // ---- the whole result handling, including reading the downloaded file ----
+
+    private val syncs = ArrayList<Unit>()
+    private lateinit var fake: FakeMmsStore
+
+    private fun setUpProvider() {
+        fake = FakeMmsStore(context).also { it.register() }
+        fake.notificationRows[50L] = android.content.ContentValues().apply {
+            put(android.provider.Telephony.Mms.DATE, 1_700_000_555L)
+            put(android.provider.Telephony.Mms.TRANSACTION_ID, "TX")
+        }
+    }
+
+    private fun run(id: Long, code: Int, bytes: ByteArray?, name: String = "dl_${id}_1_x.pdu"): Pair<Outcome, java.io.File> {
+        val file = MmsDownloadFiles.fileFor(context, name)
+        if (bytes != null) file.writeBytes(bytes)
+        store.recordAttempt(id, now)
+        val outcome = MmsDownloadReceiver.process(
+            context, id, name, code, 0, store, { _, _ -> }, { i, d -> retries += i to d }, { syncs += Unit }, now, { events += it },
+        )
+        return outcome to file
+    }
+
+    @Test
+    fun `RESULT_OK with a good PDU stores the message, removes the file, and runs the sync`() {
+        setUpProvider()
+        val (outcome, file) = run(50L, Activity.RESULT_OK, MmsTestPdus.retrieveConf())
+
+        assertEquals(Outcome.SUCCESS, outcome)
+        assertEquals(1, fake.messageInserts().size)
+        assertTrue(fake.deletes.any { it.toString() == "content://mms/50" })
+        assertFalse(file.exists())
+        assertEquals(1, syncs.size)
+        assertTrue(retries.isEmpty())
+        assertTrue(events.isEmpty())
+    }
+
+    @Test
+    fun `RESULT_OK with bytes that are not an MMS is a permanent parse failure, reported once, not retried`() {
+        setUpProvider()
+        val (outcome, file) = run(50L, Activity.RESULT_OK, ByteArray(40) { 9 })
+
+        assertEquals(Outcome.PERMANENT, outcome)
+        assertTrue(retries.isEmpty())
+        val e = events.single()
+        assertEquals(MmsDownloadReport.Kind.GAVE_UP_PERMANENT, e.kind)
+        assertEquals("PDU_PARSE_FAILED", e.codeName)
+        assertTrue(fake.inserts.isEmpty())
+        assertFalse(file.exists())
+        assertEquals(1, syncs.size)
+    }
+
+    @Test
+    fun `RESULT_OK with an empty file is transient and retried`() {
+        setUpProvider()
+        val (outcome, _) = run(50L, Activity.RESULT_OK, null)
+
+        assertEquals(Outcome.TRANSIENT, outcome)
+        assertEquals(listOf(50L to MmsDownloadPolicy.delayMillis(1)), retries)
+        assertEquals(MmsDownloadPolicy.CODE_EMPTY_DOWNLOAD, store.entry(50L)?.lastCode)
+    }
+
+    @Test
+    fun `RESULT_OK but the system store refuses the message is transient and keeps the notification row`() {
+        setUpProvider()
+        fake.failInserts = true
+        val (outcome, _) = run(50L, Activity.RESULT_OK, MmsTestPdus.retrieveConf())
+
+        assertEquals(Outcome.TRANSIENT, outcome)
+        assertEquals(1, retries.size)
+        assertTrue("content://mms/50" !in fake.deletes.map { it.toString() })
+        assertEquals(MmsDownloadPolicy.CODE_PERSIST_FAILED, store.entry(50L)?.lastCode)
+    }
+
+    @Test
+    fun `an MMS_ERROR result never reads the file, removes it, and retries`() {
+        setUpProvider()
+        val (outcome, file) = run(50L, SmsManager.MMS_ERROR_NO_DATA_NETWORK, MmsTestPdus.retrieveConf())
+
+        assertEquals(Outcome.TRANSIENT, outcome)
+        assertTrue(fake.inserts.isEmpty())
+        assertFalse(file.exists())
+        assertEquals(1, retries.size)
+    }
+
+    @Test
+    fun `a bad file name in the broadcast is ignored, not followed`() {
+        setUpProvider()
+        val outcome = MmsDownloadReceiver.process(
+            context, 50L, "../../etc/passwd", Activity.RESULT_OK, 0, store, { _, _ -> }, { i, d -> retries += i to d }, { syncs += Unit }, now, { events += it },
+        )
+        assertEquals(Outcome.SUCCESS, outcome) // legacy path: no file, nothing stored
+        assertTrue(fake.inserts.isEmpty())
+    }
 }
