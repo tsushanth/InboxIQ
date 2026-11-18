@@ -1,0 +1,9 @@
+{
+  "_note": "Per-file count of hard-coded user-visible English literals in src/main. NoHardcodedUiStringsTest fails if a count rises or a new file adds any. Lower counts are fine. Regenerate deliberately with scripts/update-hardcoded-baseline.sh; see docs/hardcoded-ui-strings-guard.md.",
+  "total": 18,
+  "files": {
+    "src/main/java/com/inboxiq/app/classify/SenderProfile.kt": {"count": 6, "h": ["4f6ab906", "7aed77c9", "a540a953", "d5de138e", "e0147a8d", "f2f8623a"]},
+    "src/main/java/com/inboxiq/app/firstrun/FunnelLog.kt": {"count": 11, "h": ["5acf154b", "68b77168", "7044d2e5", "95c75ce5", "b0f25a11", "b3b886f7", "c47d887d", "c7787702", "ce048329", "e3e5360a", "f4c74db1"]},
+    "src/main/java/com/inboxiq/app/sms/MmsDownloadPolicy.kt": {"count": 1, "h": ["5c345e39"]}
+  }
+}

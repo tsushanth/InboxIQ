@@ -184,3 +184,7 @@ GPL-3.0-or-later (see `LICENSE`). Third-party components and their licences are 
 ## Credits
 
 - Typefaces: [Instrument Sans](https://github.com/Instrument/instrument-sans) and [Instrument Serif](https://github.com/Instrument/instrument-serif), both SIL Open Font License 1.1. Licence texts are in `third_party/fonts/`; the font files are in `app/src/main/res/font/`.
+
+## Hard-coded UI strings guard
+
+A unit test (`NoHardcodedUiStringsTest`) fails if new user-visible English is hard-coded in `app/src/main` instead of strings.xml. Pre-existing literals are recorded in `app/hardcoded-ui-strings.baseline.json`. How it works and how to update the baseline: `docs/hardcoded-ui-strings-guard.md`.
