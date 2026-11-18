@@ -1,6 +1,7 @@
 package com.inboxiq.app.ui
 
 import com.inboxiq.app.R
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import android.Manifest
 import android.content.ClipData
@@ -228,7 +229,7 @@ fun ThreadScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (showBack) {
-                        IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to inbox") }
+                        IconButton(onClick = callbacks.onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back_to_inbox)) }
                     } else Spacer(Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
@@ -240,7 +241,7 @@ fun ThreadScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             threadLabel?.let {
                                 // The label is a property of the sender, so it's shown once, here, and tapping it says why.
-                                Box(Modifier.heightIn(min = 32.dp).clickable(onClickLabel = "Why is this ${LabelPalette.displayName(it)}?") { showWhy = true }, contentAlignment = Alignment.CenterStart) {
+                                Box(Modifier.heightIn(min = 32.dp).clickable(onClickLabel = stringResource(R.string.thread_why_is_this, stringResource(LabelPalette.nameRes(it)))) { showWhy = true }, contentAlignment = Alignment.CenterStart) {
                                     LabelChip(it)
                                 }
                                 Spacer(Modifier.width(6.dp))
@@ -261,23 +262,23 @@ fun ThreadScreen(
                             }
                         }
                     }
-                    IconButton(onClick = callbacks.onOpenMedia) { Icon(Icons.Filled.PhotoLibrary, contentDescription = "Photos in this conversation") }
+                    IconButton(onClick = callbacks.onOpenMedia) { Icon(Icons.Filled.PhotoLibrary, contentDescription = stringResource(R.string.thread_photos_in_conversation)) }
                     Box {
-                        IconButton(onClick = { menuOpen = true }) { Icon(Icons.Filled.MoreVert, contentDescription = "More options") }
+                        IconButton(onClick = { menuOpen = true }) { Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.common_more_options)) }
                         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                             val pinned = state?.pinnedAt != null
                             DropdownMenuItem(
-                                text = { Text(if (pinned) "Unpin" else "Pin to top") },
+                                text = { Text(stringResource(if (pinned) R.string.action_unpin else R.string.thread_pin_to_top)) },
                                 leadingIcon = { Icon(Icons.Filled.PushPin, null) },
                                 onClick = { menuOpen = false; callbacks.onPin(!pinned) },
                             )
                             DropdownMenuItem(
-                                text = { Text(if (state?.archived == true) "Move to inbox" else "Archive") },
+                                text = { Text(stringResource(if (state?.archived == true) R.string.thread_move_to_inbox else R.string.action_archive)) },
                                 leadingIcon = { Icon(Icons.Filled.Archive, null) },
                                 onClick = { menuOpen = false; callbacks.onArchive(state?.archived != true) },
                             )
                             DropdownMenuItem(
-                                text = { Text(if (muted) "Unmute" else "Mute notifications") },
+                                text = { Text(stringResource(if (muted) R.string.action_unmute else R.string.ui_mute_notifications)) },
                                 leadingIcon = { Icon(Icons.Filled.NotificationsOff, null) },
                                 onClick = { menuOpen = false; if (muted) callbacks.onMute(null) else showMute = true },
                             )
@@ -292,7 +293,7 @@ fun ThreadScreen(
                                 onClick = { menuOpen = false; showSpam = true },
                             )
                             DropdownMenuItem(
-                                text = { Text(if (isBlocked) "Unblock number" else "Block number") },
+                                text = { Text(stringResource(if (isBlocked) R.string.thread_unblock_number else R.string.ui_block_number)) },
                                 leadingIcon = { Icon(Icons.Filled.Block, null) },
                                 onClick = { menuOpen = false; callbacks.onToggleBlock() },
                             )
@@ -326,8 +327,8 @@ fun ThreadScreen(
         if (messages.isEmpty() && scheduled.isEmpty()) {
             StateMessage(
                 Icons.Filled.Info,
-                "No messages yet",
-                "Say hello below. Your texts go out as standard SMS or MMS through your carrier.",
+                stringResource(R.string.empty_no_messages_title),
+                stringResource(R.string.thread_empty_body),
                 modifier = Modifier.weight(1f),
             )
         } else {
@@ -393,11 +394,12 @@ fun ThreadScreen(
 
     // ---------------- dialogs ----------------
     if (showWhy && threadLabel != null) {
-        val e = remember(threadLabel, labelConfidence, state, messages.lastOrNull { it.isIncoming }?.body) {
+        val labelName = stringResource(LabelPalette.nameRes(threadLabel))
+        val e = remember(threadLabel, labelConfidence, state, messages.lastOrNull { it.isIncoming }?.body, labelName) {
             val recent = messages.filter { it.isIncoming }.takeLast(5).reversed().map { it.body }
             val replies = messages.count { !it.isIncoming && !com.inboxiq.app.classify.BareReplies.isBare(it.body) }
             LabelExplainer.explain(
-                threadLabel, labelConfidence, state?.labelCorrected == true, recent.firstOrNull(), LabelPalette.displayName(threadLabel),
+                threadLabel, labelConfidence, state?.labelCorrected == true, recent.firstOrNull(), labelName,
                 address = address, recentIncoming = recent, replies = replies,
             )
         }
@@ -438,8 +440,8 @@ private fun sameDay(a: Long, b: Long): Boolean {
 private fun DayHeader(timestamp: Long, now: Long) {
     val cal = Calendar.getInstance().apply { timeInMillis = now }
     val label = when {
-        sameDay(timestamp, now) -> "Today"
-        sameDay(timestamp, cal.apply { add(Calendar.DAY_OF_YEAR, -1) }.timeInMillis) -> "Yesterday"
+        sameDay(timestamp, now) -> stringResource(R.string.day_today)
+        sameDay(timestamp, cal.apply { add(Calendar.DAY_OF_YEAR, -1) }.timeInMillis) -> stringResource(R.string.day_yesterday)
         else -> android.text.format.DateFormat.format(
             android.text.format.DateFormat.getBestDateTimePattern(java.util.Locale.getDefault(), "EEEMMMd"), Date(timestamp),
         ).toString()
@@ -452,7 +454,7 @@ private fun DayHeader(timestamp: Long, now: Long) {
 fun openUrl(context: Context, url: String) {
     runCatching {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-    }.onFailure { Toast.makeText(context, "No app can open this link", Toast.LENGTH_SHORT).show() }
+    }.onFailure { Toast.makeText(context, context.getString(R.string.toast_no_app_for_link), Toast.LENGTH_SHORT).show() }
 }
 
 /** Copies [text] and marks it sensitive so Android 13+ hides it from the clipboard preview. */
@@ -509,13 +511,13 @@ private fun MessageBubble(
                 } else {
                     Surface(
                         color = bubbleColor, shape = shape,
-                        modifier = Modifier.combinedClickable(onClickLabel = null, onClick = {}, onLongClickLabel = "Message actions", onLongClick = { menu = true }),
+                        modifier = Modifier.combinedClickable(onClickLabel = null, onClick = {}, onLongClickLabel = stringResource(R.string.thread_message_actions), onLongClick = { menu = true }),
                     ) {
                         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
                             if (message.body.isNotBlank()) LinkifiedText(message.body, textColor, onLinkClick)
                             message.imagePartUri?.let { uri ->
                                 if (message.body.isNotBlank()) Spacer(Modifier.height(6.dp))
-                                MmsImage(uri, Modifier.size(200.dp).clip(RoundedCornerShape(12.dp)).clickable(onClickLabel = "Open photo", onClick = onOpenImage))
+                                MmsImage(uri, Modifier.size(200.dp).clip(RoundedCornerShape(12.dp)).clickable(onClickLabel = stringResource(R.string.media_open_photo), onClick = onOpenImage))
                             }
                         }
                     }
@@ -523,7 +525,7 @@ private fun MessageBubble(
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                     if (message.body.isNotBlank()) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.ui_copy_text)) }, leadingIcon = { Icon(Icons.Filled.ContentCopy, null) },
-                            onClick = { menu = false; copyToClipboard(context, "Message", message.body); Toast.makeText(context, "Text copied", Toast.LENGTH_SHORT).show() })
+                            onClick = { menu = false; copyToClipboard(context, context.getString(R.string.clip_label_message), message.body); Toast.makeText(context, context.getString(R.string.toast_text_copied), Toast.LENGTH_SHORT).show() })
                         DropdownMenuItem(text = { Text(stringResource(R.string.ui_share)) }, leadingIcon = { Icon(Icons.Filled.Share, null) },
                             onClick = { menu = false; shareText(context, message.body) })
                         DropdownMenuItem(text = { Text(stringResource(R.string.ui_forward)) }, leadingIcon = { Icon(Icons.AutoMirrored.Filled.Forward, null) },
@@ -541,15 +543,15 @@ private fun MessageBubble(
             }
 
             otp?.let { CodeChip(it.code, expired = it.isExpired(now), onCopy = {
-                copyToClipboard(context, "Verification code", it.code, sensitive = true)
-                Toast.makeText(context, "Code copied", Toast.LENGTH_SHORT).show()
+                copyToClipboard(context, context.getString(R.string.clip_label_code), it.code, sensitive = true)
+                Toast.makeText(context, context.getString(R.string.toast_code_copied), Toast.LENGTH_SHORT).show()
             }) }
 
             // Only shown above a confidence floor: this signal is weaker on SMS-length text.
             message.aiGeneratedConfidence?.takeIf { !isMe && it >= AI_GENERATED_DISPLAY_THRESHOLD }?.let { c ->
                 Surface(color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(50), modifier = Modifier.padding(top = 4.dp)) {
                     Text(
-                        "Possibly AI-written (${(c * 100).toInt()}% sure)",
+                        stringResource(R.string.thread_possibly_ai, (c * 100).toInt()),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
@@ -557,9 +559,10 @@ private fun MessageBubble(
                 }
             }
 
-            val status = DeliveryInfo.short(message)
+            val status = DeliveryInfo.shortRes(message)?.let { stringResource(it) }
+            val sentAutomaticallyText = stringResource(R.string.thread_sent_automatically)
             Text(
-                text = formatMessageTime(message.timestamp) + (status?.let { "  ·  $it" } ?: "") + if (sentAutomatically) "  ·  Sent automatically" else "",
+                text = listOfNotNull(formatMessageTime(message.timestamp), status, sentAutomaticallyText.takeIf { sentAutomatically }).joinToString("  ·  "),
                 style = MaterialTheme.typography.labelSmall,
                 color = if (failed) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 2.dp, start = 4.dp, end = 4.dp),
@@ -577,11 +580,12 @@ private const val AI_GENERATED_DISPLAY_THRESHOLD = 0.6f
 @Composable
 fun CodeChip(code: String, expired: Boolean, onCopy: () -> Unit) {
     val spaced = if (code.length == 6) code.chunked(3).joinToString(" ") else code
+    val codeDescription = if (expired) stringResource(R.string.thread_code_expired_description, code) else stringResource(R.string.thread_copy_code_description, code.toList().joinToString(" "))
     Surface(
         color = if (expired) MaterialTheme.colorScheme.surfaceVariant else styleFor(MessageLabel.OTP_2FA).container,
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.padding(top = 6.dp).heightIn(min = 48.dp).clickable(enabled = !expired, onClickLabel = "Copy code", onClick = onCopy)
-            .semantics { contentDescription = if (expired) "Code $code has expired" else "Copy code ${code.toList().joinToString(" ")}" },
+        modifier = Modifier.padding(top = 6.dp).heightIn(min = 48.dp).clickable(enabled = !expired, onClickLabel = stringResource(R.string.msgnotif_copy_code), onClick = onCopy)
+            .semantics { contentDescription = codeDescription },
     ) {
         Row(modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -598,7 +602,7 @@ fun CodeChip(code: String, expired: Boolean, onCopy: () -> Unit) {
             )
             Spacer(Modifier.width(12.dp))
             Text(
-                if (expired) "Expired" else "Copy code",
+                stringResource(if (expired) R.string.thread_code_expired else R.string.msgnotif_copy_code),
                 style = MaterialTheme.typography.labelLarge,
                 color = if (expired) MaterialTheme.colorScheme.onSurfaceVariant else styleFor(MessageLabel.OTP_2FA).content,
             )
@@ -624,11 +628,11 @@ private fun ScheduledBubble(s: ScheduledMessageEntity, onUndo: () -> Unit, onCan
                 Icon(Icons.Filled.Schedule, null, modifier = Modifier.size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.width(4.dp))
                 Text(
-                    if (s.isUndoWindow) "Sending in ${remaining}s" else "Scheduled for " + formatFullTimestamp(s.sendAt),
+                    if (s.isUndoWindow) stringResource(R.string.thread_sending_in, remaining.toInt()) else stringResource(R.string.thread_scheduled_for, formatFullTimestamp(s.sendAt)),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = if (s.isUndoWindow) onUndo else onCancel) { Text(if (s.isUndoWindow) "Undo" else "Cancel") }
+                TextButton(onClick = if (s.isUndoWindow) onUndo else onCancel) { Text(stringResource(if (s.isUndoWindow) R.string.common_undo else R.string.ui_cancel)) }
             }
         }
     }
@@ -665,12 +669,12 @@ private fun LinkWarningDialog(a: LinkAssessment, onOpen: () -> Unit, onDismiss: 
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Filled.Warning, null, tint = if (a.risk == LinkRisk.DANGER) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant) },
-        title = { Text(if (a.risk == LinkRisk.DANGER) "This link looks unsafe" else "Check this link first") },
+        title = { Text(stringResource(if (a.risk == LinkRisk.DANGER) R.string.link_title_unsafe else R.string.link_title_check)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.ui_it_would_open), style = MaterialTheme.typography.bodyMedium)
                 Text(a.host, style = MaterialTheme.typography.titleMedium)
-                a.reasons.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
+                a.reasons.forEach { Text("• " + (if (it.arg != null) stringResource(it.res, it.arg) else stringResource(it.res)), style = MaterialTheme.typography.bodyMedium) }
                 Text(
                     stringResource(R.string.ui_inboxiq_checks_links_on_your),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -691,14 +695,14 @@ private fun MessageDetailsDialog(m: MessageEntity, address: String, name: String
         title = { Text(stringResource(R.string.ui_message_details)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                DetailRow(if (m.isIncoming) "From" else "To", name?.let { "$it ($address)" } ?: address)
-                DetailRow(if (m.isIncoming) "Received" else "Sent from this phone", formatFullTimestamp(m.timestamp))
-                DetailRow("Type", if (m.imagePartUri != null) "Picture message (MMS)" else "Text message (SMS)")
-                DetailRow("Length", "${m.body.length} characters")
+                DetailRow(stringResource(if (m.isIncoming) R.string.details_from else R.string.details_to), name?.let { "$it ($address)" } ?: address)
+                DetailRow(stringResource(if (m.isIncoming) R.string.details_received else R.string.details_sent_from_phone), formatFullTimestamp(m.timestamp))
+                DetailRow(stringResource(R.string.details_type), stringResource(if (m.imagePartUri != null) R.string.details_type_mms else R.string.details_type_sms))
+                DetailRow(stringResource(R.string.details_length), pluralStringResource(R.plurals.details_characters, m.body.length, m.body.length))
                 if (m.isIncoming) {
-                    DetailRow("Filed under", LabelPalette.displayName(m.label))
+                    DetailRow(stringResource(R.string.details_filed_under), stringResource(LabelPalette.nameRes(m.label)))
                 } else {
-                    DetailRow("Status", DeliveryInfo.detail(m))
+                    DetailRow(stringResource(R.string.details_status), DeliveryInfo.detail(LocalContext.current, m))
                 }
             }
         },
@@ -737,9 +741,9 @@ private fun ScheduleDialog(canSchedule: Boolean, now: Long, onPick: (Long) -> Un
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(Modifier.height(8.dp))
-                    options.forEach { (label, at) ->
+                    options.forEach { (labelRes, at) ->
                         TextButton(onClick = { onPick(at) }, modifier = Modifier.fillMaxWidth()) {
-                            Text("$label  ·  ${formatFullTimestamp(at)}", modifier = Modifier.fillMaxWidth())
+                            Text(stringResource(R.string.schedule_option_with_time, stringResource(labelRes), formatFullTimestamp(at)), modifier = Modifier.fillMaxWidth())
                         }
                     }
                     val ctx = LocalContext.current
@@ -750,7 +754,7 @@ private fun ScheduleDialog(canSchedule: Boolean, now: Long, onPick: (Long) -> Un
                                 android.app.TimePickerDialog(ctx, { _, h, min ->
                                     val at = Calendar.getInstance().apply { set(y, m, d, h, min, 0); set(Calendar.MILLISECOND, 0) }.timeInMillis
                                     if (at > System.currentTimeMillis()) onPick(at)
-                                    else Toast.makeText(ctx, "Pick a time in the future", Toast.LENGTH_SHORT).show()
+                                    else Toast.makeText(ctx, ctx.getString(R.string.toast_pick_future_time), Toast.LENGTH_SHORT).show()
                                 }, 9, 0, android.text.format.DateFormat.is24HourFormat(ctx)).show()
                             }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
                         },
@@ -792,7 +796,7 @@ private fun Composer(
                         IconButton(
                             onClick = { onPendingImage(null) },
                             modifier = Modifier.size(28.dp).align(Alignment.TopEnd).offset(x = 8.dp, y = (-8).dp).background(MaterialTheme.colorScheme.surface, CircleShape),
-                        ) { Icon(Icons.Filled.Close, contentDescription = "Remove photo", tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp)) }
+                        ) { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.thread_remove_photo), tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(16.dp)) }
                     }
                 }
             }
@@ -846,11 +850,14 @@ private fun VoiceButton(onText: (String) -> Unit) {
     val transcriber = remember { VoiceTranscriber.getInstance(context) }
     var isRecording by remember { mutableStateOf(false) }
     var isTranscribing by remember { mutableStateOf(false) }
+    val transcribingDescription = stringResource(R.string.voice_transcribing_description)
+    val recordingDescription = stringResource(R.string.voice_recording_description)
+    val holdToRecordDescription = stringResource(R.string.voice_hold_to_record_description)
     val requestMic = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (!granted) Toast.makeText(context, "Allow the microphone in Settings to record voice memos", Toast.LENGTH_SHORT).show()
+        if (!granted) Toast.makeText(context, context.getString(R.string.toast_allow_microphone), Toast.LENGTH_SHORT).show()
     }
     if (isTranscribing) {
-        Box(Modifier.size(48.dp).semantics { contentDescription = "Transcribing your voice memo" }, contentAlignment = Alignment.Center) {
+        Box(Modifier.size(48.dp).semantics { contentDescription = transcribingDescription }, contentAlignment = Alignment.Center) {
             CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
         }
     } else {
@@ -859,14 +866,14 @@ private fun VoiceButton(onText: (String) -> Unit) {
         Box(
             modifier = Modifier
                 .size(48.dp)
-                .semantics { contentDescription = if (isRecording) "Recording. Release to transcribe." else "Hold to record a voice memo" }
+                .semantics { contentDescription = if (isRecording) recordingDescription else holdToRecordDescription }
                 .pointerInput(Unit) {
                     detectTapGestures(onPress = {
                         if (!transcriber.hasRecordPermission()) {
                             requestMic.launch(Manifest.permission.RECORD_AUDIO); return@detectTapGestures
                         }
                         if (!transcriber.startRecording()) {
-                            Toast.makeText(context, "Couldn't start recording", Toast.LENGTH_SHORT).show(); return@detectTapGestures
+                            Toast.makeText(context, context.getString(R.string.toast_recording_failed), Toast.LENGTH_SHORT).show(); return@detectTapGestures
                         }
                         isRecording = true
                         val released = tryAwaitRelease()
@@ -876,7 +883,7 @@ private fun VoiceButton(onText: (String) -> Unit) {
                             scope.launch {
                                 when (val r = transcriber.stopAndTranscribe()) {
                                     is VoiceTranscriber.Result.Success -> onText(r.text)
-                                    is VoiceTranscriber.Result.Failure -> Toast.makeText(context, r.reason, Toast.LENGTH_SHORT).show()
+                                    is VoiceTranscriber.Result.Failure -> Toast.makeText(context, context.getString(r.reasonRes), Toast.LENGTH_SHORT).show()
                                 }
                                 isTranscribing = false
                             }

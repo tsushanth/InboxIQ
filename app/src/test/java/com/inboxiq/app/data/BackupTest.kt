@@ -1,6 +1,7 @@
 package com.inboxiq.app.data
 
 import androidx.room.Room
+import com.inboxiq.app.R
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -85,14 +86,14 @@ class BackupTest {
     }
 
     @Test fun `wrong or damaged files fail with a readable message`() = runTest {
-        fun fails(text: String): String = try {
-            kotlinx.coroutines.runBlocking { BackupManager(dst).import(ByteArrayInputStream(text.toByteArray())) }; fail("should fail"); ""
-        } catch (e: BackupFormatException) { e.message!! }
-        assertTrue(fails("not json at all").isNotBlank())
-        assertTrue(fails("{\"format\":\"something-else\"}").contains("not an InboxIQ backup"))
-        assertTrue(fails("{\"format\":\"inboxiq-backup\",\"version\":99}").contains("newer version"))
-        assertTrue(fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"address\":\"+1\",\"body\":\"x\"").contains("damaged"))
-        assertTrue(fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"body\":\"no sender\",\"timestamp\":5}]}").contains("no sender"))
+        fun fails(text: String): Int = try {
+            kotlinx.coroutines.runBlocking { BackupManager(dst).import(ByteArrayInputStream(text.toByteArray())) }; fail("should fail"); 0
+        } catch (e: BackupFormatException) { e.messageRes }
+        assertTrue(fails("not json at all") != 0)
+        assertEquals(R.string.backup_error_not_backup, fails("{\"format\":\"something-else\"}"))
+        assertEquals(R.string.backup_error_newer_version, fails("{\"format\":\"inboxiq-backup\",\"version\":99}"))
+        assertEquals(R.string.backup_error_damaged, fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"address\":\"+1\",\"body\":\"x\""))
+        assertEquals(R.string.backup_error_no_sender, fails("{\"format\":\"inboxiq-backup\",\"version\":1,\"messages\":[{\"body\":\"no sender\",\"timestamp\":5}]}"))
     }
 
     @Test fun `a Transactions label round trips`() = runTest {

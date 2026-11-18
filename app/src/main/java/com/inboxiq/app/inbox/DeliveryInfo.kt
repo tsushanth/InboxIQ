@@ -1,5 +1,8 @@
 package com.inboxiq.app.inbox
 
+import android.content.Context
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.SendStatus
 
@@ -7,26 +10,30 @@ import com.inboxiq.app.data.SendStatus
 object DeliveryInfo {
     const val MAX_RETRIES = 5 // mirrors MmsSender.MAX_AUTO_HEAL_RETRIES
 
-    fun short(m: MessageEntity): String? = when {
+    @StringRes
+    fun shortRes(m: MessageEntity): Int? = when {
         m.isIncoming -> null
-        m.awaitingAutoHeal -> "Couldn't send, retrying"
-        m.sendStatus == SendStatus.FAILED -> "Not delivered"
-        m.sendStatus == SendStatus.PENDING -> "Sending"
-        m.sendStatus == SendStatus.SENT -> "Sent"
+        m.awaitingAutoHeal -> R.string.delivery_short_retrying
+        m.sendStatus == SendStatus.FAILED -> R.string.delivery_short_failed
+        m.sendStatus == SendStatus.PENDING -> R.string.delivery_short_sending
+        m.sendStatus == SendStatus.SENT -> R.string.delivery_short_sent
         else -> null
     }
 
-    fun detail(m: MessageEntity): String = when {
-        m.isIncoming -> "Received on this phone."
-        m.awaitingAutoHeal ->
-            "Couldn't be sent. InboxIQ will try again automatically (${m.autoHealRetryCount} of $MAX_RETRIES tries used). You can also choose Retry now."
-        m.sendStatus == SendStatus.FAILED ->
-            "Not delivered. The network refused it or there was no signal. Choose Retry now, or send it again."
-        m.sendStatus == SendStatus.PENDING -> "Handing the message to your carrier."
-        m.sendStatus == SendStatus.SENT ->
-            "Sent from this phone to your carrier's network. InboxIQ does not receive delivery receipts, so it cannot tell you the other phone got it or read it."
-        else -> "No send information was recorded for this message."
+    @StringRes
+    fun detailRes(m: MessageEntity): Int = when {
+        m.isIncoming -> R.string.delivery_detail_received
+        m.awaitingAutoHeal -> R.string.delivery_detail_retrying
+        m.sendStatus == SendStatus.FAILED -> R.string.delivery_detail_failed
+        m.sendStatus == SendStatus.PENDING -> R.string.delivery_detail_sending
+        m.sendStatus == SendStatus.SENT -> R.string.delivery_detail_sent
+        else -> R.string.delivery_detail_unknown
     }
+
+    fun short(context: Context, m: MessageEntity): String? = shortRes(m)?.let { context.getString(it) }
+
+    /** The retry counters are formatted into the one string that has placeholders for them; the others ignore the extra arguments. */
+    fun detail(context: Context, m: MessageEntity): String = context.getString(detailRes(m), m.autoHealRetryCount, MAX_RETRIES)
 
     val isFailure: (MessageEntity) -> Boolean = { !it.isIncoming && (it.awaitingAutoHeal || it.sendStatus == SendStatus.FAILED) }
 }

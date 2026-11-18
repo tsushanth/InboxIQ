@@ -1,11 +1,13 @@
 package com.inboxiq.app.classify
 
 import android.content.Context
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 
-enum class ClassifierTier(val label: String, val available: Boolean) {
-    DEFAULT("Default (bert-tiny, on-device)", available = true),
-    MID("Balanced (Gemma 3 270M, on-device — needs a one-time ~290MB download)", available = true),
-    HIGH("Best (Gemma/Qwen 1-3B) — coming soon", available = false),
+enum class ClassifierTier(@StringRes val labelRes: Int, val available: Boolean) {
+    DEFAULT(R.string.tier_default, available = true),
+    MID(R.string.tier_balanced, available = true),
+    HIGH(R.string.tier_best, available = false),
 }
 
 /**

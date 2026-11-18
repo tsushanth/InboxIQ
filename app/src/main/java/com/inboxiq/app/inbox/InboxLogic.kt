@@ -1,19 +1,21 @@
 package com.inboxiq.app.inbox
 
+import androidx.annotation.StringRes
+import com.inboxiq.app.R
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.MessageLabel
 import com.inboxiq.app.data.ThreadStateEntity
 import com.inboxiq.app.data.ThreadSummary
 
 /** The label tray: one tab per group of on-device labels. */
-enum class InboxTab(val title: String, val labels: Set<MessageLabel>?) {
-    ALL("All", null),
-    PERSONAL("Personal", setOf(MessageLabel.PERSONAL)),
-    WORK("Work", setOf(MessageLabel.WORK)),
-    TRANSACTIONS("Transactions", setOf(MessageLabel.TRANSACTION)),
-    PROMO("Promos", setOf(MessageLabel.PROMO)),
-    CODES("Codes", setOf(MessageLabel.OTP_2FA)),
-    JUNK("Junk", setOf(MessageLabel.SPAM, MessageLabel.SCAM)),
+enum class InboxTab(@StringRes val titleRes: Int, val labels: Set<MessageLabel>?) {
+    ALL(R.string.tab_all, null),
+    PERSONAL(R.string.label_personal, setOf(MessageLabel.PERSONAL)),
+    WORK(R.string.label_work, setOf(MessageLabel.WORK)),
+    TRANSACTIONS(R.string.tab_transactions, setOf(MessageLabel.TRANSACTION)),
+    PROMO(R.string.tab_promos, setOf(MessageLabel.PROMO)),
+    CODES(R.string.tab_codes, setOf(MessageLabel.OTP_2FA)),
+    JUNK(R.string.tab_junk, setOf(MessageLabel.SPAM, MessageLabel.SCAM)),
 }
 
 /** A conversation as the list sees it: its newest message plus the user's pin/archive/mute/draft state. */

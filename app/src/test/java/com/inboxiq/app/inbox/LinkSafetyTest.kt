@@ -17,7 +17,7 @@ class LinkSafetyTest {
     @Test fun `lookalike brand domain is danger`() {
         val a = LinkSafety.analyze("https://paypal-secure-login.xyz/verify", MessageLabel.PERSONAL)
         assertEquals(LinkRisk.DANGER, a.risk)
-        assertTrue(a.reasons.any { it.contains("Paypal") })
+        assertTrue(a.reasons.any { it.res == com.inboxiq.app.R.string.link_reason_brand && it.arg == "Paypal" })
         assertEquals(LinkRisk.DANGER, risk("usps-tracking.top/pay"))
     }
 

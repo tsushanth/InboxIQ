@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.core.app.RemoteInput
+import com.inboxiq.app.R
 import com.inboxiq.app.data.AppDatabase
 import com.inboxiq.app.ui.copyToClipboard
 import kotlinx.coroutines.CoroutineScope
@@ -18,8 +19,8 @@ class NotificationActionReceiver : BroadcastReceiver() {
         when (intent.action) {
             MessageNotifier.ACTION_COPY_CODE -> {
                 val code = intent.getStringExtra(MessageNotifier.EXTRA_CODE) ?: return
-                copyToClipboard(context, "Verification code", code, sensitive = true)
-                Toast.makeText(context, "Code copied", Toast.LENGTH_SHORT).show()
+                copyToClipboard(context, context.getString(R.string.clip_label_code), code, sensitive = true)
+                Toast.makeText(context, context.getString(R.string.toast_code_copied), Toast.LENGTH_SHORT).show()
                 MessageNotifier.cancel(context, address)
             }
             MessageNotifier.ACTION_MARK_READ -> {
@@ -39,7 +40,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
                     try {
                         runCatching { SmsSender.send(context, address, text) }
                             .onSuccess { markRead(context, address); MessageNotifier.cancel(context, address) }
-                            .onFailure { Toast.makeText(context, "Couldn't send the reply. Open InboxIQ to try again.", Toast.LENGTH_LONG).show() }
+                            .onFailure { Toast.makeText(context, context.getString(R.string.toast_reply_failed), Toast.LENGTH_LONG).show() }
                     } finally { pending.finish() }
                 }
             }

@@ -60,8 +60,8 @@ fun NewConversationScreen(
     var number by remember { mutableStateOf("") }
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding().imePadding().navigationBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to inbox") }
-            Text(if (forwardingText != null) "Forward to" else "New message", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.nav_back_to_inbox)) }
+            Text(stringResource(if (forwardingText != null) R.string.newconv_forward_to else R.string.ui_new_message), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Column(Modifier.padding(16.dp)) {
@@ -85,7 +85,7 @@ fun NewConversationScreen(
             }
             Spacer(Modifier.height(12.dp))
             Button(onClick = { if (number.isNotBlank()) onStart(number.trim()) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), enabled = number.isNotBlank()) {
-                Text(if (forwardingText != null) "Continue" else "Start conversation")
+                Text(stringResource(if (forwardingText != null) R.string.newconv_continue else R.string.newconv_start))
             }
         }
     }
@@ -95,14 +95,14 @@ fun NewConversationScreen(
 fun BlockedNumbersScreen(blocked: List<BlockedNumberEntity>, nameOf: (String) -> String?, onUnblock: (String) -> Unit, onBack: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to settings") }
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.ui_back_to_settings)) }
             Text(stringResource(R.string.ui_blocked_numbers), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
         }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         if (blocked.isEmpty()) {
             StateMessage(
-                Icons.Filled.Block, "No blocked numbers",
-                "Block a number from a conversation's menu. Texts from blocked numbers are not saved or shown, and you can unblock them here.",
+                Icons.Filled.Block, stringResource(R.string.blocked_empty_title),
+                stringResource(R.string.blocked_empty_body),
                 modifier = Modifier.fillMaxSize(),
             )
         } else {
