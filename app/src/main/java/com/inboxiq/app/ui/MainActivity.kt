@@ -346,7 +346,10 @@ class MainActivity : ComponentActivity() {
                             onOpenPreviousApp = { DefaultAppHelper.previousLaunchIntent(this@MainActivity, firstRun)?.let { startActivity(it) } },
                             onMakeDefault = { requestDefaultRole() },
                             onOpenSetupLog = { vm.screen = Screen.SetupLog },
+                            onReactionMode = { vm.chooseReactionMode(it) },
+                            onSendRemovalText = { vm.setSendRemovalText(it) },
                         ),
+                        reactions = vm.reactionSettings,
                         isDefault = isDefault,
                         previousAppName = remember(isDefault) { DefaultAppHelper.previousLabel(this@MainActivity, firstRun) },
                         canOpenPreviousApp = remember(isDefault) { DefaultAppHelper.previousLaunchIntent(this@MainActivity, firstRun) != null },
@@ -461,6 +464,8 @@ class MainActivity : ComponentActivity() {
         val draft by produceState<String?>(null, address) { value = vm.draftFor(address) }
         val displayName = names[address]
         val recentSent by produceState(emptyList<String>(), address) { value = runCatching { vm.recentSent() }.getOrDefault(emptyList()) }
+        val reactionRows by vm.reactionRows(address).collectAsState(initial = emptyList())
+        val reactionMap = remember(messages, reactionRows) { com.inboxiq.app.data.ReactionKey.byMessageId(messages, reactionRows) }
         val autoIds = remember(messages.size, autoLog) { if (AutoResponder.buildEnabled()) autoStore().sentIds() else emptySet() }
 
         LaunchedEffect(address, messages.count { !it.isRead }) {
@@ -493,6 +498,9 @@ class MainActivity : ComponentActivity() {
                 onSchedule = { body, at -> vm.schedule(address, body, at) },
                 onUndoSend = { id -> vm.cancelScheduled(id) },
                 onCancelScheduled = { id -> vm.cancelScheduled(id) },
+                onReact = { m, emoji, delivery -> vm.react(m, emoji, delivery) },
+                onRemoveReaction = { m, sendText -> vm.removeReaction(m, sendText) },
+                onReactionMode = { vm.chooseReactionMode(it) },
             )
         }
         val loadedDraft = draft
@@ -511,6 +519,10 @@ class MainActivity : ComponentActivity() {
                 recentSent = recentSent,
                 isKnownContact = displayName != null,
                 autoSentIds = autoIds,
+                reactions = reactionMap,
+                reactionSettings = vm.reactionSettings,
+                canSendReactions = isDefault,
+                recentEmoji = vm.recentEmoji,
             )
         }
     }

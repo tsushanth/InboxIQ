@@ -8,12 +8,13 @@ import java.io.OutputStream
 
 class BackupFormatException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
-data class ImportResult(val added: Int, val alreadyPresent: Int, val blocked: Int)
+data class ImportResult(val added: Int, val alreadyPresent: Int, val blocked: Int, val reactions: Int = 0)
 
 /**
  * Local backup of conversations to a file the user picks (system file picker, so no storage
  * permission and nothing leaves the phone). Text, labels, pins/archive/mute and blocked
- * numbers are included. Photos are not: they live in app-private storage and would make the
+ * numbers are included, and so are the user's emoji reactions (an optional `reactions` array: files
+ * written before reactions existed simply lack it, and older builds skip it, so VERSION stays 1). Photos are not: they live in app-private storage and would make the
  * file huge; the export screen says so.
  */
 class BackupManager(private val db: AppDatabase, private val clock: () -> Long = System::currentTimeMillis) {
@@ -44,6 +45,9 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
             w.name("threadState").beginArray()
             db.threadStateDao().all().forEach { writeState(w, it) }
             w.endArray()
+            w.name("reactions").beginArray()
+            db.reactionDao().all().forEach { writeReaction(w, it) }
+            w.endArray()
             w.name("blocked").beginArray()
             db.blockedNumberDao().all().forEach { w.beginObject().name("address").value(it.address).name("blockedAt").value(it.blockedAt).endObject() }
             w.endArray()
@@ -53,7 +57,7 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
     }
 
     suspend fun import(input: InputStream): ImportResult {
-        var added = 0; var dup = 0; var blockedCount = 0
+        var added = 0; var dup = 0; var blockedCount = 0; var reactionCount = 0
         JsonReader(input.bufferedReader(Charsets.UTF_8)).use { r ->
             try {
                 if (r.peek() != JsonToken.BEGIN_OBJECT) throw BackupFormatException("This is not an InboxIQ backup file.")
@@ -84,6 +88,14 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
                             }
                             r.endArray()
                         }
+                        "reactions" -> {
+                            r.beginArray()
+                            while (r.hasNext()) {
+                                // Never overwrite a reaction already set on this phone; a malformed entry is skipped, not fatal.
+                                readReaction(r)?.let { if (db.reactionDao().insertIfAbsent(it) > 0) reactionCount++ }
+                            }
+                            r.endArray()
+                        }
                         "blocked" -> {
                             r.beginArray()
                             while (r.hasNext()) {
@@ -106,7 +118,7 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
                 throw BackupFormatException("The file is damaged or incomplete, so nothing more was imported. Messages read before the problem were kept.", e)
             }
         }
-        return ImportResult(added, dup, blockedCount)
+        return ImportResult(added, dup, blockedCount, reactionCount)
     }
 
     private fun writeMessage(w: JsonWriter, m: MessageEntity) {
@@ -145,6 +157,36 @@ class BackupManager(private val db: AppDatabase, private val clock: () -> Long =
         // A message that was still sending when the backup was made must not look like it is still in flight.
         val safeStatus = if (status == SendStatus.PENDING) SendStatus.NONE else status
         return MessageEntity(threadId = 0, address = address, body = body, timestamp = ts, isIncoming = incoming, label = label, labelConfidence = conf, sendStatus = safeStatus, isRead = read)
+    }
+
+    private fun writeReaction(w: JsonWriter, x: ReactionEntity) {
+        w.beginObject()
+        w.name("address").value(x.address)
+        w.name("timestamp").value(x.timestamp)
+        w.name("isIncoming").value(x.isIncoming)
+        w.name("bodyHash").value(x.bodyHash)
+        w.name("emoji").value(x.emoji)
+        w.name("createdAt").value(x.createdAt)
+        w.name("sentAsText").value(x.sentAsText)
+        w.endObject()
+    }
+
+    private fun readReaction(r: JsonReader): ReactionEntity? {
+        var address = ""; var ts = 0L; var incoming = true; var hash = ""; var emoji = ""; var created = 0L; var sent = false
+        r.beginObject()
+        while (r.hasNext()) when (r.nextName()) {
+            "address" -> address = r.nextString()
+            "timestamp" -> ts = r.nextLong()
+            "isIncoming" -> incoming = r.nextBoolean()
+            "bodyHash" -> hash = r.nextString()
+            "emoji" -> emoji = r.nextString()
+            "createdAt" -> created = r.nextLong()
+            "sentAsText" -> sent = r.nextBoolean()
+            else -> r.skipValue()
+        }
+        r.endObject()
+        if (address.isBlank() || ts <= 0 || emoji.isBlank()) return null
+        return ReactionEntity(address, ts, incoming, hash, emoji, created, sent)
     }
 
     private fun writeState(w: JsonWriter, s: ThreadStateEntity) {

@@ -67,14 +67,49 @@ class MigrationTest {
             androidx.test.core.app.ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java,
             "chain",
-        ).addMigrations(MIGRATION_14_15).allowMainThreadQueries().build()
+        ).addMigrations(MIGRATION_14_15, MIGRATION_15_16).allowMainThreadQueries().build()
         db.openHelper.writableDatabase // forces open + schema validation
         db.close()
     }
 
+    @Test
+    fun `15 to 16 keeps every message and adds an empty reactions table that accepts rows`() {
+        helper.createDatabase("mig16", 15).use { db ->
+            db.execSQL(
+                "INSERT INTO messages (threadId, address, body, timestamp, isIncoming, label, labelConfidence, " +
+                    "sendStatus, isRead, awaitingAutoHeal, autoHealRetryCount) " +
+                    "VALUES (1, '+15550100', 'Lunch at 1?', 1000, 1, 'PERSONAL', 0.9, 'NONE', 0, 0, 0)",
+            )
+            db.execSQL("INSERT INTO thread_state (address, archived, labelCorrected) VALUES ('+15550100', 1, 0)")
+        }
+
+        helper.runMigrationsAndValidate("mig16", 16, true, MIGRATION_15_16).use { db ->
+            db.query("SELECT COUNT(*) FROM messages").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
+            db.query("SELECT archived FROM thread_state WHERE address = '+15550100'").use { c -> c.moveToFirst(); assertEquals(1, c.getInt(0)) }
+            db.query("SELECT COUNT(*) FROM reactions").use { c -> c.moveToFirst(); assertEquals(0, c.getInt(0)) }
+            db.execSQL("INSERT INTO reactions (address, timestamp, isIncoming, bodyHash, emoji, createdAt, sentAsText) VALUES ('+15550100', 1000, 1, 'abc', '👍', 5, 0)")
+            // the primary key is the natural message key: the same message cannot carry two rows
+            val dup = runCatching {
+                db.execSQL("INSERT INTO reactions (address, timestamp, isIncoming, bodyHash, emoji, createdAt, sentAsText) VALUES ('+15550100', 1000, 1, 'abc', '❤️', 6, 0)")
+            }
+            assertTrue(dup.isFailure)
+        }
+    }
+
+    @Test
+    fun `upgrade path from v15 opens through the real database builder chain`() {
+        helper.createDatabase("chain16", 15).close()
+        val db = androidx.room.Room.databaseBuilder(
+            androidx.test.core.app.ApplicationProvider.getApplicationContext(),
+            AppDatabase::class.java,
+            "chain16",
+        ).addMigrations(MIGRATION_15_16).allowMainThreadQueries().build()
+        db.openHelper.writableDatabase
+        db.close()
+    }
+
     /**
-     * The Transactions label adds an enum value only. Labels are stored as text, so the schema (and the exported 15.json) is
-     * unchanged and there is deliberately no 15 to 16 migration. This proves what that relies on: a real v15 file with every
+     * The Transactions label adds an enum value only. Labels are stored as text, so that change needed no schema change of its own. This proves what that relies on: a real v15 file with every
      * existing label, plus a TRANSACTION row and a name from the future, opens through the production builder chain and reads back.
      */
     @Test
@@ -93,7 +128,7 @@ class MigrationTest {
             androidx.test.core.app.ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java,
             "labels",
-        ).addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
+        ).addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16)
             .allowMainThreadQueries().build()
         try {
             val read = kotlinx.coroutines.runBlocking { db.messageDao().pageAfter(0, 100) }.associate { it.body to it.label }

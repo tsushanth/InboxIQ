@@ -21,6 +21,16 @@ import kotlinx.coroutines.delay
 import com.inboxiq.app.data.ContactResolver
 import com.inboxiq.app.data.MessageEntity
 import com.inboxiq.app.data.ThreadActions
+import com.inboxiq.app.R
+import com.inboxiq.app.data.ReactionEntity
+import com.inboxiq.app.reactions.ReactionDelivery
+import com.inboxiq.app.reactions.ReactionMode
+import com.inboxiq.app.reactions.ReactionPreferences
+import com.inboxiq.app.reactions.ReactionSender
+import com.inboxiq.app.reactions.ReactionSendPolicy
+import com.inboxiq.app.reactions.ReactionSettings
+import com.inboxiq.app.reactions.ReactionText
+import com.inboxiq.app.sms.DefaultSmsRole
 import com.inboxiq.app.inbox.InboxLogic
 import com.inboxiq.app.inbox.SearchLogic
 import com.inboxiq.app.inbox.ThreadRow
@@ -71,7 +81,11 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     /** address -> saved contact name (null when none). Resolved off the main thread, once per address. */
     val names: StateFlow<Map<String, String?>> = _names
 
+    val reactions = com.inboxiq.app.data.ReactionRepository(db)
+
     init {
+        // A delete whose undo window never closed (process killed) leaves reactions behind; no undo can be open at startup.
+        viewModelScope.launch(Dispatchers.IO) { runCatching { reactions.sweepOrphans() } }
         viewModelScope.launch {
             rows.collect { list ->
                 val missing = list.orEmpty().map { it.address }.filter { it !in _names.value }
@@ -176,8 +190,83 @@ class InboxViewModel(app: Application) : AndroidViewModel(app) {
     fun cancelScheduled(id: Long, restoreInto: ((String) -> Unit)? = null) {
         viewModelScope.launch {
             val row = db.scheduledMessageDao().get(id)
-            if (ScheduledSend.cancel(getApplication(), id) && row != null) restoreInto?.invoke(row.body)
+            if (ScheduledSend.cancel(getApplication(), id)) {
+                if (row != null) restoreInto?.invoke(row.body)
+                // Undoing a queued reaction text from its bubble takes the reaction back too, like the snackbar does.
+                pendingReactionSends.remove(id)?.let { revertReaction(it) }
+            }
         }
+    }
+
+    // ---------------- reactions ----------------
+
+    var reactionSettings: ReactionSettings by mutableStateOf(ReactionPreferences.get(app))
+        private set
+    var recentEmoji: List<String> by mutableStateOf(ReactionPreferences.recent(app))
+        private set
+
+    private val reactionSender = ReactionSender.production(app)
+
+    /** What to put back if a queued reaction text is undone: the reaction the message had before, or none. */
+    private class PendingReactionSend(val message: MessageEntity, val previous: ReactionEntity?)
+    private val pendingReactionSends = HashMap<Long, PendingReactionSend>()
+
+    /** The user's reactions in one conversation, read once and mapped onto messages by the thread screen. */
+    fun reactionRows(address: String) = db.reactionDao().observeThread(address)
+
+    fun chooseReactionMode(mode: ReactionMode) {
+        ReactionPreferences.setMode(getApplication(), mode)
+        reactionSettings = ReactionPreferences.get(getApplication())
+    }
+
+    fun setSendRemovalText(on: Boolean) {
+        ReactionPreferences.setSendRemovalText(getApplication(), on)
+        reactionSettings = ReactionPreferences.get(getApplication())
+    }
+
+    /** Saves [emoji] as the user's reaction to [message] and, when asked and allowed, queues the text for it. */
+    fun react(message: MessageEntity, emoji: String, delivery: ReactionDelivery) {
+        viewModelScope.launch {
+            val app = getApplication<Application>()
+            val previous = reactions.current(message)
+            reactions.set(message, emoji)
+            ReactionPreferences.pushRecent(app, emoji)
+            recentEmoji = ReactionPreferences.recent(app)
+            // Checked again here, not only where the choice was offered: a text must never go out for a message the rules exclude.
+            if (delivery == ReactionDelivery.TEXT && ReactionSendPolicy.canSendAsText(message, DefaultSmsRole.isDefault(app))) {
+                reactions.markSentAsText(message)
+                sendReactionText(message, ReactionText.compose(emoji, message.body), previous, app.getString(R.string.reaction_snackbar_sending))
+            }
+        }
+    }
+
+    fun removeReaction(message: MessageEntity, sendText: Boolean) {
+        viewModelScope.launch {
+            val app = getApplication<Application>()
+            val existing = reactions.current(message) ?: return@launch
+            reactions.clear(message)
+            if (sendText && existing.sentAsText && ReactionSendPolicy.canSendAsText(message, DefaultSmsRole.isDefault(app))) {
+                sendReactionText(message, ReactionText.composeRemoval(existing.emoji, message.body), existing, app.getString(R.string.reaction_snackbar_sending_removal))
+            }
+        }
+    }
+
+    /** Queues [text], shows the Undo bar for the undo window, then lets it go out. Undo stops it and puts the reaction back. */
+    private suspend fun sendReactionText(message: MessageEntity, text: String, previous: ReactionEntity?, notice: String) {
+        val pending = reactionSender.queue(message.address, text)
+        pendingReactionSends[pending.id] = PendingReactionSend(message, previous)
+        snackbar.currentSnackbarData?.dismiss()
+        viewModelScope.launch {
+            val result = snackbar.showSnackbar(notice, actionLabel = getApplication<Application>().getString(R.string.reaction_snackbar_undo), duration = SnackbarDuration.Indefinite)
+            if (result == SnackbarResult.ActionPerformed && reactionSender.undo(pending)) pendingReactionSends.remove(pending.id)?.let { revertReaction(it) }
+        }
+        reactionSender.await(pending)
+        pendingReactionSends.remove(pending.id)
+        if (snackbar.currentSnackbarData?.visuals?.message == notice) snackbar.currentSnackbarData?.dismiss()
+    }
+
+    private suspend fun revertReaction(p: PendingReactionSend) {
+        if (p.previous == null) reactions.clear(p.message) else reactions.restore(p.message, p.previous)
     }
 
     fun schedule(address: String, body: String, at: Long) {

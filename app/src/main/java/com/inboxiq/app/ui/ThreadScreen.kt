@@ -112,6 +112,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.inboxiq.app.data.ReactionEntity
+import com.inboxiq.app.reactions.EmojiCatalog
+import com.inboxiq.app.reactions.ReactionDelivery
+import com.inboxiq.app.reactions.ReactionEmoji
+import com.inboxiq.app.reactions.ReactionMode
+import com.inboxiq.app.reactions.ReactionPlan
+import com.inboxiq.app.reactions.ReactionPlanner
+import com.inboxiq.app.reactions.ReactionSettings
+import com.inboxiq.app.reactions.ReactionText
 import com.inboxiq.app.reply.ReplyRequest
 import com.inboxiq.app.reply.ReplySuggester
 import com.inboxiq.app.reply.RulesReplySuggester
@@ -134,6 +143,9 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 
+/** A reaction waiting for the user to say whether it also goes out as a text. */
+private class PendingReaction(val message: MessageEntity, val emoji: String, val explainer: Boolean)
+
 /** Everything the thread screen can ask its host to do. Defaults keep previews and render tests small. */
 class ThreadCallbacks(
     val onBack: () -> Unit = {},
@@ -155,6 +167,12 @@ class ThreadCallbacks(
     val onSchedule: (body: String, at: Long) -> Unit = { _, _ -> },
     val onUndoSend: (Long) -> Unit = {},
     val onCancelScheduled: (Long) -> Unit = {},
+    /** The user picked [emoji] for a message; [delivery] says whether it also goes out as a text. */
+    val onReact: (message: MessageEntity, emoji: String, delivery: ReactionDelivery) -> Unit = { _, _, _ -> },
+    /** The user took their reaction off; [sendText] asks for a removal text too. */
+    val onRemoveReaction: (message: MessageEntity, sendText: Boolean) -> Unit = { _, _ -> },
+    /** The one-time explainer was answered: this becomes the standing choice. */
+    val onReactionMode: (ReactionMode) -> Unit = {},
 )
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -179,6 +197,13 @@ fun ThreadScreen(
     suggester: ReplySuggester = RulesReplySuggester,
     /** Ids of texts the auto-responder sent: marked "Sent automatically". */
     autoSentIds: Set<Long> = emptySet(),
+    /** The user's own reaction to each message, by message id (built once per thread by the host). */
+    reactions: Map<Long, ReactionEntity> = emptyMap(),
+    reactionSettings: ReactionSettings = ReactionSettings(),
+    /** False when InboxIQ may not send texts (not the default SMS app): reactions stay on the phone. */
+    canSendReactions: Boolean = true,
+    /** Most recently used emoji, newest first, for the picker's Recent tab. */
+    recentEmoji: List<String> = emptyList(),
 ) {
     var body by remember(address) { mutableStateOf(initialDraft) }
     var menuOpen by remember { mutableStateOf(false) }
@@ -189,8 +214,21 @@ fun ThreadScreen(
     var showSpam by remember { mutableStateOf(false) }
     var showSchedule by remember { mutableStateOf(false) }
     var details by remember { mutableStateOf<MessageEntity?>(null) }
+    var pickerFor by remember { mutableStateOf<MessageEntity?>(null) }
+    var sendAsk by remember { mutableStateOf<PendingReaction?>(null) }
     var linkWarning by remember { mutableStateOf<LinkAssessment?>(null) }
     val context = LocalContext.current
+
+    val emojiCategories = remember { EmojiCatalog.load(context.resources) }
+    val emojiNames = remember(emojiCategories) { EmojiCatalog.nameIndex(emojiCategories) }
+    val nameOf: (String) -> String = { emojiNames[ReactionEmoji.canonical(it)] ?: it }
+    val reactTo: (MessageEntity, String) -> Unit = { m, e ->
+        when (val plan = ReactionPlanner.plan(m, e, reactions[m.id], reactionSettings, canSendReactions)) {
+            is ReactionPlan.Remove -> callbacks.onRemoveReaction(m, plan.sendRemovalText)
+            is ReactionPlan.Apply -> callbacks.onReact(m, e, plan.delivery)
+            is ReactionPlan.Ask -> sendAsk = PendingReaction(m, e, plan.explainer)
+        }
+    }
 
     // A ticking clock, so a code's "Copy" button turns into "Expired" without the screen being reopened.
     var tick by remember { mutableLongStateOf(now) }
@@ -349,6 +387,10 @@ fun ThreadScreen(
                         onDelete = { callbacks.onDeleteMessage(message.id) },
                         onForward = { callbacks.onForward(message.body) },
                         sentAutomatically = message.id in autoSentIds,
+                        reaction = reactions[message.id],
+                        reactionName = nameOf,
+                        onReact = { emoji -> reactTo(message, emoji) },
+                        onMoreReactions = { pickerFor = message },
                     )
                 }
                 itemsIndexed(scheduled, key = { _, s -> "s" + s.id }) { _, s ->
@@ -424,6 +466,29 @@ fun ThreadScreen(
             onDismiss = { showSchedule = false },
         )
     }
+    pickerFor?.let { m ->
+        EmojiPickerSheet(
+            categories = emojiCategories, recent = recentEmoji, nameOf = nameOf,
+            onPick = { emoji -> pickerFor = null; reactTo(m, emoji) },
+            onDismiss = { pickerFor = null },
+        )
+    }
+    sendAsk?.let { ask ->
+        ReactionSendSheet(
+            emoji = ask.emoji, explainer = ask.explainer,
+            onSend = {
+                sendAsk = null
+                if (ask.explainer) callbacks.onReactionMode(ReactionMode.SEND_AS_TEXT)
+                callbacks.onReact(ask.message, ask.emoji, ReactionDelivery.TEXT)
+            },
+            onKeepPrivate = {
+                sendAsk = null
+                if (ask.explainer) callbacks.onReactionMode(ReactionMode.KEEP_PRIVATE)
+                callbacks.onReact(ask.message, ask.emoji, ReactionDelivery.PRIVATE)
+            },
+            onDismiss = { sendAsk = null },
+        )
+    }
     details?.let { m -> MessageDetailsDialog(m, address, displayName, onDismiss = { details = null }) }
     linkWarning?.let { a -> LinkWarningDialog(a, onOpen = { openUrl(context, a.url); linkWarning = null }, onDismiss = { linkWarning = null }) }
 }
@@ -480,9 +545,16 @@ private fun MessageBubble(
     onDelete: () -> Unit,
     onForward: () -> Unit,
     sentAutomatically: Boolean = false,
+    reaction: ReactionEntity? = null,
+    reactionName: (String) -> String = { it },
+    onReact: (String) -> Unit = {},
+    onMoreReactions: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val isMe = !message.isIncoming
+    // A reaction text is never itself reacted to (no strip, no chip actions), so reactions cannot chain into each other.
+    val reactable = remember(message.body) { !ReactionText.isReactionText(message.body) }
+    val reactionActions = rememberReactionActions(reactable, reaction?.emoji, reactionName, onReact)
     var menu by remember { mutableStateOf(false) }
     val otp = remember(message.id, message.body) { if (message.isIncoming) OtpExtractor.extract(message.body, message.timestamp) else null }
     val bubbleColor = if (isMe) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -503,13 +575,14 @@ private fun MessageBubble(
             Box {
                 val invite = remember(message.body) { extractRiddleInvite(message.body) }
                 if (invite != null) {
-                    Box(Modifier.combinedClickable(onClick = {}, onLongClick = { menu = true })) {
+                    Box(Modifier.withCustomActions(reactionActions).combinedClickable(onClick = {}, onLongClick = { menu = true })) {
                         RiddleInviteCard(url = invite.second, isMe = isMe)
                     }
                 } else {
                     Surface(
                         color = bubbleColor, shape = shape,
-                        modifier = Modifier.combinedClickable(onClickLabel = null, onClick = {}, onLongClickLabel = "Message actions", onLongClick = { menu = true }),
+                        modifier = Modifier.withCustomActions(reactionActions)
+                            .combinedClickable(onClickLabel = null, onClick = {}, onLongClickLabel = "Message actions", onLongClick = { menu = true }),
                     ) {
                         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
                             if (message.body.isNotBlank()) LinkifiedText(message.body, textColor, onLinkClick)
@@ -521,6 +594,14 @@ private fun MessageBubble(
                     }
                 }
                 DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                    if (reactable) {
+                        ReactionStrip(
+                            selected = reaction?.emoji, nameOf = reactionName,
+                            onPick = { menu = false; onReact(it) },
+                            onMore = { menu = false; onMoreReactions() },
+                        )
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    }
                     if (message.body.isNotBlank()) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.ui_copy_text)) }, leadingIcon = { Icon(Icons.Filled.ContentCopy, null) },
                             onClick = { menu = false; copyToClipboard(context, "Message", message.body); Toast.makeText(context, "Text copied", Toast.LENGTH_SHORT).show() })
@@ -538,6 +619,10 @@ private fun MessageBubble(
                     DropdownMenuItem(text = { Text(stringResource(R.string.ui_delete_message)) }, leadingIcon = { Icon(Icons.Filled.Delete, null) },
                         onClick = { menu = false; onDelete() })
                 }
+            }
+
+            if (reaction != null && reactable) {
+                ReactionChip(reaction.emoji, reactionName(reaction.emoji), onRemove = { onReact(reaction.emoji) })
             }
 
             otp?.let { CodeChip(it.code, expired = it.isExpired(now), onCopy = {

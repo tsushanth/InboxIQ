@@ -199,6 +199,26 @@ val MIGRATION_14_15 = object : Migration(14, 15) {
     }
 }
 
+/** Adds the user's own emoji reactions. Purely additive: no existing table or row is touched, and there is no foreign key (see ReactionEntity). */
+val MIGRATION_15_16 = object : Migration(15, 16) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `reactions` (
+                `address` TEXT NOT NULL,
+                `timestamp` INTEGER NOT NULL,
+                `isIncoming` INTEGER NOT NULL,
+                `bodyHash` TEXT NOT NULL,
+                `emoji` TEXT NOT NULL,
+                `createdAt` INTEGER NOT NULL,
+                `sentAsText` INTEGER NOT NULL,
+                PRIMARY KEY(`address`, `timestamp`, `isIncoming`, `bodyHash`)
+            )
+            """.trimIndent(),
+        )
+    }
+}
+
 @Database(
     entities = [
         MessageEntity::class,
@@ -207,6 +227,7 @@ val MIGRATION_14_15 = object : Migration(14, 15) {
         AgentDraftEntity::class,
         ThreadStateEntity::class,
         ScheduledMessageEntity::class,
+        ReactionEntity::class,
     ],
     version = AppDatabase.VERSION,
     exportSchema = true,
@@ -220,10 +241,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun threadStateDao(): ThreadStateDao
     abstract fun scheduledMessageDao(): ScheduledMessageDao
     abstract fun replyHistoryDao(): ReplyHistoryDao
+    abstract fun reactionDao(): ReactionDao
 
     companion object {
         /** Bump together with a MIGRATION_* and an exported schema; see MigrationTest. */
-        const val VERSION = 15
+        const val VERSION = 16
         const val FILE_NAME = "inboxiq.db"
 
         @Volatile private var instance: AppDatabase? = null
@@ -239,7 +261,7 @@ abstract class AppDatabase : RoomDatabase() {
                         AppDatabase::class.java,
                         FILE_NAME,
                     )
-                        .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15)
+                        .addMigrations(MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16)
                         // Forward upgrades from 7 on go through the explicit migrations above. Only a downgrade, or a
                         // database older than any migration (versions 1-6, which would otherwise crash on open),
                         // is rebuilt, and DatabaseGuard has kept the old file by then.

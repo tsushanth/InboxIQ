@@ -134,6 +134,7 @@ object SentMmsRepair {
             return Outcome.MERGED
         }
         dao.updateAddress(ghost.id, newAddress)
+        env.db.reactionDao().reassignAddress(oldAddress, newAddress, ghost.timestamp, ghost.isIncoming)
         return Outcome.MOVED
     }
 

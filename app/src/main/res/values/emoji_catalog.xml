@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emoji picker data for reactions. One line per emoji: emoji|name|search words. English only until native review; the names are also what a screen reader says. -->
+<resources>
+    <string-array name="emoji_smileys">
+        <item>😀|grinning face|smile happy</item>
+        <item>😃|grinning face with big eyes|smile happy</item>
+        <item>😄|grinning face with smiling eyes|smile happy</item>
+        <item>😁|beaming face with smiling eyes|grin happy</item>
+        <item>😆|grinning squinting face|laugh happy</item>
+        <item>😅|grinning face with sweat|relief nervous</item>
+        <item>🤣|rolling on the floor laughing|lol laugh haha</item>
+        <item>😂|face with tears of joy|laugh lol haha cry</item>
+        <item>🙂|slightly smiling face|smile</item>
+        <item>🙃|upside-down face|silly</item>
+        <item>😉|winking face|wink</item>
+        <item>😊|smiling face with smiling eyes|blush happy</item>
+        <item>😇|smiling face with halo|angel innocent</item>
+        <item>😍|smiling face with heart-eyes|love adore</item>
+        <item>😘|face blowing a kiss|kiss love</item>
+        <item>😗|kissing face|kiss</item>
+        <item>😙|kissing face with smiling eyes|kiss</item>
+        <item>😚|kissing face with closed eyes|kiss</item>
+        <item>😋|face savoring food|yum delicious tasty</item>
+        <item>😛|face with tongue|silly</item>
+        <item>😜|winking face with tongue|silly joke</item>
+        <item>😝|squinting face with tongue|silly</item>
+        <item>🤑|money-mouth face|rich money</item>
+        <item>🤗|hugging face|hug</item>
+        <item>🤔|thinking face|hmm think</item>
+        <item>🤐|zipper-mouth face|secret quiet</item>
+        <item>😐|neutral face|meh</item>
+        <item>😑|expressionless face|blank</item>
+        <item>😶|face without mouth|speechless</item>
+        <item>😏|smirking face|smirk</item>
+        <item>😒|unamused face|unimpressed</item>
+        <item>🙄|face with rolling eyes|eye roll</item>
+        <item>😬|grimacing face|awkward</item>
+        <item>🤥|lying face|lie</item>
+        <item>😌|relieved face|calm relief</item>
+        <item>😔|pensive face|sad thoughtful</item>
+        <item>😪|sleepy face|tired</item>
+        <item>😴|sleeping face|sleep zzz</item>
+        <item>😷|face with medical mask|sick</item>
+        <item>🤒|face with thermometer|sick fever</item>
+        <item>🤕|face with head-bandage|hurt</item>
+        <item>🤢|nauseated face|sick</item>
+        <item>🤧|sneezing face|cold</item>
+        <item>😵|dizzy face|dizzy</item>
+        <item>😎|smiling face with sunglasses|cool</item>
+        <item>🤓|nerd face|nerd</item>
+        <item>😕|confused face|confused</item>
+        <item>😟|worried face|worry</item>
+        <item>🙁|slightly frowning face|sad</item>
+        <item>😮|face with open mouth|surprised wow</item>
+        <item>😯|hushed face|surprised</item>
+        <item>😲|astonished face|shocked</item>
+        <item>😳|flushed face|embarrassed</item>
+        <item>😦|frowning face with open mouth|shocked</item>
+        <item>😧|anguished face|anguish</item>
+        <item>😨|fearful face|scared</item>
+        <item>😰|anxious face with sweat|nervous</item>
+        <item>😥|sad but relieved face|disappointed</item>
+        <item>😢|crying face|sad tear</item>
+        <item>😭|loudly crying face|sob sad</item>
+        <item>😱|face screaming in fear|scared omg</item>
+        <item>😖|confounded face|upset</item>
+        <item>😣|persevering face|struggle</item>
+        <item>😞|disappointed face|sad</item>
+        <item>😓|downcast face with sweat|tired</item>
+        <item>😩|weary face|tired</item>
+        <item>😫|tired face|exhausted</item>
+        <item>😤|face with steam from nose|frustrated</item>
+        <item>😡|pouting face|angry mad</item>
+        <item>😠|angry face|mad</item>
+        <item>😈|smiling face with horns|devil</item>
+        <item>👿|angry face with horns|devil</item>
+        <item>💀|skull|dead</item>
+        <item>💩|pile of poo|poop</item>
+        <item>🤡|clown face|clown</item>
+        <item>👻|ghost|boo</item>
+        <item>🙈|see-no-evil monkey|monkey</item>
+        <item>🙉|hear-no-evil monkey|monkey</item>
+        <item>🙊|speak-no-evil monkey|monkey</item>
+    </string-array>
+    <string-array name="emoji_people">
+        <item>👍|thumbs up|like yes good</item>
+        <item>👎|thumbs down|dislike no bad</item>
+        <item>👌|OK hand|okay perfect</item>
+        <item>✌️|victory hand|peace</item>
+        <item>🤞|crossed fingers|luck hope</item>
+        <item>🤘|sign of the horns|rock</item>
+        <item>🤙|call me hand|phone</item>
+        <item>👈|backhand index pointing left|point</item>
+        <item>👉|backhand index pointing right|point</item>
+        <item>👆|backhand index pointing up|point</item>
+        <item>👇|backhand index pointing down|point</item>
+        <item>☝️|index pointing up|point</item>
+        <item>✋|raised hand|stop high five</item>
+        <item>🤚|raised back of hand|stop</item>
+        <item>🖐️|hand with fingers splayed|hand</item>
+        <item>🖖|vulcan salute|spock</item>
+        <item>👋|waving hand|hello goodbye wave</item>
+        <item>💪|flexed biceps|strong muscle</item>
+        <item>🙏|folded hands|thanks please pray</item>
+        <item>🤝|handshake|deal agreement</item>
+        <item>👏|clapping hands|applause bravo</item>
+        <item>🙌|raising hands|celebrate hooray</item>
+        <item>👐|open hands|hands</item>
+        <item>✍️|writing hand|write</item>
+        <item>🤳|selfie|photo</item>
+        <item>💅|nail polish|nails</item>
+        <item>👀|eyes|look see</item>
+        <item>👂|ear|listen</item>
+        <item>👃|nose|smell</item>
+        <item>👄|mouth|lips</item>
+        <item>👅|tongue|taste</item>
+        <item>🙋|person raising hand|hello question</item>
+        <item>🙅|person gesturing no|no</item>
+        <item>🙆|person gesturing OK|ok</item>
+        <item>🤷|person shrugging|shrug dunno</item>
+        <item>🤦|person facepalming|facepalm</item>
+        <item>🙇|person bowing|sorry bow</item>
+        <item>💁|person tipping hand|info</item>
+        <item>👶|baby|child</item>
+        <item>👦|boy|child</item>
+        <item>👧|girl|child</item>
+        <item>👨|man|person</item>
+        <item>👩|woman|person</item>
+        <item>👴|old man|elder</item>
+        <item>👵|old woman|elder</item>
+    </string-array>
+    <string-array name="emoji_hearts">
+        <item>❤️|red heart|love</item>
+        <item>💛|yellow heart|love</item>
+        <item>💚|green heart|love</item>
+        <item>💙|blue heart|love</item>
+        <item>💜|purple heart|love</item>
+        <item>🖤|black heart|love</item>
+        <item>💔|broken heart|heartbreak sad</item>
+        <item>❣️|heart exclamation|love</item>
+        <item>💕|two hearts|love</item>
+        <item>💞|revolving hearts|love</item>
+        <item>💓|beating heart|love</item>
+        <item>💗|growing heart|love</item>
+        <item>💖|sparkling heart|love</item>
+        <item>💘|heart with arrow|love cupid</item>
+        <item>💝|heart with ribbon|love gift</item>
+        <item>💯|hundred points|perfect 100</item>
+        <item>💢|anger symbol|angry</item>
+        <item>💥|collision|boom</item>
+        <item>💫|dizzy|star</item>
+        <item>💦|sweat droplets|water</item>
+        <item>💨|dashing away|fast wind</item>
+        <item>💤|zzz|sleep</item>
+        <item>✨|sparkles|shiny</item>
+        <item>⭐|star|favorite</item>
+        <item>🌟|glowing star|shine</item>
+        <item>🔥|fire|hot lit</item>
+        <item>⚡|high voltage|lightning</item>
+        <item>❄️|snowflake|cold</item>
+        <item>☀️|sun|sunny</item>
+        <item>🌈|rainbow|colors</item>
+        <item>✔️|check mark|yes done</item>
+        <item>✅|check mark button|done yes</item>
+        <item>❌|cross mark|no wrong</item>
+        <item>❎|cross mark button|no</item>
+        <item>‼️|double exclamation mark|emphasis important</item>
+        <item>⁉️|exclamation question mark|what</item>
+        <item>❓|red question mark|question</item>
+        <item>❔|white question mark|question</item>
+        <item>❕|white exclamation mark|exclamation</item>
+        <item>❗|red exclamation mark|exclamation</item>
+        <item>⭕|hollow red circle|circle</item>
+        <item>🚫|prohibited|no forbidden</item>
+        <item>⚠️|warning|careful</item>
+        <item>➕|plus|add</item>
+        <item>➖|minus|subtract</item>
+        <item>➗|divide|math</item>
+        <item>♻️|recycling symbol|recycle</item>
+        <item>🆗|OK button|ok</item>
+        <item>🆒|cool button|cool</item>
+        <item>🆕|new button|new</item>
+        <item>🆓|free button|free</item>
+        <item>➡️|right arrow|next</item>
+        <item>⬅️|left arrow|back</item>
+        <item>⬆️|up arrow|up</item>
+        <item>⬇️|down arrow|down</item>
+        <item>🔴|red circle|red</item>
+        <item>🔵|blue circle|blue</item>
+    </string-array>
+    <string-array name="emoji_nature">
+        <item>🐶|dog face|puppy pet</item>
+        <item>🐱|cat face|kitten pet</item>
+        <item>🐭|mouse face|mouse</item>
+        <item>🐹|hamster|pet</item>
+        <item>🐰|rabbit face|bunny</item>
+        <item>🦊|fox|fox</item>
+        <item>🐻|bear|bear</item>
+        <item>🐼|panda|panda</item>
+        <item>🐨|koala|koala</item>
+        <item>🐯|tiger face|tiger</item>
+        <item>🦁|lion|lion</item>
+        <item>🐮|cow face|cow</item>
+        <item>🐷|pig face|pig</item>
+        <item>🐸|frog|frog</item>
+        <item>🐵|monkey face|monkey</item>
+        <item>🐔|chicken|chicken</item>
+        <item>🐧|penguin|penguin</item>
+        <item>🐦|bird|bird</item>
+        <item>🐤|baby chick|chick</item>
+        <item>🦆|duck|duck</item>
+        <item>🦅|eagle|eagle</item>
+        <item>🦉|owl|owl</item>
+        <item>🦇|bat|bat</item>
+        <item>🐺|wolf|wolf</item>
+        <item>🐴|horse face|horse</item>
+        <item>🦄|unicorn|unicorn</item>
+        <item>🐝|honeybee|bee</item>
+        <item>🐛|bug|insect</item>
+        <item>🦋|butterfly|butterfly</item>
+        <item>🐌|snail|slow</item>
+        <item>🐞|lady beetle|ladybug</item>
+        <item>🐜|ant|ant</item>
+        <item>🐢|turtle|turtle</item>
+        <item>🐍|snake|snake</item>
+        <item>🦎|lizard|lizard</item>
+        <item>🐙|octopus|octopus</item>
+        <item>🦑|squid|squid</item>
+        <item>🦀|crab|crab</item>
+        <item>🐠|tropical fish|fish</item>
+        <item>🐟|fish|fish</item>
+        <item>🐬|dolphin|dolphin</item>
+        <item>🐳|spouting whale|whale</item>
+        <item>🦈|shark|shark</item>
+        <item>🐊|crocodile|crocodile</item>
+        <item>🐘|elephant|elephant</item>
+        <item>🦒|giraffe|giraffe</item>
+        <item>🐑|ewe|sheep</item>
+        <item>🐐|goat|goat</item>
+        <item>🐕|dog|dog</item>
+        <item>🐈|cat|cat</item>
+        <item>🐇|rabbit|rabbit</item>
+        <item>🕊️|dove|peace bird</item>
+        <item>🌸|cherry blossom|flower</item>
+        <item>🌹|rose|flower love</item>
+        <item>🌺|hibiscus|flower</item>
+        <item>🌻|sunflower|flower</item>
+        <item>🌼|blossom|flower</item>
+        <item>🌷|tulip|flower</item>
+        <item>🌱|seedling|plant</item>
+        <item>🌲|evergreen tree|tree</item>
+        <item>🌳|deciduous tree|tree</item>
+        <item>🌴|palm tree|tree beach</item>
+        <item>🌵|cactus|desert</item>
+        <item>🍀|four leaf clover|luck</item>
+        <item>🍁|maple leaf|autumn</item>
+        <item>🍂|fallen leaf|autumn</item>
+        <item>🌍|globe showing Europe-Africa|world earth</item>
+        <item>🌙|crescent moon|night moon</item>
+        <item>☁️|cloud|weather</item>
+        <item>⛄|snowman|winter</item>
+        <item>🌊|water wave|ocean sea</item>
+    </string-array>
+    <string-array name="emoji_food">
+        <item>🍎|red apple|fruit</item>
+        <item>🍏|green apple|fruit</item>
+        <item>🍊|tangerine|fruit orange</item>
+        <item>🍋|lemon|fruit</item>
+        <item>🍌|banana|fruit</item>
+        <item>🍉|watermelon|fruit</item>
+        <item>🍇|grapes|fruit</item>
+        <item>🍓|strawberry|fruit</item>
+        <item>🍒|cherries|fruit</item>
+        <item>🍑|peach|fruit</item>
+        <item>🍍|pineapple|fruit</item>
+        <item>🥝|kiwi fruit|fruit</item>
+        <item>🍅|tomato|vegetable</item>
+        <item>🥑|avocado|fruit</item>
+        <item>🥕|carrot|vegetable</item>
+        <item>🌽|ear of corn|corn</item>
+        <item>🥔|potato|vegetable</item>
+        <item>🍆|eggplant|vegetable</item>
+        <item>🍞|bread|toast</item>
+        <item>🥐|croissant|bread</item>
+        <item>🧀|cheese wedge|cheese</item>
+        <item>🍳|cooking|egg breakfast</item>
+        <item>🥞|pancakes|breakfast</item>
+        <item>🥓|bacon|breakfast</item>
+        <item>🍗|poultry leg|chicken</item>
+        <item>🍖|meat on bone|meat</item>
+        <item>🌭|hot dog|food</item>
+        <item>🍔|hamburger|burger</item>
+        <item>🍟|french fries|fries</item>
+        <item>🍕|pizza|pizza</item>
+        <item>🌮|taco|taco</item>
+        <item>🌯|burrito|burrito</item>
+        <item>🥗|green salad|salad</item>
+        <item>🍝|spaghetti|pasta</item>
+        <item>🍜|steaming bowl|noodles ramen</item>
+        <item>🍲|pot of food|stew</item>
+        <item>🍣|sushi|sushi</item>
+        <item>🍤|fried shrimp|shrimp</item>
+        <item>🍙|rice ball|rice</item>
+        <item>🍚|cooked rice|rice</item>
+        <item>🍦|soft ice cream|ice cream</item>
+        <item>🍩|doughnut|donut</item>
+        <item>🍪|cookie|cookie</item>
+        <item>🎂|birthday cake|birthday cake</item>
+        <item>🍰|shortcake|cake</item>
+        <item>🍫|chocolate bar|chocolate</item>
+        <item>🍬|candy|candy</item>
+        <item>🍭|lollipop|candy</item>
+        <item>🍿|popcorn|movie</item>
+        <item>☕|hot beverage|coffee tea</item>
+        <item>🍵|teacup without handle|tea</item>
+        <item>🍺|beer mug|beer drink</item>
+        <item>🍻|clinking beer mugs|cheers beer</item>
+        <item>🥂|clinking glasses|cheers toast</item>
+        <item>🍷|wine glass|wine</item>
+        <item>🥃|tumbler glass|whiskey</item>
+        <item>🍸|cocktail glass|cocktail</item>
+        <item>🍹|tropical drink|cocktail</item>
+    </string-array>
+    <string-array name="emoji_activities">
+        <item>⚽|soccer ball|football sport</item>
+        <item>🏀|basketball|sport</item>
+        <item>🏈|american football|sport</item>
+        <item>⚾|baseball|sport</item>
+        <item>🎾|tennis|sport</item>
+        <item>🏐|volleyball|sport</item>
+        <item>🎱|pool 8 ball|billiards</item>
+        <item>🏓|ping pong|table tennis</item>
+        <item>🏆|trophy|win champion</item>
+        <item>🥇|1st place medal|gold winner</item>
+        <item>🥈|2nd place medal|silver</item>
+        <item>🥉|3rd place medal|bronze</item>
+        <item>🎯|bullseye|target</item>
+        <item>🎮|video game|gaming controller</item>
+        <item>🎲|game die|dice</item>
+        <item>🎵|musical note|music</item>
+        <item>🎶|musical notes|music</item>
+        <item>🎤|microphone|sing karaoke</item>
+        <item>🎧|headphone|music</item>
+        <item>🎸|guitar|music</item>
+        <item>🎹|musical keyboard|piano</item>
+        <item>🎬|clapper board|movie</item>
+        <item>🎨|artist palette|art</item>
+        <item>🎉|party popper|celebrate congratulations</item>
+        <item>🎊|confetti ball|celebrate</item>
+        <item>🎈|balloon|party</item>
+        <item>🎁|wrapped gift|present</item>
+        <item>🎄|Christmas tree|christmas</item>
+        <item>🎃|jack-o-lantern|halloween</item>
+    </string-array>
+    <string-array name="emoji_objects">
+        <item>📱|mobile phone|cell</item>
+        <item>💻|laptop|computer</item>
+        <item>📷|camera|photo</item>
+        <item>📞|telephone receiver|call</item>
+        <item>💡|light bulb|idea</item>
+        <item>🔑|key|keys</item>
+        <item>🔒|locked|lock secure</item>
+        <item>📚|books|read study</item>
+        <item>✏️|pencil|write</item>
+        <item>📌|pushpin|pin</item>
+        <item>📎|paperclip|attach</item>
+        <item>💰|money bag|cash rich</item>
+        <item>💸|money with wings|spend</item>
+        <item>💳|credit card|pay</item>
+        <item>⏰|alarm clock|time wake</item>
+        <item>⌛|hourglass done|time wait</item>
+        <item>🚗|automobile|car</item>
+        <item>🚕|taxi|cab</item>
+        <item>🚌|bus|transit</item>
+        <item>🚲|bicycle|bike</item>
+        <item>✈️|airplane|flight travel</item>
+        <item>🚀|rocket|launch fast</item>
+        <item>🚢|ship|boat</item>
+        <item>🏠|house|home</item>
+        <item>🏢|office building|work</item>
+        <item>🏥|hospital|health</item>
+        <item>🏫|school|class</item>
+        <item>🏖️|beach with umbrella|vacation</item>
+        <item>🗽|Statue of Liberty|new york</item>
+        <item>⛪|church|church</item>
+        <item>🚑|ambulance|emergency</item>
+        <item>🚒|fire engine|emergency</item>
+    </string-array>
+</resources>
