@@ -89,6 +89,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -494,6 +495,8 @@ private fun MessageBubble(
         bottomStart = if (isMe) 18.dp else 4.dp, bottomEnd = if (isMe) 4.dp else 18.dp,
     )
     val failed = DeliveryInfo.isFailure(message)
+    // An incoming picture message whose picture never came: the stored body is the placeholder and there is no image part.
+    val missingPicture = message.isIncoming && message.imagePartUri == null && message.body == com.inboxiq.app.sms.MmsSync.PLACEHOLDER_BODY
     // A send failure is on screen: keep the rating prompt quiet for a while.
     if (failed) androidx.compose.runtime.LaunchedEffect(message.id) { com.kreativekoala.ratingkit.RatingKit.reportError() }
 
@@ -514,7 +517,8 @@ private fun MessageBubble(
                         modifier = Modifier.combinedClickable(onClickLabel = null, onClick = {}, onLongClickLabel = stringResource(R.string.thread_message_actions), onLongClick = { menu = true }),
                     ) {
                         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
-                            if (message.body.isNotBlank()) LinkifiedText(message.body, textColor, onLinkClick)
+                            if (missingPicture) MissingPicture(message.timestamp, textColor)
+                            else if (message.body.isNotBlank()) LinkifiedText(message.body, textColor, onLinkClick)
                             message.imagePartUri?.let { uri ->
                                 if (message.body.isNotBlank()) Spacer(Modifier.height(6.dp))
                                 MmsImage(uri, Modifier.size(200.dp).clip(RoundedCornerShape(12.dp)).clickable(onClickLabel = stringResource(R.string.media_open_photo), onClick = onOpenImage))
@@ -573,6 +577,41 @@ private fun MessageBubble(
         }
     }
 }
+
+/**
+ * What an incoming picture message shows while its picture is missing. When the carrier's notification row is still
+ * in the phone's MMS store the download can be tried again, so this offers Retry; otherwise the picture is gone and
+ * only the sender can send it again.
+ */
+@Composable
+private fun MissingPicture(timestamp: Long, textColor: androidx.compose.ui.graphics.Color) {
+    val context = LocalContext.current
+    var refresh by remember { mutableIntStateOf(0) }
+    // LOADING until the provider has been asked, NONE when no undownloaded row matches, else the provider row id.
+    val state by produceState(initialValue = MISSING_LOADING, timestamp, refresh) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            runCatching { com.inboxiq.app.sms.MmsPending.idForTimestamp(context.contentResolver, timestamp) }.getOrNull() ?: MISSING_NONE
+        }
+    }
+    when {
+        state == MISSING_LOADING -> Unit
+        state == MISSING_NONE -> Text(stringResource(R.string.mms_picture_unavailable), color = textColor)
+        else -> {
+            val retry: () -> Unit = {
+                com.inboxiq.app.sms.MmsDownloadScheduler.retryNow(context, state)
+                Toast.makeText(context, context.getString(R.string.mms_retry_started), Toast.LENGTH_SHORT).show()
+                refresh += 1
+            }
+            Column(Modifier.clickable(onClickLabel = stringResource(R.string.mms_retry_action), onClick = retry)) {
+                Text(stringResource(R.string.mms_picture_pending), color = textColor)
+                TextButton(onClick = retry) { Text(stringResource(R.string.mms_retry_action)) }
+            }
+        }
+    }
+}
+
+private const val MISSING_LOADING = -2L
+private const val MISSING_NONE = -1L
 
 /** Below this, the AI-written-text signal is too noisy on SMS-length text to show. */
 private const val AI_GENERATED_DISPLAY_THRESHOLD = 0.6f

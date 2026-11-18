@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Η εικόνα δεν έχει ληφθεί ακόμη. Πατήστε για να δοκιμάσετε ξανά.</string>
+    <string name="mms_picture_unavailable">Δεν ήταν δυνατή η φόρτωση αυτής της εικόνας. Ζητήστε από τον αποστολέα να την στείλει ξανά.</string>
+    <string name="mms_retry_action">Επανάληψη λήψης</string>
+    <string name="mms_retry_started">Γίνεται νέα προσπάθεια λήψης της εικόνας</string>
+</resources>

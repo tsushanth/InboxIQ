@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Obrázek ještě nebyl stažen. Klepnutím to zkusíte znovu.</string>
+    <string name="mms_picture_unavailable">Tento obrázek se nepodařilo načíst. Požádejte odesílatele, aby ho poslal znovu.</string>
+    <string name="mms_retry_action">Zkusit stažení znovu</string>
+    <string name="mms_retry_started">Zkouším obrázek stáhnout znovu</string>
+</resources>

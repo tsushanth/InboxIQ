@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">A imagem ainda não foi transferida. Toque para tentar novamente.</string>
+    <string name="mms_picture_unavailable">Não foi possível carregar esta imagem. Peça ao remetente que a envie novamente.</string>
+    <string name="mms_retry_action">Tentar transferir novamente</string>
+    <string name="mms_retry_started">A tentar transferir a imagem novamente</string>
+</resources>

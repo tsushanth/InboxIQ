@@ -12,7 +12,6 @@ import com.google.android.mms.pdu_alt.GenericPdu
 import com.google.android.mms.pdu_alt.NotificationInd
 import com.google.android.mms.pdu_alt.PduParser
 import com.google.android.mms.pdu_alt.PduPersister
-import com.inboxiq.app.worker.MmsDownloadWorker
 import com.inboxiq.app.worker.SyncMmsWorker
 import java.util.concurrent.TimeUnit
 
@@ -56,11 +55,8 @@ class MmsReceiver : BroadcastReceiver() {
             }
         }
 
-        WorkManager.getInstance(context).enqueue(
-            OneTimeWorkRequestBuilder<MmsDownloadWorker>()
-                .setInitialDelay(3, TimeUnit.SECONDS)
-                .build(),
-        )
+        // Waits for a network (the download needs one) and backs off exponentially if the worker has to retry.
+        MmsDownloadScheduler.enqueueAll(context, delayMs = 3_000L, replace = true)
         WorkManager.getInstance(context).enqueue(
             OneTimeWorkRequestBuilder<SyncMmsWorker>()
                 .setInitialDelay(10, TimeUnit.SECONDS)

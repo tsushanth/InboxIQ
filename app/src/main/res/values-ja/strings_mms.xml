@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">画像はまだダウンロードされていません。タップして再試行してください。</string>
+    <string name="mms_picture_unavailable">この画像を読み込めませんでした。送信者にもう一度送ってもらってください。</string>
+    <string name="mms_retry_action">ダウンロードを再試行</string>
+    <string name="mms_retry_started">画像のダウンロードを再試行しています</string>
+</resources>

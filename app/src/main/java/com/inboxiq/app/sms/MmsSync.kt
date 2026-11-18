@@ -26,6 +26,9 @@ object MmsSync {
     /** Addresses of one provider MMS: the FROM header (type 137) and the first real recipient (type 151). */
     internal data class Addresses(val from: String?, val firstTo: String?)
 
+    /** Body stored for an incoming MMS whose provider row has no text and no image part (yet). */
+    const val PLACEHOLDER_BODY = "[MMS message]"
+
     /** The provider's placeholder for "this device" in the FROM header of outgoing MMS. */
     private const val OWN_ADDRESS_TOKEN = "insert-address-token"
 
@@ -255,7 +258,7 @@ object MmsSync {
 
     private fun assemble(textParts: List<String>, imagePartUri: String?): Parts {
         val text = textParts.joinToString("\n").ifBlank {
-            if (imagePartUri != null) "" else "[MMS message]"
+            if (imagePartUri != null) "" else PLACEHOLDER_BODY
         }
         return Parts(text, imagePartUri)
     }

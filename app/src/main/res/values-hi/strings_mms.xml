@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">तस्वीर अभी डाउनलोड नहीं हुई है। दोबारा कोशिश करने के लिए टैप करें।</string>
+    <string name="mms_picture_unavailable">यह तस्वीर लोड नहीं हो सकी। भेजने वाले से इसे दोबारा भेजने को कहें।</string>
+    <string name="mms_retry_action">डाउनलोड फिर से आज़माएं</string>
+    <string name="mms_retry_started">तस्वीर फिर से डाउनलोड करने की कोशिश की जा रही है</string>
+</resources>

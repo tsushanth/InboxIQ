@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">لم يتم تنزيل الصورة بعد. اضغط لإعادة المحاولة.</string>
+    <string name="mms_picture_unavailable">تعذّر تحميل هذه الصورة. اطلب من المرسل إرسالها مرة أخرى.</string>
+    <string name="mms_retry_action">إعادة محاولة التنزيل</string>
+    <string name="mms_retry_started">جارٍ محاولة تنزيل الصورة مرة أخرى</string>
+</resources>

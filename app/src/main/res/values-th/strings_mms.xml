@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">ยังไม่ได้ดาวน์โหลดรูปภาพ แตะเพื่อลองอีกครั้ง</string>
+    <string name="mms_picture_unavailable">โหลดรูปภาพนี้ไม่ได้ ขอให้ผู้ส่งส่งมาอีกครั้ง</string>
+    <string name="mms_retry_action">ลองดาวน์โหลดอีกครั้ง</string>
+    <string name="mms_retry_started">กำลังลองดาวน์โหลดรูปภาพอีกครั้ง</string>
+</resources>

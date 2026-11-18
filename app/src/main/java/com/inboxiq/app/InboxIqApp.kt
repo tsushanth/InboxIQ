@@ -30,6 +30,15 @@ class InboxIqApp : Application() {
             autoHeal,
         )
 
+        // An announced MMS whose download failed (no data at that moment, a carrier hiccup) must not stay a
+        // placeholder forever: look for undownloaded ones on every start, and every few hours when online.
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+            runCatching {
+                if (com.inboxiq.app.sms.DefaultSmsRole.isDefault(this@InboxIqApp)) com.inboxiq.app.sms.MmsDownloadScheduler.healPending(this@InboxIqApp)
+            }
+        }
+        com.inboxiq.app.sms.MmsDownloadScheduler.ensurePeriodic(this)
+
         // Drops automatic retries queued by builds that could mark a delivered picture message as failed (once).
         kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
             runCatching { com.inboxiq.app.sms.LegacyAutoHeal.clearOnce(this@InboxIqApp) }

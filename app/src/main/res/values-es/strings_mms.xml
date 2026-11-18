@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">La imagen aún no se ha descargado. Toca para reintentar.</string>
+    <string name="mms_picture_unavailable">No se pudo cargar esta imagen. Pide al remitente que la envíe de nuevo.</string>
+    <string name="mms_retry_action">Reintentar descarga</string>
+    <string name="mms_retry_started">Intentando descargar la imagen de nuevo</string>
+</resources>

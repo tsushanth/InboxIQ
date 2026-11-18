@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mms_picture_pending">Gambar belum dimuat turun. Ketik untuk cuba lagi.</string>
+    <string name="mms_picture_unavailable">Gambar ini tidak dapat dimuatkan. Minta penghantar menghantarnya semula.</string>
+    <string name="mms_retry_action">Cuba muat turun semula</string>
+    <string name="mms_retry_started">Mencuba memuat turun gambar semula</string>
+</resources>
