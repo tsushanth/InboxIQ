@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">8 tunniksi</string>
     <string name="mute_one_week">1 viikoksi</string>
     <string name="mute_until_turned_on">Kunnes otan ilmoitukset takaisin käyttöön</string>
-    <string name="tier_default">Oletus (bert-tiny, laitteessa)</string>
+    <string name="tier_default">Oletus (laitteessa)</string>
     <string name="tier_balanced">Tasapainoinen (laitteessa; vaatii kertaluonteisen ~290MB:n latauksen)</string>
     <string name="tier_best">Paras (suurempi laitteessa toimiva malli), tulossa pian</string>
     <string name="channel_general_title">Viestit</string>

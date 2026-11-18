@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Pentru 8 ore</string>
     <string name="mute_one_week">Pentru 1 săptămână</string>
     <string name="mute_until_turned_on">Până îl reactivez</string>
-    <string name="tier_default">Implicit (bert-tiny, pe dispozitiv)</string>
+    <string name="tier_default">Implicit (pe dispozitiv)</string>
     <string name="tier_balanced">Echilibrat (pe dispozitiv; necesită o descărcare unică de ~290MB)</string>
     <string name="tier_best">Cel mai bun (model mai mare, pe dispozitiv), în curând</string>
     <string name="channel_general_title">Mesaje</string>

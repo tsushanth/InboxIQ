@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">เป็นเวลา 8 ชั่วโมง</string>
     <string name="mute_one_week">เป็นเวลา 1 สัปดาห์</string>
     <string name="mute_until_turned_on">จนกว่าฉันจะเปิดกลับ</string>
-    <string name="tier_default">ค่าเริ่มต้น (bert-tiny ในเครื่อง)</string>
+    <string name="tier_default">ค่าเริ่มต้น (ในเครื่อง)</string>
     <string name="tier_balanced">สมดุล (ในเครื่อง ต้องดาวน์โหลดครั้งเดียวประมาณ 290MB)</string>
     <string name="tier_best">ดีที่สุด (โมเดลใหญ่ขึ้นในเครื่อง) เร็ว ๆ นี้</string>
     <string name="channel_general_title">ข้อความ</string>

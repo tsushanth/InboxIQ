@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">I 8 timmar</string>
     <string name="mute_one_week">I 1 vecka</string>
     <string name="mute_until_turned_on">Tills jag slår på det igen</string>
-    <string name="tier_default">Standard (bert-tiny, på enheten)</string>
+    <string name="tier_default">Standard (på enheten)</string>
     <string name="tier_balanced">Balanserad (på enheten; kräver en engångsnedladdning på ~290MB)</string>
     <string name="tier_best">Bäst (större modell på enheten), kommer snart</string>
     <string name="channel_general_title">Meddelanden</string>

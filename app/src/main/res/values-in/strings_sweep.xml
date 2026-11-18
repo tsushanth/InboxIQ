@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Selama 8 jam</string>
     <string name="mute_one_week">Selama 1 minggu</string>
     <string name="mute_until_turned_on">Sampai saya aktifkan kembali</string>
-    <string name="tier_default">Default (bert-tiny, di ponsel)</string>
+    <string name="tier_default">Default (di ponsel)</string>
     <string name="tier_balanced">Seimbang (di ponsel; perlu unduhan sekali saja ~290MB)</string>
     <string name="tier_best">Terbaik (model yang lebih besar di ponsel), segera hadir</string>
     <string name="channel_general_title">Pesan</string>

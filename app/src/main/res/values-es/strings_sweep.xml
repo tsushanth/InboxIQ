@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Durante 8 horas</string>
     <string name="mute_one_week">Durante 1 semana</string>
     <string name="mute_until_turned_on">Hasta que lo reactive</string>
-    <string name="tier_default">Predeterminado (bert-tiny, en el dispositivo)</string>
+    <string name="tier_default">Predeterminado (en el dispositivo)</string>
     <string name="tier_balanced">Equilibrado (en el dispositivo; requiere una descarga única de ~290MB)</string>
     <string name="tier_best">El mejor (modelo más grande, en el dispositivo), próximamente</string>
     <string name="channel_general_title">Mensajes</string>

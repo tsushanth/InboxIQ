@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">Por 8 horas</string>
     <string name="mute_one_week">Por 1 semana</string>
     <string name="mute_until_turned_on">Até eu reativar</string>
-    <string name="tier_default">Padrão (bert-tiny, no dispositivo)</string>
+    <string name="tier_default">Padrão (no dispositivo)</string>
     <string name="tier_balanced">Equilibrado (no dispositivo; requer um download único de ~290MB)</string>
     <string name="tier_best">Melhor (modelo maior, no dispositivo), em breve</string>
     <string name="channel_general_title">Mensagens</string>

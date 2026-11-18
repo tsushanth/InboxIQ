@@ -17,7 +17,7 @@
     <string name="mute_eight_hours">For 8 hours</string>
     <string name="mute_one_week">For 1 week</string>
     <string name="mute_until_turned_on">Until I turn it back on</string>
-    <string name="tier_default">Default (bert-tiny, on-device)</string>
+    <string name="tier_default">Default (on-device)</string>
     <string name="tier_balanced">Balanced (on-device; needs a one-time ~290MB download)</string>
     <string name="tier_best">Best (larger on-device model), coming soon</string>
     <string name="channel_general_title">Messages</string>
