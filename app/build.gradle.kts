@@ -1,15 +1,8 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
-}
-
-val localProps = Properties().apply {
-    val f = rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
@@ -47,10 +40,17 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("/Users/sushanthtiruvaipati/Documents/GitHub/AndroidAppKey")
-            storePassword = localProps.getProperty("RELEASE_STORE_PASSWORD")
-            keyAlias = "androidappkey"
-            keyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD")
+            // Credentials live outside the repo, in ~/.gradle/gradle.properties:
+            // ANDROID_UPLOAD_STORE_FILE, ANDROID_UPLOAD_STORE_PASSWORD, ANDROID_UPLOAD_KEY_ALIAS, ANDROID_UPLOAD_KEY_PASSWORD
+            val uploadStore = providers.gradleProperty("ANDROID_UPLOAD_STORE_FILE").orNull
+            if (uploadStore != null) {
+                storeFile = file(uploadStore)
+                storePassword = providers.gradleProperty("ANDROID_UPLOAD_STORE_PASSWORD").get()
+                keyAlias = providers.gradleProperty("ANDROID_UPLOAD_KEY_ALIAS").get()
+                keyPassword = providers.gradleProperty("ANDROID_UPLOAD_KEY_PASSWORD").get()
+            } else if (gradle.startParameter.taskNames.any { it.contains("Release", ignoreCase = true) }) {
+                throw GradleException("Release signing needs ANDROID_UPLOAD_* in ~/.gradle/gradle.properties (see build.gradle.kts).")
+            }
         }
     }
 
