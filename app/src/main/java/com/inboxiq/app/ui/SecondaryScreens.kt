@@ -121,3 +121,10 @@ fun BlockedNumbersScreen(blocked: List<BlockedNumberEntity>, nameOf: (String) ->
         }
     }
 }
+
+/**
+ * The address a conversation started from the New message screen is keyed by: the typed text, trimmed and
+ * normalized to E.164 like every other address that enters the app. Short codes and sender ids come back unchanged.
+ */
+internal fun newConversationAddress(context: android.content.Context, typed: String): String =
+    com.inboxiq.app.sms.PhoneNumberNormalizer.normalize(context, typed.trim())
