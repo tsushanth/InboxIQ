@@ -2,6 +2,13 @@
 
 Newest first. Parity rule: whatever runs in production is on `main` (tree compared for the deployed paths). Releases before 0.6.1 are recorded only as git tags `play/<version>-<code>`.
 
+## 2026-11-19 Android 0.6.1 (15), core flavor, raised to 100% on Google Play production
+
+- Raised from 20% to 100% on the owner's instruction (Play Developer API edit: 0.6.1 (15) set to completed with no userFraction, validated, committed). Play production track read back afterwards: 0.6.1 (15) completed; 0.6.0 (14) is no longer on the track. The release itself is unchanged from the entry below (same AAB, `main` `a5549a0`, tag `play/0.6.1-15`).
+- Device check done before the promotion (Pixel 9 Pro, a release APK of the `core` flavor built with `:app:assembleCoreRelease` from a clean worktree at tag `play/0.6.1-15`, signed with the upload key, installed in place over 0.6.0 with data kept; InboxIQ was the default SMS app on a live SIM). Receiving: two picture messages arrived and each was downloaded on the first attempt with outcome SUCCESS, with no parse or persist failure and no retry in the following minutes; both are stored and appear in the conversation. Sending: two picture messages were handed to the platform with no error logged; delivery to the recipients was not confirmed, because 0.6.1 does not log the carrier's result for a sent MMS.
+- Known, not fixed: one phone number can appear as two conversations (the same number saved with and without the country code). Not checked whether this predates 0.6.1. Three older pending MMS rows are listed on every download pass but not retried, which is consistent with the 48-hour retry limit; their ages were not checked.
+- Not done: a crash or ANR rate review at promotion time (the Play vitals query returned an error).
+
 ## 2026-11-18 Android 0.6.1 (15), core flavor, on Google Play production at 20%
 
 - Play production track read back after commit: 0.6.1 (15) inProgress at userFraction 0.2, 0.6.0 (14) completed. Not raised above 20%.
