@@ -385,7 +385,11 @@ class MainActivity : ComponentActivity() {
                     screen is Screen.NewConversation -> NewConversationScreen(
                         onBack = { vm.screen = Screen.Inbox },
                         onPickContact = { callback -> onContactPicked = callback; pickContact.launch(null) },
-                        onStart = { address ->
+                        onStart = { typed ->
+                            // The typed number must take the same route as a picked contact: an un-normalized address
+                            // ("8136000258") would key a thread that the platform provider's own "+18136000258" copy of
+                            // the same conversation then duplicates (confirmed live with a picture message).
+                            val address = newConversationAddress(applicationContext, typed)
                             val fwd = screen.forwardBody
                             vm.launch {
                                 if (fwd != null) vm.actions.saveDraft(address, fwd)
