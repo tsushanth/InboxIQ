@@ -21,8 +21,8 @@ android {
         applicationId = "com.inboxiq.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 15
-        versionName = "0.6.1"
+        versionCode = 16
+        versionName = "0.6.2"
 
         // Native whisper.cpp build for on-device voice-memo transcription (zero network).
         ndk {
@@ -47,10 +47,13 @@ android {
 
     signingConfigs {
         create("release") {
+            // Passwords: local.properties, else ~/.gradle/gradle.properties (ANDROID_UPLOAD_*), so a clean worktree can sign.
             storeFile = file("/Users/sushanthtiruvaipati/Documents/GitHub/AndroidAppKey")
             storePassword = localProps.getProperty("RELEASE_STORE_PASSWORD")
+                ?: providers.gradleProperty("ANDROID_UPLOAD_STORE_PASSWORD").orNull
             keyAlias = "androidappkey"
             keyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD")
+                ?: providers.gradleProperty("ANDROID_UPLOAD_KEY_PASSWORD").orNull
         }
     }
 
