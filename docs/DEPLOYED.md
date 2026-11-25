@@ -2,6 +2,18 @@
 
 Newest first. Parity rule: whatever runs in production is on `main` (tree compared for the deployed paths). Releases before 0.6.1 are recorded only as git tags `play/<version>-<code>`.
 
+## 2026-11-25 Android 0.6.2 (16), core flavor, on Google Play production at 20%
+
+- Play production track read back after commit: 0.6.2 (16) inProgress at userFraction 0.2, 0.6.1 (15) completed. Beta, alpha and internal moved to 16 completed (they held 15). Uploaded with the Play edit API.
+- Built from `main` `58b6140` (#34 on top of #33); tag `play/0.6.2-16`. Flavor `core` (`:app:bundleCoreRelease`), clean detached worktree plus the gitignored `gemma_model_pack/src/main/assets/gemma3-270m-it-q8.litertlm` copied from the main checkout (sha256 `757e9119fa5bd667a2774fb470ac4afcd3190a21c677f8e69a5d6bc908abdd63`). The `ratingkit` module is the real one from its local checkout.
+- AAB sha256 `88663e1c8bf53a150eff62760f10aff9e1b18e65ff640a5d3b7323c5edfc92ac`, signed with the upload key, manifest 0.6.2 (16), targetSdk 36. No `android.permission.INTERNET` in the merged manifest of either module (base, gemma_model_pack); no permission added compared with the Play-generated APK of 15.
+- Release note (en-US): "Typing a number on the New message screen no longer starts a second conversation with someone you already text."
+- Contents: #32. Conversations already duplicated are not merged.
+- #34: signing passwords fall back to the shared `ANDROID_UPLOAD_*` Gradle properties when `local.properties` has none, so a clean worktree can build.
+- Checks: `:app:testCoreDebugUnitTest` 542 tests, 0 failures; `:app:lintCoreDebug` 0 errors; `:app:bundleCoreRelease`.
+- NOT verified: any device run of this build (the fix itself was checked on a device on 2026-11-20 with a release build of #32).
+- Rollback: halt the rollout; 0.6.1 (15) stays completed.
+
 ## 2026-11-19 Android 0.6.1 (15), core flavor, raised to 100% on Google Play production
 
 - Raised from 20% to 100% on the owner's instruction (Play Developer API edit: 0.6.1 (15) set to completed with no userFraction, validated, committed). Play production track read back afterwards: 0.6.1 (15) completed; 0.6.0 (14) is no longer on the track. The release itself is unchanged from the entry below (same AAB, `main` `a5549a0`, tag `play/0.6.1-15`).
